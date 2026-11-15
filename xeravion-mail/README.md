@@ -1,30 +1,37 @@
 # XERAVION MAIL
 
-A separate inbox application for the XERAVION brand.
+A separate inbox application for XERAVION.
 
 ## Product decisions
-- Inbox should look and feel like a clean, familiar email client.
-- No game-specific sections or game lists in the inbox.
-- Target email address format: `name@xeravion.my.id`.
-- Admin address management and buyer-specific inbox access will be separate from the inbox UI.
-- The existing XERAVION store remains at the repository root and must not be modified by this app.
+- Clean, Gmail-like inbox. No game-specific sections or game lists.
+- Address format: `name@xeravion.my.id`.
+- Existing store stays at repository root; mail app is isolated in `xeravion-mail/`.
+- Admin management and buyer-specific mailbox access must be enforced server-side.
 
 ## Current status
-- `index.html` is a static UI prototype only.
-- It does not receive, store, or send real email yet.
-- Search, folders, compose, and refresh controls are intentionally disabled until the authenticated backend is connected.
+- `index.html`: static UI prototype only.
+- `worker/src/index.js`: inbound storage starter, not deployed.
+- `worker/schema.sql`: initial D1 schema.
+- Not production-ready: no MIME parser, OTP extraction, admin login, mailbox token API, message-reading API, attachment UI, rate limits, or live provider test yet.
 
-## Important DNS / email architecture constraint
-The apex address format `@xeravion.my.id` requires the inbound mail provider's MX records on the apex domain. Adding or replacing MX records affects email delivery, not the Netlify website's HTTP A/CNAME records, but it can interrupt any existing mailbox service on the domain. Do not change MX records until the current DNS zone and any existing email service have been checked.
+## DNS and provider architecture
+Cloudflare Email Routing/Email Workers requires the relevant domain zone to be active on Cloudflare. For addresses at the apex `@xeravion.my.id`, the apex MX records must point to the receiving service. Since the authoritative nameservers are currently IDCloudHost (`elang.ns.dnscloud.id`, `fajar.ns.dnscloud.id`), Cloudflare Email Routing cannot simply be enabled by adding an MX record while leaving the zone hosted at IDCloudHost.
 
-Cloudflare Email Routing currently requires Cloudflare DNS for the domain. Since the current nameservers remain at IDCloudHost, do not promise Cloudflare Email Routing without moving DNS or using a different inbound mail provider. A provider-neutral inbound webhook can be used with a compatible email receiving service.
+Possible safe route: move authoritative DNS for the zone to Cloudflare only after exporting and verifying every existing DNS record from IDCloudHost, including Netlify apex A and www CNAME, TXT verification, and any service records. Keep Netlify records DNS-only where appropriate and verify the site before adding MX. Changing nameservers without a complete copy can interrupt the store.
 
-## Planned implementation
-1. Confirm the complete current DNS zone and whether any MX records/mailboxes already exist.
-2. Choose an inbound email provider that supports catch-all or dynamic recipients and inbound webhooks.
-3. Build authenticated backend storage for messages and attachments, with per-address access controls.
-4. Add admin address management and buyer-specific access tokens.
-5. Connect the inbox UI, then test real messages from supported game providers before production claims.
+No nameserver or MX changes have been made by this repository work. Do not publish DNS changes until the complete current IDCloudHost zone is captured and compared.
 
-## Safety
-Never expose service secrets in frontend code. Enforce authorization server-side for every mailbox and attachment request.
+## Worker bindings
+- D1 binding: `DB`
+- R2 binding: `MAIL_RAW`
+- Email handler: enable Email Routing and route the intended recipient domain to this Worker only after DNS activation.
+
+Apply `worker/schema.sql` to D1 before deploying the Worker. Do not expose service tokens in browser code.
+
+## Security and production requirements
+- Generate high-entropy per-mailbox access tokens and store only hashes.
+- Admin endpoints require a separate secret and must be rate limited.
+- Every message and attachment read must verify mailbox ownership.
+- Validate recipient domain and mailbox status.
+- Add MIME parsing with size limits and safe attachment handling.
+- Test deliverability with real messages before claiming support for any game provider.

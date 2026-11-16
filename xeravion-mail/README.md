@@ -21,12 +21,12 @@ A separate inbox application for XERAVION.
 
 ## DNS and provider architecture
 Verified from the user's IDCloudHost DNS screenshot (3 records total):
-- A `@` -> `75.2.60.5` (Netlify apex)
-- CNAME `www` -> `lucky-sorbet-57e2c8.netlify.app` (Netlify www)
+- CNAME `@` -> `xeravion-store.pages.dev` (Cloudflare Pages apex; CNAME flattening)
+- CNAME `www` -> `xeravion-store.pages.dev` (Cloudflare Pages www)
 - NS `@` -> `elang.ns.dnscloud.id`, `fajar.ns.dnscloud.id` (current authoritative nameservers shown by IDCloudHost)
 - No MX, TXT, or other record is shown in the screenshot's complete 3-record list.
 
-The domain currently uses IDCloudHost nameservers. No DNS or nameserver changes have been made by this repository work. Preserve the apex A and www CNAME exactly during any migration. Do not manually copy the old authoritative NS record as a replacement for Cloudflare's assigned nameservers; Cloudflare assigns its own authoritative nameservers when the zone is activated. Verify the registrar's nameserver screen before any switch.
+The user has clarified that the production website is now hosted on Cloudflare Pages, not Netlify. Current Cloudflare DNS screenshot shows the Pages CNAMEs above and a Google site-verification TXT record at `@` (preserve its exact value). Cloudflare nameservers assigned to the zone are `carlane.ns.cloudflare.com` and `seth.ns.cloudflare.com`; the user showed the same pair entered in IDCloudHost's custom nameserver form. Do not revert records to the historical Netlify targets. Preserve the current Pages CNAMEs and Google TXT record while configuring email. Confirm the zone status is Active before adding mail records.
 
 Cloudflare Email Service requires Cloudflare DNS. It cannot be enabled simply by adding its MX records while keeping the domain's authoritative DNS hosted at IDCloudHost. A nameserver move is not authorized until every existing DNS record has been captured, copied, and checked against the live Netlify website.
 
@@ -63,8 +63,4 @@ Cloudflare currently shows exactly 3 records:
 - CNAME `@` -> `xeravion-store.pages.dev` (proxied)
 - TXT `@` -> Google site verification token (DNS only; full token is not legible in screenshot; preserve it exactly)
 
-These do NOT match the verified active IDCloudHost DNS snapshot:
-- A `@` -> `75.2.60.5`
-- CNAME `www` -> `lucky-sorbet-57e2c8.netlify.app`
-
-Do not switch nameservers while this mismatch remains. Before migration, reconcile Cloudflare to the IDCloudHost/Netlify records: replace apex CNAME with A `@` -> `75.2.60.5`; replace www CNAME target with `lucky-sorbet-57e2c8.netlify.app`; initially set both web records to DNS only (gray cloud) for a conservative first validation; retain the Google TXT verification record exactly. Confirm with the user whether the Cloudflare Pages `xeravion-store.pages.dev` deployment is intentionally used anywhere before deleting or replacing those entries. Do not change authoritative DNS until the intended production hosting is confirmed and the records have been verified.
+Historical note: an older IDCloudHost screenshot showed Netlify records before the user migrated the website to Cloudflare Pages. Those historical Netlify values are obsolete and must not be restored.

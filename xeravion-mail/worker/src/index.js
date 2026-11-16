@@ -41,8 +41,8 @@ function bearer(request) {
 function extractOtp(text) {
   const source = String(text || "");
   const patterns = [
-    /(?:verification|security|login|one[- ]time|otp|kode|code)[^\\d]{0,35}(\\d{4,8})/i,
-    /\\b(\\d{6})\\b/
+    /(?:verification|security|login|one[- ]time|otp|kode|code)[^\d]{0,35}(\d{4,8})/i,
+    /\b(\d{6})\b/
   ];
   for (const pattern of patterns) {
     const match = source.match(pattern);
@@ -53,7 +53,7 @@ function extractOtp(text) {
 
 function safeAddress(value) {
   const address = String(value || "").trim().toLowerCase();
-  if (!/^[a-z0-9][a-z0-9._+-]{0,63}@xeravion\\.my\\.id$/.test(address)) return null;
+  if (!/^[a-z0-9][a-z0-9._+-]{0,63}@xeravion\.my\.id$/.test(address)) return null;
   return address;
 }
 

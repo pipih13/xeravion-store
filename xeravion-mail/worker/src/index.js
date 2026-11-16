@@ -39,15 +39,23 @@ function bearer(request) {
 }
 
 function extractOtp(text) {
-  const source = String(text || "");
-  const patterns = [
-    /(?:verification|security|login|one[- ]time|otp|kode|code)[^\d]{0,35}(\d{4,8})/i,
-    /\b(\d{6})\b/
-  ];
-  for (const pattern of patterns) {
-    const match = source.match(pattern);
-    if (match) return match[1];
+  const source = String(text || "").replace(/\u00a0/g, " ");
+  const cues = /verification|verify|security|login|sign[ -]?in|one[- ]time|passcode|otp|kode|verifikasi|keamanan|masuk|konfirmasi|confirmation|authentication|authentikasi/i;
+  const candidates = [...source.matchAll(/\b(\d{4,8})\b/g)];
+  if (!candidates.length) return null;
+
+  // Prefer a number explicitly described as a verification/security/login code.
+  for (const match of candidates) {
+    const start = Math.max(0, match.index - 75);
+    const end = Math.min(source.length, match.index + match[0].length + 75);
+    const context = source.slice(start, end);
+    if (cues.test(context)) return match[1];
   }
+
+  // Conservative fallback: accept a single six-digit candidate only when the
+  // message itself discusses account access or verification.
+  const sixDigit = candidates.filter(match => match[1].length === 6);
+  if (sixDigit.length === 1 && cues.test(source)) return sixDigit[0][1];
   return null;
 }
 

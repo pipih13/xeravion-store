@@ -46,6 +46,73 @@ body,.app{background:radial-gradient(ellipse at 50% -18%,#4b371b55 0,transparent
 .order-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.order-steps .stat{min-height:100px}.order-steps .stat span{line-height:1.6}.trust-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}.trust-card{background:linear-gradient(145deg,#19150f,#100e0b);border:1px solid var(--line);border-radius:14px;padding:17px}.trust-icon{width:34px;height:34px;border:1px solid #8e692c;border-radius:10px;display:grid;place-items:center;color:var(--gold);font-size:20px}.trust-card h3{font-size:14px;margin:13px 0 7px;color:#f4e8d0}.trust-card p{font-size:11px;line-height:1.75;color:#bdb3a2;margin:0}.trade-note{font-size:10px;line-height:1.8;color:#a99d89;margin:18px 0 0;padding:12px 14px;border-left:2px solid #8e692c;background:#17130d;border-radius:0 9px 9px 0}
 @media(max-width:760px){.order-steps{grid-template-columns:repeat(2,minmax(0,1fr))}.trust-grid{grid-template-columns:1fr}.trust-card{padding:15px}}
 </style>
+
+<style>
+/* XERAVION atmosphere: luminous gaming ambience, with gold kept as the signature */
+:root{
+  --neon-cyan:#55d9ff;
+  --neon-blue:#527bff;
+  --neon-violet:#a879ff;
+  --neon-orange:#ff9b58;
+}
+html{background:#080a12}
+body{
+  background-color:#080a12;
+  background-image:
+    radial-gradient(ellipse at 12% 18%,rgba(39,113,190,.19),transparent 34%),
+    radial-gradient(ellipse at 88% 32%,rgba(119,65,190,.16),transparent 35%),
+    radial-gradient(ellipse at 52% 82%,rgba(25,119,143,.11),transparent 38%),
+    linear-gradient(145deg,#080a12 0%,#0b0c15 48%,#090a10 100%);
+  background-attachment:fixed;
+}
+.app{position:relative;isolation:isolate;background:transparent}
+.app:before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  opacity:.48;
+  background-image:
+    linear-gradient(rgba(120,160,220,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(120,160,220,.035) 1px,transparent 1px),
+    radial-gradient(circle at 14% 28%,rgba(67,190,255,.13),transparent 19%),
+    radial-gradient(circle at 86% 52%,rgba(169,105,255,.12),transparent 22%);
+  background-size:42px 42px,42px 42px,auto,auto;
+  mask-image:linear-gradient(to bottom,black,transparent 92%);
+}
+.app:after{
+  content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 22% 42%,rgba(32,150,218,.075),transparent 28%),
+    radial-gradient(ellipse at 78% 24%,rgba(139,83,225,.075),transparent 27%);
+  filter:blur(34px);animation:xeravionGlow 18s ease-in-out infinite alternate;
+}
+@keyframes xeravionGlow{from{transform:translate3d(-1.5%,0,0) scale(1)}to{transform:translate3d(1.5%,1%,0) scale(1.06)}}
+.top{background:rgba(8,10,17,.88);border-bottom-color:rgba(94,155,205,.25);box-shadow:0 8px 32px rgba(0,0,0,.22)}
+.hero{position:relative}
+.hero .eyebrow{color:#e8cc91;text-shadow:0 0 18px rgba(85,217,255,.24)}
+.hero h1 span{text-shadow:0 0 28px rgba(82,123,255,.18)}
+.art{
+  border-color:rgba(101,177,226,.42);
+  background:
+    radial-gradient(ellipse at 76% 24%,rgba(151,102,255,.25),transparent 36%),
+    radial-gradient(ellipse at 18% 78%,rgba(50,194,230,.20),transparent 40%),
+    radial-gradient(ellipse at 50% 45%,rgba(190,142,65,.24),transparent 52%),
+    linear-gradient(145deg,#18243a,#111321 58%,#17120d);
+  box-shadow:inset 0 0 70px rgba(65,157,218,.10),0 24px 65px #0009,0 0 35px rgba(69,147,220,.10);
+}
+.art:before,.art:after{border-color:rgba(93,195,238,.48);box-shadow:0 0 32px rgba(74,177,237,.18)}
+.crest{filter:drop-shadow(0 0 18px rgba(85,217,255,.22))}
+.stat,.product,.panel,.trust-card{
+  background-image:linear-gradient(145deg,rgba(30,40,59,.68),rgba(17,17,27,.88) 58%,rgba(31,24,15,.76));
+  border-color:rgba(102,139,174,.28);
+}
+.product:hover{border-color:rgba(85,217,255,.62);box-shadow:0 20px 42px #0009,0 0 24px rgba(65,175,232,.13)}
+.sectionhead .eyebrow,.game{ text-shadow:0 0 16px rgba(85,217,255,.18) }
+.chip:hover,.chip.active{border-color:rgba(85,217,255,.58);box-shadow:0 0 18px rgba(85,217,255,.09)}
+.btn:not(.gold):hover{border-color:rgba(85,217,255,.58);box-shadow:0 8px 24px rgba(42,135,205,.13)}
+.buy{background:linear-gradient(110deg,#f2dfad 0%,#d0a452 52%,#9b6d28 100%)}
+.footer{background:rgba(7,9,15,.38)}
+@media(prefers-reduced-motion:reduce){.app:after{animation:none}}
+</style>
+
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-mark" src="/assets/xeravion-emblem.svg" alt="Emblem XERAVION" width="47" height="47"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#catalog" onclick="showCatalog()">Katalog</a><a href="#how">Cara Order</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>

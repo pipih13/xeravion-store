@@ -207,6 +207,16 @@ async function storeIncoming(message, env) {
   ).bind(id, mailbox.id, sender, recipient, subject, bodyText, extractOtp(subject + "\\n" + bodyText), key, raw.byteLength, JSON.stringify(attachments)).run();
 }
 
+async function adminAttachmentResponse(request, env, url, messageId, attachmentId) {
+  if (!(await adminAuthorized(request, env))) return new Response("Unauthorized", { status: 401 });
+  const address = safeAddress(url.searchParams.get("address"));
+  const mailbox = address
+    ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(address).first()
+    : null;
+  if (!mailbox) return new Response("Mailbox not found", { status: 404 });
+  return attachmentResponse(mailbox.id, messageId, attachmentId, env);
+}
+
 async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
   const row = await env.DB.prepare("SELECT attachments_json FROM messages WHERE id = ? AND mailbox_id = ?").bind(messageId, mailboxId).first();
   if (!row) return new Response("Not found", { status: 404 });
@@ -267,6 +277,9 @@ export default {
     } else if (url.pathname.startsWith("/api/messages/") && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
       response = mailbox ? await readMessage(mailbox.id, url.pathname.split("/").pop(), env) : json({ error: "Unauthorized" }, 401);
+    } else if (url.pathname.startsWith("/admin/attachments/") && request.method === "GET") {
+      const parts = url.pathname.split("/");
+      response = await adminAttachmentResponse(request, env, url, parts[3], parts[4]);
     } else if (url.pathname.startsWith("/api/attachments/") && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
       const parts = url.pathname.split("/");

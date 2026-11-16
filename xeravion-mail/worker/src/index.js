@@ -113,6 +113,28 @@ async function createMailbox(request, env) {
   return json({ ok: true, address, accessToken, note: accessToken ? "Simpan token ini; token tidak dapat ditampilkan lagi." : "Inbox support hanya dapat diakses admin." }, 201);
 }
 
+
+async function rotateMailboxToken(request, env) {
+  if (!(await adminAuthorized(request, env))) return json({ error: "Unauthorized" }, 401);
+  const body = await request.json().catch(() => null);
+  const address = safeAddress(body?.address);
+  if (!address) return json({ error: "Alamat email tidak valid" }, 400);
+  const mailbox = await env.DB.prepare(
+    "SELECT id,address FROM mailboxes WHERE address = ? AND mailbox_type = 'game_account' AND is_active = 1"
+  ).bind(address).first();
+  if (!mailbox) return json({ error: "Mailbox tidak ditemukan" }, 404);
+  const accessToken = randomToken();
+  const tokenHash = await sha256(accessToken);
+  await env.DB.prepare("UPDATE mailboxes SET access_token_hash = ? WHERE id = ?")
+    .bind(tokenHash, mailbox.id).run();
+  return json({
+    ok: true,
+    address: mailbox.address,
+    accessToken,
+    note: "Token lama langsung tidak berlaku. Simpan token baru; token hanya ditampilkan sekali."
+  });
+}
+
 async function listMailboxes(request, env) {
   if (!(await adminAuthorized(request, env))) return json({ error: "Unauthorized" }, 401);
   const result = await env.DB.prepare(
@@ -194,6 +216,36 @@ async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
   return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
 }
 
+const BUYER_HTML = \`<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>XERAVION MAIL — Inbox</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;min-height:100vh}.head{padding:18px max(18px,calc((100% - 900px)/2));border-bottom:1px solid #303238;display:flex;align-items:center;gap:12px}.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#f5d88a,#9d7025);color:#171717;display:grid;place-items:center;font-weight:900;font-size:22px}.brand{font-weight:800;letter-spacing:1px}.brand small{display:block;color:#a1a1aa;font-weight:500;letter-spacing:.2px;margin-top:3px}main{max-width:900px;margin:28px auto;padding:0 16px}.card{background:#191a1f;border:1px solid #33353d;border-radius:16px;padding:20px;margin-bottom:16px}.muted{color:#a1a1aa}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}input,button{font:inherit;border-radius:10px;padding:13px 14px;border:1px solid #41434c;background:#111216;color:#f4f4f5}input{min-width:0;flex:1}button{cursor:pointer;background:#c9a45d;color:#171717;border:0;font-weight:700}button.secondary{background:#292b32;color:#f4f4f5;border:1px solid #454751}.hidden{display:none!important}.notice{padding:11px 13px;border-radius:10px;background:#252b25;color:#b7e1bd;margin-top:12px}.error{background:#352222;color:#ffb4ab}.mail{padding:15px;border-bottom:1px solid #34363d;cursor:pointer}.mail:hover{background:#24262d}.mail strong{display:block}.mail small{color:#aaa}.otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:800;padding:12px 0}.empty{padding:35px;text-align:center;color:#999}.detail{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;color:#ddd}.pill{font-size:12px;border:1px solid #555;padding:5px 9px;border-radius:20px;color:#d9c18d;margin-left:auto}@media(max-width:600px){main{margin:16px auto}.card{padding:15px}.head{padding:14px 16px}}
+</style></head><body>
+<header class="head"><div class="logo">X</div><div class="brand">XERAVION MAIL<small>KOTAK MASUK</small></div><span class="pill">PRIVATE</span></header>
+<main>
+<section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masukkan token akses yang diberikan admin XERAVION. Token hanya digunakan selama halaman ini terbuka.</p><div class="row"><input id="token" type="password" autocomplete="off" placeholder="Token akses pembeli"><button id="openBtn">Buka inbox</button></div><div id="loginMsg"></div></section>
+<section id="inbox" class="hidden">
+<div class="card"><div class="row"><div><h2 id="address" style="margin:0">Kotak masuk</h2><p class="muted" style="margin:6px 0 0">Email yang diterima untuk alamat ini.</p></div><button id="refreshBtn" class="secondary" style="margin-left:auto">Refresh</button><button id="logoutBtn" class="secondary">Keluar</button></div>
+<div class="row" style="margin-top:16px"><input id="search" type="search" placeholder="Cari pengirim atau subjek"><button id="searchBtn" class="secondary">Cari</button></div></div>
+<div class="card"><div id="messages" class="empty">Memuat email…</div><div id="detail"></div></div>
+</section>
+</main>
+<script>
+(function(){
+let token='',currentAddress='';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path){const r=await fetch(path,{headers:{Authorization:'Bearer '+token},cache:'no-store'});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
+function showError(target,text){$(target).innerHTML='<div class="notice error">'+esc(text)+'</div>'}
+async function openInbox(){token=$('token').value.trim();if(!token){showError('loginMsg','Token belum diisi.');return}try{const d=await api('/api/messages');currentAddress=d.address||'';$('address').textContent=currentAddress;$('login').classList.add('hidden');$('inbox').classList.remove('hidden');$('loginMsg').innerHTML='';await loadMessages()}catch(e){token='';showError('loginMsg','Token tidak valid atau inbox tidak dapat dibuka: '+e.message)}}
+async function loadMessages(){try{const q=encodeURIComponent($('search').value.trim());const d=await api('/api/messages?q='+q);const arr=d.messages||[];$('messages').innerHTML=arr.length?arr.map(m=>'<div class="mail" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="otp" style="font-size:20px">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.mail').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){showError('messages',e.message)}}
+async function rotateToken(){if(!selectedAddress)return; if(!confirm('Ganti token untuk '+selectedAddress+'? Token lama langsung tidak berlaku.'))return;try{const d=await api('/admin/mailboxes/rotate-token',{method:'POST',body:JSON.stringify({address:selectedAddress})});$('createResult').innerHTML='<div class="notice"><strong>Token baru untuk '+esc(d.address)+':</strong><pre>'+esc(d.accessToken)+'</pre><button class="secondary" id="copyToken">Salin token</button><p class="muted">Token lama sudah tidak berlaku. Simpan token baru dan berikan hanya kepada pembeli yang berhak.</p></div>';$('copyToken').onclick=()=>navigator.clipboard.writeText(d.accessToken)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
+async function readMessage(id){try{const m=await api('/api/messages/'+encodeURIComponent(id));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div><button class="secondary" id="copyOtp">Salin kode</button>':'')+'<hr style="border:0;border-top:1px solid #383a42;margin:18px 0"><div class="detail">'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</div><p class="muted">Lampiran: '+((m.attachments||[]).length)+' · Lampiran belum tersedia pada versi ini.</p></div>';if(m.otp_code)$('copyOtp').onclick=()=>navigator.clipboard.writeText(m.otp_code)}catch(e){showError('detail',e.message)}}
+function logout(){token='';currentAddress='';$('token').value='';$('search').value='';$('detail').innerHTML='';$('messages').innerHTML='<div class="empty">Masukkan token untuk membuka inbox.</div>';$('inbox').classList.add('hidden');$('login').classList.remove('hidden')}
+$('openBtn').onclick=openInbox;$('token').addEventListener('keydown',e=>{if(e.key==='Enter')openInbox()});$('refreshBtn').onclick=loadMessages;$('searchBtn').onclick=loadMessages;$('logoutBtn').onclick=logout;
+})();
+</script></body></html>\`;
+
 const ADMIN_HTML = `<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>XERAVION MAIL — Admin</title>
 <style>
@@ -206,7 +258,7 @@ const ADMIN_HTML = `<!doctype html>
 <div class="card"><div class="row"><div><h2 style="margin:0">Kelola Kotak Email</h2><p class="muted" style="margin:6px 0 0">Buat alamat dan pantau inbox XERAVION.</p></div><button class="secondary" id="refreshBtn" style="margin-left:auto">Muat ulang</button><button class="secondary" id="logoutBtn">Keluar</button></div>
 <div class="row topgap"><select id="kind"><option value="ml">Mobile Legends</option><option value="ff">Free Fire</option><option value="pubg">PUBG Mobile</option><option value="support">Support (admin saja)</option></select><button id="createBtn">+ Buat alamat</button></div><div id="createResult"></div></div>
 <div class="grid"><section class="card"><h3 style="margin-top:0">Daftar Inbox</h3><div id="mailboxes" class="muted">Belum dimuat.</div></section>
-<section class="card"><div class="row"><div><h3 id="selectedTitle" style="margin:0">Pilih inbox</h3><p id="selectedSub" class="muted" style="margin:6px 0 0">Daftar email akan tampil di sini.</p></div><button id="refreshMessages" class="secondary" style="margin-left:auto">Refresh</button></div><div class="row topgap"><input id="search" placeholder="Cari pengirim atau subjek"><button id="searchBtn" class="secondary">Cari</button></div><div id="messages" class="empty">Pilih salah satu alamat email.</div><div id="detail" class="topgap"></div></section></div>
+<section class="card"><div class="row"><div><h3 id="selectedTitle" style="margin:0">Pilih inbox</h3><p id="selectedSub" class="muted" style="margin:6px 0 0">Daftar email akan tampil di sini.</p></div><button id="refreshMessages" class="secondary" style="margin-left:auto">Refresh</button><button id="rotateTokenBtn" class="secondary">Ganti token</button></div><div class="row topgap"><input id="search" placeholder="Cari pengirim atau subjek"><button id="searchBtn" class="secondary">Cari</button></div><div id="messages" class="empty">Pilih salah satu alamat email.</div><div id="detail" class="topgap"></div></section></div>
 </section></main>
 <script>
 (function(){
@@ -221,7 +273,7 @@ async function createMailbox(){try{$('createBtn').disabled=true;const v=$('kind'
 async function selectMailbox(address){selectedAddress=address;$('selectedTitle').textContent=address;$('selectedSub').textContent='Email masuk untuk alamat ini';await loadMailboxes();await loadMessages()}
 async function loadMessages(){if(!selectedAddress)return;try{const q=encodeURIComponent($('search').value.trim());const d=await api('/admin/messages?address='+encodeURIComponent(selectedAddress)+'&q='+q);const arr=d.messages||[];$('messages').innerHTML=arr.length?arr.map(m=>'<div class="message" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="otp" style="font-size:18px">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.message').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){$('messages').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
 async function readMessage(id){try{const m=await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(m.received_at)+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'<pre>'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</pre><div class="muted">Lampiran: '+((m.attachments||[]).length)+' · Penyimpanan lampiran belum diaktifkan.</div></div>'}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
-$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=()=>loadMailboxes().catch(e=>alert(e.message));$('refreshMessages').onclick=()=>loadMessages();$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
+$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=()=>loadMailboxes().catch(e=>alert(e.message));$('refreshMessages').onclick=()=>loadMessages();$('rotateTokenBtn').onclick=rotateToken;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
 })();
 </script></body></html>`;
 
@@ -240,10 +292,14 @@ export default {
     const url = new URL(request.url);
     let response;
 
-    if (url.pathname === "/panel" && request.method === "GET") {
+    if (url.pathname === "/inbox" && request.method === "GET") {
+      response = new Response(BUYER_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
+    } else if (url.pathname === "/panel" && request.method === "GET") {
       response = new Response(ADMIN_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
     } else if (url.pathname === "/health" && request.method === "GET") {
       response = json({ ok: true, service: "xeravion-mail", status: "worker-online" });
+    } else if (url.pathname === "/admin/mailboxes/rotate-token" && request.method === "POST") {
+      response = await rotateMailboxToken(request, env);
     } else if (url.pathname === "/admin/mailboxes" && request.method === "POST") {
       response = await createMailbox(request, env);
     } else if (url.pathname === "/admin/mailboxes" && request.method === "GET") {

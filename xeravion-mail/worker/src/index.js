@@ -174,66 +174,24 @@ async function storeIncoming(message, env) {
   }
   const parsed = await PostalMime.parse(raw);
   const id = crypto.randomUUID();
-  const key = "inbound/" + mailbox.id + "/" + id + ".eml";
-  const attachments = [];
-
-  await env.MAIL_RAW.put(key, raw, {
-    httpMetadata: { contentType: "message/rfc822" },
-    customMetadata: { mailboxId: mailbox.id, messageId: id }
-  });
-
-  for (const attachment of parsed.attachments || []) {
-    const attachmentId = crypto.randomUUID();
-    const attachmentKey = "attachments/" + mailbox.id + "/" + id + "/" + attachmentId;
-    const content = attachment.content;
-    await env.MAIL_RAW.put(attachmentKey, content, {
-      httpMetadata: { contentType: attachment.mimeType || "application/octet-stream" }
-    });
-    attachments.push({
-      id: attachmentId,
-      key: attachmentKey,
-      name: String(attachment.filename || "attachment").slice(0, 180),
-      contentType: String(attachment.mimeType || "application/octet-stream").slice(0, 120),
-      size: content.byteLength
-    });
-  }
-
   const bodyText = String(parsed.text || "").slice(0, 200000);
   const subject = String(parsed.subject || message.headers.get("subject") || "").slice(0, 998);
   const sender = String(parsed.from?.address || message.from || "").slice(0, 320);
+
+  // MVP mode: store searchable message text in D1 only.
+  // Raw MIME and attachments are intentionally not retained until R2 is enabled.
   await env.DB.prepare(
     `INSERT INTO messages (id,mailbox_id,sender,recipient,subject,body_text,otp_code,r2_key,raw_size,attachments_json)
      VALUES (?,?,?,?,?,?,?,?,?,?)`
-  ).bind(id, mailbox.id, sender, recipient, subject, bodyText, extractOtp(subject + "\\n" + bodyText), key, raw.byteLength, JSON.stringify(attachments)).run();
-}
-
-async function adminAttachmentResponse(request, env, url, messageId, attachmentId) {
-  if (!(await adminAuthorized(request, env))) return new Response("Unauthorized", { status: 401 });
-  const address = safeAddress(url.searchParams.get("address"));
-  const mailbox = address
-    ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(address).first()
-    : null;
-  if (!mailbox) return new Response("Mailbox not found", { status: 404 });
-  return attachmentResponse(mailbox.id, messageId, attachmentId, env);
+  ).bind(
+    id, mailbox.id, sender, recipient, subject, bodyText,
+    extractOtp(subject + "\\n" + bodyText),
+    "d1-only/" + id, raw.byteLength, "[]"
+  ).run();
 }
 
 async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
-  const row = await env.DB.prepare("SELECT attachments_json FROM messages WHERE id = ? AND mailbox_id = ?").bind(messageId, mailboxId).first();
-  if (!row) return new Response("Not found", { status: 404 });
-  let items = [];
-  try { items = JSON.parse(row.attachments_json || "[]"); } catch {}
-  const item = items.find(x => x.id === attachmentId);
-  if (!item) return new Response("Not found", { status: 404 });
-  const object = await env.MAIL_RAW.get(item.key);
-  if (!object) return new Response("Not found", { status: 404 });
-  return new Response(object.body, {
-    headers: {
-      "content-type": item.contentType || "application/octet-stream",
-      "content-disposition": "attachment; filename*=UTF-8''" + encodeURIComponent(item.name),
-      "cache-control": "private, no-store",
-      "x-content-type-options": "nosniff"
-    }
-  });
+  return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
 }
 
 export default {

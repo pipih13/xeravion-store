@@ -70,3 +70,34 @@ Historical note: an older IDCloudHost screenshot showed Netlify records before t
 Cloudflare Overview displays: "Your domain is now protected by Cloudflare". Treat the zone as active/proxied at Cloudflare. User confirmed the site is hosted on Cloudflare Pages at `xeravion-store.pages.dev`; do not restore historical Netlify records.
 
 Do not onboard Email Routing / add root MX records until the Worker has been deployed, D1 and R2 bindings are ready, and a catch-all Worker rule can be enabled immediately. Cloudflare documents that messages with no matching rule and no active catch-all are rejected; after MX activation, configure routing rules promptly. The next engineering milestone is to finish and deploy a secure receiving Worker and inbox API, then onboard Email Routing and test delivery.
+
+
+## Worker implementation milestone (2026-11-17)
+The Worker code currently committed includes:
+- inbound `email()` handler that checks known active recipient mailboxes;
+- MIME parsing with PostalMime;
+- raw message and attachment storage in R2;
+- sender, recipient, subject, plain-text body, received time, read status and best-effort OTP extraction in D1;
+- admin-only mailbox creation/listing and support mailbox access;
+- buyer mailbox access using a one-time-issued bearer token (only its hash is stored);
+- mailbox-scoped message and attachment reads;
+- 20 MiB inbound size guard.
+
+Important limitations before production:
+- Code is committed but NOT deployed; no D1 database, R2 bucket, Worker secret, or email route has been created yet.
+- OTP extraction is heuristic and must be tested against real game emails. It is not guaranteed to find every code.
+- HTML email rendering is intentionally not enabled yet; plain-text body only.
+- No UI login/admin panel or buyer token delivery integration exists yet.
+- Add rate limiting, token revocation/rotation, audit logs, spam/abuse controls, retention policy and robust MIME/attachment testing before public launch.
+- The support mailbox is admin-only at API level; do not expose its API key in the browser.
+
+## Deployment configuration
+Worker folder: `xeravion-mail/worker`.
+- Install dependencies with `npm install`.
+- Create D1 database named `xeravion-mail-db` and paste its real database ID into `wrangler.toml`.
+- Create R2 bucket named `xeravion-mail`.
+- Apply `schema.sql` to the remote D1 database.
+- Set secret `ADMIN_API_KEY` using Wrangler secret storage; never commit it.
+- Set `APP_ORIGIN` to the exact final inbox website origin before enabling browser access.
+- Deploy Worker and test `/health`, admin authorization, mailbox creation, and inbox APIs.
+- Only then configure Email Routing MX and a catch-all route to this Worker.

@@ -101,3 +101,13 @@ Worker folder: `xeravion-mail/worker`.
 - Set `APP_ORIGIN` to the exact final inbox website origin before enabling browser access.
 - Deploy Worker and test `/health`, admin authorization, mailbox creation, and inbox APIs.
 - Only then configure Email Routing MX and a catch-all route to this Worker.
+
+
+## Cost-conscious MVP decision (2026-11-17)
+R2 activation is deferred. The first release is D1-only:
+- store parsed sender, recipient, subject, plain-text body, OTP candidate and received time in D1;
+- do not retain raw MIME or attachment contents;
+- attachment endpoints return HTTP 501 until R2 is deliberately enabled;
+- no R2 bucket or R2 billing activation is required for this MVP.
+The existing D1 schema has a NOT NULL `r2_key` field, so D1-only messages use a unique `d1-only/<message-id>` marker. This is an internal placeholder, not a real R2 object key.
+Enable R2 later only if the user explicitly wants attachments/raw email archival and accepts usage-based billing.

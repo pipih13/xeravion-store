@@ -216,7 +216,7 @@ async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
   return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
 }
 
-const BUYER_HTML = \`<!doctype html>
+const BUYER_HTML = `<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>XERAVION MAIL — Inbox</title>
 <style>
 :root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#101114;color:#f4f4f5}*{box-sizing:border-box}body{margin:0;min-height:100vh}.head{padding:18px max(18px,calc((100% - 900px)/2));border-bottom:1px solid #303238;display:flex;align-items:center;gap:12px}.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(145deg,#f5d88a,#9d7025);color:#171717;display:grid;place-items:center;font-weight:900;font-size:22px}.brand{font-weight:800;letter-spacing:1px}.brand small{display:block;color:#a1a1aa;font-weight:500;letter-spacing:.2px;margin-top:3px}main{max-width:900px;margin:28px auto;padding:0 16px}.card{background:#191a1f;border:1px solid #33353d;border-radius:16px;padding:20px;margin-bottom:16px}.muted{color:#a1a1aa}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}input,button{font:inherit;border-radius:10px;padding:13px 14px;border:1px solid #41434c;background:#111216;color:#f4f4f5}input{min-width:0;flex:1}button{cursor:pointer;background:#c9a45d;color:#171717;border:0;font-weight:700}button.secondary{background:#292b32;color:#f4f4f5;border:1px solid #454751}.hidden{display:none!important}.notice{padding:11px 13px;border-radius:10px;background:#252b25;color:#b7e1bd;margin-top:12px}.error{background:#352222;color:#ffb4ab}.mail{padding:15px;border-bottom:1px solid #34363d;cursor:pointer}.mail:hover{background:#24262d}.mail strong{display:block}.mail small{color:#aaa}.otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:800;padding:12px 0}.empty{padding:35px;text-align:center;color:#999}.detail{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;color:#ddd}.pill{font-size:12px;border:1px solid #555;padding:5px 9px;border-radius:20px;color:#d9c18d;margin-left:auto}@media(max-width:600px){main{margin:16px auto}.card{padding:15px}.head{padding:14px 16px}}
@@ -244,7 +244,7 @@ async function readMessage(id){try{const m=await api('/api/messages/'+encodeURIC
 function logout(){token='';currentAddress='';$('token').value='';$('search').value='';$('detail').innerHTML='';$('messages').innerHTML='<div class="empty">Masukkan token untuk membuka inbox.</div>';$('inbox').classList.add('hidden');$('login').classList.remove('hidden')}
 $('openBtn').onclick=openInbox;$('token').addEventListener('keydown',e=>{if(e.key==='Enter')openInbox()});$('refreshBtn').onclick=loadMessages;$('searchBtn').onclick=loadMessages;$('logoutBtn').onclick=logout;
 })();
-</script></body></html>\`;
+</script></body></html>`;
 
 const ADMIN_HTML = `<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>XERAVION MAIL — Admin</title>

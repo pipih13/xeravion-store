@@ -20,7 +20,13 @@ A separate inbox application for XERAVION.
 - Not production-ready: no MIME parser, OTP extraction, admin login, mailbox token API, message-reading API, attachment UI, rate limits, or live provider test yet.
 
 ## DNS and provider architecture
-The domain currently uses IDCloudHost nameservers (`elang.ns.dnscloud.id`, `fajar.ns.dnscloud.id`). No DNS or nameserver changes have been made by this repository work.
+Verified from the user's IDCloudHost DNS screenshot (3 records total):
+- A `@` -> `75.2.60.5` (Netlify apex)
+- CNAME `www` -> `lucky-sorbet-57e2c8.netlify.app` (Netlify www)
+- NS `@` -> `elang.ns.dnscloud.id`, `fajar.ns.dnscloud.id` (current authoritative nameservers shown by IDCloudHost)
+- No MX, TXT, or other record is shown in the screenshot's complete 3-record list.
+
+The domain currently uses IDCloudHost nameservers. No DNS or nameserver changes have been made by this repository work. Preserve the apex A and www CNAME exactly during any migration. Do not manually copy the old authoritative NS record as a replacement for Cloudflare's assigned nameservers; Cloudflare assigns its own authoritative nameservers when the zone is activated. Verify the registrar's nameserver screen before any switch.
 
 Cloudflare Email Service requires Cloudflare DNS. It cannot be enabled simply by adding its MX records while keeping the domain's authoritative DNS hosted at IDCloudHost. A nameserver move is not authorized until every existing DNS record has been captured, copied, and checked against the live Netlify website.
 

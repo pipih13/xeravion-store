@@ -55,3 +55,16 @@ Apply `worker/schema.sql` to D1 before deploying the Worker. Do not expose servi
 - Validate recipient domain and mailbox status.
 - Add MIME parsing with size limits and safe attachment handling.
 - Test delivery from actual game-provider senders before claiming support for any game.
+
+
+## Cloudflare DNS onboarding screenshot review (2026-11-17)
+Cloudflare currently shows exactly 3 records:
+- CNAME `www` -> `xeravion-store.pages.dev` (proxied)
+- CNAME `@` -> `xeravion-store.pages.dev` (proxied)
+- TXT `@` -> Google site verification token (DNS only; full token is not legible in screenshot; preserve it exactly)
+
+These do NOT match the verified active IDCloudHost DNS snapshot:
+- A `@` -> `75.2.60.5`
+- CNAME `www` -> `lucky-sorbet-57e2c8.netlify.app`
+
+Do not switch nameservers while this mismatch remains. Before migration, reconcile Cloudflare to the IDCloudHost/Netlify records: replace apex CNAME with A `@` -> `75.2.60.5`; replace www CNAME target with `lucky-sorbet-57e2c8.netlify.app`; initially set both web records to DNS only (gray cloud) for a conservative first validation; retain the Google TXT verification record exactly. Confirm with the user whether the Cloudflare Pages `xeravion-store.pages.dev` deployment is intentionally used anywhere before deleting or replacing those entries. Do not change authoritative DNS until the intended production hosting is confirmed and the records have been verified.

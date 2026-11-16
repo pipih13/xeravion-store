@@ -64,3 +64,9 @@ Cloudflare currently shows exactly 3 records:
 - TXT `@` -> Google site verification token (DNS only; full token is not legible in screenshot; preserve it exactly)
 
 Historical note: an older IDCloudHost screenshot showed Netlify records before the user migrated the website to Cloudflare Pages. Those historical Netlify values are obsolete and must not be restored.
+
+
+## Domain activation status (user screenshot, 2026-11-17)
+Cloudflare Overview displays: "Your domain is now protected by Cloudflare". Treat the zone as active/proxied at Cloudflare. User confirmed the site is hosted on Cloudflare Pages at `xeravion-store.pages.dev`; do not restore historical Netlify records.
+
+Do not onboard Email Routing / add root MX records until the Worker has been deployed, D1 and R2 bindings are ready, and a catch-all Worker rule can be enabled immediately. Cloudflare documents that messages with no matching rule and no active catch-all are rejected; after MX activation, configure routing rules promptly. The next engineering milestone is to finish and deploy a secure receiving Worker and inbox API, then onboard Email Routing and test delivery.

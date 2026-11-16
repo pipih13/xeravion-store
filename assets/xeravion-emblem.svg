@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">XERAVION emblem</title><desc id="desc">Emblem XERAVION berwarna emas dengan mahkota dan huruf X.</desc>
+<defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff1c8"/><stop offset=".42" stop-color="#e8bd60"/><stop offset="1" stop-color="#8e5e19"/></linearGradient><radialGradient id="glow"><stop stop-color="#b88431" stop-opacity=".38"/><stop offset="1" stop-color="#090807" stop-opacity="0"/></radialGradient><filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter></defs>
+<circle cx="256" cy="256" r="244" fill="#080807"/><circle cx="256" cy="256" r="226" fill="url(#glow)"/><circle cx="256" cy="256" r="210" fill="none" stroke="url(#gold)" stroke-width="10"/><circle cx="256" cy="256" r="194" fill="none" stroke="#d5a84f" stroke-opacity=".45" stroke-width="2"/>
+<path d="M150 183l31-70 49 52 26-91 26 91 49-52 31 70-106-24z" fill="url(#gold)" stroke="#fff0c2" stroke-width="5" stroke-linejoin="round"/>
+<path d="M178 204h156l-35 31h-86z" fill="url(#gold)" stroke="#f7dfaa" stroke-width="4"/>
+<path d="M151 267l74-67 31 31 31-31 74 67-35 29-70-64-70 64z" fill="url(#gold)" stroke="#fff0c2" stroke-width="5" stroke-linejoin="round"/>
+<path d="M174 320l82-73 82 73-36 0-46-39-46 39z" fill="#080807" stroke="url(#gold)" stroke-width="7" stroke-linejoin="round"/>
+<path d="M145 350l111-100 111 100-37 0-74-66-74 66z" fill="url(#gold)" stroke="#f8dda0" stroke-width="4" stroke-linejoin="round"/>
+<path d="M206 365l50 55 50-55-22-1-28 29-28-29z" fill="url(#gold)"/>
+<path d="M108 256l52-52 20 20-32 32 32 32-20 20zM404 256l-52-52-20 20 32 32-32 32 20 20z" fill="url(#gold)" opacity=".85"/>
+<path d="M256 40v22M256 450v22M40 256h22M450 256h22" stroke="#f6d995" stroke-width="5" stroke-linecap="round"/>
+</svg>

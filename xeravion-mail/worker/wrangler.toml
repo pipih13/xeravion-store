@@ -7,7 +7,7 @@ workers_dev = true
 [[d1_databases]]
 binding = "DB"
 database_name = "xeravion-mail-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "1f6fa688-dceb-4c20-b792-7447063347ae"
 
 
 # Set ADMIN_API_KEY with: npx wrangler secret put ADMIN_API_KEY

@@ -415,7 +415,7 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
     const url = new URL(request.url);
     // Normalize trailing slashes so /inbox and /inbox/ resolve identically.
-    const path = url.pathname.replace(/\\/+$/, "") || "/";
+    const path = url.pathname.replace(/\/+$/, "") || "/";
     let response;
 
     if (path === "/" && request.method === "GET") {

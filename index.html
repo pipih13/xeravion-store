@@ -236,7 +236,7 @@ body{
 </style>
 </head>
 <body><div class="app">
-<header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#catalog" onclick="showCatalog()">Katalog</a><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>
+<header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>
 <main class="wrap">
 <section class="catalog" id="catalog"><div class="hero"><div><div class="eyebrow">CURATED DIGITAL COLLECTION</div><h1>Akun pilihan.<br><span>Pengalaman berbeda.</span></h1><p>Temukan koleksi akun game pilihan di XERAVION. Telusuri katalog, lihat detail, dan hubungi admin untuk mengecek ketersediaan sebelum transaksi.</p><div class="actions"><a class="btn gold" href="#products">Jelajahi katalog ↓</a><a class="btn" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION" target="_blank" rel="noopener">Hubungi admin</a></div></div><div class="art game-slider" id="gameSlider" aria-label="Game yang tersedia di XERAVION"><div class="slides">
 <article class="game-slide active"><img src="https://cdn.unipin.com/images/content_image_pages/1794479829-700x280px%20_Website%20-%202026-11-12T173551.460.jpg" alt="Artwork Mobile Legends Bang Bang" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>DOUBLE 11 • KAGURA FEAST OF ETERNITY</span><strong>MOBILE LEGENDS</strong><small>Premium Supply berlangsung 13–17 November</small></div></article>
@@ -588,5 +588,11 @@ loadProducts();
 .member-order-row>span:last-child{text-align:right;white-space:nowrap}
 .member-order-row small{display:block;line-height:1.55}
 @media(max-width:480px){.member-order-row{flex-direction:column;gap:7px}.member-order-row>span:last-child{text-align:left;white-space:normal}}
+</style>
+<style id="xeravion-header-nav-balance">
+/* Header navigation: remove duplicate Catalog link and balance spacing */
+.navlinks{gap:clamp(14px,1.45vw,19px);align-items:center}
+.navlinks a{white-space:nowrap}
+@media(min-width:761px) and (max-width:1050px){.navlinks{gap:12px;font-size:12px}.navright{gap:6px}.navright .btn{padding:9px 10px;font-size:10px}}
 </style>
 </body></html>

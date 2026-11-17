@@ -153,6 +153,85 @@ body{
 .admin .sectionhead input{max-width:230px}
 @media(max-width:600px){.admin-game-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.admin-game-tab{justify-content:space-between;padding:10px}.admin-game-tab:first-child{grid-column:1/-1}.admin .sectionhead{align-items:stretch;flex-direction:column}.admin .sectionhead input{max-width:none}}
 </style>
+<style id="xeravion-spacing-polish">
+/* XERAVION spacing and alignment polish — compact, balanced desktop and mobile */
+:root{--layout-gap:clamp(14px,2vw,22px)}
+.wrap{padding-left:clamp(15px,2.2vw,24px);padding-right:clamp(15px,2.2vw,24px)}
+.hero{padding:clamp(34px,4.5vw,58px) clamp(20px,3vw,32px) clamp(24px,3vw,34px);gap:clamp(22px,3.2vw,38px)}
+.stats{gap:10px;margin:14px 0 34px}
+.sectionhead{margin-bottom:13px}
+.sectionhead h2{margin-top:5px}
+.tools{margin-bottom:10px}
+.chips{margin-bottom:15px}
+.grid{gap:14px}
+.product{border-radius:17px}
+.thumb{height:clamp(145px,17vw,180px)}
+.prod{padding:14px}
+.prod h3{margin:6px 0}
+.desc{min-height:30px;line-height:1.5}
+.priceRow{margin:10px 0}
+.how{padding:30px 0}
+.order-steps{margin-bottom:12px!important}
+.trust-grid{gap:12px}
+.trade-note{margin-top:12px}
+.payment-section,.about-section,.faq-section{padding-top:30px;padding-bottom:30px}
+.payment-grid{gap:10px;margin:16px 0}
+.about-points{gap:9px}
+.faq-list{gap:8px;margin-top:14px}
+.footer-contact{gap:11px;padding-bottom:18px}
+
+/* Dashboard: more breathing room inside top cards, less empty vertical space */
+.admin.active{padding:24px 0 42px}
+.adminbar{margin-bottom:15px;padding:8px 2px 3px;align-items:center}
+.adminbar h2{margin:5px 0 3px;line-height:1.2}
+.adminstats{gap:11px;margin-bottom:13px}
+.adminstats .stat{padding:17px 16px 15px;min-height:78px;display:flex;flex-direction:column;justify-content:center;gap:5px}
+.adminstats .stat b{line-height:1.1}
+.admin .panel{padding:20px;margin-bottom:13px}
+.admin .panel h3{margin-bottom:12px}
+.admin .formgrid{gap:9px}
+.admin .formgrid input,.admin .formgrid select,.admin .formgrid textarea{min-height:42px}
+.admin .formgrid textarea{padding:10px 12px;line-height:1.5}
+.admin .notice{margin:10px 0 0}
+.admin-game-tabs{margin:10px 0 13px;gap:7px}
+.admin-game-tab{padding:9px 12px}
+.admin-game-heading{margin:7px 0 9px}
+.adminlist th,.adminlist td{padding:10px 9px}
+.admin-table-wrap{border-radius:11px}
+@media(max-width:760px){
+ .wrap{padding-left:14px;padding-right:14px}
+ .hero{padding:26px 17px 19px;gap:17px}
+ .stats{margin:12px 0 27px;gap:8px}
+ .stat{padding:10px}
+ .sectionhead{margin-bottom:11px}
+ .grid{gap:10px}
+ .thumb{height:clamp(118px,34vw,150px)}
+ .prod{padding:11px}
+ .priceRow{margin:9px 0}
+ .how{padding:25px 0}
+ .payment-section,.about-section,.faq-section{padding-top:25px;padding-bottom:25px}
+ .admin.active{padding:15px 0 30px}
+ .adminbar{padding:8px 1px 2px;margin-bottom:12px;gap:9px;flex-direction:column}
+ .adminbar .navright{width:100%;display:flex}
+ .adminbar .navright .btn{flex:1}
+ .adminstats{gap:7px;margin-bottom:10px}
+ .adminstats .stat{padding:15px 10px 13px;min-height:75px;gap:5px}
+ .adminstats .stat b{font-size:17px}
+ .adminstats .stat span{font-size:9px;line-height:1.35}
+ .admin .panel{padding:15px 13px;margin-bottom:11px}
+ .admin .formgrid{gap:8px}
+ .admin-game-tabs{margin:9px 0 12px;gap:6px}
+ .admin-game-tab{padding:9px 10px;font-size:10px}
+ .adminlist{min-width:590px}
+}
+@media(max-width:390px){
+ .admin.active{padding-top:12px}
+ .adminstats .stat{padding:13px 8px 11px}
+ .adminstats .stat b{font-size:16px}
+ .admin .panel{padding:13px 11px}
+ .hero{padding-left:15px;padding-right:15px}
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#catalog" onclick="showCatalog()">Katalog</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>

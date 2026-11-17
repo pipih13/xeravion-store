@@ -294,4 +294,25 @@ async function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.g
 let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}document.addEventListener('DOMContentLoaded',()=>{const slider=document.getElementById('gameSlider');if(slider){slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
 loadProducts();
 </script>
+
+<style id="xeravion-responsive-detail-images">
+/* Keep full account screenshots visible on every screen size. */
+.detail-layout,.detail-media,.detail-body{min-width:0;max-width:100%;box-sizing:border-box}
+.detail-media{overflow:hidden}
+.detail-image{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;max-height:68vh!important;object-fit:contain!important;object-position:center!important;aspect-ratio:auto!important}
+.detail-placeholder{min-height:220px!important;height:auto!important}
+.detail-thumbs{width:100%;max-width:100%;box-sizing:border-box;overflow-x:auto;overscroll-behavior-x:contain}
+.detail-thumb img{object-fit:contain!important}
+@media(max-width:760px){
+  .detail-layout{grid-template-columns:minmax(0,1fr)!important}
+  .detail-media{width:100%;padding:58px 14px 8px!important;gap:10px}
+  .detail-image{max-height:58vh!important;border-radius:12px}
+  .detail-body{width:100%;padding:18px 16px 30px!important}
+}
+@media(max-width:380px){
+  .detail-media{padding-left:10px!important;padding-right:10px!important}
+  .detail-image{max-height:52vh!important}
+}
+</style>
+
 </body></html>

@@ -403,6 +403,40 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #productDetailModal .detail-actions .buy{min-height:54px!important}
 }
 </style>
+<style id="xeravion-detail-neon-watermark">
+/* Stronger XERAVION identity: luminous edges, richer panels and subtle emblem watermark */
+#productDetailModal .detail-body{position:relative!important;isolation:isolate;overflow:hidden}
+#productDetailModal .detail-body:before{
+ content:"";position:absolute;z-index:-1;pointer-events:none;
+ width:min(74vw,330px);height:min(74vw,330px);left:50%;top:52%;
+ transform:translate(-50%,-50%);
+ background:url("/assets/xeravion-emblem.svg") center/contain no-repeat;
+ opacity:.105;filter:drop-shadow(0 0 18px rgba(52,190,255,.65)) drop-shadow(0 0 34px rgba(167,91,255,.48));
+}
+#productDetailModal .detail-body:after{
+ content:"";position:absolute;z-index:-2;inset:0;pointer-events:none;
+ background:radial-gradient(ellipse at 50% 48%,rgba(27,154,226,.12),transparent 43%),radial-gradient(ellipse at 88% 12%,rgba(158,80,255,.12),transparent 34%),radial-gradient(ellipse at 8% 88%,rgba(224,174,76,.08),transparent 32%);
+}
+#productDetailModal .detail-body>*{position:relative;z-index:1}
+#productDetailModal .detail-back-top{border-color:rgba(241,197,104,.78)!important;box-shadow:0 0 0 1px rgba(241,197,104,.12),0 0 19px rgba(222,169,75,.17),inset 0 0 18px rgba(232,187,97,.08)!important}
+#productDetailModal .detail-meta .game{border-color:rgba(75,215,255,.72)!important;background:linear-gradient(110deg,rgba(0,181,255,.25),rgba(107,79,255,.22))!important;color:#b5f0ff!important;box-shadow:0 0 16px rgba(0,188,255,.2),inset 0 0 12px rgba(0,188,255,.08)}
+#productDetailModal .detail-stock{border-color:rgba(94,255,173,.65)!important;background:linear-gradient(110deg,rgba(26,190,112,.22),rgba(28,117,91,.14))!important;color:#a5ffd0!important;box-shadow:0 0 14px rgba(43,231,139,.16)}
+#productDetailModal .detail-title{color:#fff4d9!important;text-shadow:0 0 10px rgba(255,218,150,.2),0 0 24px rgba(64,181,255,.14)!important}
+#productDetailModal .detail-price{border-color:rgba(255,211,119,.7)!important;background:linear-gradient(115deg,rgba(255,202,104,.24),rgba(173,111,34,.16),rgba(53,140,195,.12))!important;box-shadow:0 0 0 1px rgba(255,215,137,.08),0 0 24px rgba(224,171,76,.2),inset 0 0 20px rgba(255,219,151,.08)!important}
+#productDetailModal .detail-section{position:relative;border-color:rgba(87,190,244,.42)!important;background:linear-gradient(135deg,rgba(17,51,77,.84),rgba(26,24,53,.86) 58%,rgba(54,37,23,.68))!important;box-shadow:0 0 0 1px rgba(74,181,242,.08),0 0 24px rgba(32,154,226,.13),inset 0 1px rgba(255,255,255,.07)!important}
+#productDetailModal .detail-section:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(110deg,transparent 0%,rgba(78,202,255,.07) 48%,transparent 100%)}
+#productDetailModal .detail-section h3{color:#ffe2a5!important;text-shadow:0 0 12px rgba(255,197,96,.25)}
+#productDetailModal .detail-section h3:before{width:5px!important;height:21px!important;background:linear-gradient(180deg,#54e5ff,#8c70ff 58%,#e9b95f)!important;box-shadow:0 0 9px #54dfff,0 0 18px rgba(143,104,255,.55)!important}
+#productDetailModal .detail-description{color:#e1eaff!important;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+#productDetailModal .detail-actions .buy{border:1px solid rgba(255,225,164,.72)!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 26px rgba(228,174,76,.27),0 9px 28px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.42)!important}
+#productDetailModal .detail-media{border-right:1px solid rgba(72,179,234,.16);box-shadow:inset -1px 0 rgba(255,255,255,.025)}
+#productDetailModal .detail-image{border-color:rgba(76,203,255,.42)!important;box-shadow:0 0 0 1px rgba(76,203,255,.08),0 0 24px rgba(33,158,231,.19),0 14px 36px rgba(0,0,0,.32)!important}
+#productDetailModal .detail-thumb.active{border-color:#ffe09a!important;box-shadow:0 0 0 1px rgba(255,216,136,.18),0 0 18px rgba(238,188,91,.32)!important}
+@media(max-width:760px){
+ #productDetailModal .detail-body:before{width:245px;height:245px;top:50%;opacity:.12}
+ #productDetailModal .detail-section{box-shadow:0 0 0 1px rgba(74,181,242,.1),0 0 20px rgba(32,154,226,.16),inset 0 1px rgba(255,255,255,.07)!important}
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>

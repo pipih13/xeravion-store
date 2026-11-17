@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="XERAVION Imperial Emblem">
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff4c9"/><stop offset=".22" stop-color="#f7d778"/><stop offset=".52" stop-color="#c58a25"/><stop offset=".76" stop-color="#ffe9a0"/><stop offset="1" stop-color="#8e5b13"/></linearGradient>
+ <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#27baff"/><stop offset="1" stop-color="#302b91"/></linearGradient>
+ <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d77cff"/><stop offset="1" stop-color="#5524a8"/></linearGradient>
+ <radialGradient id="bg"><stop stop-color="#20243b"/><stop offset=".7" stop-color="#090b14"/><stop offset="1" stop-color="#030408"/></radialGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="256" cy="256" r="238" fill="url(#bg)" stroke="url(#gold)" stroke-width="10"/>
+<circle cx="256" cy="256" r="218" fill="none" stroke="url(#blue)" stroke-width="3" opacity=".9"/>
+<circle cx="256" cy="256" r="207" fill="none" stroke="url(#violet)" stroke-width="2" opacity=".7"/>
+<path d="M90 172 L166 190 L256 117 L346 190 L422 172 L382 260 L422 340 L346 322 L256 397 L166 322 L90 340 L130 260Z" fill="#090b13" stroke="url(#gold)" stroke-width="5"/>
+<path d="M151 330 L225 230 L164 164 L255 219 L348 164 L287 230 L361 330 L256 276Z" fill="none" stroke="url(#gold)" stroke-width="20" stroke-linejoin="bevel" filter="url(#glow)"/>
+<path d="M174 111 L198 69 L226 100 L256 43 L286 100 L314 69 L338 111 L321 137 L191 137Z" fill="url(#gold)" stroke="#fff0b4" stroke-width="3"/>
+<path d="M190 135 Q256 158 322 135 L312 160 Q256 180 200 160Z" fill="url(#gold)" stroke="#8f5d18" stroke-width="3"/>
+<path d="M256 88 L270 110 L256 130 L242 110Z" fill="url(#violet)" stroke="#fff0b4" stroke-width="2"/>
+<path d="M256 365 L272 390 L256 414 L240 390Z" fill="url(#gold)" stroke="#fff0b4" stroke-width="2"/>
+<path d="M58 256 H105 M407 256 H454" stroke="url(#gold)" stroke-width="4" opacity=".9"/>
+<circle cx="256" cy="256" r="5" fill="#fff4c9" filter="url(#glow)"/>
+</svg>

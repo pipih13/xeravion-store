@@ -533,7 +533,7 @@ export default {
     } else if (path === "/panel" && request.method === "GET") {
       response = new Response(ADMIN_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
     } else if (path === "/health" && request.method === "GET") {
-      response = json({ ok: true, service: "xeravion-mail", status: "worker-online", version: "domain-router-fix-1" });
+      response = json({ ok: true, service: "xeravion-mail", status: "worker-online", version: "password-token-auth-v1" });
     } else if (path === "/api/login" && request.method === "POST") {
       response = await buyerPasswordLogin(request, env);
     } else if (path === "/admin/mailboxes/set-password" && request.method === "POST") {

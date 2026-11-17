@@ -244,7 +244,7 @@ async function deleteAdminMessage(request, env, messageId, address) {
   if (!(await adminAuthorized(request, env))) return json({ error: "Unauthorized" }, 401);
   const safe = safeAddress(address);
   if (!safe || !messageId) return json({ error: "Permintaan tidak valid" }, 400);
-  const mailbox = await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(safe).first();
+  const mailbox = await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ?").bind(safe).first();
   if (!mailbox) return json({ error: "Mailbox tidak ditemukan" }, 404);
   const result = await env.DB.prepare("DELETE FROM messages WHERE id = ? AND mailbox_id = ?").bind(messageId, mailbox.id).run();
   if (!Number(result.meta?.changes || 0)) return json({ error: "Email tidak ditemukan" }, 404);
@@ -366,14 +366,14 @@ export default {
       if (!(await adminAuthorized(request, env))) response = json({ error: "Unauthorized" }, 401);
       else {
         const address = safeAddress(url.searchParams.get("address"));
-        const mailbox = address ? await env.DB.prepare("SELECT id,address FROM mailboxes WHERE address = ? AND is_active = 1").bind(address).first() : null;
+        const mailbox = address ? await env.DB.prepare("SELECT id,address FROM mailboxes WHERE address = ?").bind(address).first() : null;
         response = mailbox ? await listMessages(mailbox, env, url) : json({ error: "Mailbox not found" }, 404);
       }
     } else if (url.pathname.startsWith("/admin/messages/") && request.method === "GET") {
       if (!(await adminAuthorized(request, env))) response = json({ error: "Unauthorized" }, 401);
       else {
         const address = safeAddress(url.searchParams.get("address"));
-        const mailbox = address ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(address).first() : null;
+        const mailbox = address ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ?").bind(address).first() : null;
         response = mailbox ? await readMessage(mailbox.id, url.pathname.split("/").pop(), env) : json({ error: "Mailbox not found" }, 404);
       }
     } else if (url.pathname.startsWith("/admin/messages/") && request.method === "DELETE") {

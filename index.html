@@ -840,4 +840,31 @@ body.xeravion-listing-page .detail-image-trigger img{pointer-events:auto!importa
 #payment .payment-logo-qris .payment-logo{width:80px!important;max-height:30px!important}
 @media(max-width:420px){#payment .payment-logo-wrap{width:62px!important;height:44px!important;flex-basis:62px!important;padding:5px 6px!important}}
 </style>
+
+<style id="xeravion-category-three-up-size">
+/* Three category cards stay visible side by side, with a little more room */
+body.xeravion-home-page #gameCategoryHub .game-category-grid{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:10px!important;
+ overflow:visible!important;
+ overflow-x:visible!important;
+ padding:4px 0 10px!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card{
+ width:auto!important;min-width:0!important;max-width:none!important;
+ flex:initial!important;height:148px!important;min-height:148px!important;
+ padding:11px!important;gap:6px!important;border-radius:13px!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card strong{
+ font-size:clamp(11px,3.2vw,15px)!important;line-height:1.18!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card small{font-size:10px!important}
+body.xeravion-home-page #gameCategoryHub .game-category-card b{
+ font-size:9px!important;letter-spacing:.5px!important;margin-top:2px!important;
+}
+@media(min-width:701px){
+ body.xeravion-home-page #gameCategoryHub .game-category-card{height:190px!important;min-height:190px!important;padding:16px!important}
+}
+</style>
 </body></html>

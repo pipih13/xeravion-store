@@ -272,6 +272,17 @@ async function deleteAdminMessage(request, env, messageId, address) {
   return json({ ok: true, deleted: true });
 }
 
+async function adminAttachmentResponse(request, env, url, messageId, attachmentId) {
+  if (!(await adminAuthorized(request, env))) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+  // Attachments are intentionally unavailable while this service uses D1-only storage.
+  return new Response("Attachments are not enabled in the current D1-only edition", {
+    status: 501,
+    headers: { "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" }
+  });
+}
+
 async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
   return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
 }

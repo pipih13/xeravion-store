@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<script>
+/* Reloading a category/detail URL must return to the storefront root. */
+(function(){
+ try{
+  var entry=window.performance&&performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
+  var legacy=window.performance&&performance.navigation&&performance.navigation.type===1;
+  var isReload=(entry&&entry.type==='reload')||legacy;
+  var params=new URLSearchParams(window.location.search);
+  if(isReload&&(params.has('game')||params.has('listing'))){
+   params.delete('game');params.delete('listing');
+   var clean=window.location.pathname+(params.toString()?'?'+params.toString():'');
+   window.location.replace(clean||'/');
+  }
+ }catch(e){console.warn('XERAVION refresh route fallback:',e)}
+})();
+</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#080807"><meta name="description" content="XERAVION adalah etalase digital akun game Mobile Legends, PUBG Mobile, dan Free Fire. Jelajahi katalog, lihat detail akun, dan hubungi admin untuk cek stok serta transaksi."><meta name="robots" content="index,follow,max-image-preview:large"><meta name="googlebot" content="index,follow"><meta name="author" content="XERAVION"><link rel="canonical" href="https://xeravion.my.id/"><meta property="og:locale" content="id_ID"><link rel="icon" type="image/svg+xml" href="/assets/xeravion-emblem.svg" sizes="any"><meta property="og:type" content="website"><meta property="og:site_name" content="XERAVION"><meta property="og:title" content="XERAVION — Premium Game Account Store"><meta property="og:description" content="Etalase akun game pilihan. Telusuri katalog dan hubungi admin XERAVION untuk konfirmasi ketersediaan."><meta property="og:url" content="https://xeravion.my.id/"><meta property="og:image" content="https://xeravion.my.id/assets/xeravion-emblem.svg"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="XERAVION — Premium Game Account Store"><meta name="twitter:description" content="Etalase akun game pilihan. Telusuri katalog dan hubungi admin XERAVION."><title>Jual Akun Mobile Legends, PUBG & Free Fire | XERAVION</title><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"XERAVION","url":"https://xeravion.my.id/","logo":"https://xeravion.my.id/assets/xeravion-emblem.svg","description":"Etalase digital dan layanan informasi akun game Mobile Legends, PUBG Mobile, dan Free Fire. Calon pembeli dapat melihat katalog dan menghubungi admin untuk konfirmasi ketersediaan.","contactPoint":{"@type":"ContactPoint","telephone":"+6287714947270","email":"support@xeravion.my.id","contactType":"customer service","availableLanguage":"Indonesian"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"XERAVION","url":"https://xeravion.my.id/","inLanguage":"id-ID","description":"Etalase akun game Mobile Legends, PUBG Mobile, dan Free Fire."}</script>
 <style>
 :root{--site-primary:#c49a4a;--site-secondary:#241c10;--site-background:#0b0a08;--site-on-primary:#160f05;--site-on-secondary:#f5e8c9;--site-on-background:#f4efe5;--site-font-body:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--site-font-heading:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--site-heading-scale:1;--site-spacing-scale:1;--site-radius-scale:1;--site-decoration-opacity:1;--gold:#e3c27c;--muted:#a99d89;--line:#3b301f;--panel:#15120d;--panel2:#1d180f;--green:#56d69a;--red:#ff8585}
@@ -697,9 +713,6 @@ loadProducts();
 <style id="xeravion-admin-listing-share-style">.admin-share-buy{margin-top:7px!important;background:linear-gradient(120deg,#15243b,#101827)!important;border:1px solid #6482b5!important;color:#dceaff!important}.admin-share-buy:hover{border-color:#9fc6ff!important;box-shadow:0 0 15px #5489d633!important}</style><style id="xeravion-image-preview-styles">.detail-image-trigger{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.detail-image-trigger .detail-image{cursor:zoom-in}.image-zoom-hint{position:absolute;right:12px;bottom:12px;padding:7px 10px;border:1px solid #e8cc9180;border-radius:20px;background:#080b13d9;color:#f4dfad;font-size:11px}.image-preview-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(3,5,10,.97);align-items:center;justify-content:center;padding:54px 56px}.image-preview-modal.show{display:flex}.image-preview-modal>img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}.image-preview-close,.image-preview-nav{position:absolute;display:grid;place-items:center;border:1px solid #e8cc91aa;background:#111827ef;color:#f8e4b5;border-radius:50%;cursor:pointer}.image-preview-close{top:18px;right:18px;width:42px;height:42px;font-size:28px}.image-preview-nav{top:50%;transform:translateY(-50%);width:42px;height:42px;font-size:30px}.image-preview-nav.prev{left:12px}.image-preview-nav.next{right:12px}.image-preview-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#f4dfad;background:#111827d9;border-radius:20px;padding:6px 12px;font-size:12px}@media(max-width:600px){.image-preview-modal{padding:58px 42px}.image-preview-nav{width:34px;height:34px}.image-preview-nav.prev{left:5px}.image-preview-nav.next{right:5px}}</style><style id="xeravion-separated-store-pages">
 /* Homepage is a game selector only; account inventory lives on each game's own route. */
 body.xeravion-home-page main>section:not(#catalog){display:none!important}
-body.xeravion-home-page #catalog>.hero,
-body.xeravion-home-page #catalog>.stats,
-body.xeravion-home-page #catalog>.topup-coming,
 body.xeravion-home-page #catalog>.sectionhead,
 body.xeravion-home-page #catalog>.tools,
 body.xeravion-home-page #catalog>.chips,

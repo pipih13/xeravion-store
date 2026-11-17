@@ -40,22 +40,38 @@ function bearer(request) {
 
 function extractOtp(text) {
   const source = String(text || "").replace(/\u00a0/g, " ");
-  const cues = /verification|verify|security|login|sign[ -]?in|one[- ]time|passcode|otp|kode|verifikasi|keamanan|masuk|konfirmasi|confirmation|authentication|authentikasi/i;
-  const candidates = [...source.matchAll(/\b(\d{4,8})\b/g)];
-  if (!candidates.length) return null;
+  const codeLabel = /(?:verification|verify|security|login|sign[ -]?in|one[- ]time|passcode|otp|kode|verifikasi|keamanan|masuk|konfirmasi|confirmation|authentication|authentikasi).{0,45}(?:code|kode|password|passcode|otp)?|(?:code|kode|password|passcode|otp).{0,35}(?:verification|verify|security|login|sign[ -]?in|one[- ]time|verifikasi|keamanan|masuk|konfirmasi)?/i;
+  const accountLabel = /account\s*(?:id|number)|user\s*id|player\s*id|character\s*id|id\s*(?:akun|account|pengguna|pemain)|nomor\s*akun/i;
+  const lines = source.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
 
-  // Prefer a number explicitly described as a verification/security/login code.
-  for (const match of candidates) {
-    const start = Math.max(0, match.index - 75);
-    const end = Math.min(source.length, match.index + match[0].length + 75);
-    const context = source.slice(start, end);
-    if (cues.test(context)) return match[1];
+  // Prefer a code on the same line as an explicit login/verification label.
+  // Never treat a number on an account-ID line as the login code.
+  for (const line of lines) {
+    if (accountLabel.test(line) || !codeLabel.test(line)) continue;
+    const match = line.match(/\b(\d{4,8})\b/);
+    if (match) return match[1];
   }
 
-  // Conservative fallback: accept a single six-digit candidate only when the
-  // message itself discusses account access or verification.
-  const sixDigit = candidates.filter(match => match[1].length === 6);
-  if (sixDigit.length === 1 && cues.test(source)) return sixDigit[0][1];
+  // Some providers put the label and number on adjacent lines.
+  for (let i = 0; i < lines.length; i++) {
+    if (accountLabel.test(lines[i]) || !codeLabel.test(lines[i])) continue;
+    const sameLine = lines[i].match(/\b(\d{4,8})\b/);
+    if (sameLine) return sameLine[1];
+    const next = lines[i + 1] || "";
+    if (!accountLabel.test(next)) {
+      const nextNumber = next.match(/\b(\d{4,8})\b/);
+      if (nextNumber) return nextNumber[1];
+    }
+  }
+
+  // Safe fallback only when exactly one six-digit number exists and the
+  // message explicitly refers to account access or verification.
+  const candidates = [...source.matchAll(/\b(\d{6})\b/g)];
+  const hasAccessContext = /verification|verify|security|login|sign[ -]?in|one[- ]time|passcode|otp|kode|verifikasi|keamanan|masuk|konfirmasi|authentication/i.test(source);
+  if (candidates.length === 1 && hasAccessContext) {
+    const line = lines.find(item => item.includes(candidates[0][1])) || "";
+    if (!accountLabel.test(line)) return candidates[0][1];
+  }
   return null;
 }
 
@@ -301,7 +317,7 @@ h2{font-size:clamp(20px,3vw,27px);letter-spacing:-.6px;color:#fff0c8}h3{color:#f
 input{min-width:0;flex:1;background:#0b0a08;border:1px solid #51432b;border-radius:11px;padding:13px 15px;color:#f5ead4;outline:none;transition:border-color .2s,box-shadow .2s}input:focus{border-color:#e4c47e;box-shadow:0 0 0 3px #d3ad6520}input::placeholder{color:#827967}
 button{border-radius:11px;padding:12px 16px;border:1px solid transparent;background:linear-gradient(120deg,#f2dfad,#c99d4d 60%,#9b6d28);color:#171006;font-weight:850;letter-spacing:.2px;box-shadow:0 7px 18px #c49a4a20;transition:filter .2s,transform .2s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button.secondary{background:linear-gradient(145deg,#211b11,#100e0b);color:#f2d99f;border:1px solid #765d32;box-shadow:none}.hidden{display:none!important}
 .notice{padding:12px 14px;border-radius:11px;background:#211a10;border:1px solid #6e552b;color:#e8d3a8;margin-top:12px;font-size:12px;line-height:1.6}.error{background:#352222;border-color:#754040;color:#ffb4ab}
-.mail{padding:10px 12px;border-bottom:1px solid #51432b;cursor:pointer;text-align:left;transition:background .18s,border-color .18s}.mail:hover{background:linear-gradient(90deg,#392b174d,transparent);border-color:#98743a}.mail strong{display:block;text-align:left;color:#f7e8c6;font-size:13px;line-height:1.35;margin-bottom:3px}.mail small{display:block;text-align:left;color:#b4a78f;font-size:10px;line-height:1.35}.mail .otp{font-size:18px;letter-spacing:3px;padding:4px 0 0;text-align:left}.otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:900;padding:12px 0;text-shadow:0 0 22px #c49a4a55}.empty{padding:24px 14px;text-align:center;color:#a99d89}#messages:not(.empty){padding:0;text-align:left}#listView{padding:10px 12px}.detail{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:#ddd2bd;font-size:13px}.card .card{background:#100e0b;border-color:#4a3b25;box-shadow:none}
+.mail{padding:10px 12px;border-bottom:1px solid #51432b;cursor:pointer;text-align:left;transition:background .18s,border-color .18s}.mail:hover{background:linear-gradient(90deg,#392b174d,transparent);border-color:#98743a}.mail strong{display:block;text-align:left;color:#f7e8c6;font-size:13px;line-height:1.35;margin-bottom:3px}.mail small{display:block;text-align:left;color:#b4a78f;font-size:10px;line-height:1.35}.mail .otp{font-size:14px;letter-spacing:2px;padding:2px 0 0;text-align:left}.otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:900;padding:12px 0;text-shadow:0 0 22px #c49a4a55}.empty{padding:24px 14px;text-align:center;color:#a99d89}#messages:not(.empty){padding:0;text-align:left}#listView{padding:10px 12px}.detail{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:#ddd2bd;font-size:13px}.card .card{background:#100e0b;border-color:#4a3b25;box-shadow:none}
 hr{border:0;border-top:1px solid #51432b}
 @media(max-width:600px){main{margin:20px auto;padding:0 13px}.card{padding:16px;border-radius:16px}.head{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.pill{font-size:8px;padding:6px 8px}.row button{padding:11px 12px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
@@ -331,9 +347,9 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 async function api(path){const r=await fetch(path,{headers:{Authorization:'Bearer '+token},cache:'no-store'});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
 function showError(target,text){$(target).innerHTML='<div class="notice error">'+esc(text)+'</div>'}
 async function openInbox(){const candidate=$('token').value.trim();if(!candidate){showError('loginMsg','Token belum diisi.');return}token=candidate;try{const d=await api('/api/messages');currentAddress=d.address||'';saveSession();$('address').textContent=currentAddress;$('login').classList.add('hidden');$('inbox').classList.remove('hidden');$('loginMsg').innerHTML='';$('token').value='';await loadMessages()}catch(e){clearSession();showError('loginMsg','Token tidak valid atau inbox tidak dapat dibuka: '+e.message)}}
-async function loadMessages(){try{const d=await api('/api/messages');const arr=d.messages||[];$('messages').classList.toggle('empty',!arr.length);$('messages').innerHTML=arr.length?arr.map(m=>'<div class="mail" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="otp" style="font-size:20px">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.mail').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){if(/Unauthorized/i.test(e.message)){logout();showError('loginMsg','Sesi berakhir. Masukkan token kembali.')}else showError('messages',e.message)}}
+async function loadMessages(){try{const d=await api('/api/messages');const arr=d.messages||[];$('messages').classList.toggle('empty',!arr.length);$('messages').innerHTML=arr.length?arr.map(m=>'<div class="mail" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="muted" style="font-size:9px;letter-spacing:1.4px;margin-top:5px">KODE LOGIN</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.mail').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){if(/Unauthorized/i.test(e.message)){logout();showError('loginMsg','Sesi berakhir. Masukkan token kembali.')}else showError('messages',e.message)}}
 async function rotateToken(){if(!selectedAddress)return; if(!confirm('Ganti token untuk '+selectedAddress+'? Token lama langsung tidak berlaku.'))return;try{const d=await api('/admin/mailboxes/rotate-token',{method:'POST',body:JSON.stringify({address:selectedAddress})});$('createResult').innerHTML='<div class="notice"><strong>Token baru untuk '+esc(d.address)+':</strong><pre>'+esc(d.accessToken)+'</pre><button class="secondary" id="copyToken">Salin token</button><p class="muted">Token lama sudah tidak berlaku. Simpan token baru dan berikan hanya kepada pembeli yang berhak.</p></div>';$('copyToken').onclick=()=>navigator.clipboard.writeText(d.accessToken)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
-async function readMessage(id){try{const m=await api('/api/messages/'+encodeURIComponent(id));$('detail').innerHTML='<div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</p><h2>'+esc(m.subject||'(Tanpa subjek)')+'</h2>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div><button class="secondary" id="copyOtp">Salin kode</button>':'')+'<hr style="border:0;border-top:1px solid #383a42;margin:18px 0"><div class="detail">'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</div><p class="muted">Lampiran: '+((m.attachments||[]).length)+' · Lampiran belum tersedia pada versi ini.</p>';$('listView').classList.add('hidden');$('detailView').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(m.otp_code)$('copyOtp').onclick=()=>navigator.clipboard.writeText(m.otp_code)}catch(e){showError('messages',e.message)}}
+async function readMessage(id){try{const m=await api('/api/messages/'+encodeURIComponent(id));$('detail').innerHTML='<div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</p><h2>'+esc(m.subject||'(Tanpa subjek)')+'</h2>'+(m.otp_code?'<div class="muted">KODE LOGIN TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div><button class="secondary" id="copyOtp">Salin kode</button>':'')+'<hr style="border:0;border-top:1px solid #383a42;margin:18px 0"><div class="detail">'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</div><p class="muted">Lampiran: '+((m.attachments||[]).length)+' · Lampiran belum tersedia pada versi ini.</p>';$('listView').classList.add('hidden');$('detailView').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(m.otp_code)$('copyOtp').onclick=()=>navigator.clipboard.writeText(m.otp_code)}catch(e){showError('messages',e.message)}}
 function backToList(){$('detailView').classList.add('hidden');$('listView').classList.remove('hidden');$('detail').innerHTML='';window.scrollTo({top:0,behavior:'smooth'})}
 function logout(){clearSession();$('token').value='';$('detail').innerHTML='';$('detailView').classList.add('hidden');$('listView').classList.remove('hidden');$('messages').innerHTML='<div class="empty">Masukkan token untuk membuka inbox.</div>';$('inbox').classList.add('hidden');$('login').classList.remove('hidden')}
 $('openBtn').onclick=openInbox;$('token').addEventListener('keydown',e=>{if(e.key==='Enter')openInbox()});$('backBtn').onclick=backToList;$('refreshBtn').onclick=loadMessages;$('logoutBtn').onclick=logout;

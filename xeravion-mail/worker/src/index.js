@@ -375,6 +375,35 @@ button{cursor:pointer;background:linear-gradient(120deg,#f2dfad,#c99d4d 60%,#9b6
 .otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:900;padding:12px 0;text-shadow:0 0 22px #c49a4a55}.notice{padding:12px 14px;border-radius:11px;background:#211a10;border:1px solid #6e552b;color:#e8d3a8;margin-top:10px;font-size:12px;line-height:1.6}.error{background:#352222;border-color:#754040;color:#ffb4ab}.pill{font-size:10px;letter-spacing:.5px;border:1px solid #8e6d36;padding:6px 10px;border-radius:30px;color:#e8cc91;background:#21190d}.empty{padding:38px;text-align:center;color:#a99d89}.topgap{margin-top:12px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#e8d9bb;line-height:1.6;background:#0b0a08;border:1px solid #51432b;border-radius:10px;padding:12px}.adminstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.adminstats .stat{background:#100e0b;border:1px solid #51432b;border-radius:12px;padding:12px}.sectionlabel{font-size:10px;color:#e8cc91;letter-spacing:2px}
 @media(max-width:760px){main{margin:18px auto;padding:0 13px}.grid{grid-template-columns:1fr}.card{padding:15px;border-radius:15px}header{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px;font-size:23px}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.row button{font-size:11px;padding:10px}.pill{font-size:9px}.adminstats{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+
+/* XERAVION blue-red theme: explicit overrides for all admin surfaces */
+:root{color-scheme:dark;background:#070a12;color:#edf3ff;--muted:#aab7ca;--line:#263c56}
+html{background:#070a12!important}
+body{background:radial-gradient(ellipse at 12% 8%,#0879d933,transparent 34%),radial-gradient(ellipse at 92% 24%,#d6294930,transparent 31%),radial-gradient(ellipse at 52% -18%,#263e6655,transparent 48%),#070a12!important;color:#edf3ff!important}
+header{background:#080d18ed!important;border-bottom:1px solid #3479b866!important}
+.brand small{color:#91c9ff!important}
+main .card,.card{background:linear-gradient(145deg,#142238ed,#0b101bf2)!important;border-color:#29476b!important}
+h2,h3{color:#e5f2ff!important}
+.muted{color:#aab7ca!important}
+input,select{background:#080f1b!important;border-color:#29476b!important;color:#edf3ff!important}
+input:focus,select:focus{border-color:#48aaff!important;box-shadow:0 0 0 3px #249dff24!important}
+input::placeholder{color:#8196b2!important}
+button:not(.secondary){background:linear-gradient(120deg,#7bd0ff,#258ce2 60%,#1760aa)!important;color:#06111e!important;border:1px solid #4aa9f5!important}
+button.secondary{background:linear-gradient(145deg,#17263a,#0c1422)!important;color:#b9dcff!important;border:1px solid #35618d!important}
+.mailbox{background:linear-gradient(145deg,#17263a,#0c1422)!important;color:#e1efff!important;border-color:#29476b!important}
+.mailbox.active{border-color:#48aaff!important;background:linear-gradient(120deg,#164c75,#10243a)!important;box-shadow:0 0 0 2px #249dff24!important}
+.mailbox small,.message small{color:#aab7ca!important}
+.message{border-bottom-color:#263c56!important}
+.message strong{color:#e7f2ff!important}
+.otp{color:#79c8ff!important;text-shadow:0 0 22px #218de855!important}
+.notice{background:#10263b!important;border-color:#287bb7!important;color:#c5e7ff!important}
+.error{background:#351b29!important;border-color:#a33d59!important;color:#ffc0cc!important}
+.pill{border-color:#3479b8!important;color:#9ed4ff!important;background:#10243a!important}
+.empty{color:#9eb0c7!important}
+pre{color:#d8eaff!important;background:#080f1b!important;border-color:#29476b!important}
+.adminstats .stat{background:#101b2b!important;border-color:#29476b!important}
+.sectionlabel{color:#8dcaff!important}
+.logo{background:linear-gradient(145deg,#173d60 0%,#126cae 48%,#7c263e 100%)!important;color:#eaf6ff!important;box-shadow:0 0 0 1px #55baff55,0 10px 34px #168de844!important}
 </style></head><body>
 <header><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>ADMIN CONTROL PANEL</small></div><span class="pill" style="margin-left:auto">PRIVATE</span></header>
 <main>

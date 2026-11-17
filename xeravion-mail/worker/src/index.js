@@ -220,6 +220,17 @@ async function storeIncoming(message, env) {
   ).run();
 }
 
+async function deleteAdminMessage(request, env, messageId, address) {
+  if (!(await adminAuthorized(request, env))) return json({ error: "Unauthorized" }, 401);
+  const safe = safeAddress(address);
+  if (!safe || !messageId) return json({ error: "Permintaan tidak valid" }, 400);
+  const mailbox = await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(safe).first();
+  if (!mailbox) return json({ error: "Mailbox tidak ditemukan" }, 404);
+  const result = await env.DB.prepare("DELETE FROM messages WHERE id = ? AND mailbox_id = ?").bind(messageId, mailbox.id).run();
+  if (!Number(result.meta?.changes || 0)) return json({ error: "Email tidak ditemukan" }, 404);
+  return json({ ok: true, deleted: true });
+}
+
 async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
   return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
 }
@@ -291,7 +302,8 @@ finally{$('rotateTokenBtn').disabled=false}
 }
 async function selectMailbox(address){selectedAddress=address;$('selectedTitle').textContent=address;$('selectedSub').textContent='Email masuk untuk alamat ini';await loadMailboxes();await loadMessages()}
 async function loadMessages(){if(!selectedAddress)return;try{const q=encodeURIComponent($('search').value.trim());const d=await api('/admin/messages?address='+encodeURIComponent(selectedAddress)+'&q='+q);const arr=d.messages||[];$('messages').innerHTML=arr.length?arr.map(m=>'<div class="message" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="otp" style="font-size:18px">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.message').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){$('messages').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
-async function readMessage(id){try{const m=await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(m.received_at)+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'<pre>'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</pre><div class="muted">Lampiran: '+((m.attachments||[]).length)+' · Penyimpanan lampiran belum diaktifkan.</div></div>'}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
+async function deleteMessage(id,subject){if(!confirm('Hapus email "'+(subject||'(Tanpa subjek)')+'" secara permanen?'))return;try{await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress),{method:'DELETE'});$('detail').innerHTML='<div class="notice">Email berhasil dihapus.</div>';await loadMessages()}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
+async function readMessage(id){try{const m=await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(m.received_at)+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'<pre>'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</pre><div class="muted">Lampiran: '+((m.attachments||[]).length)+' · Penyimpanan lampiran belum diaktifkan.</div><button class="secondary" id="deleteMessageBtn" style="background:#542727;border-color:#754040;color:#ffd8d3;margin-top:14px">Hapus email ini</button></div>';$('deleteMessageBtn').onclick=()=>deleteMessage(m.id,m.subject)}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
 $('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=()=>loadMailboxes().catch(e=>alert(e.message));$('refreshMessages').onclick=()=>loadMessages();$('rotateTokenBtn').onclick=rotateToken;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
 })();
 </script></body></html>`;
@@ -337,6 +349,8 @@ export default {
         const mailbox = address ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ? AND is_active = 1").bind(address).first() : null;
         response = mailbox ? await readMessage(mailbox.id, url.pathname.split("/").pop(), env) : json({ error: "Mailbox not found" }, 404);
       }
+    } else if (url.pathname.startsWith("/admin/messages/") && request.method === "DELETE") {
+      response = await deleteAdminMessage(request, env, url.pathname.split("/").pop(), url.searchParams.get("address"));
     } else if (url.pathname === "/api/messages" && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
       response = mailbox ? await listMessages(mailbox, env, url) : json({ error: "Unauthorized" }, 401);

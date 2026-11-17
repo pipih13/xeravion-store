@@ -797,4 +797,39 @@ body.xeravion-listing-page .image-preview-count{z-index:2}
 body.xeravion-listing-page .detail-image-trigger,
 body.xeravion-listing-page .detail-image-trigger img{pointer-events:auto!important}
 </style>
+
+<style id="xeravion-category-compact-row">
+/* Compact game category cards in a horizontal row */
+.game-category-grid{
+ display:flex!important;flex-wrap:nowrap!important;gap:10px!important;
+ overflow-x:auto!important;overflow-y:hidden!important;
+ padding:4px 2px 12px!important;scroll-snap-type:x mandatory;
+ -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+}
+.game-category-card{
+ flex:0 0 168px!important;width:168px!important;min-width:168px!important;
+ height:132px!important;min-height:132px!important;padding:12px!important;
+ border-radius:13px!important;gap:5px!important;scroll-snap-align:start;
+}
+.game-category-card strong{font-size:14px!important;line-height:1.2!important}
+.game-category-card small{font-size:10px!important}
+.game-category-card b{font-size:9px!important;letter-spacing:.8px!important;margin-top:3px!important}
+.game-category-image{object-position:center!important}
+@media(max-width:700px){
+ .game-category-hub{margin:18px 0 26px!important}
+ .game-category-hub>.sectionhead{margin-bottom:10px!important}
+ .game-category-grid{gap:8px!important}
+ .game-category-card{flex-basis:142px!important;width:142px!important;min-width:142px!important;height:112px!important;min-height:112px!important;padding:10px!important}
+ .game-category-card strong{font-size:12px!important}
+ .game-category-card small{font-size:9px!important}
+ .game-category-card b{font-size:8px!important}
+}
+</style>
+<script id="xeravion-use-ml-hero-art">
+(function(){
+ const hero=document.querySelector('#gameSlider .game-slide img[alt*="Mobile Legends"]')||document.querySelector('#gameSlider .game-slide img');
+ const category=document.querySelector('#gameCategoryHub .game-category-card.ml .game-category-image');
+ if(hero&&category){category.src=hero.currentSrc||hero.src;category.removeAttribute('srcset');}
+})();
+</script>
 </body></html>

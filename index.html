@@ -352,6 +352,27 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  transform:scale(1.27)!important;
 }
 </style>
+<style id="xeravion-shirt-soft-blur-sides">
+/* Use a blurred, enlarged copy of the same original banner only as side fill.
+   The foreground original image remains fully visible and untouched. */
+#gameSlider .shirt-slide{isolation:isolate;overflow:hidden;background:#080d1c!important}
+#gameSlider .shirt-slide::before{
+ content:"";position:absolute;inset:-28px;z-index:0;
+ background-image:url("/assets/xeravion-official-shirt-banner.jpg");
+ background-size:cover;background-position:center;
+ filter:blur(22px) brightness(.58) saturate(1.18);
+ transform:scale(1.06);
+}
+#gameSlider .shirt-slide>img{
+ position:relative;z-index:1;
+ display:block;width:100%;height:100%;
+ object-fit:contain!important;object-position:center!important;
+ background:transparent!important;transform:none!important;
+}
+#gameSlider .shirt-slide.active>img{transform:none!important}
+#gameSlider .shirt-slide>.slide-shade{z-index:2;background:linear-gradient(90deg,rgba(4,8,20,.18),transparent 24%,transparent 76%,rgba(4,8,20,.18)),linear-gradient(0deg,rgba(4,8,20,.25),transparent 48%)}
+#gameSlider .shirt-slide>.slide-copy{z-index:3}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>

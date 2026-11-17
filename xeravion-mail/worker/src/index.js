@@ -41,27 +41,13 @@ function bearer(request) {
 function htmlToReadableText(html) {
   let value = String(html || "");
   value = value
-    .replace(/<!--[\\s\\S]*?-->/g, " ")
-    .replace(/<(script|style|head|title|noscript)\\b[^>]*>[\\s\\S]*?<\\/\\1\\s*>/gi, " ")
-    .replace(/<(br|hr)\\b[^>]*>/gi, "\\n")
-    .replace(/<\\/(p|div|section|article|tr|td|th|li|h[1-6]|blockquote|pre)\\s*>/gi, "\\n")
-    .replace(/<li\\b[^>]*>/gi, "• ")
+    .replace(/<!--[\s\S]*?-->/g, " ")
+    .replace(/<(script|style|head|title|noscript)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, " ")
+    .replace(/<(br|hr)\b[^>]*>/gi, "\n")
+    .replace(/<\/(p|div|section|article|tr|td|th|li|h[1-6]|blockquote|pre)\s*>/gi, "\n")
+    .replace(/<li\b[^>]*>/gi, "• ")
     .replace(/<[^>]*>/g, " ");
-  value = value
-    .replace(/&nbsp;|&#160;|&#xA0;/gi, " ")
-    .replace(/&amp;/gi, "&")
-    .replace(/&lt;/gi, "<")
-    .replace(/&gt;/gi, ">")
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&#(\\d+);/g, (_, n) => { const cp = Number(n); return cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""; })
-    .replace(/&#x([0-9a-f]+);/gi, (_, n) => { const cp = parseInt(n, 16); return cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""; })
-    .replace(/[ \\t]+\\n/g, "\\n")
-    .replace(/\\n[ \\t]+/g, "\\n")
-    .replace(/\\n{3,}/g, "\\n\\n")
-    .replace(/[ \\t]{2,}/g, " ")
-    .trim();
-  return value;
+  return value.replace(/&nbsp;|&#160;|&#xA0;/gi," ").replace(/&amp;/gi,"&").replace(/&lt;/gi,"<").replace(/&gt;/gi,">").replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&#(\d+);/g,(_,n)=>{const c=Number(n);return c>0&&c<=0x10ffff?String.fromCodePoint(c):"";}).replace(/&#x([0-9a-f]+);/gi,(_,n)=>{const c=parseInt(n,16);return c>0&&c<=0x10ffff?String.fromCodePoint(c):"";}).replace(/[ \t]+\n/g,"\n").replace(/\n[ \t]+/g,"\n").replace(/\n{3,}/g,"\n\n").replace(/[ \t]{2,}/g," ").trim();
 }
 
 function extractOtp(text) {
@@ -319,43 +305,35 @@ async function adminMailboxByAddress(request, env, address) {
 
 async function storeIncoming(message, env) {
   const recipient = safeAddress(message.to);
-  if (!recipient) {
-    message.setReject("Invalid XERAVION recipient");
-    return;
-  }
-  const mailbox = await env.DB.prepare(
-    "SELECT id,address FROM mailboxes WHERE address = ? AND is_active = 1"
-  ).bind(recipient).first();
-  if (!mailbox) {
-    message.setReject("Unknown XERAVION mailbox");
-    return;
-  }
-  if (Number(message.rawSize || 0) > MAX_EMAIL_BYTES) {
-    message.setReject("Message exceeds XERAVION size limit");
-    return;
-  }
-
+  if (!recipient) { message.setReject("Invalid XERAVION recipient"); return; }
+  const mailbox = await env.DB.prepare("SELECT id,address FROM mailboxes WHERE address = ? AND is_active = 1").bind(recipient).first();
+  if (!mailbox) { message.setReject("Unknown XERAVION mailbox"); return; }
+  if (Number(message.rawSize || 0) > MAX_EMAIL_BYTES) { message.setReject("Message exceeds XERAVION size limit"); return; }
   const raw = await new Response(message.raw).arrayBuffer();
-  if (raw.byteLength > MAX_EMAIL_BYTES) {
-    message.setReject("Message exceeds XERAVION size limit");
-    return;
-  }
+  if (raw.byteLength > MAX_EMAIL_BYTES) { message.setReject("Message exceeds XERAVION size limit"); return; }
   const parsed = await PostalMime.parse(raw);
   const id = crypto.randomUUID();
-  const bodyText = String(parsed.text || htmlToReadableText(parsed.html) || "").slice(0, 200000);
-  const subject = String(parsed.subject || message.headers.get("subject") || "").slice(0, 998);
-  const sender = String(parsed.from?.address || message.from || "").slice(0, 320);
-
-  // MVP mode: store searchable message text in D1 only.
-  // Raw MIME and attachments are intentionally not retained until R2 is enabled.
-  await env.DB.prepare(
-    `INSERT INTO messages (id,mailbox_id,sender,recipient,subject,body_text,otp_code,r2_key,raw_size,attachments_json)
-     VALUES (?,?,?,?,?,?,?,?,?,?)`
-  ).bind(
-    id, mailbox.id, sender, recipient, subject, bodyText,
-    extractOtp(subject + "\\n" + bodyText),
-    "d1-only/" + id, raw.byteLength, "[]"
-  ).run();
+  const bodyText = String(parsed.text || htmlToReadableText(parsed.html) || "");
+  const subject = String(parsed.subject || message.headers.get("subject") || "");
+  const sender = String(parsed.from?.address || message.from || "");
+  const attachmentRows = [];
+  let rawKey = "d1-only/" + id;
+  if (env.MAIL_STORE) {
+    rawKey = "messages/" + mailbox.id + "/" + id + "/original.eml";
+    await env.MAIL_STORE.put(rawKey, raw, { httpMetadata: { contentType: "message/rfc822" } });
+    for (const item of (parsed.attachments || [])) {
+      const attachmentId = crypto.randomUUID();
+      const filename = String(item.filename || ("attachment-" + attachmentId)).replace(/[\r\n\0]/g, "_").slice(0,240);
+      const contentType = String(item.mimeType || "application/octet-stream").slice(0,160);
+      const key = "attachments/" + mailbox.id + "/" + id + "/" + attachmentId;
+      await env.MAIL_STORE.put(key, item.content, { httpMetadata: { contentType } });
+      attachmentRows.push({id:attachmentId,name:filename,contentType,size:Number(item.content?.byteLength || 0),key,available:true});
+    }
+  } else {
+    for (const item of (parsed.attachments || [])) attachmentRows.push({id:crypto.randomUUID(),name:String(item.filename || "Lampiran"),contentType:String(item.mimeType || "application/octet-stream"),size:Number(item.content?.byteLength || 0),available:false});
+  }
+  await env.DB.prepare(`INSERT INTO messages (id,mailbox_id,sender,recipient,subject,body_text,otp_code,r2_key,raw_size,attachments_json) VALUES (?,?,?,?,?,?,?,?,?,?)`)
+    .bind(id,mailbox.id,sender.slice(0,320),recipient,subject.slice(0,998),bodyText,extractOtp(subject + "\n" + bodyText),rawKey,raw.byteLength,JSON.stringify(attachmentRows)).run();
 }
 
 async function deleteAdminMessage(request, env, messageId, address) {
@@ -370,19 +348,30 @@ async function deleteAdminMessage(request, env, messageId, address) {
   return json({ ok: true, deleted: true });
 }
 
-async function adminAttachmentResponse(request, env, url, messageId, attachmentId) {
-  if (!(await adminAuthorized(request, env))) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-  // Attachments are intentionally unavailable while this service uses D1-only storage.
-  return new Response("Attachments are not enabled in the current D1-only edition", {
-    status: 501,
-    headers: { "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" }
-  });
+async function findAttachment(messageId, attachmentId, env) {
+  const row = await env.DB.prepare("SELECT attachments_json FROM messages WHERE id=?").bind(messageId).first();
+  if (!row) return null;
+  let items=[]; try { items=JSON.parse(row.attachments_json || "[]"); } catch {}
+  return items.find(x=>x.id===attachmentId && x.key) || null;
 }
-
+async function attachmentObjectResponse(item, env) {
+  if (!item || !item.key) return new Response("Lampiran tidak tersedia", {status:404});
+  if (!env.MAIL_STORE) return new Response("Penyimpanan lampiran belum dikonfigurasi", {status:503});
+  const object=await env.MAIL_STORE.get(item.key);
+  if (!object) return new Response("Lampiran tidak ditemukan", {status:404});
+  const headers=new Headers(); object.writeHttpMetadata(headers);
+  headers.set("content-disposition","attachment; filename*=UTF-8''"+encodeURIComponent(item.name || "lampiran"));
+  headers.set("cache-control","private, no-store"); headers.set("x-content-type-options","nosniff");
+  return new Response(object.body,{headers});
+}
+async function adminAttachmentResponse(request, env, url, messageId, attachmentId) {
+  if (!(await adminAuthorized(request, env))) return new Response("Unauthorized",{status:401});
+  return attachmentObjectResponse(await findAttachment(messageId,attachmentId,env),env);
+}
 async function attachmentResponse(mailboxId, messageId, attachmentId, env) {
-  return new Response("Attachments are not enabled in the current D1-only edition", { status: 501 });
+  const owns=await env.DB.prepare("SELECT id FROM messages WHERE id=? AND mailbox_id=?").bind(messageId,mailboxId).first();
+  if (!owns) return new Response("Email tidak ditemukan",{status:404});
+  return attachmentObjectResponse(await findAttachment(messageId,attachmentId,env),env);
 }
 
 const BUYER_HTML = `<!doctype html>

@@ -287,7 +287,7 @@ body{
  </div>
  <div id="creditMemberResults" class="hint" style="margin-top:12px">Cari member untuk melihat saldo dan memilih akun.</div>
  <div class="formgrid" style="margin-top:18px">
-  <input id="creditSelectedMember" class="wide" readonly placeholder="Member terpilih (pilih dari hasil pencarian)">
+  <div class="wide" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Member terpilih (pilih dari hasil pencarian)"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div>
   <input id="creditPurchaseRef" placeholder="Kode / referensi transaksi">
   <input id="creditPurchaseAmount" type="number" min="1" placeholder="Nilai transaksi (Rp)">
   <label class="hint wide" style="display:flex;gap:9px;align-items:center"><input type="checkbox" id="creditUsedPoints"> Pesanan ini menggunakan Credit Points (tidak mendapat cashback)</label>
@@ -396,7 +396,7 @@ async function createXeravionOrder(){
  const selectedText=document.getElementById('creditSelectedMember')?.value||'';
  const memberEmail=selectedText.split(' · ')[0].trim();
  const linkedUser=selectedCreditMember&&memberEmail.toLowerCase()===buyerEmail.toLowerCase()?selectedCreditMember:null;
- if(selectedCreditMember&&!linkedUser){msg.textContent='Email pembeli berbeda dari member terpilih. Pilih member yang emailnya sama atau kosongkan pilihan member dengan memuat ulang halaman.';return}
+ if(selectedCreditMember&&!linkedUser){msg.textContent='Email pembeli berbeda dari member terpilih. Pesanan tetap dibuat sebagai pesanan tamu; lepas pilihan member jika memang bukan pembeli tersebut.'}
  msg.textContent='Menyimpan pesanan…';
  try{
   const payload={user_id:linkedUser,product_id:product.id,product_code:product.code,product_name:product.name,game:product.game,buyer_name:buyerName,buyer_email:buyerEmail,buyer_whatsapp:buyerWhatsapp||null,item_price:product.price,points_used:0,points_discount:0,amount_due:product.price,payment_method:paymentMethod};
@@ -461,6 +461,7 @@ async function sendXeravionInvoice(id){
 
 async function searchCreditMembers(){const q=document.getElementById('creditMemberQuery').value.trim(),out=document.getElementById('creditMemberResults'),msg=document.getElementById('creditAdminMessage');out.textContent='Mencari member…';msg.textContent='';try{const{data,error}=await supabaseClient.rpc('credit_admin_search_members',{p_query:q});if(error)throw error;out.innerHTML=data?.length?data.map(m=>'<div class="history-row"><span><strong>'+esc(m.display_name||'Member XERAVION')+'</strong><small>'+esc(m.email||'Email tidak tersedia')+' · Saldo '+Number(m.balance).toLocaleString('id-ID')+' XP</small></span><button class="smallbtn" onclick="selectCreditMember(\''+m.user_id+'\',\''+String(m.email||'').replace(/'/g,"\\'")+'\')">Pilih</button></div>').join(''):'<p class="hint">Member tidak ditemukan. Pastikan akun sudah mendaftar dan email terverifikasi.</p>'}catch(e){out.textContent='Gagal mencari member: '+(e.message||e);}}
 function selectCreditMember(id,email){selectedCreditMember=id;document.getElementById('creditSelectedMember').value=email+' · '+id;document.getElementById('creditAdminMessage').textContent='Member dipilih. Masukkan referensi dan nilai transaksi.'}
+function clearCreditMember(){selectedCreditMember=null;document.getElementById('creditSelectedMember').value='';document.getElementById('creditAdminMessage').textContent='Pilihan member dilepas. Pesanan baru akan dibuat tanpa tautan akun member.'}
 async function completeCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditPurchaseRef').value.trim(),amount=Number(document.getElementById('creditPurchaseAmount').value),used=document.getElementById('creditUsedPoints').checked;if(!selectedCreditMember){msg.textContent='Pilih member terlebih dahulu.';return}if(!ref||!Number.isSafeInteger(amount)||amount<=0){msg.textContent='Isi referensi transaksi dan nilai transaksi yang valid.';return}if(!confirm('Konfirmasi transaksi '+ref+' selesai? Cashback 3% akan dicatat satu kali.'))return;try{const{data,error}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:selectedCreditMember,p_purchase_reference:ref,p_purchase_amount:amount,p_used_points:used});if(error)throw error;msg.textContent=used?'Transaksi selesai. Tidak ada cashback karena pesanan menggunakan poin.':'Berhasil! Cashback '+Number(data||0).toLocaleString('id-ID')+' XP telah diberikan dan berlaku 12 bulan.';await searchCreditMembers()}catch(e){msg.textContent='Gagal memproses: '+(e.message||e)}}
 async function reverseCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditReverseRef').value.trim(),reason=document.getElementById('creditReverseReason').value.trim();if(!ref){msg.textContent='Masukkan referensi transaksi.';return}if(!confirm('Batalkan cashback untuk transaksi '+ref+'? Tindakan ini mencatat pengurangan poin dan tidak dapat dibatalkan otomatis.'))return;try{const{data,error}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:ref,p_reason:reason||'Transaksi dibatalkan'});if(error)throw error;msg.textContent='Cashback dibatalkan. '+Number(data||0).toLocaleString('id-ID')+' XP telah dikoreksi dari saldo member.'}catch(e){msg.textContent='Gagal membatalkan cashback: '+(e.message||e)}}
 let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}document.addEventListener('DOMContentLoaded',()=>{const slider=document.getElementById('gameSlider');if(slider){slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
@@ -582,4 +583,10 @@ loadProducts();
  .topup-mark{flex-basis:44px;width:44px;height:44px;border-radius:13px}
  .topup-mark span{font-size:19px}
 }
-</style></body></html>
+</style><style id="xeravion-member-order-polish">
+.member-order-row{align-items:flex-start;gap:14px}
+.member-order-row>span:last-child{text-align:right;white-space:nowrap}
+.member-order-row small{display:block;line-height:1.55}
+@media(max-width:480px){.member-order-row{flex-direction:column;gap:7px}.member-order-row>span:last-child{text-align:left;white-space:normal}}
+</style>
+</body></html>

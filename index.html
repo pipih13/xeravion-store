@@ -430,7 +430,7 @@ async function completeXeravionOrder(id){
   }
   let bonusMessage='';
   if(order.user_id){
-   const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:false});
+   const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:Number(order.points_used||0)>0});
    if(bonusError)bonusMessage=' Cashback belum terkonfirmasi; coba ulangi konfirmasi atau periksa panel Credit Points: '+bonusError.message;
    else bonusMessage=' Cashback '+Number(bonus||0).toLocaleString('id-ID')+' XP dicatat (jika belum pernah diberikan).';
   }
@@ -440,8 +440,19 @@ async function completeXeravionOrder(id){
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
 async function cancelXeravionOrder(id){
- if(!confirm('Batalkan pesanan ini?'))return;const msg=document.getElementById('orderAdminMessage');
- try{const{data:o,error:r}=await supabaseClient.from('orders').select('invoice_number').eq('id',id).single();if(r)throw r;const{error}=await supabaseClient.from('orders').update({order_status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;msg.textContent='Pesanan dibatalkan. Jika cashback pernah diberikan, gunakan fungsi pembatalan cashback dengan referensi '+o.invoice_number+'.';await loadXeravionOrders()}catch(e){msg.textContent='Gagal membatalkan pesanan: '+(e.message||e)}
+ if(!confirm('Batalkan pesanan ini? Jika cashback sudah diberikan, sistem juga akan mencoba mengoreksinya.'))return;
+ const msg=document.getElementById('orderAdminMessage');
+ try{
+  const{data:o,error:r}=await supabaseClient.from('orders').select('invoice_number,user_id').eq('id',id).single();if(r)throw r;
+  const{error}=await supabaseClient.from('orders').update({order_status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;
+  let note='Pesanan dibatalkan.';
+  if(o.user_id){
+   const{data:reversed,error:reverseError}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:o.invoice_number,p_reason:'Pesanan XERAVION dibatalkan'});
+   if(!reverseError)note+=' Cashback '+Number(reversed||0).toLocaleString('id-ID')+' XP telah dikoreksi.';
+   else if(!String(reverseError.message||'').includes('tidak ditemukan'))note+=' Perhatian: koreksi cashback perlu diperiksa manual ('+reverseError.message+').';
+  }
+  msg.textContent=note;await loadXeravionOrders();
+ }catch(e){msg.textContent='Gagal membatalkan pesanan: '+(e.message||e)}
 }
 async function sendXeravionInvoice(id){
  const msg=document.getElementById('orderAdminMessage');if(!confirm('Kirim invoice ke email pembeli?'))return;msg.textContent='Mengirim invoice…';

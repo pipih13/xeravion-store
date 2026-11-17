@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 320">
+<defs>
+ <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0b4"/><stop offset=".35" stop-color="#e7b94e"/><stop offset=".7" stop-color="#a9681c"/><stop offset="1" stop-color="#ffe8a0"/></linearGradient>
+ <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#603d9d"/><stop offset=".5" stop-color="#28194d"/><stop offset="1" stop-color="#100d27"/></linearGradient>
+ <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f2b8ff"/><stop offset=".5" stop-color="#a64cff"/><stop offset="1" stop-color="#4a27b8"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <filter id="shadow"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<ellipse cx="230" cy="280" rx="150" ry="17" fill="#8c45ff" opacity=".28" filter="url(#shadow)"/>
+<!-- flying reward coins -->
+<g stroke="#8e5b1d" stroke-width="3">
+ <g transform="translate(93 85) rotate(-20)"><circle r="31" fill="url(#g)"/><circle r="23" fill="none" stroke="#fff0b4" stroke-width="2"/><path d="M-9-13h18M-9 0h18M-9 13h18" stroke="#a56b20" stroke-width="4"/></g>
+ <g transform="translate(327 67) rotate(18)"><circle r="25" fill="url(#g)"/><circle r="18" fill="none" stroke="#fff0b4" stroke-width="2"/><path d="M-7-10h14M-7 0h14M-7 10h14" stroke="#a56b20" stroke-width="3"/></g>
+ <g transform="translate(365 168) rotate(26)"><circle r="20" fill="url(#violet)"/><circle r="14" fill="none" stroke="#f5d9ff" stroke-width="2"/><path d="M-6-8h12M-6 0h12M-6 8h12" stroke="#fff" stroke-width="2"/></g>
+ <g transform="translate(145 190) rotate(-12)"><circle r="17" fill="url(#g)"/><circle r="11" fill="none" stroke="#fff0b4" stroke-width="2"/><path d="M-5-6h10M-5 0h10M-5 6h10" stroke="#a56b20" stroke-width="2"/></g>
+</g>
+<!-- open chest lid -->
+<path d="M105 160l25-70q5-15 22-15h161q18 0 24 16l25 69-36 26H139z" fill="url(#wood)" stroke="url(#g)" stroke-width="9" stroke-linejoin="round"/>
+<path d="M126 145l25-51h158l26 51-29 18H154z" fill="#a64cff" opacity=".28"/>
+<path d="M155 112h149M143 135h175" stroke="url(#g)" stroke-width="5" opacity=".85"/>
+<!-- treasure glow -->
+<path d="M135 171q95-80 190 0v35H135z" fill="#ffda74" opacity=".25" filter="url(#glow)"/>
+<g fill="url(#g)" stroke="#8f5c1d" stroke-width="2">
+ <circle cx="180" cy="172" r="19"/><circle cx="221" cy="160" r="22"/><circle cx="265" cy="171" r="19"/><circle cx="302" cy="180" r="15"/>
+</g>
+<!-- chest body -->
+<path d="M105 174h258v90q0 20-20 20H125q-20 0-20-20z" fill="url(#wood)" stroke="url(#g)" stroke-width="9"/>
+<path d="M112 198h244M112 242h244" stroke="#d9a84c" stroke-width="5" opacity=".7"/>
+<path d="M203 177h62v105h-62z" fill="url(#g)" stroke="#fff0b4" stroke-width="3"/>
+<path d="M219 211h30v34h-30z" rx="5" fill="#271744" stroke="#fff0b4" stroke-width="3"/>
+<path d="M234 218v17" stroke="#ffe7a0" stroke-width="4" stroke-linecap="round"/>
+<path d="M99 172h270" stroke="#fff0b4" stroke-width="6" stroke-linecap="round"/>
+<g fill="#fff0b4" filter="url(#glow)"><path d="M70 135l5 13 13 5-13 5-5 13-5-13-13-5 13-5z"/><path d="M382 95l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/></g>
+</svg>

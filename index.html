@@ -573,16 +573,21 @@ async function redeemMemberReward(){alert('Poin digunakan saat pembelian akun me
 async function memberSignOut(){await supabaseClient.auth.signOut();document.getElementById('memberAccount').classList.add('hidden');document.getElementById('memberAuth').classList.remove('hidden');setMemberMode('login');alert('Kamu sudah keluar dari akun member XERAVION.')}
 
 
-/* On a manual refresh, return category-only URLs to the storefront home.
-   Keep listing deep links intact so a refreshed listing still reopens its detail. */
+/* On manual refresh, always return to the storefront homepage.
+   Directly opened shared listing links still work on a normal navigation. */
 (function normalizeRefreshRoute(){
  const nav=performance.getEntriesByType('navigation')[0];
- if(!nav||nav.type!=='reload')return;
+ const legacyReload=performance.navigation&&performance.navigation.type===1;
+ if((!nav||nav.type!=='reload')&&!legacyReload)return;
  const url=new URL(location.href);
- if(url.searchParams.has('game')&&!url.searchParams.has('listing')){
+ const hadStoreRoute=url.searchParams.has('game')||url.searchParams.has('listing');
+ if(hadStoreRoute){
   url.searchParams.delete('game');
+  url.searchParams.delete('listing');
   history.replaceState({},'',url.pathname+url.search+url.hash);
  }
+ document.body.classList.remove('xeravion-listing-page','xeravion-game-page');
+ document.body.classList.add('xeravion-home-page');
 })();
 loadProducts();
 </script>

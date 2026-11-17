@@ -730,4 +730,9 @@ body.xeravion-game-page #catalog>.sectionhead{margin-top:0}
 .payment-logo-dana .payment-symbol,.payment-logo-gopay .payment-symbol{background:linear-gradient(145deg,#b5e7ff,#3a8bd8);color:#08213b}
 .payment-logo-shopee .payment-symbol{background:linear-gradient(145deg,#ffd1a0,#ed7844);color:#4a1b0a}
 
-</style></body></html>
+</style><style id="xeravion-admin-route-visibility-fix">
+/* Dashboard harus tetap dapat tampil di homepage maupun halaman kategori game. */
+body.xeravion-home-page main>section#admin.active,
+body.xeravion-game-page main>section#admin.active{display:block!important}
+</style>
+</body></html>

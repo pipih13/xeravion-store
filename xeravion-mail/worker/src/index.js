@@ -414,54 +414,58 @@ export default {
     const headers = cors(request, env);
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
     const url = new URL(request.url);
+    // Normalize trailing slashes so /inbox and /inbox/ resolve identically.
+    const path = url.pathname.replace(/\\/+$/, "") || "/";
     let response;
 
-    if (url.pathname === "/inbox" && request.method === "GET") {
+    if (path === "/" && request.method === "GET") {
+      response = Response.redirect(new URL("/inbox", url.origin), 302);
+    } else if (path === "/inbox" && request.method === "GET") {
       response = new Response(BUYER_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
-    } else if (url.pathname === "/panel" && request.method === "GET") {
+    } else if (path === "/panel" && request.method === "GET") {
       response = new Response(ADMIN_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
-    } else if (url.pathname === "/health" && request.method === "GET") {
-      response = json({ ok: true, service: "xeravion-mail", status: "worker-online" });
-    } else if (url.pathname === "/admin/audit-logs" && request.method === "GET") {
+    } else if (path === "/health" && request.method === "GET") {
+      response = json({ ok: true, service: "xeravion-mail", status: "worker-online", version: "domain-router-fix-1" });
+    } else if (path === "/admin/audit-logs" && request.method === "GET") {
       response = await listAuditLogs(request, env, url);
-    } else if (url.pathname === "/admin/stats" && request.method === "GET") {
+    } else if (path === "/admin/stats" && request.method === "GET") {
       response = await adminStats(request, env);
-    } else if (url.pathname === "/admin/mailboxes/status" && request.method === "POST") {
+    } else if (path === "/admin/mailboxes/status" && request.method === "POST") {
       response = await setMailboxStatus(request, env);
-    } else if (url.pathname === "/admin/mailboxes/rotate-token" && request.method === "POST") {
+    } else if (path === "/admin/mailboxes/rotate-token" && request.method === "POST") {
       response = await rotateMailboxToken(request, env);
-    } else if (url.pathname === "/admin/mailboxes" && request.method === "POST") {
+    } else if (path === "/admin/mailboxes" && request.method === "POST") {
       response = await createMailbox(request, env);
-    } else if (url.pathname === "/admin/mailboxes" && request.method === "GET") {
+    } else if (path === "/admin/mailboxes" && request.method === "GET") {
       response = await listMailboxes(request, env);
-    } else if (url.pathname === "/admin/messages" && request.method === "GET") {
+    } else if (path === "/admin/messages" && request.method === "GET") {
       if (!(await adminAuthorized(request, env))) response = json({ error: "Unauthorized" }, 401);
       else {
         const address = safeAddress(url.searchParams.get("address"));
         const mailbox = address ? await env.DB.prepare("SELECT id,address FROM mailboxes WHERE address = ?").bind(address).first() : null;
         response = mailbox ? await listMessages(mailbox, env, url) : json({ error: "Mailbox not found" }, 404);
       }
-    } else if (url.pathname.startsWith("/admin/messages/") && request.method === "GET") {
+    } else if (path.startsWith("/admin/messages/") && request.method === "GET") {
       if (!(await adminAuthorized(request, env))) response = json({ error: "Unauthorized" }, 401);
       else {
         const address = safeAddress(url.searchParams.get("address"));
         const mailbox = address ? await env.DB.prepare("SELECT id FROM mailboxes WHERE address = ?").bind(address).first() : null;
-        response = mailbox ? await readMessage(mailbox.id, url.pathname.split("/").pop(), env) : json({ error: "Mailbox not found" }, 404);
+        response = mailbox ? await readMessage(mailbox.id, path.split("/").pop(), env) : json({ error: "Mailbox not found" }, 404);
       }
-    } else if (url.pathname.startsWith("/admin/messages/") && request.method === "DELETE") {
-      response = await deleteAdminMessage(request, env, url.pathname.split("/").pop(), url.searchParams.get("address"));
-    } else if (url.pathname === "/api/messages" && request.method === "GET") {
+    } else if (path.startsWith("/admin/messages/") && request.method === "DELETE") {
+      response = await deleteAdminMessage(request, env, path.split("/").pop(), url.searchParams.get("address"));
+    } else if (path === "/api/messages" && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
       response = mailbox ? await listMessages(mailbox, env, url) : json({ error: "Unauthorized" }, 401);
-    } else if (url.pathname.startsWith("/api/messages/") && request.method === "GET") {
+    } else if (path.startsWith("/api/messages/") && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
-      response = mailbox ? await readMessage(mailbox.id, url.pathname.split("/").pop(), env) : json({ error: "Unauthorized" }, 401);
-    } else if (url.pathname.startsWith("/admin/attachments/") && request.method === "GET") {
-      const parts = url.pathname.split("/");
+      response = mailbox ? await readMessage(mailbox.id, path.split("/").pop(), env) : json({ error: "Unauthorized" }, 401);
+    } else if (path.startsWith("/admin/attachments/") && request.method === "GET") {
+      const parts = path.split("/");
       response = await adminAttachmentResponse(request, env, url, parts[3], parts[4]);
-    } else if (url.pathname.startsWith("/api/attachments/") && request.method === "GET") {
+    } else if (path.startsWith("/api/attachments/") && request.method === "GET") {
       const mailbox = await resolveBuyer(request, env);
-      const parts = url.pathname.split("/");
+      const parts = path.split("/");
       response = mailbox ? await attachmentResponse(mailbox.id, parts[3], parts[4], env) : new Response("Unauthorized", { status: 401 });
     } else {
       response = json({ error: "Not found" }, 404);

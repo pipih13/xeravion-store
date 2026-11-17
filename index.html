@@ -22,6 +22,29 @@ body,.app{background:radial-gradient(ellipse at 50% -18%,#4b371b55 0,transparent
 .how{border-color:#51432b;padding:42px 0}.footer{border-color:#51432b;background:#080706}.admin .panel,.panel{background:linear-gradient(145deg,#19150f,#0e0d0a);border-color:#59472a;box-shadow:0 15px 35px #0004}.modal{background:linear-gradient(145deg,#211a10,#100e0b);border-color:#8a6a35;box-shadow:0 25px 80px #000b}.notice{background:#241b0d;border-color:#98743a;color:#ead6a9}
 @media(max-width:760px){.hero{padding-top:46px;gap:25px}.art{height:220px}.thumb{height:140px}.prod{padding:12px}}
 @media(max-width:390px){.hero h1{font-size:39px}.art{height:190px}}
+
+/* XERAVION header and mobile layout correction */
+.brand{min-width:0;flex:0 1 auto;gap:10px}
+.brand-mark{display:block;width:42px!important;height:42px!important;min-width:42px;max-width:42px;flex:0 0 42px;object-fit:cover;object-position:center 18%;border-radius:50%;background:#080b16;overflow:hidden}
+.brand>div{min-width:0}
+.brand b{display:block;font-size:clamp(14px,2vw,20px);letter-spacing:2px;white-space:nowrap}
+.brand small{font-size:8px;letter-spacing:1.4px;white-space:nowrap}
+.nav{min-width:0}
+@media(max-width:760px){
+ .wrap{width:100%;max-width:100%;padding-left:14px;padding-right:14px}
+ .nav{height:auto;min-height:68px;flex-wrap:wrap;padding-top:9px;padding-bottom:9px;gap:8px}
+ .brand{flex:1 1 100%;justify-content:center}
+ .brand-mark{width:38px!important;height:38px!important;min-width:38px;max-width:38px;flex-basis:38px}
+ .navlinks{order:3;width:100%;justify-content:center;gap:clamp(10px,3vw,20px);font-size:11px;flex-wrap:wrap}
+ .navright{gap:6px}
+ .navright .btn{padding:8px 10px;font-size:11px}
+ .hero{width:100%;grid-template-columns:minmax(0,1fr);padding:28px 18px 20px;gap:18px}
+ .hero h1{font-size:clamp(34px,9vw,46px);line-height:1.08;overflow-wrap:anywhere}
+ .hero p{font-size:13px}
+ .art{width:100%;max-width:100%}
+}
+html,body,.app{max-width:100%;overflow-x:hidden}
+
 </style>
 <style>
 .brand-mark{width:48px;height:48px;flex:0 0 48px;object-fit:cover;object-position:center 24%;border-radius:50%;background:#080a12;filter:drop-shadow(0 0 7px #ffd76b88) drop-shadow(0 0 13px #398cff55)}

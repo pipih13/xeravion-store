@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+<defs>
+ <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#071225"/><stop offset=".55" stop-color="#11102b"/><stop offset="1" stop-color="#090b18"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#255bd5" stop-opacity=".55"/><stop offset="1" stop-color="#255bd5" stop-opacity="0"/></radialGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#fff0bd"/><stop offset=".45" stop-color="#e2b650"/><stop offset="1" stop-color="#8e5a17"/></linearGradient>
+ <linearGradient id="shirt" x2="1" y2="1"><stop stop-color="#20232c"/><stop offset=".45" stop-color="#08090e"/><stop offset="1" stop-color="#171923"/></linearGradient>
+ <linearGradient id="neon" x2="1"><stop stop-color="#16c9ff"/><stop offset=".5" stop-color="#7455ff"/><stop offset="1" stop-color="#d34dff"/></linearGradient>
+ <filter id="blur"><feGaussianBlur stdDeviation="35"/></filter>
+ <filter id="shadow"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/>
+<ellipse cx="1230" cy="390" rx="500" ry="390" fill="url(#glow)"/>
+<ellipse cx="200" cy="800" rx="600" ry="180" fill="#133e8d" opacity=".22" filter="url(#blur)"/>
+<g opacity=".55" fill="none" stroke="url(#neon)" stroke-width="5">
+ <path d="M0 150H390L500 40H720"/><path d="M1080 70H1470L1600 200"/>
+ <path d="M0 740H360L480 860H790"/><path d="M1120 850H1480L1600 730"/>
+ <path d="M900 0V110M930 0V80M960 0V55" opacity=".5"/>
+</g>
+<g opacity=".16" stroke="#8daaff" fill="none" stroke-width="3">
+ <path d="M80 270h160v100H80zM110 300h100M110 330h70"/>
+ <circle cx="300" cy="580" r="70"/><path d="M260 580h80m-40-40v80"/>
+ <path d="M1320 180h170v110h-170zM1350 215h110M1350 250h75"/>
+</g>
+<g opacity=".45" fill="#19c9ff"><circle cx="180" cy="190" r="4"/><circle cx="450" cy="250" r="3"/><circle cx="760" cy="130" r="4"/><circle cx="1400" cy="600" r="4"/></g>
+<ellipse cx="1170" cy="820" rx="350" ry="38" fill="#000" opacity=".6" filter="url(#shadow)"/>
+<ellipse cx="1170" cy="810" rx="300" ry="18" fill="none" stroke="url(#gold)" stroke-width="5" opacity=".9"/>
+<!-- floating premium black shirt -->
+<path d="M1030 170L1120 115Q1170 155 1220 115L1310 170L1480 300L1390 405L1310 340L1325 760Q1170 820 1015 760L1030 340L950 405L860 300Z" fill="url(#shirt)" stroke="#4d5263" stroke-width="5"/>
+<path d="M1120 115Q1170 235 1220 115" fill="none" stroke="#596071" stroke-width="13"/>
+<path d="M1120 115Q1170 180 1220 115" fill="none" stroke="#07080d" stroke-width="8"/>
+<path d="M1030 170L950 405M1310 170L1390 405" fill="none" stroke="#343947" stroke-width="4"/>
+<path d="M1018 760Q1170 790 1322 760" fill="none" stroke="#3a3d48" stroke-width="5"/>
+<g transform="translate(1170 350)">
+ <path d="M-43 -22L-3 -70L25 -24L67 -74L17 4L-13 -20L-52 22Z" fill="url(#gold)"/>
+ <text x="0" y="48" text-anchor="middle" font-family="Arial,sans-serif" font-size="29" font-weight="900" letter-spacing="2" fill="url(#gold)">XERAVION</text>
+ <text x="0" y="75" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#e4e7ef">XERAVION.MY.ID</text>
+</g>
+<g opacity=".65" fill="none" stroke="url(#neon)" stroke-width="4"><path d="M650 700q100-100 200 0t200 0"/><path d="M720 740q100-100 200 0t200 0" opacity=".5"/></g>
+<path d="M0 0H430L300 24H0ZM1600 900H1220l130-24h250Z" fill="url(#gold)" opacity=".8"/>
+</svg>

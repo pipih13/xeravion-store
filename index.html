@@ -572,6 +572,18 @@ async function refreshMemberPanel(){
 async function redeemMemberReward(){alert('Poin digunakan saat pembelian akun melalui admin. Hubungi admin XERAVION untuk menghitung diskon maksimal 10% dan memproses pesanan.')}
 async function memberSignOut(){await supabaseClient.auth.signOut();document.getElementById('memberAccount').classList.add('hidden');document.getElementById('memberAuth').classList.remove('hidden');setMemberMode('login');alert('Kamu sudah keluar dari akun member XERAVION.')}
 
+
+/* On a manual refresh, return category-only URLs to the storefront home.
+   Keep listing deep links intact so a refreshed listing still reopens its detail. */
+(function normalizeRefreshRoute(){
+ const nav=performance.getEntriesByType('navigation')[0];
+ if(!nav||nav.type!=='reload')return;
+ const url=new URL(location.href);
+ if(url.searchParams.has('game')&&!url.searchParams.has('listing')){
+  url.searchParams.delete('game');
+  history.replaceState({},'',url.pathname+url.search+url.hash);
+ }
+})();
 loadProducts();
 </script>
 

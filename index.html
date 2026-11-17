@@ -396,14 +396,22 @@ async function loadXeravionOrders(){
  }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat: '+esc(e.message||e)+'</td></tr>'}
 }
 async function completeXeravionOrder(id){
- const msg=document.getElementById('orderAdminMessage');if(!confirm('Konfirmasi pembayaran sudah diterima dan pesanan sudah selesai? Pastikan dana benar-benar masuk.'))return;
+ const msg=document.getElementById('orderAdminMessage');if(!confirm('Pastikan dana sudah benar-benar diterima dan akun sudah diserahkan. Konfirmasi pembayaran dan penyelesaian pesanan?'))return;
  try{
   const{data:order,error:readError}=await supabaseClient.from('orders').select('*').eq('id',id).single();if(readError)throw readError;
-  if(order.order_status==='completed'||order.payment_status==='paid'){msg.textContent='Pesanan ini sudah pernah dikonfirmasi.';return}
-  const{error:updateError}=await supabaseClient.from('orders').update({payment_status:'paid',order_status:'completed',updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;
-  let bonusMessage='';if(order.user_id){const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:false});if(bonusError)bonusMessage=' Cashback perlu diperiksa manual: '+bonusError.message;else bonusMessage=' Cashback '+Number(bonus||0).toLocaleString('id-ID')+' XP dicatat.'}
-  msg.textContent='Pembayaran dan pesanan dikonfirmasi selesai.'+bonusMessage+' Sekarang invoice dapat dikirim.';
-  await loadXeravionOrders();
+  if(order.order_status==='cancelled')throw new Error('Pesanan yang dibatalkan tidak dapat diselesaikan.');
+  if(order.payment_status!=='paid'||order.order_status!=='completed'){
+   const{error:updateError}=await supabaseClient.from('orders').update({payment_status:'paid',order_status:'completed',updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;
+  }
+  let bonusMessage='';
+  if(order.user_id){
+   const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:false});
+   if(bonusError)bonusMessage=' Cashback belum terkonfirmasi; coba ulangi konfirmasi atau periksa panel Credit Points: '+bonusError.message;
+   else bonusMessage=' Cashback '+Number(bonus||0).toLocaleString('id-ID')+' XP dicatat (jika belum pernah diberikan).';
+  }
+  if(order.product_id){const{error:stockError}=await supabaseClient.from('products').update({status:'Terjual'}).eq('id',order.product_id);if(stockError)bonusMessage+=' Status stok perlu diperbarui manual: '+stockError.message;}
+  msg.textContent='Pesanan berstatus lunas dan selesai.'+bonusMessage+' Invoice siap dikirim.';
+  await loadProducts();await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
 async function cancelXeravionOrder(id){

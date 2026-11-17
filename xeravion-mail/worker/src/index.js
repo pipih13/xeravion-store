@@ -105,13 +105,72 @@ async function listAuditLogs(request, env, url) {
   return json({ logs: rows.results || [] });
 }
 
+
+// Password credentials and short-lived buyer sessions. Passwords use PBKDF2-SHA256.
+async function ensureAuthTables(env) {
+  await env.DB.prepare("CREATE TABLE IF NOT EXISTS mailbox_credentials (mailbox_id TEXT PRIMARY KEY, password_salt TEXT NOT NULL, password_hash TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')), FOREIGN KEY(mailbox_id) REFERENCES mailboxes(id))").run();
+  await env.DB.prepare("CREATE TABLE IF NOT EXISTS buyer_sessions (token_hash TEXT PRIMARY KEY, mailbox_id TEXT NOT NULL, expires_at TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')), FOREIGN KEY(mailbox_id) REFERENCES mailboxes(id))").run();
+}
+function randomPassword() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%";
+  const bytes = crypto.getRandomValues(new Uint8Array(18));
+  return Array.from(bytes, b => chars[b % chars.length]).join("");
+}
+async function derivePassword(password, saltHex) {
+  const salt = Uint8Array.from(saltHex.match(/.{2}/g).map(x => parseInt(x,16)));
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+  const bits = await crypto.subtle.deriveBits({name:"PBKDF2", hash:"SHA-256", salt, iterations:210000}, key, 256);
+  return [...new Uint8Array(bits)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+async function saveMailboxPassword(env, mailboxId, password) {
+  await ensureAuthTables(env);
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const saltHex = [...salt].map(x=>x.toString(16).padStart(2,"0")).join("");
+  const hash = await derivePassword(password, saltHex);
+  await env.DB.prepare("INSERT INTO mailbox_credentials (mailbox_id,password_salt,password_hash) VALUES (?,?,?) ON CONFLICT(mailbox_id) DO UPDATE SET password_salt=excluded.password_salt,password_hash=excluded.password_hash,updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')").bind(mailboxId,saltHex,hash).run();
+}
+async function setMailboxPassword(request, env) {
+  if (!(await adminAuthorized(request, env))) return json({error:"Unauthorized"},401);
+  const body = await request.json().catch(()=>null);
+  const address = safeAddress(body?.address);
+  if (!address) return json({error:"Alamat email tidak valid"},400);
+  const mailbox = await env.DB.prepare("SELECT id,address,mailbox_type,is_active FROM mailboxes WHERE address=?").bind(address).first();
+  if (!mailbox || mailbox.mailbox_type !== "game_account") return json({error:"Mailbox game aktif tidak ditemukan"},404);
+  if (!mailbox.is_active) return json({error:"Aktifkan mailbox sebelum mengatur password"},400);
+  const password = randomPassword();
+  await saveMailboxPassword(env,mailbox.id,password);
+  await logAdminAction(env,"password_set",address);
+  return json({ok:true,address,password,note:"Password hanya ditampilkan kali ini. Berikan kepada pembeli yang berhak."});
+}
+async function buyerPasswordLogin(request, env) {
+  const body = await request.json().catch(()=>null);
+  const address = safeAddress(body?.address);
+  const password = String(body?.password || "");
+  if (!address || password.length < 1 || password.length > 256) return json({error:"Email atau kata sandi tidak valid"},400);
+  await ensureAuthTables(env);
+  const mailbox = await env.DB.prepare("SELECT id,address FROM mailboxes WHERE address=? AND mailbox_type='game_account' AND is_active=1").bind(address).first();
+  if (!mailbox) return json({error:"Email atau kata sandi salah"},401);
+  const credential = await env.DB.prepare("SELECT password_salt,password_hash FROM mailbox_credentials WHERE mailbox_id=?").bind(mailbox.id).first();
+  if (!credential) return json({error:"Password belum dibuat. Hubungi admin XERAVION."},401);
+  const candidate = await derivePassword(password,credential.password_salt);
+  if (candidate !== credential.password_hash) return json({error:"Email atau kata sandi salah"},401);
+  const sessionToken = randomToken();
+  const tokenHash = await sha256(sessionToken);
+  await env.DB.prepare("DELETE FROM buyer_sessions WHERE expires_at <= strftime('%Y-%m-%dT%H:%M:%fZ','now')").run();
+  await env.DB.prepare("INSERT INTO buyer_sessions (token_hash,mailbox_id,expires_at) VALUES (?,?,strftime('%Y-%m-%dT%H:%M:%fZ','now','+12 hours'))").bind(tokenHash,mailbox.id).run();
+  return json({ok:true,address:mailbox.address,accessToken:sessionToken});
+}
+
 async function resolveBuyer(request, env) {
   const token = bearer(request);
   if (!token) return null;
   const hash = await sha256(token);
-  return await env.DB.prepare(
+  const legacy = await env.DB.prepare(
     "SELECT id, address, mailbox_type FROM mailboxes WHERE access_token_hash = ? AND is_active = 1 AND mailbox_type = 'game_account'"
   ).bind(hash).first();
+  if (legacy) return legacy;
+  await ensureAuthTables(env);
+  return await env.DB.prepare("SELECT m.id,m.address,m.mailbox_type FROM buyer_sessions s JOIN mailboxes m ON m.id=s.mailbox_id WHERE s.token_hash=? AND s.expires_at>strftime('%Y-%m-%dT%H:%M:%fZ','now') AND m.is_active=1 AND m.mailbox_type='game_account'").bind(hash).first();
 }
 
 async function createMailbox(request, env) {
@@ -149,10 +208,10 @@ async function createMailbox(request, env) {
   await env.DB.prepare(
     "INSERT INTO mailboxes (id,address,mailbox_type,game_code,access_token_hash) VALUES (?,?,?,?,?)"
   ).bind(id, address, gameCode ? "game_account" : "support", gameCode, tokenHash).run();
-  await logAdminAction(env, "mailbox_created", address, { mailbox_type: gameCode ? "game_account" : "support", game_code: gameCode });
-
-  // Buyer token is shown once only. Support is accessed exclusively through admin endpoints.
-  return json({ ok: true, address, accessToken, note: accessToken ? "Simpan token ini; token tidak dapat ditampilkan lagi." : "Inbox support hanya dapat diakses admin." }, 201);
+  let password = null;
+  if (gameCode) { password = randomPassword(); await saveMailboxPassword(env,id,password); }
+  await logAdminAction(env, "mailbox_created", address, { mailbox_type: gameCode ? "game_account" : "support", game_code: gameCode, password_created: !!password });
+  return json({ ok: true, address, accessToken, password, note: accessToken ? "Simpan token dan password ini; keduanya hanya ditampilkan sekali." : "Inbox support hanya dapat diakses admin." }, 201);
 }
 
 
@@ -324,7 +383,7 @@ hr{border:0;border-top:1px solid #263c56}
 </style></head><body>
 <header class="head"><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>KOTAK MASUK</small></div><span class="pill">PRIVATE</span></header>
 <main>
-<section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masukkan token akses yang diberikan admin XERAVION. Sesi aman yang tetap aktif saat halaman di-refresh dan berakhir otomatis setelah 10 menit tanpa aktivitas.</p><div class="row"><input id="token" type="password" autocomplete="off" placeholder="Token akses pembeli"><button id="openBtn">Buka inbox</button></div><div id="loginMsg"></div></section>
+<section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masuk dengan email dan kata sandi, atau gunakan token akses sebagai alternatif.</p><div class="row"><input id="emailAddress" type="email" autocomplete="username" placeholder="Alamat email XERAVION"><input id="emailPassword" type="password" autocomplete="current-password" placeholder="Kata sandi"><button id="passwordLoginBtn">Masuk</button></div><div class="muted" style="text-align:center;margin:10px 0">ATAU</div><div class="row"><input id="token" type="password" autocomplete="off" placeholder="Token akses pembeli"><button id="openBtn">Masuk dengan token</button></div><div id="loginMsg"></div></section>
 <section id="inbox" class="hidden">
 <div class="card"><div class="row"><div><h2 id="address" style="margin:0">Kotak masuk</h2><p class="muted" style="margin:6px 0 0">Email yang diterima untuk alamat ini.</p></div><button id="refreshBtn" class="secondary" style="margin-left:auto">Refresh</button><button id="logoutBtn" class="secondary">Keluar</button></div>
 </div>
@@ -346,13 +405,15 @@ async function restoreSession(){let saved=null;try{saved=JSON.parse(sessionStora
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path){const r=await fetch(path,{headers:{Authorization:'Bearer '+token},cache:'no-store'});let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||('HTTP '+r.status));return d}
 function showError(target,text){$(target).innerHTML='<div class="notice error">'+esc(text)+'</div>'}
-async function openInbox(){const candidate=$('token').value.trim();if(!candidate){showError('loginMsg','Token belum diisi.');return}token=candidate;try{const d=await api('/api/messages');currentAddress=d.address||'';saveSession();$('address').textContent=currentAddress;$('login').classList.add('hidden');$('inbox').classList.remove('hidden');$('loginMsg').innerHTML='';$('token').value='';await loadMessages()}catch(e){clearSession();showError('loginMsg','Token tidak valid atau inbox tidak dapat dibuka: '+e.message)}}
+async function enterInbox(sessionToken,address){token=sessionToken;currentAddress=address||'';const d=await api('/api/messages');currentAddress=d.address||currentAddress;saveSession();$('address').textContent=currentAddress;$('login').classList.add('hidden');$('inbox').classList.remove('hidden');$('loginMsg').innerHTML='';$('token').value='';$('emailPassword').value='';await loadMessages()}
+async function openInbox(){const candidate=$('token').value.trim();if(!candidate){showError('loginMsg','Token belum diisi.');return}try{await enterInbox(candidate,'')}catch(e){clearSession();showError('loginMsg','Token tidak valid atau inbox tidak dapat dibuka: '+e.message)}}
+async function passwordLogin(){const address=$('emailAddress').value.trim();const password=$('emailPassword').value;if(!address||!password){showError('loginMsg','Masukkan alamat email dan kata sandi.');return}try{$('passwordLoginBtn').disabled=true;const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address,password}),cache:'no-store'});const d=await r.json();if(!r.ok)throw new Error(d.error||'Login gagal');await enterInbox(d.accessToken,d.address)}catch(e){clearSession();showError('loginMsg',e.message)}finally{$('passwordLoginBtn').disabled=false}}
 async function loadMessages(){try{const d=await api('/api/messages');const arr=d.messages||[];$('messages').classList.toggle('empty',!arr.length);$('messages').innerHTML=arr.length?arr.map(m=>'<div class="mail" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="muted" style="font-size:9px;letter-spacing:1.4px;margin-top:5px">KODE LOGIN</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.mail').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){if(/Unauthorized/i.test(e.message)){logout();showError('loginMsg','Sesi berakhir. Masukkan token kembali.')}else showError('messages',e.message)}}
 async function rotateToken(){if(!selectedAddress)return; if(!confirm('Ganti token untuk '+selectedAddress+'? Token lama langsung tidak berlaku.'))return;try{const d=await api('/admin/mailboxes/rotate-token',{method:'POST',body:JSON.stringify({address:selectedAddress})});$('createResult').innerHTML='<div class="notice"><strong>Token baru untuk '+esc(d.address)+':</strong><pre>'+esc(d.accessToken)+'</pre><button class="secondary" id="copyToken">Salin token</button><p class="muted">Token lama sudah tidak berlaku. Simpan token baru dan berikan hanya kepada pembeli yang berhak.</p></div>';$('copyToken').onclick=()=>navigator.clipboard.writeText(d.accessToken)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
 async function readMessage(id){try{const m=await api('/api/messages/'+encodeURIComponent(id));$('detail').innerHTML='<div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</p><h2>'+esc(m.subject||'(Tanpa subjek)')+'</h2>'+(m.otp_code?'<div class="muted">KODE LOGIN TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div><button class="secondary" id="copyOtp">Salin kode</button>':'')+'<hr style="border:0;border-top:1px solid #383a42;margin:18px 0"><div class="detail">'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</div><p class="muted">Lampiran: '+((m.attachments||[]).length)+' · Lampiran belum tersedia pada versi ini.</p>';$('listView').classList.add('hidden');$('detailView').classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(m.otp_code)$('copyOtp').onclick=()=>navigator.clipboard.writeText(m.otp_code)}catch(e){showError('messages',e.message)}}
 function backToList(){$('detailView').classList.add('hidden');$('listView').classList.remove('hidden');$('detail').innerHTML='';window.scrollTo({top:0,behavior:'smooth'})}
 function logout(){clearSession();$('token').value='';$('detail').innerHTML='';$('detailView').classList.add('hidden');$('listView').classList.remove('hidden');$('messages').innerHTML='<div class="empty">Masukkan token untuk membuka inbox.</div>';$('inbox').classList.add('hidden');$('login').classList.remove('hidden')}
-$('openBtn').onclick=openInbox;$('token').addEventListener('keydown',e=>{if(e.key==='Enter')openInbox()});$('backBtn').onclick=backToList;$('refreshBtn').onclick=loadMessages;$('logoutBtn').onclick=logout;
+$('openBtn').onclick=openInbox;$('passwordLoginBtn').onclick=passwordLogin;$('emailPassword').addEventListener('keydown',e=>{if(e.key==='Enter')passwordLogin()});$('token').addEventListener('keydown',e=>{if(e.key==='Enter')openInbox()});$('backBtn').onclick=backToList;$('refreshBtn').onclick=loadMessages;$('logoutBtn').onclick=logout;
 ['pointerdown','keydown','scroll','touchstart'].forEach(evt=>document.addEventListener(evt,touchSession,{passive:true}));
 setInterval(()=>{if(token&&expiredSession())logout()},10000);
 restoreSession();
@@ -412,7 +473,7 @@ pre{color:#d8eaff!important;background:#080f1b!important;border-color:#29476b!im
 <div class="card"><div class="row"><div><h2 style="margin:0">Kelola Kotak Email</h2><p class="muted" style="margin:6px 0 0">Buat alamat dan pantau inbox XERAVION.</p></div><button class="secondary" id="refreshBtn" style="margin-left:auto">Muat ulang</button><button class="secondary" id="logoutBtn">Keluar</button></div>
 <div class="row topgap"><select id="kind"><option value="ml">Mobile Legends</option><option value="ff">Free Fire</option><option value="pubg">PUBG Mobile</option><option value="support">Support (admin saja)</option></select><button id="createBtn">+ Buat alamat</button></div><div id="createResult"></div></div>
 <div class="card"><h3 style="margin-top:0">Ringkasan</h3><div class="row" id="stats"><span class="pill">Memuat statistik…</span></div></div><div class="card"><div class="row"><h3 style="margin:0">Riwayat Aktivitas Admin</h3><button id="auditRefresh" class="secondary" style="margin-left:auto">Refresh riwayat</button></div><div id="auditLogs" class="muted topgap">Memuat riwayat…</div></div><div class="grid"><section class="card"><h3 style="margin-top:0">Daftar Inbox</h3><input id="mailboxSearch" type="search" placeholder="Cari alamat atau game" class="topgap"><div id="mailboxes" class="muted">Belum dimuat.</div></section>
-<section class="card"><div class="row"><div><h3 id="selectedTitle" style="margin:0">Pilih inbox</h3><p id="selectedSub" class="muted" style="margin:6px 0 0">Daftar email akan tampil di sini.</p></div><button id="refreshMessages" class="secondary" style="margin-left:auto">Refresh</button><button id="rotateTokenBtn" class="secondary">Ganti token</button><button id="statusBtn" class="secondary" disabled>Nonaktifkan mailbox</button></div><div class="row topgap"><input id="search" placeholder="Cari pengirim atau subjek"><button id="searchBtn" class="secondary">Cari</button></div><div id="messages" class="empty">Pilih salah satu alamat email.</div><div id="detail" class="topgap"></div></section></div>
+<section class="card"><div class="row"><div><h3 id="selectedTitle" style="margin:0">Pilih inbox</h3><p id="selectedSub" class="muted" style="margin:6px 0 0">Daftar email akan tampil di sini.</p></div><button id="refreshMessages" class="secondary" style="margin-left:auto">Refresh</button><button id="rotateTokenBtn" class="secondary">Ganti token</button><button id="setPasswordBtn" class="secondary">Buat / reset password</button><button id="statusBtn" class="secondary" disabled>Nonaktifkan mailbox</button></div><div class="row topgap"><input id="search" placeholder="Cari pengirim atau subjek"><button id="searchBtn" class="secondary">Cari</button></div><div id="messages" class="empty">Pilih salah satu alamat email.</div><div id="detail" class="topgap"></div></section></div>
 </section></main>
 <script>
 (function(){
@@ -427,7 +488,7 @@ async function loadAuditLogs(){const d=await api('/admin/audit-logs?limit=50');c
 async function loadMailboxes(){const d=await api('/admin/mailboxes');mailboxCache=d.mailboxes||[];renderMailboxes()}
 function renderMailboxes(){const q=$('mailboxSearch').value.trim().toLowerCase();const list=mailboxCache.filter(m=>(m.address+' '+(m.game_code||'')+' '+m.mailbox_type).toLowerCase().includes(q));$('mailboxes').innerHTML=list.length?list.map(m=>'<button class="mailbox '+(m.address===selectedAddress?'active':'')+'" data-address="'+esc(m.address)+'"><strong>'+esc(m.address)+'</strong><small>'+esc(m.mailbox_type==='support'?'Support — admin only':(m.game_code||'game').toUpperCase())+' · '+(m.is_active?'Aktif':'Nonaktif')+'</small></button>').join(''):'<div class="empty">Tidak ada mailbox yang cocok.</div>';document.querySelectorAll('.mailbox').forEach(b=>b.addEventListener('click',()=>selectMailbox(b.dataset.address)))}
 async function changeMailboxStatus(){const m=mailboxCache.find(x=>x.address===selectedAddress);if(!m)return;const next=!Boolean(m.is_active);if(!confirm((next?'Aktifkan':'Nonaktifkan')+' mailbox '+selectedAddress+'?'))return;try{$('statusBtn').disabled=true;await api('/admin/mailboxes/status',{method:'POST',body:JSON.stringify({address:selectedAddress,isActive:next})});await loadMailboxes();await loadStats();await selectMailbox(selectedAddress)}catch(e){alert(e.message)}finally{$('statusBtn').disabled=false}}
-async function createMailbox(){try{$('createBtn').disabled=true;const v=$('kind').value;const body=v==='support'?{type:'support'}:{game:v};const d=await api('/admin/mailboxes',{method:'POST',body:JSON.stringify(body)});$('createResult').innerHTML='<div class="notice"><strong>Alamat dibuat: '+esc(d.address)+'</strong>'+(d.accessToken?'<p>Token akses pembeli (hanya ditampilkan sekali):</p><pre>'+esc(d.accessToken)+'</pre><button class="secondary" id="copyToken">Salin token</button><p class="muted">Simpan token ini secara aman dan berikan hanya kepada pembeli yang berhak.</p>':'<p>'+esc(d.note||'')+'</p>')+'</div>';if(d.accessToken)$('copyToken').onclick=()=>navigator.clipboard.writeText(d.accessToken);await loadMailboxes();if(d.address)await selectMailbox(d.address)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}finally{$('createBtn').disabled=false}}
+async function createMailbox(){try{$('createBtn').disabled=true;const v=$('kind').value;const body=v==='support'?{type:'support'}:{game:v};const d=await api('/admin/mailboxes',{method:'POST',body:JSON.stringify(body)});$('createResult').innerHTML='<div class="notice"><strong>Alamat dibuat: '+esc(d.address)+'</strong>'+(d.accessToken?'<p>Token akses (sekali tampil):</p><pre>'+esc(d.accessToken)+'</pre><button class="secondary" id="copyToken">Salin token</button><p>Kata sandi (sekali tampil):</p><pre>'+esc(d.password||'')+'</pre><button class="secondary" id="copyPassword">Salin kata sandi</button><p class="muted">Simpan keduanya dengan aman dan berikan kepada pembeli yang berhak.</p>':'<p>'+esc(d.note||'')+'</p>')+'</div>';if(d.accessToken)$('copyToken').onclick=()=>navigator.clipboard.writeText(d.accessToken);if(d.password)$('copyPassword').onclick=()=>navigator.clipboard.writeText(d.password);await loadMailboxes();if(d.address)await selectMailbox(d.address)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}finally{$('createBtn').disabled=false}}
 async function rotateToken(){
 if(!selectedAddress){$('createResult').innerHTML='<div class="notice error">Pilih alamat email terlebih dahulu.</div>';return}
 if(!confirm('Ganti token akses untuk '+selectedAddress+'? Token lama akan langsung tidak berlaku.'))return;
@@ -442,8 +503,9 @@ finally{$('rotateTokenBtn').disabled=false}
 async function selectMailbox(address){selectedAddress=address;const m=mailboxCache.find(x=>x.address===address);$('selectedTitle').textContent=address;$('selectedSub').textContent=m&&!m.is_active?'Mailbox nonaktif — email baru ditolak dan token pembeli tidak berlaku.':'Email masuk untuk alamat ini';$('statusBtn').textContent=m&&m.is_active?'Nonaktifkan mailbox':'Aktifkan mailbox';$('statusBtn').disabled=false;renderMailboxes();await loadMessages()}
 async function loadMessages(){if(!selectedAddress)return;try{const q=encodeURIComponent($('search').value.trim());const d=await api('/admin/messages?address='+encodeURIComponent(selectedAddress)+'&q='+q);const arr=d.messages||[];$('messages').innerHTML=arr.length?arr.map(m=>'<div class="message" data-id="'+esc(m.id)+'"><strong>'+esc(m.subject||'(Tanpa subjek)')+'</strong><small>'+esc(m.sender)+' · '+esc(new Date(m.received_at).toLocaleString('id-ID'))+'</small>'+(m.otp_code?'<div class="otp" style="font-size:18px">'+esc(m.otp_code)+'</div>':'')+'</div>').join(''):'<div class="empty">Inbox masih kosong.</div>';document.querySelectorAll('.message').forEach(el=>el.addEventListener('click',()=>readMessage(el.dataset.id)))}catch(e){$('messages').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
 async function deleteMessage(id,subject){if(!confirm('Hapus email "'+(subject||'(Tanpa subjek)')+'" secara permanen?'))return;try{await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress),{method:'DELETE'});$('detail').innerHTML='<div class="notice">Email berhasil dihapus.</div>';await loadMessages()}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
+async function setPassword(){if(!selectedAddress){$('createResult').innerHTML='<div class="notice error">Pilih inbox game terlebih dahulu.</div>';return}if(!confirm('Buat atau reset kata sandi untuk '+selectedAddress+'? Password lama akan langsung tidak berlaku.'))return;try{$('setPasswordBtn').disabled=true;const d=await api('/admin/mailboxes/set-password',{method:'POST',body:JSON.stringify({address:selectedAddress})});$('createResult').innerHTML='<div class="notice"><strong>Password baru untuk '+esc(d.address)+':</strong><pre>'+esc(d.password)+'</pre><button class="secondary" id="copyNewPassword">Salin password</button><p class="muted">Password lama tidak berlaku. Simpan dan berikan kepada pemilik mailbox. Password hanya ditampilkan sekali.</p></div>';$('copyNewPassword').onclick=()=>navigator.clipboard.writeText(d.password)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}finally{$('setPasswordBtn').disabled=false}}
 async function readMessage(id){try{const m=await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(m.received_at)+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'<pre>'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</pre><div class="muted">Lampiran: '+((m.attachments||[]).length)+' · Penyimpanan lampiran belum diaktifkan.</div><button class="secondary" id="deleteMessageBtn" style="background:#542727;border-color:#754040;color:#ffd8d3;margin-top:14px">Hapus email ini</button></div>';$('deleteMessageBtn').onclick=()=>deleteMessage(m.id,m.subject)}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
-$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=async()=>{await loadMailboxes();await loadStats();await loadMessages();await loadAuditLogs()};$('refreshMessages').onclick=async()=>{await loadMessages();await loadStats()};$('rotateTokenBtn').onclick=rotateToken;$('statusBtn').onclick=changeMailboxStatus;$('mailboxSearch').addEventListener('input',renderMailboxes);$('auditRefresh').onclick=loadAuditLogs;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
+$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=async()=>{await loadMailboxes();await loadStats();await loadMessages();await loadAuditLogs()};$('refreshMessages').onclick=async()=>{await loadMessages();await loadStats()};$('rotateTokenBtn').onclick=rotateToken;$('setPasswordBtn').onclick=setPassword;$('statusBtn').onclick=changeMailboxStatus;$('mailboxSearch').addEventListener('input',renderMailboxes);$('auditRefresh').onclick=loadAuditLogs;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
 })();
 </script></body></html>`;
 
@@ -472,6 +534,10 @@ export default {
       response = new Response(ADMIN_HTML, { headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" } });
     } else if (path === "/health" && request.method === "GET") {
       response = json({ ok: true, service: "xeravion-mail", status: "worker-online", version: "domain-router-fix-1" });
+    } else if (path === "/api/login" && request.method === "POST") {
+      response = await buyerPasswordLogin(request, env);
+    } else if (path === "/admin/mailboxes/set-password" && request.method === "POST") {
+      response = await setMailboxPassword(request, env);
     } else if (path === "/admin/audit-logs" && request.method === "GET") {
       response = await listAuditLogs(request, env, url);
     } else if (path === "/admin/stats" && request.method === "GET") {

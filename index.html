@@ -474,6 +474,12 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #productDetailModal .detail-body{min-width:0}
 }
 </style>
+<style id="xeravion-xp-loyalty-emblem-style">
+#creditPoints .credit-promo{position:relative;overflow:hidden}
+#creditPoints .credit-orb{width:clamp(132px,19vw,190px)!important;height:clamp(132px,19vw,190px)!important;flex:0 0 auto!important;display:grid!important;place-items:center!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+#creditPoints .credit-orb img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 13px rgba(150,70,255,.34)) drop-shadow(0 0 12px rgba(235,187,91,.24))}
+@media(max-width:600px){#creditPoints .credit-promo{align-items:center}#creditPoints .credit-orb{width:clamp(108px,29vw,142px)!important;height:clamp(108px,29vw,142px)!important}}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>
@@ -552,7 +558,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <section class="how" id="creditPoints">
   <div class="eyebrow">XERAVION LOYALTY PROGRAM</div>
   <div class="sectionhead"><div><h2>XERAVION Credit Points</h2><p>Kumpulkan poin dari transaksi yang memenuhi syarat dan tukarkan dengan reward pilihan.</p></div><button class="btn gold" onclick="openMember()">Gabung / Masuk</button></div>
-  <div class="credit-promo"><div><span class="credit-kicker">PLAY • COLLECT • REDEEM</span><h2>Setiap transaksi punya nilai lebih.</h2><p>Buat akun gratis untuk melihat saldo, riwayat poin, dan hadiah yang tersedia.</p><button class="btn gold" onclick="openMember()">Mulai kumpulkan poin ↗</button></div><div class="credit-orb"><span>XP</span><b>LOYALTY</b></div></div>
+  <div class="credit-promo"><div><span class="credit-kicker">PLAY • COLLECT • REDEEM</span><h2>Setiap transaksi punya nilai lebih.</h2><p>Buat akun gratis untuk melihat saldo, riwayat poin, dan hadiah yang tersedia.</p><button class="btn gold" onclick="openMember()">Mulai kumpulkan poin ↗</button></div><div class="credit-orb"><img src="/assets/xeravion-xp-loyalty.svg" alt="Emblem XERAVION XP Loyalty" loading="lazy"></div></div>
   <div class="credit-benefits"><article><b>01 · Kumpulkan</b><span>Dapatkan poin setelah transaksi berhasil diverifikasi admin.</span></article><article><b>02 · Pantau</b><span>Lihat saldo dan setiap perubahan poin di akunmu.</span></article><article><b>03 · Tukarkan</b><span>Gunakan poin untuk diskon atau reward akun yang tersedia.</span></article></div>
   <p class="hint">Poin bukan uang tunai dan tidak dapat diuangkan. Syarat, jumlah poin, dan reward akan ditampilkan secara transparan di akun anggota.</p>
 </section>

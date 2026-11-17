@@ -710,7 +710,7 @@ loadProducts();
 .payment-logo-bank svg{width:34px;height:34px}
 @media(max-width:420px){.payment-logo-wrap{width:64px;height:44px;flex-basis:64px;padding:6px 7px}}
 </style>
-<style id="xeravion-admin-listing-share-style">.admin-share-buy{margin-top:7px!important;background:linear-gradient(120deg,#15243b,#101827)!important;border:1px solid #6482b5!important;color:#dceaff!important}.admin-share-buy:hover{border-color:#9fc6ff!important;box-shadow:0 0 15px #5489d633!important}</style><style id="xeravion-image-preview-styles">.detail-image-trigger{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.detail-image-trigger .detail-image{cursor:zoom-in}.image-zoom-hint{position:absolute;right:12px;bottom:12px;padding:7px 10px;border:1px solid #e8cc9180;border-radius:20px;background:#080b13d9;color:#f4dfad;font-size:11px}.image-preview-modal{display:none;position:fixed;inset:0;z-index:3000;background:rgba(3,5,10,.97);align-items:center;justify-content:center;padding:54px 56px}.image-preview-modal.show{display:flex}.image-preview-modal>img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}.image-preview-close,.image-preview-nav{position:absolute;display:grid;place-items:center;border:1px solid #e8cc91aa;background:#111827ef;color:#f8e4b5;border-radius:50%;cursor:pointer}.image-preview-close{top:18px;right:18px;width:42px;height:42px;font-size:28px}.image-preview-nav{top:50%;transform:translateY(-50%);width:42px;height:42px;font-size:30px}.image-preview-nav.prev{left:12px}.image-preview-nav.next{right:12px}.image-preview-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#f4dfad;background:#111827d9;border-radius:20px;padding:6px 12px;font-size:12px}@media(max-width:600px){.image-preview-modal{padding:58px 42px}.image-preview-nav{width:34px;height:34px}.image-preview-nav.prev{left:5px}.image-preview-nav.next{right:5px}}</style><style id="xeravion-separated-store-pages">
+<style id="xeravion-admin-listing-share-style">.admin-share-buy{margin-top:7px!important;background:linear-gradient(120deg,#15243b,#101827)!important;border:1px solid #6482b5!important;color:#dceaff!important}.admin-share-buy:hover{border-color:#9fc6ff!important;box-shadow:0 0 15px #5489d633!important}</style><style id="xeravion-image-preview-styles">.detail-image-trigger{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.detail-image-trigger .detail-image{cursor:zoom-in}.image-zoom-hint{position:absolute;right:12px;bottom:12px;padding:7px 10px;border:1px solid #e8cc9180;border-radius:20px;background:#080b13d9;color:#f4dfad;font-size:11px}.image-preview-modal{display:none;position:fixed!important;inset:0!important;z-index:10050!important;background:rgba(3,5,10,.98);align-items:center;justify-content:center;padding:54px 56px;pointer-events:auto!important;touch-action:pan-y}.image-preview-modal.show{display:flex}.image-preview-modal>img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}.image-preview-close,.image-preview-nav{position:absolute;display:grid;place-items:center;border:1px solid #e8cc91aa;background:#111827ef;color:#f8e4b5;border-radius:50%;cursor:pointer}.image-preview-close{top:18px;right:18px;width:42px;height:42px;font-size:28px}.image-preview-nav{top:50%;transform:translateY(-50%);width:42px;height:42px;font-size:30px}.image-preview-nav.prev{left:12px}.image-preview-nav.next{right:12px}.image-preview-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#f4dfad;background:#111827d9;border-radius:20px;padding:6px 12px;font-size:12px}@media(max-width:600px){.image-preview-modal{padding:58px 42px}.image-preview-nav{width:34px;height:34px}.image-preview-nav.prev{left:5px}.image-preview-nav.next{right:5px}}</style><style id="xeravion-separated-store-pages">
 /* Homepage is a game selector only; account inventory lives on each game's own route. */
 /* Keep the original homepage sections visible after introducing game routes. */
 body.xeravion-home-page #catalog>.sectionhead,
@@ -784,5 +784,17 @@ body.xeravion-game-page main>section#admin.active{display:block!important}
  #productDetailModal .detail-section h3{font-size:14px!important;margin-bottom:8px!important}
  #productDetailModal .detail-actions .buy{min-height:46px!important;font-size:12px!important}
 }
+</style>
+
+<style id="xeravion-image-preview-layer-fix">
+/* Keep image lightbox above the full-screen listing detail modal */
+body.xeravion-listing-page .image-preview-modal{z-index:10050!important}
+body.xeravion-listing-page .image-preview-modal.show{display:flex!important;visibility:visible!important;opacity:1!important}
+body.xeravion-listing-page .image-preview-modal>img{position:relative;z-index:1;max-width:100%;max-height:100%;object-fit:contain;touch-action:pinch-zoom}
+body.xeravion-listing-page .image-preview-close,
+body.xeravion-listing-page .image-preview-nav,
+body.xeravion-listing-page .image-preview-count{z-index:2}
+body.xeravion-listing-page .detail-image-trigger,
+body.xeravion-listing-page .detail-image-trigger img{pointer-events:auto!important}
 </style>
 </body></html>

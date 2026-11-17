@@ -291,10 +291,10 @@ const BUYER_HTML = `<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101114"><title>XERAVION MAIL — Inbox</title>
 <style>
 :root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#080807;color:#f7f1e6;--gold:#e8cc91;--gold2:#c49a4a;--muted:#b4a78f;--line:#51432b;--panel:#15120d;--panel2:#1d180f}
-*{box-sizing:border-box}html{min-height:100%;background:#080807}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -18%,#4b371b55 0,transparent 44%),radial-gradient(ellipse at 100% 65%,#18243b22,transparent 36%),#080807;color:#f7f1e6}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(120deg,transparent 49.8%,#c49a4a18 50%,transparent 50.2%);background-size:46px 46px;mask-image:linear-gradient(to bottom,#000,transparent 70%)}
+*{box-sizing:border-box}html{min-height:100%;background:#080807}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% -18%,#4b371b55 0,transparent 44%),#080807;color:#f7f1e6}
+
 button,input{font:inherit}button{cursor:pointer}.head{position:sticky;top:0;z-index:20;padding:15px max(18px,calc((100% - 1040px)/2));border-bottom:1px solid #b9975540;background:#090806eF;backdrop-filter:blur(18px);display:flex;align-items:center;gap:12px;box-shadow:0 10px 35px #0005}
-.logo{width:47px;height:47px;flex:0 0 47px;border-radius:15px;background:linear-gradient(145deg,#fff0c8 0%,#d7b36a 42%,#79551f 100%);color:#160f05;display:grid;place-items:center;font-weight:1000;font-size:27px;box-shadow:0 0 0 1px #f3d99b55,0 10px 34px #c49a4a40}
+.logo{width:47px;height:47px;flex:0 0 47px;object-fit:contain;display:block;filter:drop-shadow(0 4px 12px #c49a4a55)}
 .brand{font-weight:900;letter-spacing:3.4px;font-size:21px}.brand small{display:block;color:#bca779;font-weight:600;font-size:9px;letter-spacing:2.7px;margin-top:4px}.pill{font-size:9px;letter-spacing:2px;border:1px solid #8e6d36;padding:7px 11px;border-radius:30px;color:#e8cc91;margin-left:auto;background:#21190d}
 main{position:relative;z-index:1;max-width:1040px;margin:38px auto;padding:0 20px}.card{background:linear-gradient(145deg,#1b1710ed,#0e0d0bf2);border:1px solid #59472a;border-radius:19px;padding:22px;margin-bottom:17px;box-shadow:0 18px 42px #0006,inset 0 1px #ffffff08}
 h2{font-size:clamp(20px,3vw,27px);letter-spacing:-.6px;color:#fff0c8}h3{color:#f3dfb2}.muted{color:#b4a78f}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
@@ -303,10 +303,10 @@ button{border-radius:11px;padding:12px 16px;border:1px solid transparent;backgro
 .notice{padding:12px 14px;border-radius:11px;background:#211a10;border:1px solid #6e552b;color:#e8d3a8;margin-top:12px;font-size:12px;line-height:1.6}.error{background:#352222;border-color:#754040;color:#ffb4ab}
 .mail{padding:16px;border-bottom:1px solid #51432b;cursor:pointer;transition:background .18s,border-color .18s}.mail:hover{background:linear-gradient(90deg,#392b174d,transparent);border-color:#98743a}.mail strong{display:block;color:#f7e8c6;font-size:14px;margin-bottom:5px}.mail small{color:#b4a78f;font-size:11px}.otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:900;padding:12px 0;text-shadow:0 0 22px #c49a4a55}.empty{padding:42px 20px;text-align:center;color:#a99d89}.detail{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.75;color:#ddd2bd;font-size:13px}.card .card{background:#100e0b;border-color:#4a3b25;box-shadow:none}
 hr{border:0;border-top:1px solid #51432b}
-@media(max-width:600px){main{margin:20px auto;padding:0 13px}.card{padding:16px;border-radius:16px}.head{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px;font-size:23px}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.pill{font-size:8px;padding:6px 8px}.row button{padding:11px 12px;font-size:12px}}
+@media(max-width:600px){main{margin:20px auto;padding:0 13px}.card{padding:16px;border-radius:16px}.head{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.pill{font-size:8px;padding:6px 8px}.row button{padding:11px 12px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 </style></head><body>
-<header class="head"><div class="logo">X</div><div class="brand">XERAVION MAIL<small>KOTAK MASUK</small></div><span class="pill">PRIVATE</span></header>
+<header class="head"><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>KOTAK MASUK</small></div><span class="pill">PRIVATE</span></header>
 <main>
 <section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masukkan token akses yang diberikan admin XERAVION. Sesi aman yang tetap aktif saat halaman di-refresh dan berakhir otomatis setelah 10 menit tanpa aktivitas.</p><div class="row"><input id="token" type="password" autocomplete="off" placeholder="Token akses pembeli"><button id="openBtn">Buka inbox</button></div><div id="loginMsg"></div></section>
 <section id="inbox" class="hidden">
@@ -359,7 +359,7 @@ button{cursor:pointer;background:linear-gradient(120deg,#f2dfad,#c99d4d 60%,#9b6
 @media(max-width:760px){main{margin:18px auto;padding:0 13px}.grid{grid-template-columns:1fr}.card{padding:15px;border-radius:15px}header{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px;font-size:23px}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.row button{font-size:11px;padding:10px}.pill{font-size:9px}.adminstats{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
 </style></head><body>
-<header><div class="logo">X</div><div class="brand">XERAVION MAIL<small>ADMIN CONTROL PANEL</small></div><span class="pill" style="margin-left:auto">PRIVATE</span></header>
+<header><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>ADMIN CONTROL PANEL</small></div><span class="pill" style="margin-left:auto">PRIVATE</span></header>
 <main>
 <section id="login" class="card"><h2>Masuk Admin</h2><p class="muted">Masukkan ADMIN_API_KEY yang kamu simpan di Cloudflare. Kunci hanya dipakai selama halaman ini terbuka dan tidak disimpan.</p><div class="row"><input id="key" type="password" autocomplete="off" placeholder="Tempel kunci admin di sini"><button id="loginBtn">Masuk</button></div><div id="loginMsg"></div></section>
 <section id="app" class="hidden">

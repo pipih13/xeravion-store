@@ -380,7 +380,7 @@ hr{border:0;border-top:1px solid #263c56}
 </style></head><body>
 <header class="head"><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>KOTAK MASUK</small></div><span class="pill">PRIVATE</span></header>
 <main>
-<section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masuk menggunakan alamat email dan kata sandi.</p><div class="row"><input id="emailAddress" type="email" autocomplete="username" placeholder="Alamat email XERAVION"><input id="emailPassword" type="password" autocomplete="current-password" placeholder="Kata sandi"><button id="passwordLoginBtn">Masuk</button></div><div id="loginMsg"></div></section>
+<section id="login" class="card"><h2 style="margin-top:0">Buka kotak masuk</h2><p class="muted">Masuk menggunakan alamat email dan kata sandi.</p><div class="login-fields" style="display:flex;flex-direction:column;gap:12px;align-items:stretch"><input id="emailAddress" type="email" autocomplete="username" placeholder="Alamat email XERAVION" style="width:100%;flex:none"><input id="emailPassword" type="password" autocomplete="current-password" placeholder="Kata sandi" style="width:100%;flex:none"><button id="passwordLoginBtn" style="width:100%">Masuk</button></div><div id="loginMsg"></div></section>
 <section id="inbox" class="hidden">
 <div class="card"><div class="row"><div><h2 id="address" style="margin:0">Kotak masuk</h2><p class="muted" style="margin:6px 0 0">Email yang diterima untuk alamat ini.</p></div><button id="refreshBtn" class="secondary" style="margin-left:auto">Refresh</button><button id="logoutBtn" class="secondary">Keluar</button></div>
 </div>

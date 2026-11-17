@@ -38,6 +38,32 @@ function bearer(request) {
   return value.startsWith("Bearer ") ? value.slice(7).trim() : "";
 }
 
+function htmlToReadableText(html) {
+  let value = String(html || "");
+  value = value
+    .replace(/<!--[\\s\\S]*?-->/g, " ")
+    .replace(/<(script|style|head|title|noscript)\\b[^>]*>[\\s\\S]*?<\\/\\1\\s*>/gi, " ")
+    .replace(/<(br|hr)\\b[^>]*>/gi, "\\n")
+    .replace(/<\\/(p|div|section|article|tr|td|th|li|h[1-6]|blockquote|pre)\\s*>/gi, "\\n")
+    .replace(/<li\\b[^>]*>/gi, "• ")
+    .replace(/<[^>]*>/g, " ");
+  value = value
+    .replace(/&nbsp;|&#160;|&#xA0;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&#(\\d+);/g, (_, n) => { const cp = Number(n); return cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""; })
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => { const cp = parseInt(n, 16); return cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : ""; })
+    .replace(/[ \\t]+\\n/g, "\\n")
+    .replace(/\\n[ \\t]+/g, "\\n")
+    .replace(/\\n{3,}/g, "\\n\\n")
+    .replace(/[ \\t]{2,}/g, " ")
+    .trim();
+  return value;
+}
+
 function extractOtp(text) {
   const source = String(text || "").replace(/\u00a0/g, " ");
   const codeLabel = /(?:verification|verify|security|login|sign[ -]?in|one[- ]time|passcode|otp|kode|verifikasi|keamanan|masuk|konfirmasi|confirmation|authentication|authentikasi).{0,45}(?:code|kode|password|passcode|otp)?|(?:code|kode|password|passcode|otp).{0,35}(?:verification|verify|security|login|sign[ -]?in|one[- ]time|verifikasi|keamanan|masuk|konfirmasi)?/i;
@@ -316,7 +342,7 @@ async function storeIncoming(message, env) {
   }
   const parsed = await PostalMime.parse(raw);
   const id = crypto.randomUUID();
-  const bodyText = String(parsed.text || "").slice(0, 200000);
+  const bodyText = String(parsed.text || htmlToReadableText(parsed.html) || "").slice(0, 200000);
   const subject = String(parsed.subject || message.headers.get("subject") || "").slice(0, 998);
   const sender = String(parsed.from?.address || message.from || "").slice(0, 320);
 

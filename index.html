@@ -15,6 +15,27 @@
 #gameSlider .shirt-slide img{object-fit:contain!important;object-position:center center!important;transform:none!important;background:#071225}
 #gameSlider .shirt-slide.active img{transform:none!important}
 #gameSlider .shirt-slide .slide-shade{background:linear-gradient(90deg,rgba(4,8,20,.78) 0%,rgba(4,8,20,.48) 38%,rgba(4,8,20,0) 72%),linear-gradient(0deg,rgba(4,8,20,.5),transparent 55%)}
+
+/* Header alignment: keep brand, navigation and actions on one baseline */
+.top .nav{display:flex;flex-flow:row nowrap;align-items:center;justify-content:space-between;min-height:76px;height:auto;gap:clamp(8px,1.4vw,18px)}
+.top .brand{flex:0 0 auto;min-width:0;align-self:center;white-space:nowrap}
+.top .brand-logo{display:block;flex:0 0 40px}
+.top .brand-copy{display:flex;flex-direction:column;justify-content:center;line-height:1.15}
+.top .brand-copy b,.top .brand-copy small{margin:0}
+.top .navlinks{flex:1 1 auto;min-width:0;display:flex;align-items:center;justify-content:center;gap:clamp(9px,1.5vw,20px);white-space:nowrap}
+.top .navright{flex:0 0 auto;display:flex;flex-flow:row nowrap;align-items:center;justify-content:flex-end;gap:8px;white-space:nowrap}
+.top .navright .btn{white-space:nowrap;padding:10px 12px}
+@media(min-width:761px) and (max-width:1050px){
+ .top .nav{gap:9px}
+ .top .brand{gap:7px}
+ .top .brand-logo{width:34px;height:34px;flex-basis:34px}
+ .top .brand b{font-size:16px;letter-spacing:1.8px}
+ .top .brand small{font-size:7px;letter-spacing:1.3px}
+ .top .navlinks{gap:9px;font-size:11px}
+ .top .navright{gap:5px}
+ .top .navright .btn{font-size:10px;padding:9px 8px}
+}
+@media(max-width:760px){.top .nav{height:66px;min-height:66px;flex-flow:row nowrap}.top .navlinks{display:none}.top .navright{margin-left:auto}}
 </style>
 <style>
 :root{--gold:#e8cc91;--muted:#b4a78f;--line:#51432b;--panel:#13110e;--panel2:#1b1711;--site-background:#080807;--site-on-background:#f7f1e6}

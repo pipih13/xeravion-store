@@ -503,7 +503,7 @@ main{position:relative;z-index:1;max-width:1160px;margin:32px auto;padding:0 18p
 h2,h3{color:#fff0c8;letter-spacing:-.4px}.muted{color:#b4a78f}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 input,select,button{font:inherit;border-radius:11px;padding:12px 14px;border:1px solid #51432b;background:#0b0a08;color:#f5ead4;outline:none}input{min-width:0;flex:1}input:focus,select:focus{border-color:#e4c47e;box-shadow:0 0 0 3px #d3ad6520}input::placeholder{color:#827967}
 button{cursor:pointer;background:linear-gradient(120deg,#f2dfad,#c99d4d 60%,#9b6d28);color:#171006;border:0;font-weight:850;transition:filter .2s,transform .2s}button:hover{filter:brightness(1.1);transform:translateY(-1px)}button.secondary{background:linear-gradient(145deg,#211b11,#100e0b);color:#f2d99f;border:1px solid #765d32;box-shadow:none}button:disabled{opacity:.5;cursor:not-allowed;transform:none}.hidden{display:none!important}
-.grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}.mailbox{display:block;width:100%;text-align:left;margin:8px 0;background:linear-gradient(145deg,#211b11,#100e0b);color:#f2e5c9;border:1px solid #51432b;border-radius:11px;font-weight:600}.mailbox.active{border-color:#d3ad68;background:linear-gradient(120deg,#4a3718,#241b0e);box-shadow:0 0 0 2px #c49a4a18}.mailbox small{display:block;color:#b4a78f;margin-top:5px}.message{padding:14px;border-bottom:1px solid #51432b;cursor:pointer;transition:background .18s}.message:hover{background:linear-gradient(90deg,#392b174d,transparent)}.message strong{display:block;color:#f7e8c6}.message small{color:#b4a78f;font-size:11px}
+.grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px}.mailbox-group{margin-top:15px;padding:12px;border:1px solid #29476b;border-radius:14px;background:linear-gradient(155deg,#101b2b,#0a111d)}.mailbox-group:first-child{margin-top:12px}.mailbox-group-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.mailbox-group-head h4{margin:0;color:#e5f1ff;font-size:13px;letter-spacing:.4px}.mailbox-group-head p{margin:4px 0 0;color:#91a8c4;font-size:10px;line-height:1.4}.mailbox-count{flex:0 0 auto;min-width:27px;height:27px;padding:0 7px;border-radius:20px;display:grid;place-items:center;background:#183b60;border:1px solid #3479b8;color:#b8ddff;font-size:11px;font-weight:800}.mailbox-group-support .mailbox-count{background:#342b19;border-color:#8d713c;color:#f4d99c}.mailbox{display:block;width:100%;text-align:left;margin:8px 0;background:linear-gradient(145deg,#211b11,#100e0b);color:#f2e5c9;border:1px solid #51432b;border-radius:11px;font-weight:600}.mailbox.active{border-color:#d3ad68;background:linear-gradient(120deg,#4a3718,#241b0e);box-shadow:0 0 0 2px #c49a4a18}.mailbox small{display:block;color:#b4a78f;margin-top:5px}.message{padding:14px;border-bottom:1px solid #51432b;cursor:pointer;transition:background .18s}.message:hover{background:linear-gradient(90deg,#392b174d,transparent)}.message strong{display:block;color:#f7e8c6}.message small{color:#b4a78f;font-size:11px}
 .otp{font-size:28px;letter-spacing:4px;color:#f4d58d;font-weight:900;padding:12px 0;text-shadow:0 0 22px #c49a4a55}.notice{padding:12px 14px;border-radius:11px;background:#211a10;border:1px solid #6e552b;color:#e8d3a8;margin-top:10px;font-size:12px;line-height:1.6}.error{background:#352222;border-color:#754040;color:#ffb4ab}.pill{font-size:10px;letter-spacing:.5px;border:1px solid #8e6d36;padding:6px 10px;border-radius:30px;color:#e8cc91;background:#21190d}.empty{padding:38px;text-align:center;color:#a99d89}.topgap{margin-top:12px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#e8d9bb;line-height:1.6;background:#0b0a08;border:1px solid #51432b;border-radius:10px;padding:12px}.adminstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.adminstats .stat{background:#100e0b;border:1px solid #51432b;border-radius:12px;padding:12px}.sectionlabel{font-size:10px;color:#e8cc91;letter-spacing:2px}
 @media(max-width:760px){main{margin:18px auto;padding:0 13px}.grid{grid-template-columns:1fr}.card{padding:15px;border-radius:15px}header{padding:12px 14px}.logo{width:39px;height:39px;flex-basis:39px;object-fit:contain}.brand{font-size:17px;letter-spacing:2px}.brand small{font-size:8px;letter-spacing:1.8px}.row button{font-size:11px;padding:10px}.pill{font-size:9px}.adminstats{grid-template-columns:1fr 1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
@@ -590,19 +590,25 @@ async function loadAuditLogs(){const d=await api('/admin/audit-logs?limit=8');co
 async function loadMailboxes(){const d=await api('/admin/mailboxes');mailboxCache=d.mailboxes||[];renderMailboxes()}
 function renderMailboxes(){
   const q=$('mailboxSearch').value.trim().toLowerCase();
-  const list=mailboxCache
-    .filter(m=>(m.address+' '+(m.game_code||'')+' '+m.mailbox_type).toLowerCase().includes(q))
-    .sort((a,b)=>{
-      const aSupport=a.mailbox_type==='support'?0:1;
-      const bSupport=b.mailbox_type==='support'?0:1;
-      if(aSupport!==bSupport)return aSupport-bSupport;
-      const gameCompare=String(a.game_code||'').localeCompare(String(b.game_code||''));
-      if(gameCompare!==0)return gameCompare;
-      const numberOf=m=>Number((String(m.address||'').match(/(\\d+)@/)||[])[1]||0);
-      return numberOf(a)-numberOf(b);
-    });
-  $('mailboxes').innerHTML=list.length?list.map(m=>'<button class="mailbox '+(m.address===selectedAddress?'active':'')+'" data-address="'+esc(m.address)+'"><strong>'+esc(m.address)+'</strong><small>'+esc(m.mailbox_type==='support'?'Support — admin only':(m.game_code||'game').toUpperCase())+' · '+(m.is_active?'Aktif':'Nonaktif')+'</small></button>').join(''):'<div class="empty">Tidak ada mailbox yang cocok.</div>';
-  document.querySelectorAll('.mailbox').forEach(b=>b.addEventListener('click',()=>selectMailbox(b.dataset.address)));
+  const filtered=mailboxCache.filter(m=>(m.address+' '+(m.game_code||'')+' '+m.mailbox_type).toLowerCase().includes(q));
+  const groups=[
+    {key:'support',title:'Support',subtitle:'Email layanan dan bantuan admin'},
+    {key:'ml',title:'Mobile Legends',subtitle:'Alamat email khusus akun Mobile Legends'},
+    {key:'ff',title:'Free Fire',subtitle:'Alamat email khusus akun Free Fire'},
+    {key:'pubg',title:'PUBG Mobile',subtitle:'Alamat email khusus akun PUBG Mobile'}
+  ];
+  const numberOf=m=>Number((String(m.address||'').match(/(\\d+)@/)||[])[1]||0);
+  const renderGroup=(group,rows)=>{
+    if(!rows.length)return '';
+    rows.sort((a,b)=>numberOf(a)-numberOf(b)||String(a.address).localeCompare(String(b.address)));
+    return '<section class="mailbox-group mailbox-group-'+group.key+'"><div class="mailbox-group-head"><div><h4>'+group.title+'</h4><p>'+group.subtitle+'</p></div><span class="mailbox-count">'+rows.length+'</span></div>'+rows.map(m=>'<button class="mailbox '+(m.address===selectedAddress?'active':'')+'" data-address="'+esc(m.address)+'"><strong>'+esc(m.address)+'</strong><small>'+(m.is_active?'Aktif':'Nonaktif')+'</small></button>').join('')+'</section>';
+  };
+  let html='';
+  for(const group of groups){const rows=filtered.filter(m=>group.key==='support'?m.mailbox_type==='support':m.mailbox_type!=='support'&&m.game_code===group.key);html+=renderGroup(group,rows);}
+  const other=filtered.filter(m=>m.mailbox_type!=='support'&&!['ml','ff','pubg'].includes(m.game_code));
+  html+=renderGroup({key:'other',title:'Game lainnya',subtitle:'Mailbox dengan kategori game lain'},other);
+  $('mailboxes').innerHTML=html||'<div class="empty">Tidak ada mailbox yang cocok.</div>';
+  $('mailboxes').querySelectorAll('.mailbox').forEach(b=>b.addEventListener('click',()=>selectMailbox(b.dataset.address)));
 }
 async function changeMailboxStatus(){const m=mailboxCache.find(x=>x.address===selectedAddress);if(!m)return;const next=!Boolean(m.is_active);if(!confirm((next?'Aktifkan':'Nonaktifkan')+' mailbox '+selectedAddress+'?'))return;try{$('statusBtn').disabled=true;await api('/admin/mailboxes/status',{method:'POST',body:JSON.stringify({address:selectedAddress,isActive:next})});await loadMailboxes();await loadStats();await selectMailbox(selectedAddress)}catch(e){alert(e.message)}finally{$('statusBtn').disabled=false}}
 async function createMailbox(){try{$('createBtn').disabled=true;const v=$('kind').value;const body=v==='support'?{type:'support'}:{game:v};const d=await api('/admin/mailboxes',{method:'POST',body:JSON.stringify(body)});$('createResult').innerHTML='<div class="notice"><strong>Alamat dibuat: '+esc(d.address)+'</strong>'+(d.password?'<p>Password acak awal:</p><pre>'+esc(d.password)+'</pre><button class="secondary" id="copyPassword">Salin password</button><p class="muted">Simpan password ini. Anda juga bisa menggantinya dengan password manual atau membuat password acak baru dari pengaturan mailbox.</p>':'<p>'+esc(d.note||'')+'</p>')+'</div>';if(d.password)bindCopyButton('copyPassword',d.password);await loadMailboxes();if(d.address)await selectMailbox(d.address)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}finally{$('createBtn').disabled=false}}

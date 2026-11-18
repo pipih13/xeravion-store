@@ -482,6 +482,19 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 </style>
 
 
+<style id="xeravion-credit-scene-and-corner-emblem">
+#creditPoints .credit-promo{position:relative!important;isolation:isolate;overflow:hidden!important}
+#creditPoints .credit-scene{position:absolute!important;left:-8px!important;bottom:-20px!important;width:min(66%,410px)!important;max-width:none!important;z-index:0!important;pointer-events:none!important;opacity:.23;filter:saturate(.9) brightness(.86) drop-shadow(0 0 14px rgba(216,165,67,.16))}
+#creditPoints .credit-scene img{display:block!important;width:100%!important;height:auto!important;object-fit:contain!important}
+#creditPoints .credit-promo>div:not(.credit-scene){position:relative;z-index:2}
+#creditPoints .credit-promo>div:first-of-type{max-width:none!important}
+#creditPoints .credit-promo>.credit-orb{position:absolute!important;right:18px!important;bottom:14px!important;top:auto!important;width:104px!important;height:104px!important;display:grid!important;place-items:center!important;z-index:4!important}
+#creditPoints .credit-orb img{width:100%!important;height:100%!important;object-fit:contain!important}
+@media(max-width:600px){
+ #creditPoints .credit-scene{left:-12px!important;bottom:-14px!important;width:76%!important;opacity:.19}
+ #creditPoints .credit-promo>.credit-orb{right:12px!important;bottom:12px!important;width:78px!important;height:78px!important}
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>
@@ -560,7 +573,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <section class="how" id="creditPoints">
   <div class="eyebrow">XERAVION LOYALTY PROGRAM</div>
   <div class="sectionhead"><div><h2>XERAVION Credit Points</h2><p>Kumpulkan poin dari transaksi yang memenuhi syarat dan tukarkan dengan reward pilihan.</p></div><button class="btn gold" onclick="openMember()">Gabung / Masuk</button></div>
-  <div class="credit-promo"><div><span class="credit-kicker">PLAY • COLLECT • REDEEM</span><h2>Setiap transaksi punya nilai lebih.</h2><p>Buat akun gratis untuk melihat saldo, riwayat poin, dan hadiah yang tersedia.</p><button class="btn gold" onclick="openMember()">Mulai kumpulkan poin ↗</button></div><div class="credit-orb"><img src="/assets/xeravion-xp-loyalty-transparent.png" alt="Logo asli XERAVION XP Loyalty" loading="lazy"></div></div>
+  <div class="credit-promo"><div class="credit-scene" aria-hidden="true"><img src="/assets/file_000000005c808207b2a045ea48abfdb7.png" alt="" loading="lazy"></div><div><span class="credit-kicker">PLAY • COLLECT • REDEEM</span><h2>Setiap transaksi punya nilai lebih.</h2><p>Buat akun gratis untuk melihat saldo, riwayat poin, dan hadiah yang tersedia.</p><button class="btn gold" onclick="openMember()">Mulai kumpulkan poin ↗</button></div><div class="credit-orb"><img src="/assets/xeravion-xp-loyalty-transparent.png" alt="Logo asli XERAVION XP Loyalty" loading="lazy"></div></div>
   <div class="credit-benefits"><article><b>01 · Kumpulkan</b><span>Dapatkan poin setelah transaksi berhasil diverifikasi admin.</span></article><article><b>02 · Pantau</b><span>Lihat saldo dan setiap perubahan poin di akunmu.</span></article><article><b>03 · Tukarkan</b><span>Gunakan poin untuk diskon atau reward akun yang tersedia.</span></article></div>
   <p class="hint">Poin bukan uang tunai dan tidak dapat diuangkan. Syarat, jumlah poin, dan reward akan ditampilkan secara transparan di akun anggota.</p>
 </section>

@@ -16,7 +16,7 @@ function cors(request, env) {
   if (!origin || !allowed || origin !== allowed) return {};
   return {
     "access-control-allow-origin": allowed,
-    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-methods": "GET,POST,DELETE,OPTIONS",
     "access-control-allow-headers": "authorization,content-type",
     "vary": "Origin"
   };
@@ -511,7 +511,7 @@ pre{color:#d8eaff!important;background:#080f1b!important;border-color:#29476b!im
 </style></head><body>
 <header><img class="logo" src="https://xeravion.my.id/assets/xeravion-emblem.svg" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>ADMIN CONTROL PANEL</small></div><span class="pill" style="margin-left:auto">PRIVATE</span></header>
 <main>
-<section id="login" class="card"><h2>Masuk Admin</h2><p class="muted">Masukkan ADMIN_API_KEY yang kamu simpan di Cloudflare. Kunci hanya dipakai selama halaman ini terbuka dan tidak disimpan.</p><div class="row"><input id="key" type="password" autocomplete="off" placeholder="Tempel kunci admin di sini"><button id="loginBtn">Masuk</button></div><div id="loginMsg"></div></section>
+<section id="login" class="card"><h2>Menunggu sesi Admin XERAVION</h2><p class="muted">Panel ini menggunakan sesi admin dari Dashboard utama. Kembali ke Dashboard Admin XERAVION dan buka tab Mail untuk menghubungkan sesi secara aman.</p><div id="loginMsg"><div class="notice">Memeriksa sesi admin…</div></div></section>
 <section id="app" class="hidden">
 <div class="card"><div class="row"><div><h2 style="margin:0">Kelola Kotak Email</h2><p class="muted" style="margin:6px 0 0">Buat alamat dan pantau inbox XERAVION.</p></div><button class="secondary" id="refreshBtn" style="margin-left:auto">Muat ulang</button><button class="secondary" id="logoutBtn">Keluar</button></div>
 <div class="row topgap"><select id="kind"><option value="ml">Mobile Legends</option><option value="ff">Free Fire</option><option value="pubg">PUBG Mobile</option><option value="support">Support (admin saja)</option></select><button id="createBtn">+ Buat alamat</button></div><div id="createResult"></div></div>

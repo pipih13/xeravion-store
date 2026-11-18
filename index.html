@@ -1109,4 +1109,37 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  #catalog .stats .stat:nth-child(3) b{font-size:12px!important}
 }
 </style>
+
+<style id="xeravion-detail-watermark-final-layer">
+/* Keep the XERAVION emblem centered behind both the account photo and details. */
+#productDetailModal .detail-modal{
+ position:relative!important;
+ isolation:isolate!important;
+}
+#productDetailModal .detail-modal:before{
+ content:""!important;
+ display:block!important;
+ position:absolute!important;
+ inset:0!important;
+ z-index:0!important;
+ pointer-events:none!important;
+ background-image:url("/assets/file_0000000027ec8211877e42918a96984e.png")!important;
+ background-repeat:no-repeat!important;
+ background-position:center center!important;
+ background-size:min(66vw,290px) min(66vw,290px)!important;
+ opacity:.3!important;
+}
+#productDetailModal .detail-body:before{content:none!important;display:none!important}
+#productDetailModal .detail-layout{
+ position:relative!important;
+ z-index:1!important;
+}
+@media(max-width:760px){
+ #productDetailModal .detail-modal:before{
+  background-size:min(62vw,260px) min(62vw,260px)!important;
+  background-position:center center!important;
+  opacity:.3!important;
+ }
+}
+</style>
 </body></html>

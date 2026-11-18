@@ -709,20 +709,18 @@ function previewFile(e){
 async function createXeravionWatermark(file){
  const objectUrl=URL.createObjectURL(file);
  try{
-  const source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));img.src=objectUrl});
+  const source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Foto sumber tidak dapat dibaca.'));img.src=objectUrl});
   const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
   canvas.width=source.naturalWidth||source.width;canvas.height=source.naturalHeight||source.height;
   if(!canvas.width||!canvas.height)throw new Error('Ukuran foto tidak valid.');
   ctx.drawImage(source,0,0,canvas.width,canvas.height);
-  const logo=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Logo watermark XERAVION gagal dimuat.'));img.src='/assets/xeravion-watermark-wordmark.svg'});
-  const maxW=canvas.width*.58,maxH=canvas.height*.24,scale=Math.min(maxW/logo.naturalWidth,maxH/logo.naturalHeight),w=logo.naturalWidth*scale,h=logo.naturalHeight*scale,cx=canvas.width/2,cy=canvas.height/2- Math.min(canvas.height*.025,18);
+  const logo=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Aset watermark wordmark gagal dimuat.'));img.src='/assets/xeravion-watermark-wordmark.svg?v=3'});
+  if(!logo.naturalWidth||!logo.naturalHeight)throw new Error('Ukuran aset watermark tidak valid.');
+  const maxW=canvas.width*.72,maxH=canvas.height*.32,scale=Math.min(maxW/logo.naturalWidth,maxH/logo.naturalHeight),w=logo.naturalWidth*scale,h=logo.naturalHeight*scale,cx=canvas.width/2,cy=canvas.height/2;
   ctx.save();ctx.globalAlpha=.15;ctx.drawImage(logo,cx-w/2,cy-h/2,w,h);ctx.restore();
-  const fontSize=Math.max(10,Math.min(canvas.width*.023,canvas.height*.035,28));
-  ctx.save();ctx.globalAlpha=.15;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#e8cc91';ctx.font='800 '+fontSize+'px Inter, Arial, sans-serif';ctx.shadowColor='transparent';
-  ctx.fillText('PREMIUM GAME ACCOUNT STORE',cx,cy+h/2+fontSize*1.25,canvas.width*.88);ctx.restore();
-  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',.92));
-  if(!blob)throw new Error('Gagal memproses foto watermark.');
-  return new File([blob],(file.name.replace(/\.[^.]+$/,'')||'xeravion-account')+'-xeravion-v2.webp',{type:'image/webp',lastModified:Date.now()});
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',.94));
+  if(!blob)throw new Error('Gagal membuat foto watermark.');
+  return new File([blob],(file.name.replace(/\\.[^.]+$/,'')||'xeravion-account')+'-xeravion-v3.webp',{type:'image/webp',lastModified:Date.now()});
  }finally{URL.revokeObjectURL(objectUrl)}
 }
 async function saveProduct(){let wasEditing=Boolean(editingId),name=document.getElementById('newName').value.trim(),game=document.getElementById('newGame').value,price=Number(document.getElementById('newPrice').value),code=document.getElementById('newCode').value.trim().toUpperCase(),desc=document.getElementById('newDesc').value.trim(),stock=document.getElementById('newStock').value,url=document.getElementById('newImageUrl').value.trim();if(!name||!price||price<1||!code){alert('Nama, harga, dan kode listing wajib diisi.');return}let old=items.find(x=>String(x.id)===String(editingId)),image=url||old?.image||'',uploadedUrls=[];const saveButton=document.getElementById('saveBtn');saveButton.disabled=true;saveButton.textContent='Memproses watermark & mengunggah…';try{for(const file of selectedImageFiles){const watermarked=await createXeravionWatermark(file),path=Date.now()+'-'+Math.random().toString(36).slice(2)+'.webp';const{data:uploaded,error:uploadError}=await supabaseClient.storage.from(IMAGE_BUCKET).upload(path,watermarked,{cacheControl:'3600',upsert:false,contentType:'image/webp'});if(uploadError)throw new Error('Gagal mengunggah '+file.name+': '+uploadError.message);const{data:publicData}=supabaseClient.storage.from(IMAGE_BUCKET).getPublicUrl(uploaded.path);uploadedUrls.push(publicData.publicUrl)}if(uploadedUrls.length)image=uploadedUrls[0];const typedGallery=document.getElementById('newGallery').value.split(/\r?\n/).map(x=>safeImageUrl(x.trim())).filter(Boolean),gallery=[...(old?.gallery||[]),...uploadedUrls.slice(1),...typedGallery].filter((v,i,a)=>a.indexOf(v)===i),payload={code,name,game,price,description:desc,image_url:image,status:stock,gallery_images:gallery};let result=wasEditing?await supabaseClient.from('products').update(payload).eq('id',editingId):await supabaseClient.from('products').insert(payload);if(result.error)throw new Error('Gagal menyimpan: '+result.error.message);resetForm();await loadProducts();alert(wasEditing?'Listing berhasil diperbarui.':'Listing berhasil ditambahkan. Foto unggahan sudah diberi watermark XERAVION.')}catch(error){alert(error.message||'Proses unggah gagal.')}finally{saveButton.disabled=false;saveButton.textContent=editingId?'Simpan perubahan':'Simpan listing'}}
@@ -735,40 +733,38 @@ async function watermarkOldListingPhotos(){
  if(sessionError||!session){alert('Sesi admin tidak ditemukan. Silakan login kembali.');return}
  const{data:allowed,error:adminError}=await supabaseClient.rpc('is_admin');
  if(adminError||!allowed){xeravionAdminVerified=false;alert('Aksi ini hanya dapat dilakukan oleh admin XERAVION.');return}
- const candidates=items.map(p=>({product:p,fields:[{key:'image',url:p.image,dbKey:'image_url'},...(p.gallery||[]).map((url,i)=>({key:'gallery',url,index:i}))]}));
- const todo=candidates.flatMap(x=>x.fields.filter(f=>f.url&&!/\/legacy-watermarked-v2\//i.test(f.url)&&!/-xeravion-v2\.webp(?:[?#]|$)/i.test(f.url)).map(f=>({...f,product:x.product})));
- if(!todo.length){status.textContent='Semua foto listing sudah menggunakan watermark atau tidak ada foto yang perlu diproses.';return}
- if(!confirm('Watermark akan diterapkan pada '+todo.length+' foto dari '+candidates.length+' listing. Foto asli tetap disimpan dan alamat foto listing akan diperbarui. Lanjutkan?'))return;
- button.disabled=true;let done=0,failed=0,skipped=0;
- const updates=new Map();
+ const todo=items.flatMap(product=>[{key:'image',url:product.image},...(product.gallery||[]).map((url,index)=>({key:'gallery',url,index}))].filter(f=>f.url&&!/legacy-watermarked-v3\\//i.test(f.url)&&!/-xeravion-v3\\.webp(?:[?#]|$)/i.test(f.url)).map(f=>({...f,product})));
+ if(!todo.length){status.textContent='Semua foto sudah menggunakan watermark versi terbaru.';return}
+ if(!confirm('Versi watermark baru akan diterapkan ulang ke '+todo.length+' foto dari '+items.length+' listing. Foto asli tetap disimpan. Lanjutkan?'))return;
+ button.disabled=true;let processed=0,updated=0,failed=0;const changes=new Map();
  try{
   for(let i=0;i<todo.length;i++){
-   const f=todo[i];status.textContent='Memproses '+(i+1)+' dari '+todo.length+' foto…';
+   const f=todo[i];status.textContent='Membuat watermark '+(i+1)+'/'+todo.length+'…';
    try{
     const response=await fetch(f.url,{mode:'cors',cache:'no-store'});
-    if(!response.ok)throw new Error('HTTP '+response.status);
-    const blob=await response.blob();
-    if(!blob.type.startsWith('image/'))throw new Error('URL bukan file gambar');
-    const sourceFile=new File([blob],'xeravion-old-photo-'+i,{type:blob.type});
-    const watermarked=await createXeravionWatermark(sourceFile);
-    const path='legacy-watermarked-v2/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'.webp';
-    const{data:uploaded,error:uploadError}=await supabaseClient.storage.from(IMAGE_BUCKET).upload(path,watermarked,{cacheControl:'3600',upsert:false,contentType:'image/webp'});
-    if(uploadError)throw uploadError;
+    if(!response.ok)throw new Error('Gagal membaca foto (HTTP '+response.status+').');
+    const blob=await response.blob();if(!blob.type.startsWith('image/'))throw new Error('Alamat tidak mengembalikan file gambar.');
+    const watermarked=await createXeravionWatermark(new File([blob],'xeravion-source-'+i,{type:blob.type}));
+    const path='legacy-watermarked-v3/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'.webp';
+    const{data:uploaded,error:uploadError}=await supabaseClient.storage.from(IMAGE_BUCKET).upload(path,watermarked,{cacheControl:'0',upsert:false,contentType:'image/webp'});
+    if(uploadError)throw new Error('Upload gagal: '+uploadError.message);
     const{data:publicData}=supabaseClient.storage.from(IMAGE_BUCKET).getPublicUrl(uploaded.path);
-    if(!updates.has(f.product.id))updates.set(f.product.id,{product:f.product,image:f.product.image,gallery:[...(f.product.gallery||[])]});
-    const update=updates.get(f.product.id);
-    if(f.key==='image')update.image=publicData.publicUrl;else update.gallery[f.index]=publicData.publicUrl;
-    done++;
-   }catch(error){failed++;console.warn('Watermark foto gagal:',f.url,error)}
+    if(!publicData?.publicUrl)throw new Error('URL foto hasil watermark tidak tersedia.');
+    if(!changes.has(f.product.id))changes.set(f.product.id,{product:f.product,image:f.product.image,gallery:[...(f.product.gallery||[])]});
+    const change=changes.get(f.product.id);if(f.key==='image')change.image=publicData.publicUrl;else change.gallery[f.index]=publicData.publicUrl;
+    processed++;
+   }catch(error){failed++;console.error('Migrasi foto gagal',f.url,error)}
   }
-  for(const update of updates.values()){
-   const{error}=await supabaseClient.from('products').update({image_url:update.image,gallery_images:update.gallery}).eq('id',update.product.id);
-   if(error){failed++;console.error('Gagal memperbarui listing '+update.product.code,error)}
+  for(const change of changes.values()){
+   status.textContent='Memperbarui data listing '+change.product.code+'…';
+   const{data,error}=await supabaseClient.from('products').update({image_url:change.image,gallery_images:change.gallery}).eq('id',change.product.id).select('id');
+   if(error||!data?.length){failed++;console.error('Update database gagal',change.product.code,error);continue}
+   updated+=data.length;
   }
   await loadProducts();
-  status.textContent='Selesai. '+done+' foto berhasil diproses; '+failed+' kendala. Foto asli tetap tersimpan.';
-  alert('Proses watermark selesai. Berhasil diproses: '+done+' foto. Kendala: '+failed+'. Periksa listing yang gagal sebelum mengulang proses.');
- }catch(error){status.textContent='Proses terhenti: '+(error.message||'Kesalahan tidak diketahui');alert(status.textContent)}
+  status.textContent='Selesai: '+processed+' foto diproses, '+updated+' listing diperbarui, '+failed+' kendala.';
+  alert('Migrasi watermark versi baru selesai. Foto diproses: '+processed+'. Listing berhasil diperbarui: '+updated+'. Kendala: '+failed+'. Foto asli tetap tersimpan.');
+ }catch(error){status.textContent='Migrasi terhenti: '+(error.message||'Kesalahan tidak diketahui');alert(status.textContent)}
  finally{button.disabled=false}
 }
 async function changeStock(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;let opts=['Tersedia','Pending','Terjual'],n=opts[(opts.indexOf(p.stock)+1)%opts.length];const{error}=await supabaseClient.from('products').update({status:n}).eq('id',id);if(error){alert('Gagal mengubah status: '+error.message);return}await loadProducts()}

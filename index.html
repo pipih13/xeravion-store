@@ -883,9 +883,16 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
    document.body.style.overflow='';
    document.documentElement.style.overflow='';
   }
-  [login,confirm].forEach(el=>{if(el)el.classList.remove('show')});
+  [login,confirm].forEach(el=>{if(el){el.classList.remove('show');el.style.removeProperty('display');el.style.removeProperty('pointer-events')}});
+  // A fresh page load must never inherit a visible overlay from an interrupted prior session.
+  document.querySelectorAll('.modalback,.image-preview-modal').forEach(el=>{
+   if(el!==detail){el.classList.remove('show');el.style.removeProperty('display');el.style.removeProperty('visibility');el.style.removeProperty('pointer-events')}
+  });
+  if(!hasListing&&detail){detail.classList.remove('show');detail.style.removeProperty('display');detail.style.removeProperty('visibility');detail.style.removeProperty('pointer-events')}
   document.body.style.pointerEvents='auto';
   document.documentElement.style.pointerEvents='auto';
+  document.body.style.removeProperty('overflow');
+  document.documentElement.style.removeProperty('overflow');
  }catch(error){console.warn('XERAVION interaction recovery:',error)}
 })();
 </script>

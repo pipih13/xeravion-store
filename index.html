@@ -483,14 +483,15 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 
 
 <style id="xeravion-credit-scene-and-corner-emblem">
-#creditPoints .credit-promo{position:relative!important;isolation:isolate;overflow:hidden!important}
-#creditPoints .credit-scene{position:absolute!important;inset:0!important;left:0!important;right:0!important;bottom:0!important;top:0!important;width:100%!important;height:100%!important;max-width:none!important;z-index:1!important;pointer-events:none!important;opacity:1!important;filter:none!important;-webkit-mask-image:none!important;mask-image:none!important}
-#creditPoints .credit-scene img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;opacity:1!important}
-#creditPoints .credit-promo>div:first-of-type{position:relative!important;z-index:2!important;max-width:none!important}
-#creditPoints .credit-promo>.credit-orb{position:absolute!important;right:18px!important;bottom:14px!important;top:auto!important;width:104px!important;height:104px!important;display:grid!important;place-items:center!important;z-index:5!important}
-#creditPoints .credit-orb img{width:100%!important;height:100%!important;object-fit:contain!important}
+#creditPoints .credit-promo{position:relative!important;isolation:isolate;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:flex-start!important}
+#creditPoints .credit-promo>.credit-scene{position:absolute!important;inset:0!important;left:0!important;right:0!important;bottom:0!important;top:0!important;width:100%!important;height:100%!important;max-width:none!important;z-index:1!important;pointer-events:none!important;opacity:1!important;filter:none!important;flex:none!important}
+#creditPoints .credit-promo>.credit-scene img{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;opacity:1!important}
+#creditPoints .credit-promo>div:nth-child(2){position:relative!important;z-index:2!important;width:100%!important;max-width:620px!important;flex:1 1 auto!important;margin-right:auto!important}
+#creditPoints .credit-promo>.credit-orb{position:absolute!important;right:18px!important;bottom:14px!important;top:auto!important;width:104px!important;height:104px!important;flex:none!important;display:grid!important;place-items:center!important;z-index:5!important}
+#creditPoints .credit-promo>.credit-orb img{width:100%!important;height:100%!important;object-fit:contain!important}
 @media(max-width:600px){
- #creditPoints .credit-scene img{object-position:center center!important}
+ #creditPoints .credit-promo{align-items:flex-start!important}
+ #creditPoints .credit-promo>div:nth-child(2){width:100%!important;max-width:100%!important;margin:0!important}
  #creditPoints .credit-promo>.credit-orb{right:12px!important;bottom:12px!important;width:78px!important;height:78px!important}
 }
 </style>

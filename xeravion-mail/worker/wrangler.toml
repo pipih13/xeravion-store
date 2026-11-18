@@ -12,4 +12,6 @@ database_id = "1f6fa688-dceb-4c20-b792-7447063347ae"
 
 # Set ADMIN_API_KEY with: npx wrangler secret put ADMIN_API_KEY
 [vars]
-APP_ORIGIN = "https://xeravion-mail.pages.dev"
+APP_ORIGIN = "https://xeravion.my.id"
+SUPABASE_URL = "https://holebdvalywkpjvgqffn.supabase.co"
+SUPABASE_ANON_KEY = "sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm"

@@ -509,7 +509,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 </style>
 
 <style id="xeravion-credit-scene-responsive-fit">
-/* Fit the XP Loyalty artwork inside its own card across screen sizes */
+/* Reframe the XP artwork upward so the character's head stays visible */
 #creditPoints .credit-promo{position:relative!important;overflow:hidden!important;min-width:0}
 #creditPoints .credit-promo>.credit-scene{
  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
@@ -517,18 +517,16 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 }
 #creditPoints .credit-promo>.credit-scene img{
  display:block!important;width:100%!important;height:100%!important;
- object-fit:cover!important;object-position:center 48%!important;
+ object-fit:cover!important;object-position:center 8%!important;
 }
 @media(max-width:600px){
- #creditPoints .credit-promo{min-height:190px!important}
  #creditPoints .credit-promo>.credit-scene img{
-  object-fit:cover!important;object-position:57% center!important;
+  object-fit:cover!important;object-position:center 5%!important;
  }
 }
 @media(min-width:601px){
- #creditPoints .credit-promo{min-height:210px!important}
  #creditPoints .credit-promo>.credit-scene img{
-  object-fit:cover!important;object-position:center 48%!important;
+  object-fit:cover!important;object-position:center 10%!important;
  }
 }
 </style></head>

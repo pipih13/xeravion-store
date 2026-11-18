@@ -507,7 +507,7 @@ button.secondary{background:linear-gradient(145deg,#17263a,#0c1422)!important;co
 pre{color:#d8eaff!important;background:#080f1b!important;border-color:#29476b!important}
 .adminstats .stat{background:#101b2b!important;border-color:#29476b!important}
 .sectionlabel{color:#8dcaff!important}
-.logo{background:linear-gradient(145deg,#173d60 0%,#126cae 48%,#7c263e 100%)!important;color:#eaf6ff!important;box-shadow:0 0 0 1px #55baff55,0 10px 34px #168de844!important}
+.logo{width:47px!important;height:47px!important;flex:0 0 47px!important;object-fit:contain!important;display:block!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;filter:drop-shadow(0 4px 12px #238de866)!important}
 </style></head><body>
 <header><img class="logo" src="https://xeravion.my.id/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION"><div class="brand">XERAVION MAIL<small>ADMIN CONTROL PANEL</small></div><span class="pill" style="margin-left:auto">PRIVATE</span></header>
 <main>

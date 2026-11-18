@@ -1189,11 +1189,52 @@ async function completeCreditPurchase(){const msg=document.getElementById('credi
 async function reverseCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditReverseRef').value.trim(),reason=document.getElementById('creditReverseReason').value.trim();if(!ref){msg.textContent='Masukkan referensi transaksi.';return}if(!confirm('Batalkan cashback untuk transaksi '+ref+'? Tindakan ini mencatat pengurangan poin dan tidak dapat dibatalkan otomatis.'))return;try{const{data,error}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:ref,p_reason:reason||'Transaksi dibatalkan'});if(error)throw error;msg.textContent='Cashback dibatalkan. '+Number(data||0).toLocaleString('id-ID')+' XP telah dikoreksi dari saldo member.'}catch(e){msg.textContent='Gagal membatalkan cashback: '+(e.message||e)}}
 let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}document.addEventListener('DOMContentLoaded',()=>{initXeravionAdminRoute();if(isXeravionAdminRoute())restoreXeravionAdminSession();['click','keydown','pointerdown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetXeravionAdminIdle,{passive:true}));const slider=document.getElementById('gameSlider');if(slider&&!isXeravionAdminRoute()){slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
 
-let memberMode='login',memberBusy=false;
+let memberMode='login',memberBusy=false,memberCooldownUntil=0,memberCooldownTimer=null;
+function startMemberCooldown(seconds){
+  memberCooldownUntil=Date.now()+Math.max(1,seconds)*1000;
+  const btn=document.getElementById('memberSubmit');
+  if(memberCooldownTimer)clearInterval(memberCooldownTimer);
+  const tick=()=>{
+    const left=Math.max(0,Math.ceil((memberCooldownUntil-Date.now())/1000));
+    if(left>0){btn.disabled=true;btn.textContent='Tunggu '+left+' detik';}
+    else{clearInterval(memberCooldownTimer);memberCooldownTimer=null;btn.disabled=false;btn.textContent=memberMode==='signup'?'Buat akun':'Masuk';}
+  };
+  tick();memberCooldownTimer=setInterval(tick,500);
+}
 function openMember(){document.getElementById('memberModal').classList.add('show');loadMemberSession()}
 function closeMember(){document.getElementById('memberModal').classList.remove('show')}
 function setMemberMode(mode){memberMode=mode;document.getElementById('memberLoginTab').classList.toggle('active',mode==='login');document.getElementById('memberSignupTab').classList.toggle('active',mode==='signup');document.getElementById('memberName').classList.toggle('hidden',mode!=='signup');document.getElementById('memberSubmit').textContent=mode==='signup'?'Buat akun':'Masuk';document.getElementById('memberAuthMessage').textContent=''}
-async function submitMemberAuth(){if(memberBusy)return;const email=document.getElementById('memberEmail').value.trim(),password=document.getElementById('memberPassword').value,name=document.getElementById('memberName').value.trim(),msg=document.getElementById('memberAuthMessage');if(!email||!email.includes('@')){msg.textContent='Masukkan alamat email yang valid.';return}if(!password){msg.textContent='Password wajib diisi.';return}if(password.length<8){msg.textContent='Password minimal 8 karakter.';return}if(memberMode==='signup'&&!name){msg.textContent='Nama tampilan wajib diisi.';return}memberBusy=true;document.getElementById('memberSubmit').disabled=true;msg.textContent='Memproses…';try{if(memberMode==='signup'){const{data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name},emailRedirectTo:location.origin}});if(error)throw error;if(data.session){msg.textContent='Akun berhasil dibuat.';await loadMemberSession()}else{msg.textContent='Pendaftaran diterima. Periksa email untuk verifikasi, lalu masuk setelah email dikonfirmasi.'}}else{const{error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await loadMemberSession()}}catch(e){msg.textContent='Tidak dapat memproses akun: '+(e.message||'Kesalahan tidak diketahui')}finally{memberBusy=false;document.getElementById('memberSubmit').disabled=false}}
+async function submitMemberAuth(){
+ if(memberBusy)return;
+ if(Date.now()<memberCooldownUntil)return;
+ const email=document.getElementById('memberEmail').value.trim(),password=document.getElementById('memberPassword').value,name=document.getElementById('memberName').value.trim(),msg=document.getElementById('memberAuthMessage');
+ if(!email||!email.includes('@')){msg.textContent='Masukkan alamat email yang valid.';return}
+ if(!password){msg.textContent='Password wajib diisi.';return}
+ if(password.length<8){msg.textContent='Password minimal 8 karakter.';return}
+ if(memberMode==='signup'&&!name){msg.textContent='Nama tampilan wajib diisi.';return}
+ memberBusy=true;document.getElementById('memberSubmit').disabled=true;msg.textContent='Memproses…';
+ try{
+  if(memberMode==='signup'){
+   const{data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name},emailRedirectTo:'https://xeravion.my.id/' }});
+   if(error)throw error;
+   if(data.session){msg.textContent='Akun berhasil dibuat.';await loadMemberSession()}
+   else{msg.textContent='Pendaftaran diterima. Silakan cek Inbox/Spam email untuk tautan konfirmasi. Jangan daftar ulang; setelah konfirmasi, kembali ke sini lalu masuk.'}
+  }else{
+   const{error}=await supabaseClient.auth.signInWithPassword({email,password});
+   if(error)throw error;
+   await loadMemberSession();
+  }
+ }catch(e){
+  const errorText=String(e.message||'');
+  const wait=errorText.match(/after\\s+(\\d+)\\s+seconds?/i);
+  if(wait){const seconds=Number(wait[1]);msg.textContent='Batas pengiriman email aktif. Tunggu '+seconds+' detik sebelum mencoba lagi. Jangan tekan tombol berulang.';startMemberCooldown(seconds)}
+  else if(/email not confirmed/i.test(errorText)){msg.textContent='Akun sudah terdaftar, tetapi email belum dikonfirmasi. Buka email dari Supabase di Inbox/Spam, klik tautan konfirmasi, lalu masuk kembali.'}
+  else{msg.textContent='Tidak dapat memproses akun: '+(errorText||'Kesalahan tidak diketahui')}
+ }finally{
+  memberBusy=false;
+  if(Date.now()>=memberCooldownUntil){const btn=document.getElementById('memberSubmit');btn.disabled=false;btn.textContent=memberMode==='signup'?'Buat akun':'Masuk'}
+ }
+}
 async function resetMemberPassword(){const email=document.getElementById('memberEmail').value.trim(),msg=document.getElementById('memberAuthMessage');if(!email){msg.textContent='Masukkan email terlebih dahulu.';return}try{const{error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:location.origin});if(error)throw error;msg.textContent='Tautan reset password dikirim jika email terdaftar. Periksa kotak masuk dan spam.'}catch(e){msg.textContent=e.message||'Gagal mengirim tautan reset.'}}
 async function loadMemberSession(){const auth=document.getElementById('memberAuth'),account=document.getElementById('memberAccount');try{const{data:{session}}=await supabaseClient.auth.getSession();auth.classList.toggle('hidden',!!session);account.classList.toggle('hidden',!session);if(session)await refreshMemberPanel()}catch(e){auth.classList.remove('hidden');account.classList.add('hidden');document.getElementById('memberAuthMessage').textContent='Gagal memuat sesi: '+e.message}}
 async function refreshMemberPanel(){

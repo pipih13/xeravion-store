@@ -713,7 +713,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 </style>
 </head>
 <body><div class="app">
-<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="translateXeravionSite(this.value)" aria-label="Select language"><option value="id">Indonesia</option><option value="en">English</option><option value="ms">Melayu</option><option value="ar">العربية</option><option value="es">Español</option><option value="pt">Português</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh-CN">中文</option><option value="th">ไทย</option><option value="vi">Tiếng Việt</option><option value="tl">Filipino</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
+<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="translateXeravionSite(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">
 <section class="catalog" id="catalog"><div class="hero"><div><div class="eyebrow">CURATED DIGITAL COLLECTION</div><h1>Akun pilihan.<br><span>Pengalaman berbeda.</span></h1><p>Temukan koleksi akun game pilihan di XERAVION. Telusuri katalog, lihat detail, dan hubungi admin untuk mengecek ketersediaan sebelum transaksi.</p><div class="actions"><a class="btn gold" href="#products">Jelajahi katalog ↓</a><a class="btn" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION" target="_blank" rel="noopener">Hubungi admin</a></div></div><div class="art game-slider" id="gameSlider" aria-label="Game yang tersedia di XERAVION"><div class="slides">
 <article class="game-slide active"><img src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Artwork event kolaborasi Mobile Legends Bang Bang x SpongeBob" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>MLBB × SPONGEBOB • UNDERSEA BASH</span><strong>MOBILE LEGENDS</strong><small>Event kolaborasi berlangsung 11 November – 10 Desember</small></div></article>
@@ -773,7 +773,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
   <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
  </div>
 </div>
-<div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="notice" style="margin:0 0 14px"><strong>Ganti seluruh foto listing Mobile Legends</strong><div class="hint" style="margin:5px 0 9px">Hapus file foto utama dan galeri yang sedang dipakai listing Mobile Legends saja. Data akun, harga, stok, PUBG, dan Free Fire tetap aman. Setelah dibersihkan, unggah foto MLBB baru tanpa watermark.</div><button class="btn gold" type="button" id="cleanupMlPhotosBtn" onclick="cleanupMobileLegendsPhotos()">Hapus foto lama MLBB</button><span class="hint" id="cleanupMlPhotosStatus" style="display:block;margin-top:7px"></span></div><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><select id="newGame"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>eFootball</option><option>Clash of Clans</option><option>Lainnya</option></select><input id="newPrice" type="number" min="1" placeholder="Harga (Rp) *"><input id="newCode" placeholder="Kode listing *"><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newGallery" placeholder="URL foto tambahan, satu URL per baris (opsional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div><input class="wide" id="newImageUrl" placeholder="Atau tempel URL gambar (opsional)"><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="notice" style="margin:0 0 14px"><strong>Ganti seluruh foto listing Mobile Legends</strong><div class="hint" style="margin:5px 0 9px">Hapus file foto utama dan galeri yang sedang dipakai listing Mobile Legends saja. Data akun, harga, stok, PUBG, dan Free Fire tetap aman. Setelah dibersihkan, unggah foto MLBB baru tanpa watermark.</div><button class="btn gold" type="button" id="cleanupMlPhotosBtn" onclick="cleanupMobileLegendsPhotos()">Hapus foto lama MLBB</button><span class="hint" id="cleanupMlPhotosStatus" style="display:block;margin-top:7px"></span></div><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><input id="newNameEn" placeholder="English account name (optional)"><select id="newGame"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>eFootball</option><option>Clash of Clans</option><option>Lainnya</option></select><input id="newPrice" type="number" min="1" placeholder="Harga (Rp) *"><input id="newCode" placeholder="Kode listing *"><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newDescEn" placeholder="English account description (optional)"></textarea><textarea class="wide" id="newGallery" placeholder="URL foto tambahan, satu URL per baris (opsional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div><input class="wide" id="newImageUrl" placeholder="Atau tempel URL gambar (opsional)"><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar listing akun</h3><div class="hint">Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.</div></div><input id="adminSearch" placeholder="Cari nama atau kode…" oninput="renderAdmin()"></div><div class="admin-game-tabs" id="adminGameTabs" role="tablist" aria-label="Filter listing berdasarkan game"></div><div class="admin-game-heading"><span id="adminGameHeading">SEMUA GAME</span><span id="adminGameCount">0 listing</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama akun</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminRows"></tbody></table></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
  <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Catat pesanan manual. Invoice hanya bisa dikirim setelah pembayaran lunas dan pesanan selesai.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
@@ -869,7 +869,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],deleteId=null,items=[],xeravionAdminVerified=false;
-const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,game:r.game,price:Number(r.price),desc:r.description||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
+const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,price:Number(r.price),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
 function waLink(p){let msg=`Halo admin XERAVION, saya tertarik dengan akun ${p.code} - ${p.name} (${p.game}) dengan harga ${rupiah(p.price)}. Apakah akun ini masih tersedia?`;return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`}
 async function shareListing(id){
  const p=items.find(x=>Number(x.id)===Number(id));if(!p)return;
@@ -976,7 +976,7 @@ async function saveProduct(){
   if(!image)throw new Error('Belum ada foto utama. Pilih minimal satu foto atau masukkan URL gambar.');
   const typedGallery=document.getElementById('newGallery').value.split(/\r?\n/).map(x=>safeImageUrl(x.trim())).filter(Boolean);
   const gallery=[...(old?.gallery||[]).filter(u=>!/^https?:\/\/xeravion\.my\.id\/?(?:\?.*)?$/i.test(u)),...uploadedUrls.slice(1),...typedGallery].filter((v,i,a)=>a.indexOf(v)===i);
-  const payload={code,name,game,price,description:desc,image_url:image,status:stock,gallery_images:gallery};
+  const payload={code,name,name_en:document.getElementById('newNameEn').value.trim(),game,price,description:desc,description_en:document.getElementById('newDescEn').value.trim(),image_url:image,status:stock,gallery_images:gallery};
   saveButton.textContent='Menyimpan listing…';
   const result=wasEditing?await supabaseClient.from('products').update(payload).eq('id',editingId):await supabaseClient.from('products').insert(payload);
   if(result.error)throw new Error('Gagal menyimpan listing: '+result.error.message);
@@ -984,8 +984,8 @@ async function saveProduct(){
  }catch(error){console.error('XERAVION saveProduct:',error);alert(error?.message||'Proses unggah gagal. Data listing tidak diubah jika verifikasi foto gagal.')}
  finally{saveButton.disabled=false;saveButton.textContent=editingId?'Simpan perubahan':originalLabel}
 }
-function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;adminGameFilter=p.game;selectedImageFile=null;selectedImageFiles=[];document.getElementById('newName').value=p.name;document.getElementById('newGame').value=p.game;renderAdmin();document.getElementById('newPrice').value=p.price;document.getElementById('newCode').value=p.code;document.getElementById('newDesc').value=p.desc;document.getElementById('newGallery').value=(p.gallery||[]).join('\n');document.getElementById('newStock').value=p.stock;pendingImage='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}if(p.image){im.src=p.image;im.style.display='block'}else im.style.display='none';document.getElementById('newImage').value='';document.getElementById('imagePreviewList').innerHTML='';document.getElementById('newImageUrl').value='';document.getElementById('formTitle').textContent='✎ Edit listing '+p.code;document.getElementById('saveBtn').textContent='Simpan perubahan';showAdminTab('form');document.getElementById('adminTab-form').scrollIntoView({behavior:'smooth',block:'start'})}
-function resetForm(){editingId=null;pendingImage='';selectedImageFile=null;selectedImageFiles=[];['newName','newPrice','newCode','newDesc','newGallery','newImageUrl','newImage'].forEach(id=>document.getElementById(id).value='');document.getElementById('newGame').selectedIndex=0;document.getElementById('newStock').value='Tersedia';document.getElementById('imagePreviewList').innerHTML='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}im.removeAttribute('src');im.style.display='none';document.getElementById('formTitle').textContent='＋ Tambah akun ke etalase';document.getElementById('saveBtn').textContent='Simpan listing'}
+function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;adminGameFilter=p.game;selectedImageFile=null;selectedImageFiles=[];document.getElementById('newName').value=p.name;document.getElementById('newNameEn').value=p.name_en||'';document.getElementById('newDescEn').value=p.description_en||'';document.getElementById('newGame').value=p.game;renderAdmin();document.getElementById('newPrice').value=p.price;document.getElementById('newCode').value=p.code;document.getElementById('newDesc').value=p.desc;document.getElementById('newGallery').value=(p.gallery||[]).join('\n');document.getElementById('newStock').value=p.stock;pendingImage='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}if(p.image){im.src=p.image;im.style.display='block'}else im.style.display='none';document.getElementById('newImage').value='';document.getElementById('imagePreviewList').innerHTML='';document.getElementById('newImageUrl').value='';document.getElementById('formTitle').textContent='✎ Edit listing '+p.code;document.getElementById('saveBtn').textContent='Simpan perubahan';showAdminTab('form');document.getElementById('adminTab-form').scrollIntoView({behavior:'smooth',block:'start'})}
+function resetForm(){editingId=null;pendingImage='';selectedImageFile=null;selectedImageFiles=[];['newName','newNameEn','newPrice','newCode','newDesc','newDescEn','newGallery','newImageUrl','newImage'].forEach(id=>document.getElementById(id).value='');document.getElementById('newGame').selectedIndex=0;document.getElementById('newStock').value='Tersedia';document.getElementById('imagePreviewList').innerHTML='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}im.removeAttribute('src');im.style.display='none';document.getElementById('formTitle').textContent='＋ Tambah akun ke etalase';document.getElementById('saveBtn').textContent='Simpan listing'}
 async function cleanupMobileLegendsPhotos(){
  const button=document.getElementById('cleanupMlPhotosBtn'),status=document.getElementById('cleanupMlPhotosStatus');
  const say=message=>{if(status)status.textContent=message;console.log('[XERAVION MLBB cleanup]',message)};
@@ -1800,218 +1800,101 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  const KEY='xeravion_preferred_language';
  const LANGS=['id','en','ms','ar','es','pt','fr','de','ja','ko','zh-CN','th','vi','tl'];
  const SKIP_TAGS=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','SELECT','OPTION','CODE','PRE','SVG']);
- const SKIP_SELECTOR='.language-picker,[data-no-translate],[contenteditable="true"]';
- const ATTRS=['placeholder','title','aria-label','alt'];
- const originals=new WeakMap(), applied=new WeakMap(), attrOriginals=new WeakMap(), attrApplied=new WeakMap();
- const cache=new Map();
- let active='id',generation=0,observer=null,queue=[],scheduled=false;
- const valid=lang=>LANGS.includes(lang);
- function readLanguage(){try{const v=localStorage.getItem(KEY);return valid(v)?v:'id';}catch(_){return 'id';}}
- function saveLanguage(lang){try{localStorage.setItem(KEY,lang);}catch(_){}}
- function skipped(el){if(!el)return true;if(SKIP_TAGS.has(el.tagName))return true;try{return !!el.closest(SKIP_SELECTOR);}catch(_){return false;}}
- function originalText(node){if(!originals.has(node))originals.set(node,node.nodeValue);return originals.get(node);}
- function normalize(value,lang){return lang==='en'?value.replace(/\bfamous\b/gi,'renowned'):value;}
- function collect(root){
-  const texts=[],attrs=[];
-  if(!root)return {texts,attrs};
+ const SKIP_SELECTOR='.language-picker,[data-no-translate],[contenteditable="<script id="xeravion-bilingual-id-en">
+(function(){
+ 'use strict';
+ const KEY='xeravion_preferred_language';
+ const DICT={
+ 'Akun pilihan.':'Curated accounts.','Pengalaman berbeda.':'A different experience.',
+ 'Temukan koleksi akun game pilihan di XERAVION. Telusuri katalog, lihat detail, dan hubungi admin untuk mengecek ketersediaan sebelum transaksi.':'Discover selected gaming accounts at XERAVION. Browse the catalog, view account details, and contact our admin to check availability before purchasing.',
+ 'Jelajahi katalog ↓':'Explore catalog ↓','Hubungi admin':'Contact admin',
+ 'Cara Order':'How to Order','Tentang':'About','Kontak':'Contact','Semua':'All',
+ 'Jual Akun':'Account Store','Cari akun atau kode listing…':'Search accounts or listing code…',
+ 'Urutkan':'Sort by','Terbaru':'Newest','Harga terendah':'Lowest price','Harga tertinggi':'Highest price',
+ 'Semua game':'All games','Lainnya':'Other games','akun tersedia':'accounts available',
+ 'LIHAT DETAIL AKUN ↗':'VIEW ACCOUNT DETAILS ↗','TANYA VIA WHATSAPP ↗':'ASK VIA WHATSAPP ↗',
+ 'Kembali ke Listing':'Back to Listings','Deskripsi akun':'Account Description',
+ 'Belum ada deskripsi tambahan.':'No additional description.','Detail akun dapat ditanyakan kepada admin.':'Ask the admin for more account details.',
+ 'Perbesar foto':'Enlarge photo','KODE LISTING:':'LISTING CODE:',
+ 'Stock Ready:':'Stock Ready:','akun':'accounts','Tersedia':'Available','Pending':'Pending','Terjual':'Sold',
+ 'Belum ada akun yang cocok. Coba kata kunci atau kategori lain.':'No matching accounts found. Try another keyword or category.',
+ 'Member Points':'Member Points','Login ↗':'Login ↗','PREMIUM GAME ACCOUNT STORE':'PREMIUM GAME ACCOUNT STORE',
+ 'Akun game pilihan':'Selected gaming accounts','Cari nama atau kode…':'Search name or code…',
+ 'Simpan listing':'Save listing','Simpan perubahan':'Save changes','Kosongkan form':'Clear form',
+ 'Nama / judul akun *':'Account name / title *','Deskripsi akun lengkap':'Full account description',
+ 'Harga (Rp) *':'Price (IDR) *','Kode listing *':'Listing code *',
+ 'Pilih bahasa':'Select language','Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.':'Select 1–8 photos at once, up to 5 MB each. All photos are automatically watermarked with XERAVION before upload.',
+ 'Atau tempel URL gambar (opsional)':'Or paste an image URL (optional)',
+ 'URL foto tambahan, satu URL per baris (opsional)':'Additional photo URLs, one per line (optional)',
+ 'Daftar listing akun':'Account listings','Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.':'Listings are separated by game. Choose a category to manage ML, PUBG, or Free Fire accounts individually.',
+ 'Cari nama atau kode…':'Search name or code…','Harga':'Price','Status':'Status','Aksi':'Actions',
+ 'FAQ':'FAQ','Top Up':'Top Up','SEGERA':'COMING SOON','Cara Order':'How to Order',
+ 'Hubungi admin untuk mengecek ketersediaan sebelum transaksi.':'Contact the admin to check availability before purchasing.',
+ 'Member Points':'Member Points','Tentang XERAVION':'About XERAVION',
+ 'Pilih kategori game':'Choose a game category','Jelajahi akun':'Browse accounts',
+ 'Koleksi akun game':'Gaming account collection','Akun tersedia':'Available accounts',
+ 'Lihat semua':'View all','Lihat detail':'View details','Kembali':'Back'
+ };
+ let active='id', observer=null, applying=false;
+ const valid=v=>v==='id'||v==='en';
+ const read=()=>{try{const v=localStorage.getItem(KEY);return valid(v)?v:'id'}catch(_){return'id'}};
+ const save=v=>{try{localStorage.setItem(KEY,v)}catch(_){}};
+ function translateTree(root){
+  if(active!=='en'||!root)return;
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
-   const node=walker.currentNode,parent=node.parentElement;
-   if(skipped(parent))continue;
-   const raw=originalText(node),value=raw.trim();
-   if(value&&/[A-Za-zÀ-ÿ]/.test(value))texts.push({node,raw,value});
+   const n=walker.currentNode,p=n.parentElement;
+   if(!p||/^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|CODE|PRE|SVG)$/.test(p.tagName)||p.closest('.language-picker,[data-no-translate],[contenteditable="true"]'))continue;
+   const raw=n.nodeValue,trim=raw.trim();if(!trim)continue;
+   const translated=DICT[trim];
+   if(translated){const lead=raw.match(/^\s*/)?.[0]||'',tail=raw.match(/\s*$/)?.[0]||'';n.nodeValue=lead+translated+tail;}
   }
-  const elements=[];
-  if(root.nodeType===1)elements.push(root);
-  if(root.querySelectorAll)elements.push(...root.querySelectorAll('*'));
-  for(const el of elements){
-   if(skipped(el))continue;
-   for(const name of ATTRS){
-    if(!el.hasAttribute(name))continue;
-    let map=attrOriginals.get(el);if(!map){map={};attrOriginals.set(el,map);}
-    if(!(name in map))map[name]=el.getAttribute(name);
-    const value=map[name]||'';
-    if(value&&/[A-Za-zÀ-ÿ]/.test(value))attrs.push({el,name,value});
-   }
-  }
-  return {texts,attrs};
+  const els=[...(root.nodeType===1?[root]:[]),...(root.querySelectorAll?root.querySelectorAll('[placeholder],[title],[aria-label],[alt]'):[])];
+  const attrs={placeholder:{'Nama / judul akun *':'Account name / title *','Deskripsi akun lengkap':'Full account description','Harga (Rp) *':'Price (IDR) *','Kode listing *':'Listing code *'},'aria-label':{'Pilih bahasa':'Select language'}};
+  els.forEach(el=>{for(const [a,map] of Object.entries(attrs)){if(el.hasAttribute(a)){const v=el.getAttribute(a);if(map[v])el.setAttribute(a,map[v]);}}});
  }
- function restoreAll(){
-  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
-  while(walker.nextNode()){
-   const node=walker.currentNode;if(!originals.has(node))continue;
-   const value=originals.get(node);applied.set(node,value);
-   if(node.nodeValue!==value)node.nodeValue=value;
+ function refreshDynamic(){
+  if(active!=='en')return;
+  if(typeof window.render==='function'&&!window.__xerBilingualRendering){
+   const original=window.render;
+   window.render=function(){
+    const list=typeof items!=='undefined'?items:null;
+    if(list)list.forEach(p=>{p.__idName=p.name;p.__idDesc=p.desc;p.name=p.name_en||p.name;p.desc=p.description_en||p.desc;});
+    try{return original.apply(this,arguments)}finally{if(list)list.forEach(p=>{p.name=p.__idName;p.desc=p.__idDesc;delete p.__idName;delete p.__idDesc;});}
+   };
+   window.__xerBilingualRendering=true;
   }
-  for(const el of [document.body,...document.body.querySelectorAll('*')]){
-   const map=attrOriginals.get(el);if(!map)continue;
-   let last=attrApplied.get(el);if(!last){last={};attrApplied.set(el,last);}
-   for(const name of Object.keys(map)){
-    last[name]=map[name];
-    if(el.getAttribute(name)!==map[name])el.setAttribute(name,map[name]);
-    el.removeAttribute('data-xer-lang-'+name);
-   }
+  if(typeof window.openProductDetail==='function'&&!window.__xerBilingualDetail){
+   const originalDetail=window.openProductDetail;
+   window.openProductDetail=function(id,fromUrl){
+    const p=typeof items!=='undefined'&&items.find(x=>Number(x.id)===Number(id));
+    if(p){const n=p.name,d=p.desc;p.name=p.name_en||n;p.desc=p.description_en||d;try{return originalDetail.call(this,id,fromUrl)}finally{p.name=n;p.desc=d;}}
+    return originalDetail.call(this,id,fromUrl);
+   };
+   window.__xerBilingualDetail=true;
   }
  }
- function applyOutput(item,value,lang,token){
-  if(token!==generation||active!==lang||!value)return;
-  if(item.node){
-   if(!item.node.isConnected)return;
-   const leading=item.raw.match(/^\s*/)?.[0]||'',trailing=item.raw.match(/\s*$/)?.[0]||'';
-   const output=leading+value+trailing;
-   applied.set(item.node,output);
-   if(item.node.nodeValue!==output)item.node.nodeValue=output;
-  }else{
-   if(!item.el.isConnected)return;
-   let last=attrApplied.get(item.el);if(!last){last={};attrApplied.set(item.el,last);}
-   last[item.name]=value;
-   if(item.el.getAttribute(item.name)!==value){
-    item.el.setAttribute(item.name,value);
-    item.el.setAttribute('data-xer-lang-'+item.name,lang);
-   }
-  }
- }
- async function browserFallback(source,lang){
-  const key=lang+'|'+source;
-  if(cache.has(key))return cache.get(key);
-  const providers=[
-   async()=>{
-    const url=new URL('https://api.mymemory.translated.net/get');
-    url.searchParams.set('q',source);url.searchParams.set('langpair','id|'+lang);
-    const response=await fetch(url.toString(),{mode:'cors',credentials:'omit',cache:'no-store'});
-    if(!response.ok)throw new Error('MyMemory HTTP '+response.status);
-    const data=await response.json();
-    if(Number(data.responseStatus||200)!==200)throw new Error('MyMemory translation unavailable');
-    return data.responseData&&data.responseData.translatedText;
-   },
-   async()=>{
-    const url=new URL('https://translate.googleapis.com/translate_a/single');
-    url.searchParams.set('client','gtx');url.searchParams.set('sl','auto');
-    url.searchParams.set('tl',lang);url.searchParams.set('dt','t');url.searchParams.set('q',source);
-    const response=await fetch(url.toString(),{mode:'cors',credentials:'omit',cache:'no-store'});
-    if(!response.ok)throw new Error('Google Translate HTTP '+response.status);
-    const data=await response.json();
-    return (data[0]||[]).map(part=>part&&part[0]||'').join('');
-   }
-  ];
-  for(const provider of providers){
-   try{
-    const value=await provider();
-    if(typeof value==='string'&&value.trim()&&value.trim().toLowerCase()!==source.trim().toLowerCase()){
-     const output=normalize(value.trim(),lang);cache.set(key,output);return output;
-    }
-   }catch(error){console.warn('XERAVION browser translation fallback:',error);}
-  }
-  return null;
- }
- async function translateBatch(items,lang,token){
-  const unique=[...new Set(items.map(item=>item.value).filter(value=>!cache.has(lang+'|'+value)))];
-  const batches=[];
-  let current=[],size=0;
-  for(const value of unique){
-   if(current.length>=10||size+value.length>28000){if(current.length)batches.push(current);current=[];size=0;}
-   current.push(value);size+=value.length;
-  }
-  if(current.length)batches.push(current);
-  let cursor=0;
-  async function runBatch(){
-   while(cursor<batches.length){
-    if(token!==generation||active!==lang)return;
-    const texts=batches[cursor++];
-    let translated=new Map();
-    try{
-     const response=await fetch('/api/translate',{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},cache:'no-store',body:JSON.stringify({target:lang,texts})});
-     if(!response.ok)throw new Error('Pages Function HTTP '+response.status);
-     const payload=await response.json();
-     if(!Array.isArray(payload.translations)||payload.translations.length!==texts.length)throw new Error('Invalid translation response');
-     payload.translations.forEach((value,index)=>{
-      if(typeof value==='string'&&value.trim()){
-       const output=normalize(value.trim(),lang);cache.set(lang+'|'+texts[index],output);translated.set(texts[index],output);
-      }
-     });
-    }catch(error){console.warn('XERAVION Pages translation unavailable; trying browser fallback:',error);}
-    for(const item of items){
-     if(token!==generation||active!==lang)return;
-     if(!texts.includes(item.value))continue;
-     let value=translated.get(item.value)||cache.get(lang+'|'+item.value);
-     if(!value)value=await browserFallback(item.value,lang);
-     if(value)applyOutput(item,value,lang,token);
-    }
-   }
-  }
-  await Promise.all(Array.from({length:Math.min(5,batches.length)},runBatch));
-  // Apply any cached values for repeated strings after all batches finish.
-  if(token===generation&&active===lang){
-   for(const item of items){
-    const value=cache.get(lang+'|'+item.value);
-    if(value)applyOutput(item,value,lang,token);
-   }
-  }
- }
- async function translateRoot(root,lang,token){
-  if(!root||lang==='id'||token!==generation)return;
-  const found=collect(root);
-  const items=[...found.texts.map(x=>({node:x.node,raw:x.raw,value:x.value})),...found.attrs.map(x=>({el:x.el,name:x.name,value:x.value}))];
-  await translateBatch(items,lang,token);
- }
- async function applyLanguage(lang){
-  if(!valid(lang))return;
-  active=lang;const token=++generation;saveLanguage(lang);
-  document.documentElement.lang=lang;
-  document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-  const picker=document.getElementById('siteLanguage');if(picker&&picker.value!==lang)picker.value=lang;
-  restoreAll();
-  if(lang!=='id')await translateRoot(document.body,lang,token);
- }
- function schedule(root){
-  if(!root||root.nodeType!==1)return;
-  queue.push(root);if(scheduled)return;scheduled=true;
-  Promise.resolve().then(async()=>{
-   try{
-    while(queue.length){
-     const batch=queue.splice(0,8),token=generation,lang=active;
-     if(lang==='id')continue;
-     for(const node of batch){
-      if(token!==generation||lang!==active)break;
-      if(node.isConnected)await translateRoot(node,lang,token);
-     }
-    }
-   }catch(error){console.warn('XERAVION dynamic translation observer:',error);}
-   finally{scheduled=false;if(queue.length)schedule(queue.shift());}
-  });
- }
- function observe(){
-  if(observer||!document.body)return;
-  observer=new MutationObserver(records=>{
-   for(const record of records){
-    if(record.type==='characterData'){
-     const node=record.target,current=node.nodeValue;
-     if(applied.has(node)&&applied.get(node)===current)continue;
-     originals.set(node,current);applied.delete(node);
-     if(active!=='id'&&node.parentElement&&!skipped(node.parentElement))schedule(node.parentElement);
-    }else if(record.type==='attributes'){
-     const el=record.target,name=record.attributeName;if(!ATTRS.includes(name)||skipped(el))continue;
-     const last=attrApplied.get(el);if(last&&last[name]===el.getAttribute(name))continue;
-     let map=attrOriginals.get(el);if(!map){map={};attrOriginals.set(el,map);}map[name]=el.getAttribute(name);
-     if(active!=='id')schedule(el);
-    }else{
-     for(const node of record.addedNodes)if(node.nodeType===1)schedule(node);
-    }
-   }
-  });
-  observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATTRS});
- }
- function initialize(){
-  const lang=readLanguage();active='id';
+ async function setLanguage(lang){
+  if(!valid(lang))lang='id';
+  active=lang;save(lang);document.documentElement.lang=lang==='en'?'en':'id';document.documentElement.dir='ltr';
   const picker=document.getElementById('siteLanguage');if(picker)picker.value=lang;
-  observe();
-  if(lang!=='id')applyLanguage(lang);
+  if(lang==='id'){location.reload();return;}
+  applying=true;
+  // Re-render listing and detail using manually supplied English fields, then translate fixed interface labels.
+  refreshDynamic();
+  if(typeof window.render==='function')window.render();
+  translateTree(document.body);
+  applying=false;
  }
- window.translateXeravionSite=applyLanguage;
+ function init(){
+  const picker=document.getElementById('siteLanguage');if(picker)picker.value=read();
+  active='id';
+  if(read()==='en')setLanguage('en');
+  if(!observer){observer=new MutationObserver(records=>{if(active!=='en'||applying)return;for(const r of records)for(const n of r.addedNodes)if(n.nodeType===1)translateTree(n);});observer.observe(document.body,{childList:true,subtree:true});}
+ }
+ window.translateXeravionSite=setLanguage;
  window.getXeravionLanguage=()=>active;
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});else initialize();
- window.addEventListener('pageshow',()=>{const lang=readLanguage();if(lang!==active)applyLanguage(lang);});
- window.addEventListener('storage',event=>{if(event.key===KEY&&valid(event.newValue)&&event.newValue!==active)applyLanguage(event.newValue);});
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ window.addEventListener('pageshow',()=>{const v=read();if(v!==active)setLanguage(v)});
 })();
 </script>
-</body></html>

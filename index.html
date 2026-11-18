@@ -660,11 +660,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
   <div class="eyebrow">XERAVION MAIL CONTROL</div>
   <h3 style="margin:6px 0">Pusat Email XERAVION</h3>
   <p class="hint">Kelola mailbox, email masuk, status akun email, dan aktivitas admin dari satu dashboard. Sesi menggunakan login admin utama XERAVION.</p>
-  <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-   <span class="status" id="xerMailConnectionStatus">Menyiapkan koneksi…</span>
-   <button class="btn" type="button" onclick="connectXeravionMail()">Hubungkan / Muat ulang Mail</button>
-  </div>
-  <p class="hint" id="xerMailConnectionHint" style="margin-top:8px">Panel Mail akan menerima sesi admin yang sudah diverifikasi oleh Supabase.</p>
+  <p class="hint" style="margin-top:8px">Mail terhubung otomatis menggunakan sesi admin XERAVION. Gunakan tombol Muat ulang di dalam Mail untuk memperbarui kotak masuk.</p>
  </div>
  <div class="panel" style="padding:0;overflow:hidden">
   <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
@@ -948,15 +944,22 @@ function closeLogin(){document.getElementById('loginModal').classList.remove('sh
 
 const XERAVION_MAIL_URL='https://mail.xeravion.my.id/panel';
 async function connectXeravionMail(){
- const frame=document.getElementById('xeravionMailFrame'),status=document.getElementById('xerMailConnectionStatus'),hint=document.getElementById('xerMailConnectionHint');
- if(!frame||!xeravionAdminVerified){if(status)status.textContent='Login admin diperlukan';if(hint)hint.textContent='Silakan login melalui Dashboard Admin utama terlebih dahulu.';return}
+ const frame=document.getElementById('xeravionMailFrame');
+ if(!frame||!xeravionAdminVerified)return;
  try{
   const {data:{session},error}=await supabaseClient.auth.getSession();
   if(error||!session?.access_token)throw new Error(error?.message||'Sesi admin tidak ditemukan. Silakan login ulang.');
   const target=new URL(XERAVION_MAIL_URL);
-  const send=()=>{try{frame.contentWindow.postMessage({type:'XERAVION_ADMIN_SESSION',accessToken:session.access_token},target.origin);status.textContent='Sesi admin dikirim';hint.textContent='Memverifikasi hak akses admin dan memuat data Mail…'}catch(e){status.textContent='Gagal menghubungkan';hint.textContent=e?.message||String(e)}};
-  if(frame.dataset.loaded==='1')send();else{frame.addEventListener('load',()=>{frame.dataset.loaded='1';send()},{once:true});if(frame.src==='about:blank'||!frame.src.startsWith(target.origin+'/panel'))frame.src=XERAVION_MAIL_URL+'?embed=1';}
- }catch(e){status.textContent='Koneksi gagal';hint.textContent=e?.message||String(e);console.error('XERAVION Mail connection:',e)}
+  const send=()=>{
+   try{frame.contentWindow.postMessage({type:'XERAVION_ADMIN_SESSION',accessToken:session.access_token},target.origin)}
+   catch(e){console.error('XERAVION Mail connection:',e)}
+  };
+  if(frame.dataset.loaded==='1')send();
+  else{
+   frame.addEventListener('load',()=>{frame.dataset.loaded='1';send()},{once:true});
+   if(frame.src==='about:blank'||!frame.src.startsWith(target.origin+'/panel'))frame.src=XERAVION_MAIL_URL+'?embed=1';
+  }
+ }catch(e){console.error('XERAVION Mail connection:',e)}
 }
 let selectedCreditMember=null;
 function showAdminTab(tab){

@@ -658,6 +658,39 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #productDetailModal .detail-media:before{opacity:.28;background-size:28px 28px,28px 28px,100% 100%}
 }
 </style>
+<style id="xeravion-starlight-promo-slide">
+.starlight-slide{background:linear-gradient(120deg,#081d43,#211044 62%,#101b3a)!important}
+.starlight-slide>img{opacity:.28!important;object-fit:cover!important;object-position:center 28%!important;filter:saturate(1.25)}
+.starlight-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,12,34,.78),rgba(10,10,36,.68)),linear-gradient(0deg,rgba(7,8,25,.7),transparent 75%)}
+.starlight-content{position:absolute;inset:12px 42px 38px;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:7px;color:#fff}
+.starlight-heading{display:flex;flex-direction:column;gap:2px}
+.starlight-heading span{font-size:8px;letter-spacing:2px;color:#9eeaff;font-weight:900}
+.starlight-heading strong{font-size:clamp(14px,2.4vw,22px);color:#ffe3a3;text-shadow:0 2px 12px #000}
+.starlight-heading small{font-size:9px;color:#e5eaff}
+.starlight-products{display:flex;gap:8px;max-width:440px}
+.starlight-product{display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-items:center;column-gap:7px;flex:1;min-width:0;padding:5px 8px;border-radius:10px;background:rgba(6,15,39,.82);border:1px solid rgba(98,203,255,.62);box-shadow:0 0 13px rgba(39,145,255,.22)}
+.starlight-product.premium{border-color:rgba(201,139,255,.78);box-shadow:0 0 13px rgba(172,87,255,.24)}
+.starlight-product img{grid-row:1/3;width:42px;height:42px;object-fit:contain;border-radius:6px;background:#fff}
+.starlight-product b{font-size:8px;letter-spacing:1px;color:#8de6ff}
+.starlight-product.premium b{color:#d7a8ff}
+.starlight-product strong{font-size:clamp(11px,2vw,16px);color:#ffe3a3;white-space:nowrap}
+.starlight-terms{font-size:8px;line-height:1.25;color:#eef3ff}
+.starlight-terms b{color:#ffdf79}
+.starlight-contact{align-self:flex-start;padding:6px 12px;border-radius:20px;background:linear-gradient(110deg,#f8e2a6,#b77d2c);color:#17101a;font-size:8px;font-weight:950;letter-spacing:.5px;text-decoration:none;box-shadow:0 3px 14px #dca64c55}
+@media(max-width:760px){
+ .starlight-content{inset:10px 34px 32px;gap:5px}
+ .starlight-heading span{font-size:7px;letter-spacing:1.3px}
+ .starlight-heading strong{font-size:15px}
+ .starlight-heading small{font-size:8px}
+ .starlight-products{gap:6px}
+ .starlight-product{grid-template-columns:32px 1fr;column-gap:5px;padding:4px 5px}
+ .starlight-product img{width:32px;height:32px}
+ .starlight-product b{font-size:7px}
+ .starlight-product strong{font-size:11px}
+ .starlight-terms{font-size:7px}
+ .starlight-contact{font-size:7px;padding:5px 9px}
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -666,7 +699,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <article class="game-slide active"><img src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Artwork event kolaborasi Mobile Legends Bang Bang x SpongeBob" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>MLBB × SPONGEBOB • UNDERSEA BASH</span><strong>MOBILE LEGENDS</strong><small>Event kolaborasi berlangsung 11 November – 10 Desember</small></div></article>
 <article class="game-slide"><img src="https://play-lh.googleusercontent.com/J7yc5dVCW8CnEPsroJy-gnNjMEYMYu4UKj843o8njDItR30Gb_7xcrKgR5tFcK5zTqL69Kz79VWFaxfbg5AAvw=w1600" alt="Artwork PUBG Mobile" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>V4.7 • ARCTIC CHRONICLES</span><strong>PUBG MOBILE</strong><small>Mode Ancient Beast sudah hadir di Erangel</small></div></article>
 <article class="game-slide"><img src="https://cdn1.katadata.co.id/media/images/thumb/2026/11/10/Free_Fire_Storm_Arena-2026_11_10-14_01_55_8dd6fe596193688685ef9faded2f522b_960x640_thumb.png" alt="Artwork Free Fire" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>STORM ARENA • FFWS GLOBAL FINALS</span><strong>FREE FIRE</strong><small>Event November berlangsung hingga 29 November</small></div></article>
-<article class="game-slide shirt-slide"><img src="/assets/xeravion-official-shirt-banner.jpg" alt="Kaos resmi XERAVION dengan logo emas berlatar gaming" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>OFFICIAL MERCHANDISE • XERAVION</span><strong>KAOS RESMI XERAVION</strong><small>Kenakan identitas XERAVION. Tersedia melalui pemesanan admin.</small><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20memesan%20kaos%20resmi%20XERAVION." target="_blank" rel="noopener">PESAN KAOS VIA WHATSAPP ↗</a></div></article></div><button class="slider-arrow prev" type="button" aria-label="Slide sebelumnya" onclick="moveGameSlide(-1)">‹</button><button class="slider-arrow next" type="button" aria-label="Slide berikutnya" onclick="moveGameSlide(1)">›</button><div class="slider-bottom"><label>PLAY • COLLECT • CONNECT</label><div class="slider-dots"><button class="slider-dot active" type="button" aria-label="Mobile Legends" onclick="showGameSlide(0)"></button><button class="slider-dot" type="button" aria-label="PUBG Mobile" onclick="showGameSlide(1)"></button><button class="slider-dot" type="button" aria-label="Free Fire" onclick="showGameSlide(2)"></button><button class="slider-dot" type="button" aria-label="Kaos resmi XERAVION" onclick="showGameSlide(3)"></button></div></div></div></div>
+<article class="game-slide starlight-slide"><img src="https://pbs.twimg.com/media/HRa3AHLboAArVLV.jpg" alt="Artwork Starlight November 2026 Kalea Tideborn Sailor" loading="lazy"><div class="starlight-shade"></div><div class="starlight-content"><div class="starlight-heading"><span>MLBB • STARLIGHT NOVEMBER 2026</span><strong>KALEA — TIDEBORN SAILOR</strong><small>Starlight Member Card tersedia di XERAVION</small></div><div class="starlight-products"><div class="starlight-product basic"><img src="https://cdn.vcgamers.com/variant-master/temp/7b90157c-340e-4557-b0e5-3df090701703.png" alt="Starlight Member Card Basic"><b>BASIC</b><strong>Rp. 45.000</strong></div><div class="starlight-product premium"><img src="https://d1x91p7vw3vuq8.cloudfront.net/itemku-upload/202366/os2vsrhc8nm4owquqzqwp.jpg" alt="Premium Starlight Member Card"><b>PREMIUM</b><strong>Rp. 65.000</strong></div></div><div class="starlight-terms">Syarat: berteman di dalam game selama <b>7 hari</b> agar kartu dapat dikirim</div><a class="starlight-contact" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20berminat%20Starlight%20Member%20Card." target="_blank" rel="noopener">HUBUNGI ADMIN JIKA BERMINAT ↗</a></div></article><article class="game-slide shirt-slide"><img src="/assets/xeravion-official-shirt-banner.jpg" alt="Kaos resmi XERAVION dengan logo emas berlatar gaming" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>OFFICIAL MERCHANDISE • XERAVION</span><strong>KAOS RESMI XERAVION</strong><small>Kenakan identitas XERAVION. Tersedia melalui pemesanan admin.</small><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20memesan%20kaos%20resmi%20XERAVION." target="_blank" rel="noopener">PESAN KAOS VIA WHATSAPP ↗</a></div></article></div><button class="slider-arrow prev" type="button" aria-label="Slide sebelumnya" onclick="moveGameSlide(-1)">‹</button><button class="slider-arrow next" type="button" aria-label="Slide berikutnya" onclick="moveGameSlide(1)">›</button><div class="slider-bottom"><label>PLAY • COLLECT • CONNECT</label><div class="slider-dots"><button class="slider-dot active" type="button" aria-label="Mobile Legends" onclick="showGameSlide(0)"></button><button class="slider-dot" type="button" aria-label="PUBG Mobile" onclick="showGameSlide(1)"></button><button class="slider-dot" type="button" aria-label="Free Fire" onclick="showGameSlide(2)"></button><button class="slider-dot" type="button" aria-label="Kaos resmi XERAVION" onclick="showGameSlide(3)"></button><button class="slider-dot" type="button" aria-label="Starlight Member Card" onclick="showGameSlide(4)"></button></div></div></div></div>
 <div class="stats"><div class="stat"><b id="countStat">0</b><span>Listing akun</span></div><div class="stat"><b>3+</b><span>Kategori game</span></div><div class="stat"><b>Top Up Game</b><span>Segera Hadir</span></div></div>
 <div id="gameCategoryHub" class="game-category-hub">
  <div class="sectionhead"><div><div class="eyebrow">PILIH DUNIA GAME</div><h2>Jelajahi kategori</h2></div><p>Pilih game untuk melihat akun yang tersedia</p></div>

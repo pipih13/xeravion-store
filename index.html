@@ -743,9 +743,24 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing</button>
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Credit Points</button>
+ <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
  <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
 </nav>
 <div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Kelola Credit Points</button></div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-analytics">
+ <div class="panel xer-traffic-panel">
+  <div class="sectionhead"><div><h3 style="margin:0">XERAVION Visitor Analytics</h3><div class="hint">Pantau lalu lintas toko langsung dari Cloudflare.</div></div><button class="btn" type="button" onclick="loadXeravionAnalytics()">Muat ulang</button></div>
+  <div class="xer-traffic-controls"><div class="hint">Periode statistik</div><select id="xerTrafficPeriod" aria-label="Periode statistik" onchange="loadXeravionAnalytics()"><option value="7">7 hari terakhir</option><option value="30">30 hari terakhir</option></select></div>
+  <div class="xer-traffic-stats">
+   <div class="stat"><b id="xerTrafficPageViews">—</b><span>Page views</span></div>
+   <div class="stat"><b id="xerTrafficRequests">—</b><span>Total requests</span></div>
+   <div class="stat"><b id="xerTrafficUnique">—</b><span>Pengunjung unik harian*</span></div>
+  </div>
+  <div class="xer-traffic-chart-wrap"><h4>Kunjungan per hari</h4><div id="xerTrafficChart" class="xer-traffic-chart"><div class="hint">Tekan Muat ulang untuk mengambil statistik.</div></div></div>
+  <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
+  <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
+ </div>
+</div>
 <div class="xer-admin-tab-panel" id="adminTab-mail">
  <div class="panel" style="padding:0;overflow:hidden">
   <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
@@ -1048,14 +1063,47 @@ async function connectXeravionMail(){
 }
 let selectedCreditMember=null;
 function showAdminTab(tab){
- const allowed=['overview','form','listings','orders','credits','mail'];
+ const allowed=['overview','form','listings','orders','credits','analytics','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
  if(tab==='orders')loadXeravionOrders();
  if(tab==='listings')renderAdmin();
  if(tab==='form')populateOrderProducts();
+ if(tab==='analytics')loadXeravionAnalytics();
  if(tab==='mail')connectXeravionMail();
+}
+function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
+async function loadXeravionAnalytics(){
+ const status=document.getElementById('xerTrafficStatus'),chart=document.getElementById('xerTrafficChart');
+ if(!status||!chart)return;
+ if(!xeravionAdminVerified){status.textContent='Silakan login sebagai admin untuk melihat statistik.';return}
+ const days=Number(document.getElementById('xerTrafficPeriod')?.value||7);
+ status.textContent='Mengambil statistik dari Cloudflare…';
+ chart.innerHTML='<div class="hint">Memuat data kunjungan…</div>';
+ ['xerTrafficPageViews','xerTrafficRequests','xerTrafficUnique'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—'});
+ try{
+  const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
+  const response=await fetch('/api/admin-analytics?days='+days,{headers:{Authorization:'Bearer '+session.access_token},cache:'no-store'});
+  const data=await response.json();
+  if(!response.ok){throw new Error(data.error||'Gagal mengambil data Cloudflare.')}
+  const totals=data.totals||{};
+  document.getElementById('xerTrafficPageViews').textContent=formatTrafficNumber(totals.pageViews);
+  document.getElementById('xerTrafficRequests').textContent=formatTrafficNumber(totals.requests);
+  document.getElementById('xerTrafficUnique').textContent=formatTrafficNumber(totals.uniqueVisitorsDailySum);
+  const rows=Array.isArray(data.daily)?data.daily:[];
+  const max=Math.max(1,...rows.map(x=>Number(x.pageViews||0)));
+  chart.innerHTML=rows.length?rows.map(row=>{
+   const label=new Date(row.date+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
+   const value=Number(row.pageViews||0),height=Math.max(3,Math.round(value/max*100));
+   return '<div class="xer-traffic-day" title="'+label+': '+formatTrafficNumber(value)+' page views"><div class="xer-traffic-bar" style="height:'+height+'%"></div><b>'+formatTrafficNumber(value)+'</b><span>'+label+'</span></div>';
+  }).join(''):'<div class="hint">Belum ada data untuk periode ini.</div>';
+  status.textContent='Data Cloudflare berhasil dimuat · '+data.startDate+' sampai '+data.endDate+'. Pengunjung unik adalah akumulasi metrik harian.';
+ }catch(error){
+  status.textContent=error.message||'Tidak dapat memuat statistik.';
+  chart.innerHTML='<div class="hint">Statistik belum tersedia. Periksa konfigurasi Cloudflare Pages.</div>';
+ }
 }
 async function populateOrderProducts(){
  const sel=document.getElementById('orderProduct');if(!sel)return;
@@ -1629,5 +1677,21 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  .top .wrap.nav>.navright{gap:2px!important}
  .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
 }
+
+/* XERAVION admin visitor analytics */
+.xer-traffic-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.xer-traffic-controls select{min-width:170px;padding:10px 12px;border-radius:12px;border:1px solid #64502e;background:#100e0b;color:#f7f1e6}
+.xer-traffic-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
+.xer-traffic-stats .stat{min-height:90px;padding:16px;border:1px solid #59472a;border-radius:16px;background:linear-gradient(145deg,#19150f,#0d0c09)}
+.xer-traffic-stats .stat b{display:block;font-size:clamp(22px,4vw,32px);color:#e8cc91;font-variant-numeric:tabular-nums}
+.xer-traffic-stats .stat span{display:block;margin-top:6px;color:#b4a78f;font-size:12px}
+.xer-traffic-chart-wrap{margin-top:20px;padding:16px;border:1px solid #51432b;border-radius:16px;background:#0e0c0a}
+.xer-traffic-chart-wrap h4{margin:0 0 18px;color:#e8cc91}
+.xer-traffic-chart{min-height:190px;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:12px 4px 4px}
+.xer-traffic-day{flex:1 0 38px;min-width:38px;height:160px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+.xer-traffic-day b{font-size:10px;color:#f7f1e6;font-variant-numeric:tabular-nums}
+.xer-traffic-day span{font-size:10px;color:#b4a78f;white-space:nowrap}
+.xer-traffic-bar{width:min(28px,70%);min-height:3px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#f5dfaa,#a77a32);box-shadow:0 0 14px #c99a4a35}
+@media(max-width:600px){.xer-traffic-stats{grid-template-columns:1fr 1fr}.xer-traffic-stats .stat:last-child{grid-column:1/-1}.xer-traffic-chart{gap:5px}.xer-traffic-day{flex-basis:34px;min-width:34px}}
 </style>
 </body></html>

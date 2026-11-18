@@ -507,31 +507,31 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  -webkit-text-stroke:0!important;
 }
 </style>
-<style id="xeravion-responsive-page-background">
-html,body{min-height:100%;background-color:#080a12!important}
-body{
- background-image:
-  radial-gradient(ellipse at 12% 16%,rgba(39,113,190,.22),transparent 38%),
-  radial-gradient(ellipse at 88% 34%,rgba(119,65,190,.19),transparent 40%),
-  radial-gradient(ellipse at 52% 82%,rgba(25,119,143,.13),transparent 42%),
-  linear-gradient(145deg,#080a12 0%,#0b0c15 48%,#090a10 100%)!important;
- background-repeat:no-repeat!important;
- background-attachment:fixed!important;
- background-size:100% 100%,100% 100%,100% 100%,cover!important;
+
+<style id="xeravion-credit-scene-responsive-fit">
+/* Fit the XP Loyalty artwork inside its own card across screen sizes */
+#creditPoints .credit-promo{position:relative!important;overflow:hidden!important;min-width:0}
+#creditPoints .credit-promo>.credit-scene{
+ position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+ overflow:hidden!important;z-index:1!important;pointer-events:none!important;
 }
-.app:before{inset:0!important;opacity:.38!important;background-size:48px 48px,48px 48px, min(42vw,520px) auto,min(48vw,600px) auto!important}
-.app:after{inset:0!important;filter:blur(42px)!important;opacity:.8!important}
-@media(max-width:760px){
- body{background-attachment:scroll!important;background-size:100% 100%,100% 100%,100% 100%,cover!important}
- .app:before{position:fixed!important;inset:0!important;opacity:.30!important;background-size:38px 38px,38px 38px,72vw auto,78vw auto!important}
- .app:after{position:fixed!important;inset:0!important;filter:blur(30px)!important;animation:none!important}
+#creditPoints .credit-promo>.credit-scene img{
+ display:block!important;width:100%!important;height:100%!important;
+ object-fit:cover!important;object-position:center 48%!important;
 }
-@media(min-width:761px){
- body{background-attachment:fixed!important}
- .app:before,.app:after{position:fixed!important;inset:0!important}
+@media(max-width:600px){
+ #creditPoints .credit-promo{min-height:190px!important}
+ #creditPoints .credit-promo>.credit-scene img{
+  object-fit:cover!important;object-position:57% center!important;
+ }
 }
-</style>
-</head>
+@media(min-width:601px){
+ #creditPoints .credit-promo{min-height:210px!important}
+ #creditPoints .credit-promo>.credit-scene img{
+  object-fit:cover!important;object-position:center 48%!important;
+ }
+}
+</style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><div class="brand"><img class="brand-logo" src="/assets/xeravion-emblem.svg" alt="Logo XERAVION" width="40" height="40"><div><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></div></div><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn" onclick="openAdmin()">Dashboard</button><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener">WhatsApp ↗</a></div></div></header>
 <main class="wrap">

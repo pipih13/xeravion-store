@@ -1347,4 +1347,54 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  }
 }
 </style>
+<style id="xeravion-mobile-header-single-row">
+/* Phone header: brand, Member Points, Dashboard and Login share one horizontal row. */
+@media(max-width:760px){
+ .top .wrap.nav{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:space-between!important;
+  gap:6px!important;min-height:62px!important;height:auto!important;
+  padding-top:7px!important;padding-bottom:7px!important;
+ }
+ .top .wrap.nav>a.brand{
+  flex:0 1 auto!important;width:auto!important;min-width:0!important;
+  max-width:none!important;margin:0!important;gap:6px!important;
+  justify-content:flex-start!important;align-items:center!important;
+ }
+ .top .wrap.nav>a.brand img.brand-logo{
+  width:32px!important;height:32px!important;min-width:32px!important;
+  flex:0 0 32px!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy{min-width:0!important}
+ .top .wrap.nav>a.brand .brand-copy b{
+  font-size:clamp(11px,3.5vw,15px)!important;
+  letter-spacing:1px!important;line-height:1.1!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy small{
+  font-size:clamp(5px,1.55vw,7px)!important;
+  letter-spacing:.55px!important;margin-top:2px!important;
+ }
+ .top .wrap.nav>.navright{
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  display:flex!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:3px!important;margin:0!important;
+ }
+ .top .wrap.nav>.navright .btn{
+  flex:0 1 auto!important;min-width:0!important;
+  padding:7px 6px!important;font-size:clamp(7px,1.9vw,9px)!important;
+  line-height:1.15!important;white-space:nowrap!important;
+  border-radius:8px!important;
+ }
+}
+@media(max-width:370px){
+ .top .wrap.nav{gap:4px!important;padding-left:8px!important;padding-right:8px!important}
+ .top .wrap.nav>a.brand{gap:4px!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:28px!important;height:28px!important;min-width:28px!important;flex-basis:28px!important}
+ .top .wrap.nav>a.brand .brand-copy b{font-size:10px!important;letter-spacing:.65px!important}
+ .top .wrap.nav>a.brand .brand-copy small{font-size:5px!important;letter-spacing:.25px!important}
+ .top .wrap.nav>.navright{gap:2px!important}
+ .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
+}
+</style>
 </body></html>

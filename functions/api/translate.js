@@ -56,7 +56,7 @@ export async function onRequestPost({ request }) {
       return json({ error: "Send between 1 and 12 text items." }, 400);
     }
     const clean = texts.map(value => typeof value === "string" ? value.trim() : "");
-    if (clean.some(value => !value || value.length > 1200) || clean.join("").length > 9000) {
+    if (clean.some(value => !value || value.length > 4000) || clean.join("").length > 9000) {
       return json({ error: "Text batch is empty or too large." }, 400);
     }
 

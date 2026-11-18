@@ -617,7 +617,48 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  }
 }
 </style>
-<style id="xeravion-image-preview-zoom-gesture">.image-preview-modal{touch-action:none!important;overscroll-behavior:contain!important}.image-preview-modal>img#imagePreviewFull{touch-action:none!important;user-select:none!important;-webkit-user-drag:none!important;cursor:grab;transform-origin:center center;will-change:transform;max-width:100%;max-height:100%}.image-preview-modal>img#imagePreviewFull:active{cursor:grabbing}</style></head>
+<style id="xeravion-image-preview-zoom-gesture">.image-preview-modal{touch-action:none!important;overscroll-behavior:contain!important}.image-preview-modal>img#imagePreviewFull{touch-action:none!important;user-select:none!important;-webkit-user-drag:none!important;cursor:grab;transform-origin:center center;will-change:transform;max-width:100%;max-height:100%}.image-preview-modal>img#imagePreviewFull:active{cursor:grabbing}</style><style id="xeravion-listing-photo-backdrop">
+/* Game-inspired illuminated stage behind listing photos */
+#productDetailModal .detail-media{
+ position:relative!important;isolation:isolate!important;overflow:hidden!important;
+ background:
+  radial-gradient(ellipse at 16% 18%,rgba(0,190,255,.32),transparent 43%),
+  radial-gradient(ellipse at 88% 22%,rgba(116,73,255,.29),transparent 45%),
+  radial-gradient(ellipse at 52% 100%,rgba(222,166,67,.19),transparent 49%),
+  linear-gradient(145deg,#101d35 0%,#111326 48%,#171321 100%)!important;
+}
+#productDetailModal .detail-media:before{
+ content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.32;
+ background:
+  linear-gradient(rgba(100,204,255,.11) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(100,204,255,.11) 1px,transparent 1px),
+  radial-gradient(circle at 50% 45%,transparent 0 26%,rgba(78,181,255,.22) 26.3%,transparent 27%,transparent 38%,rgba(177,123,255,.14) 38.3%,transparent 39%);
+ background-size:34px 34px,34px 34px,100% 100%;
+}
+#productDetailModal .detail-media:after{
+ content:"";position:absolute;z-index:0;pointer-events:none;
+ width:58%;aspect-ratio:1;right:-18%;top:8%;
+ border:1px solid rgba(91,208,255,.24);border-radius:50%;
+ box-shadow:0 0 0 18px rgba(91,208,255,.04),0 0 0 42px rgba(151,104,255,.04),inset 0 0 45px rgba(76,166,255,.09);
+}
+#productDetailModal .detail-media>*{position:relative;z-index:1}
+#productDetailModal .detail-image{
+ background:rgba(7,12,25,.78)!important;
+ box-shadow:0 0 0 1px rgba(90,205,255,.18),0 12px 34px rgba(0,0,0,.38),0 0 28px rgba(32,155,255,.14)!important;
+}
+#productDetailModal .detail-thumbs{filter:drop-shadow(0 5px 12px rgba(0,0,0,.28))}
+@media(max-width:760px){
+ #productDetailModal .detail-media{
+  background:
+   radial-gradient(ellipse at 12% 20%,rgba(0,190,255,.35),transparent 48%),
+   radial-gradient(ellipse at 92% 24%,rgba(130,76,255,.31),transparent 48%),
+   radial-gradient(ellipse at 50% 100%,rgba(224,169,74,.20),transparent 50%),
+   linear-gradient(150deg,#0d1b32 0%,#121326 54%,#1b1525 100%)!important;
+ }
+ #productDetailModal .detail-media:before{opacity:.28;background-size:28px 28px,28px 28px,100% 100%}
+}
+</style>
+</head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">

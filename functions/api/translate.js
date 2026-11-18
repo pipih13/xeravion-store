@@ -15,7 +15,7 @@ function json(data, status = 200) {
 
 function normalize(value, source, target) {
   const output = String(value || "").trim() || source;
-  return target === "en" ? output.replace(/\\bfamous\\b/gi, "renowned") : output;
+  return target === "en" ? output.replace(/\bfamous\b/gi, "renowned") : output;
 }
 
 async function translateOne(source, target) {

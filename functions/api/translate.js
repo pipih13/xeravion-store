@@ -74,7 +74,14 @@ async function translateOne(source, target) {
 }
 
 export async function onRequestGet() {
-  return json({ service: "xeravion-translation", status: "ready", languages: [...ALLOWED_LANGUAGES] });
+  const sample = await translateOne("Halo, selamat datang di XERAVION.", "en");
+  return json({
+    service: "xeravion-translation",
+    status: "ready",
+    provider_status: sample ? "working" : "unavailable",
+    sample_translation: sample,
+    languages: [...ALLOWED_LANGUAGES]
+  });
 }
 
 export async function onRequestPost({ request }) {

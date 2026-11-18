@@ -1299,4 +1299,17 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  .top .nav>.navright{width:100%;justify-content:flex-start!important}
 }
 </style>
+<style id="xeravion-touch-header-zoom-fix">
+/* Keep the phone header layout stable when Chrome zoom changes the CSS viewport. */
+@media (pointer:coarse) and (hover:none){
+ .top .nav{height:auto!important;min-height:68px!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;padding-top:9px!important;padding-bottom:9px!important}
+ .top .nav>.brand{order:0!important;flex:0 0 auto!important;width:auto!important;max-width:100%!important;justify-content:flex-start!important;align-items:center!important;margin:0!important;padding:0!important}
+ .top .nav>.brand .brand-logo{width:38px!important;height:38px!important;min-width:38px!important;flex:0 0 38px!important;margin:0!important}
+ .top .nav>.brand .brand-copy{text-align:left!important;min-width:0!important}
+ .top .nav>.brand .brand-copy b{font-size:16px!important;letter-spacing:1.8px!important;white-space:nowrap!important}
+ .top .nav>.brand .brand-copy small{font-size:7px!important;letter-spacing:1.2px!important;white-space:nowrap!important}
+ .top .nav>.navright{order:1!important;flex:1 0 100%!important;width:100%!important;display:flex!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:6px!important}
+ .top .nav>.navright .btn{padding:9px 10px!important;font-size:10px!important;white-space:nowrap!important}
+}
+</style>
 </body></html>

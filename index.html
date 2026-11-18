@@ -656,20 +656,19 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 </nav>
 <div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Kelola Credit Points</button></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-mail">
- <div class="panel" style="margin-bottom:14px">
+ <div class="panel" style="margin-bottom:12px">
   <div class="eyebrow">XERAVION MAIL CONTROL</div>
   <h3 style="margin:6px 0">Pusat Email XERAVION</h3>
-  <p class="hint">Panel Mail sekarang berada di dalam pusat kendali admin. Pratinjau inbox di bawah masih berupa prototipe dan belum membaca email sungguhan.</p>
-  <div class="notice" style="margin:12px 0 0"><strong>Status integrasi: tahap persiapan</strong><div class="hint" style="margin-top:5px">Worker penerima email, database D1, autentikasi admin Mail, dan API inbox belum dipasang ke produksi. Karena itu tombol dan folder pada pratinjau belum aktif. Tidak ada email atau data mailbox yang diubah.</div></div>
+  <p class="hint">Kelola mailbox, email masuk, status akun email, dan aktivitas admin dari satu dashboard. Sesi menggunakan login admin utama XERAVION.</p>
+  <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+   <span class="status" id="xerMailConnectionStatus">Menyiapkan koneksi…</span>
+   <button class="btn" type="button" onclick="connectXeravionMail()">Hubungkan / Muat ulang Mail</button>
+   <button class="btn" type="button" onclick="openXeravionMailStandalone()">Buka panel Mail terpisah</button>
+  </div>
+  <p class="hint" id="xerMailConnectionHint" style="margin-top:8px">Panel Mail akan menerima sesi admin yang sudah diverifikasi oleh Supabase.</p>
  </div>
  <div class="panel" style="padding:0;overflow:hidden">
-  <div style="padding:12px 16px;border-bottom:1px solid var(--line,#343434);font-weight:700">XERAVION Mail · Pratinjau antarmuka</div>
-  <div class="xer-mail-embed">
-   <header class="xer-mail-head"><div class="xer-mail-brand"><b class="xer-mail-logo">X</b><strong>XERAVION MAIL</strong></div><div class="xer-mail-search">⌕ <span>Telusuri email</span></div><span class="xer-mail-avatar">X</span></header>
-   <div class="xer-mail-body"><aside class="xer-mail-side"><button type="button" disabled>＋ Tulis</button><div class="xer-mail-folder active">✉　Kotak Masuk</div><div class="xer-mail-folder">☆　Berbintang</div><div class="xer-mail-folder">▤　Semua Email</div><div class="xer-mail-folder">⚑　Spam</div><div class="xer-mail-folder">▱　Sampah</div></aside>
-    <section class="xer-mail-inbox"><div class="xer-mail-toolbar">□　↻ <span>0–0 dari 0</span></div><div class="xer-mail-empty"><div class="xer-mail-envelope">✉</div><h3>Kotak masuk kosong</h3><p>Email yang diterima oleh alamat XERAVION akan muncul di sini setelah server email dihubungkan.</p><small>Pratinjau antarmuka · Belum terhubung ke server email</small></div></section>
-   </div>
-  </div>
+  <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
  </div>
 </div>
 <div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="notice" style="margin:0 0 14px"><strong>Ganti seluruh foto listing Mobile Legends</strong><div class="hint" style="margin:5px 0 9px">Hapus file foto utama dan galeri yang sedang dipakai listing Mobile Legends saja. Data akun, harga, stok, PUBG, dan Free Fire tetap aman. Setelah dibersihkan, unggah foto MLBB baru tanpa watermark.</div><button class="btn gold" type="button" id="cleanupMlPhotosBtn" onclick="cleanupMobileLegendsPhotos()">Hapus foto lama MLBB</button><span class="hint" id="cleanupMlPhotosStatus" style="display:block;margin-top:7px"></span></div><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><select id="newGame"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>Lainnya</option></select><input id="newPrice" type="number" min="1" placeholder="Harga (Rp) *"><input id="newCode" placeholder="Kode listing *"><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newGallery" placeholder="URL foto tambahan, satu URL per baris (opsional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div><input class="wide" id="newImageUrl" placeholder="Atau tempel URL gambar (opsional)"><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
@@ -948,6 +947,19 @@ function initXeravionAdminRoute(){if(!isXeravionAdminRoute())return;document.bod
 function togglePasswordVisibility(inputId,button){const input=document.getElementById(inputId);if(!input||!button)return;const show=input.type==='password';input.type=show?'text':'password';button.textContent=show?'Sembunyi':'Lihat';button.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');button.setAttribute('aria-pressed',String(show));}
 function closeLogin(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent=''}function showAdminPanel(){sessionStorage.setItem('xeravion-admin-view','1');document.querySelector('.catalog').classList.add('hidden');document.getElementById('how').style.display='none';document.getElementById('faq').style.display='none';document.getElementById('about').style.display='none';document.getElementById('admin').classList.add('active');window.scrollTo(0,0);loadProducts();loadXeravionOrders()}async function signOutAdmin(){if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);localStorage.removeItem(XERAVION_ADMIN_ACTIVITY_KEY);await supabaseClient.auth.signOut();xeravionAdminVerified=false;render();showCatalog();alert('Kamu sudah keluar dari Dashboard admin.')}function showCatalog(){sessionStorage.removeItem('xeravion-admin-view');document.querySelector('.catalog').classList.remove('hidden');document.getElementById('how').style.display='block';document.getElementById('faq').style.display='block';document.getElementById('about').style.display='block';document.getElementById('admin').classList.remove('active');window.scrollTo(0,0)}
 
+const XERAVION_MAIL_URL='https://mail.xeravion.my.id/panel';
+async function connectXeravionMail(){
+ const frame=document.getElementById('xeravionMailFrame'),status=document.getElementById('xerMailConnectionStatus'),hint=document.getElementById('xerMailConnectionHint');
+ if(!frame||!xeravionAdminVerified){if(status)status.textContent='Login admin diperlukan';if(hint)hint.textContent='Silakan login melalui Dashboard Admin utama terlebih dahulu.';return}
+ try{
+  const {data:{session},error}=await supabaseClient.auth.getSession();
+  if(error||!session?.access_token)throw new Error(error?.message||'Sesi admin tidak ditemukan. Silakan login ulang.');
+  const target=new URL(XERAVION_MAIL_URL);
+  const send=()=>{try{frame.contentWindow.postMessage({type:'XERAVION_ADMIN_SESSION',accessToken:session.access_token},target.origin);status.textContent='Sesi admin dikirim';hint.textContent='Memverifikasi hak akses admin dan memuat data Mail…'}catch(e){status.textContent='Gagal menghubungkan';hint.textContent=e?.message||String(e)}};
+  if(frame.dataset.loaded==='1')send();else{frame.addEventListener('load',()=>{frame.dataset.loaded='1';send()},{once:true});if(frame.src==='about:blank'||!frame.src.startsWith(target.origin+'/panel'))frame.src=XERAVION_MAIL_URL+'?embed=1';}
+ }catch(e){status.textContent='Koneksi gagal';hint.textContent=e?.message||String(e);console.error('XERAVION Mail connection:',e)}
+}
+function openXeravionMailStandalone(){window.open(XERAVION_MAIL_URL,'_blank','noopener,noreferrer')}
 let selectedCreditMember=null;
 function showAdminTab(tab){
  const allowed=['overview','form','listings','orders','credits','mail'];
@@ -957,6 +969,7 @@ function showAdminTab(tab){
  if(tab==='orders')loadXeravionOrders();
  if(tab==='listings')renderAdmin();
  if(tab==='form')populateOrderProducts();
+ if(tab==='mail')connectXeravionMail();
 }
 async function populateOrderProducts(){
  const sel=document.getElementById('orderProduct');if(!sel)return;

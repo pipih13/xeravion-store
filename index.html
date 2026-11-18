@@ -785,12 +785,12 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <div class="xer-admin-tab-panel" id="adminTab-credits"><div class="panel" id="creditAdminPanel">
  <div class="sectionhead"><div><h3 style="margin:0">XERAVION Credit Points · Admin</h3><div class="hint">Cari member, catat transaksi selesai, atau batalkan cashback saat transaksi dibatalkan.</div></div></div>
  <div class="formgrid">
-  <input id="creditMemberQuery" placeholder="Cari email member…" class="wide">
-  <button class="btn" onclick="searchCreditMembers()">Cari member</button>
+  <input id="creditMemberQuery" placeholder="Cari nama atau email member…" class="wide" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCreditMembers()}">
+  <button class="btn" type="button" id="creditMemberSearchButton" onclick="searchCreditMembers()">Cari member</button>
  </div>
- <div id="creditMemberResults" class="hint" style="margin-top:12px">Cari member untuk melihat saldo dan memilih akun.</div>
+ <div id="creditMemberResults" class="hint" style="margin-top:12px">Ketik nama atau email, lalu tekan Cari member. Pilih akun dari hasil pencarian.</div>
  <div class="formgrid" style="margin-top:18px">
-  <div class="wide" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Member terpilih (pilih dari hasil pencarian)"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div>
+  <div class="wide"><div class="hint" style="margin-bottom:6px">MEMBER YANG DIPILIH</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Belum ada member dipilih"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div><div class="hint" style="margin-top:6px">Kolom ini menampilkan akun tujuan cashback. Pilih member dari hasil pencarian di atas.</div></div>
   <input id="creditPurchaseRef" placeholder="Kode / referensi transaksi">
   <input id="creditPurchaseAmount" type="number" min="1" placeholder="Nilai transaksi (Rp)">
   <label class="hint wide" style="display:flex;gap:9px;align-items:center"><input type="checkbox" id="creditUsedPoints"> Pesanan ini menggunakan Credit Points (tidak mendapat cashback)</label>
@@ -1182,9 +1182,37 @@ async function sendXeravionInvoice(id){
  try{const{data,error}=await supabaseClient.functions.invoke('send-xeravion-invoice',{body:{order_id:id}});if(error)throw error;if(data?.error)throw new Error(data.error);msg.textContent='Invoice '+data.invoice_number+' berhasil dikirim. ID email: '+data.email_id;await loadXeravionOrders()}catch(e){msg.textContent='Gagal mengirim invoice: '+(e.message||e)}
 }
 
-async function searchCreditMembers(){const q=document.getElementById('creditMemberQuery').value.trim(),out=document.getElementById('creditMemberResults'),msg=document.getElementById('creditAdminMessage');out.textContent='Mencari member…';msg.textContent='';try{const{data,error}=await supabaseClient.rpc('credit_admin_search_members',{p_query:q});if(error)throw error;out.innerHTML=data?.length?data.map(m=>'<div class="history-row"><span><strong>'+esc(m.display_name||'Member XERAVION')+'</strong><small>'+esc(m.email||'Email tidak tersedia')+' · Saldo '+Number(m.balance).toLocaleString('id-ID')+' XP</small></span><button class="smallbtn" onclick="selectCreditMember(\''+m.user_id+'\',\''+String(m.email||'').replace(/'/g,"\\'")+'\')">Pilih</button></div>').join(''):'<p class="hint">Member tidak ditemukan. Pastikan akun sudah mendaftar dan email terverifikasi.</p>'}catch(e){out.textContent='Gagal mencari member: '+(e.message||e);}}
-function selectCreditMember(id,email){selectedCreditMember=id;document.getElementById('creditSelectedMember').value=email+' · '+id;document.getElementById('creditAdminMessage').textContent='Member dipilih. Masukkan referensi dan nilai transaksi.'}
-function clearCreditMember(){selectedCreditMember=null;document.getElementById('creditSelectedMember').value='';document.getElementById('creditAdminMessage').textContent='Pilihan member dilepas. Pesanan baru akan dibuat tanpa tautan akun member.'}
+async function searchCreditMembers(){
+ const input=document.getElementById('creditMemberQuery'),out=document.getElementById('creditMemberResults'),msg=document.getElementById('creditAdminMessage'),btn=document.getElementById('creditMemberSearchButton');
+ const q=input.value.trim();
+ if(!q){out.innerHTML='<p class="hint">Masukkan nama atau email member terlebih dahulu.</p>';input.focus();return}
+ out.innerHTML='<p class="hint">Sedang mencari member…</p>';msg.textContent='';
+ if(btn){btn.disabled=true;btn.textContent='Mencari…'}
+ try{
+  const{data,error}=await supabaseClient.rpc('credit_admin_search_members',{p_query:q});
+  if(error)throw error;
+  if(!Array.isArray(data)||!data.length){out.innerHTML='<p class="hint">Tidak ada member yang cocok dengan “'+esc(q)+'”. Coba nama lengkap atau alamat email.</p>';return}
+  window.creditMemberCache=Object.fromEntries(data.map(m=>[String(m.user_id),m]));
+  out.innerHTML='<div class="hint" style="margin-bottom:8px">Ditemukan '+data.length+' member. Tekan Pilih pada akun yang benar.</div>'+data.map(m=>{
+   const id=String(m.user_id||''),email=String(m.email||''),name=String(m.display_name||'Member XERAVION');
+   return '<div class="history-row"><span><strong>'+esc(name)+'</strong><small>'+esc(email||'Email tidak tersedia')+' · Saldo '+Number(m.balance||0).toLocaleString('id-ID')+' XP</small></span><button class="smallbtn" type="button" onclick="selectCreditMember(\''+id+'\')">Pilih</button></div>';
+  }).join('');
+ }catch(e){
+  out.innerHTML='<p class="hint">Pencarian gagal: '+esc(e.message||String(e))+'</p>';
+ }finally{if(btn){btn.disabled=false;btn.textContent='Cari member'}}
+}
+function selectCreditMember(id){
+ const chosen=window.creditMemberCache?.[id];
+ if(!chosen){document.getElementById('creditAdminMessage').textContent='Data member tidak ditemukan. Silakan cari ulang.';return}
+ selectedCreditMember=id;
+ document.getElementById('creditSelectedMember').value=(chosen.display_name||'Member')+' · '+(chosen.email||'Email tidak tersedia');
+ document.getElementById('creditAdminMessage').textContent='Member dipilih. Cashback akan masuk ke akun ini.';
+}
+function clearCreditMember(){
+ selectedCreditMember=null;
+ document.getElementById('creditSelectedMember').value='';
+ document.getElementById('creditAdminMessage').textContent='Pilihan member dilepas.';
+}
 async function completeCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditPurchaseRef').value.trim(),amount=Number(document.getElementById('creditPurchaseAmount').value),used=document.getElementById('creditUsedPoints').checked;if(!selectedCreditMember){msg.textContent='Pilih member terlebih dahulu.';return}if(!ref||!Number.isSafeInteger(amount)||amount<=0){msg.textContent='Isi referensi transaksi dan nilai transaksi yang valid.';return}if(!confirm('Konfirmasi transaksi '+ref+' selesai? Cashback 3% akan dicatat satu kali.'))return;try{const{data,error}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:selectedCreditMember,p_purchase_reference:ref,p_purchase_amount:amount,p_used_points:used});if(error)throw error;msg.textContent=used?'Transaksi selesai. Tidak ada cashback karena pesanan menggunakan poin.':'Berhasil! Cashback '+Number(data||0).toLocaleString('id-ID')+' XP telah diberikan dan berlaku 12 bulan.';await searchCreditMembers()}catch(e){msg.textContent='Gagal memproses: '+(e.message||e)}}
 async function reverseCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditReverseRef').value.trim(),reason=document.getElementById('creditReverseReason').value.trim();if(!ref){msg.textContent='Masukkan referensi transaksi.';return}if(!confirm('Batalkan cashback untuk transaksi '+ref+'? Tindakan ini mencatat pengurangan poin dan tidak dapat dibatalkan otomatis.'))return;try{const{data,error}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:ref,p_reason:reason||'Transaksi dibatalkan'});if(error)throw error;msg.textContent='Cashback dibatalkan. '+Number(data||0).toLocaleString('id-ID')+' XP telah dikoreksi dari saldo member.'}catch(e){msg.textContent='Gagal membatalkan cashback: '+(e.message||e)}}
 let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}document.addEventListener('DOMContentLoaded',()=>{initXeravionAdminRoute();if(isXeravionAdminRoute())restoreXeravionAdminSession();['click','keydown','pointerdown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetXeravionAdminIdle,{passive:true}));const slider=document.getElementById('gameSlider');if(slider&&!isXeravionAdminRoute()){slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});

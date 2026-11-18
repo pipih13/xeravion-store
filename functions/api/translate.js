@@ -43,7 +43,11 @@ async function translateOne(source, target) {
     }
   }
   console.warn("XERAVION translation provider failed:", lastError);
-  return source;
+  return null;
+}
+
+export async function onRequestGet() {
+  return json({ service: "xeravion-translation", status: "ready", languages: [...ALLOWED_LANGUAGES] }, 200);
 }
 
 export async function onRequestPost({ request }) {

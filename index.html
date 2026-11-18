@@ -754,7 +754,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
   <div class="xer-traffic-stats">
    <div class="stat"><b id="xerTrafficPageViews">—</b><span>Page views</span></div>
    <div class="stat"><b id="xerTrafficRequests">—</b><span>Total requests</span></div>
-   <div class="stat"><b id="xerTrafficUnique">—</b><span>Pengunjung unik harian*</span></div>
+   <div class="stat"><b id="xerTrafficUnique">—</b><span>Pengunjung unik</span></div>
   </div>
   <div class="xer-traffic-chart-wrap"><h4>Kunjungan per hari</h4><div id="xerTrafficChart" class="xer-traffic-chart"><div class="hint">Tekan Muat ulang untuk mengambil statistik.</div></div></div>
   <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
@@ -1091,7 +1091,7 @@ async function loadXeravionAnalytics(){
   const totals=data.totals||{};
   document.getElementById('xerTrafficPageViews').textContent=formatTrafficNumber(totals.pageViews);
   document.getElementById('xerTrafficRequests').textContent=formatTrafficNumber(totals.requests);
-  document.getElementById('xerTrafficUnique').textContent=formatTrafficNumber(totals.uniqueVisitorsDailySum);
+  document.getElementById('xerTrafficUnique').textContent=formatTrafficNumber(totals.uniqueVisitors);
   const rows=Array.isArray(data.daily)?data.daily:[];
   const max=Math.max(1,...rows.map(x=>Number(x.pageViews||0)));
   chart.innerHTML=rows.length?rows.map(row=>{

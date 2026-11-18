@@ -102,7 +102,7 @@ async function adminAuthorized(request, env) {
   // Auth and the is_admin RPC before any Mail administration endpoint is served.
   if (env.SUPABASE_URL && env.SUPABASE_ANON_KEY && supplied.split(".").length === 3) {
     try {
-      const base = env.SUPABASE_URL.replace(/\\/+$/, "");
+      const base = env.SUPABASE_URL.replace(/\/+$/, "");
       const authResponse = await fetch(base + "/auth/v1/user", {
         headers: { apikey: env.SUPABASE_ANON_KEY, Authorization: "Bearer " + supplied }
       });

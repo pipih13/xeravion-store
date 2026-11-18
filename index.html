@@ -710,7 +710,7 @@ async function watermarkOldListingPhotos(){
  const{data:allowed,error:adminError}=await supabaseClient.rpc('is_admin');
  if(adminError||!allowed){xeravionAdminVerified=false;alert('Aksi ini hanya dapat dilakukan oleh admin XERAVION.');return}
  const candidates=items.map(p=>({product:p,fields:[{key:'image',url:p.image,dbKey:'image_url'},...(p.gallery||[]).map((url,i)=>({key:'gallery',url,index:i}))]}));
- const todo=candidates.flatMap(x=>x.fields.filter(f=>f.url&&!/\\/legacy-watermarked\\//i.test(f.url)&&!/-xeravion\\.webp(?:[?#]|$)/i.test(f.url)).map(f=>({...f,product:x.product})));
+ const todo=candidates.flatMap(x=>x.fields.filter(f=>f.url&&!/\/legacy-watermarked\//i.test(f.url)&&!/-xeravion\.webp(?:[?#]|$)/i.test(f.url)).map(f=>({...f,product:x.product})));
  if(!todo.length){status.textContent='Semua foto listing sudah menggunakan watermark atau tidak ada foto yang perlu diproses.';return}
  if(!confirm('Watermark akan diterapkan pada '+todo.length+' foto dari '+candidates.length+' listing. Foto asli tetap disimpan dan alamat foto listing akan diperbarui. Lanjutkan?'))return;
  button.disabled=true;let done=0,failed=0,skipped=0;

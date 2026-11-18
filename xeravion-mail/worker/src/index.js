@@ -95,7 +95,39 @@ function safeAddress(value) {
 
 async function adminAuthorized(request, env) {
   const supplied = bearer(request);
-  if (!env.ADMIN_API_KEY || !supplied) return false;
+  if (!supplied) return false;
+
+  // Unified admin access: validate the existing XERAVION Supabase session.
+  // The publishable key is not a secret; the user's JWT is verified by Supabase
+  // Auth and the is_admin RPC before any Mail administration endpoint is served.
+  if (env.SUPABASE_URL && env.SUPABASE_ANON_KEY && supplied.split(".").length === 3) {
+    try {
+      const base = env.SUPABASE_URL.replace(/\\/+$/, "");
+      const authResponse = await fetch(base + "/auth/v1/user", {
+        headers: { apikey: env.SUPABASE_ANON_KEY, Authorization: "Bearer " + supplied }
+      });
+      if (!authResponse.ok) return false;
+      const user = await authResponse.json();
+      if (!user?.id) return false;
+      const roleResponse = await fetch(base + "/rest/v1/rpc/is_admin", {
+        method: "POST",
+        headers: {
+          apikey: env.SUPABASE_ANON_KEY,
+          Authorization: "Bearer " + supplied,
+          "Content-Type": "application/json"
+        },
+        body: "{}"
+      });
+      if (!roleResponse.ok) return false;
+      return (await roleResponse.json()) === true;
+    } catch (error) {
+      console.error("Supabase admin session verification failed", error);
+      return false;
+    }
+  }
+
+  // Optional legacy key path retained for break-glass maintenance only.
+  if (!env.ADMIN_API_KEY) return false;
   const [a, b] = await Promise.all([sha256(supplied), sha256(env.ADMIN_API_KEY)]);
   return a === b;
 }
@@ -493,7 +525,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path,opts){opts=opts||{};opts.headers=Object.assign({},opts.headers||{},{Authorization:'Bearer '+adminKey});if(opts.body)opts.headers['Content-Type']='application/json';const r=await fetch(path,opts);let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||('HTTP '+r.status));return data}
 function message(text,error){$('loginMsg').innerHTML='<div class="notice '+(error?'error':'')+'">'+esc(text)+'</div>'}
-async function login(){adminKey=$('key').value.trim();if(!adminKey){message('Masukkan kunci admin.',true);return}try{await api('/admin/mailboxes');$('login').classList.add('hidden');$('app').classList.remove('hidden');$('loginMsg').innerHTML='';await loadMailboxes();await loadStats();await loadAuditLogs()}catch(e){adminKey='';message('Kunci ditolak atau server bermasalah: '+e.message,true)}}
+async function login(){if(!adminKey){adminKey=$('key').value.trim()}if(!adminKey){message('Sesi admin XERAVION belum diterima. Buka panel ini dari Dashboard Admin utama.',true);return}try{await api('/admin/mailboxes');$('login').classList.add('hidden');$('app').classList.remove('hidden');$('loginMsg').innerHTML='';await loadMailboxes();await loadStats();await loadAuditLogs()}catch(e){adminKey='';message('Sesi admin ditolak atau server bermasalah: '+e.message,true)}}
 async function loadStats(){const d=await api('/admin/stats');$('stats').innerHTML='<span class="pill">Total mailbox: '+d.mailboxes.total+'</span><span class="pill">Aktif: '+d.mailboxes.active+'</span><span class="pill">Nonaktif: '+d.mailboxes.inactive+'</span><span class="pill">Total email: '+d.messages.total+'</span><span class="pill">Belum dibaca: '+d.messages.unread+'</span>'}
 async function loadAuditLogs(){const d=await api('/admin/audit-logs?limit=50');const names={mailbox_created:'Mailbox dibuat',email_deleted:'Email dihapus',mailbox_activated:'Mailbox diaktifkan',mailbox_deactivated:'Mailbox dinonaktifkan',password_manual_set:'Password manual diatur',password_random_set:'Password acak dibuat'};const logs=d.logs||[];$('auditLogs').innerHTML=logs.length?logs.map(x=>'<div class="message"><strong>'+esc(names[x.action]||x.action)+'</strong><small>'+esc(x.target)+' · '+esc(new Date(x.created_at).toLocaleString('id-ID'))+'</small></div>').join(''):'<div class="empty">Belum ada aktivitas tercatat.</div>'}
 async function loadMailboxes(){const d=await api('/admin/mailboxes');mailboxCache=d.mailboxes||[];renderMailboxes()}
@@ -506,7 +538,7 @@ async function loadMessages(){if(!selectedAddress)return;try{const q=encodeURICo
 async function deleteMessage(id,subject){if(!confirm('Hapus email "'+(subject||'(Tanpa subjek)')+'" secara permanen?'))return;try{await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress),{method:'DELETE'});$('detail').innerHTML='<div class="notice">Email berhasil dihapus.</div>';await loadMessages()}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
 async function setPassword(mode){if(!selectedAddress){$('passwordResultMessage').innerHTML='<div class="notice error">Pilih inbox game terlebih dahulu.</div>';return}let password='';if(mode==='manual'){password=$('manualPassword').value;if(password.length<8||password.length>128){$('passwordResultMessage').innerHTML='<div class="notice error">Password manual harus 8–128 karakter.</div>';return}if(password!==$('confirmManualPassword').value){$('passwordResultMessage').innerHTML='<div class="notice error">Konfirmasi password tidak sama.</div>';return}}if(!confirm((mode==='manual'?'Atur password manual':'Buat password acak')+' untuk '+selectedAddress+'? Password lama akan langsung tidak berlaku.'))return;try{$('setPasswordBtn').disabled=true;$('manualPasswordBtn').disabled=true;$('passwordResultMessage').innerHTML='<div class="notice">Sedang menyimpan password…</div>';const d=await api('/admin/mailboxes/set-password',{method:'POST',body:JSON.stringify({address:selectedAddress,mode,password})});$('passwordResultMessage').innerHTML='<div class="notice"><strong>Password '+(mode==='manual'?'manual':'acak')+' berhasil disimpan untuk '+esc(d.address)+':</strong><pre>'+esc(d.password)+'</pre><button class="secondary" id="copyNewPassword">Salin password</button><p class="muted">Password lama sudah tidak berlaku. Simpan password baru ini. Password hanya ditampilkan pada proses ini.</p></div>';$('copyNewPassword').onclick=()=>navigator.clipboard.writeText(d.password);$('manualPassword').value='';$('confirmManualPassword').value=''}catch(e){$('passwordResultMessage').innerHTML='<div class="notice error">Gagal menyimpan password: '+esc(e.message)+'</div>'}finally{$('setPasswordBtn').disabled=false;$('manualPasswordBtn').disabled=false}}
 async function readMessage(id){try{const m=await api('/admin/messages/'+encodeURIComponent(id)+'?address='+encodeURIComponent(selectedAddress));$('detail').innerHTML='<div class="card"><div class="muted">DARI</div><strong>'+esc(m.sender)+'</strong><p class="muted">'+esc(m.received_at)+'</p><h3>'+esc(m.subject||'(Tanpa subjek)')+'</h3>'+(m.otp_code?'<div class="muted">KODE TERDETEKSI</div><div class="otp">'+esc(m.otp_code)+'</div>':'')+'<pre>'+esc(m.body_text||'(Email tidak memiliki teks biasa.)')+'</pre><div class="muted">Lampiran: '+((m.attachments||[]).length)+' · Penyimpanan lampiran belum diaktifkan.</div><button class="secondary" id="deleteMessageBtn" style="background:#542727;border-color:#754040;color:#ffd8d3;margin-top:14px">Hapus email ini</button></div>';$('deleteMessageBtn').onclick=()=>deleteMessage(m.id,m.subject)}catch(e){$('detail').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}}
-$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=async()=>{await loadMailboxes();await loadStats();await loadMessages();await loadAuditLogs()};$('refreshMessages').onclick=async()=>{await loadMessages();await loadStats()};$('statusBtn').onclick=changeMailboxStatus;$('mailboxSearch').addEventListener('input',renderMailboxes);$('auditRefresh').onclick=loadAuditLogs;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
+window.addEventListener('message',event=>{if(event.origin!=='https://xeravion.my.id'||event.data?.type!=='XERAVION_ADMIN_SESSION'||typeof event.data.accessToken!=='string')return;adminKey=event.data.accessToken;login()});$('loginBtn').onclick=login;$('key').addEventListener('keydown',e=>{if(e.key==='Enter')login()});$('createBtn').onclick=createMailbox;$('refreshBtn').onclick=async()=>{await loadMailboxes();await loadStats();await loadMessages();await loadAuditLogs()};$('refreshMessages').onclick=async()=>{await loadMessages();await loadStats()};$('statusBtn').onclick=changeMailboxStatus;$('mailboxSearch').addEventListener('input',renderMailboxes);$('auditRefresh').onclick=loadAuditLogs;$('searchBtn').onclick=()=>loadMessages();$('logoutBtn').onclick=()=>{adminKey='';selectedAddress='';$('key').value='';$('app').classList.add('hidden');$('login').classList.remove('hidden');$('createResult').innerHTML='';$('detail').innerHTML=''};
 })();
 </script></body></html>`;
 

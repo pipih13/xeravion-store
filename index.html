@@ -663,7 +663,6 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
   <div class="row" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
    <span class="status" id="xerMailConnectionStatus">Menyiapkan koneksi…</span>
    <button class="btn" type="button" onclick="connectXeravionMail()">Hubungkan / Muat ulang Mail</button>
-   <button class="btn" type="button" onclick="openXeravionMailStandalone()">Buka panel Mail terpisah</button>
   </div>
   <p class="hint" id="xerMailConnectionHint" style="margin-top:8px">Panel Mail akan menerima sesi admin yang sudah diverifikasi oleh Supabase.</p>
  </div>
@@ -959,7 +958,6 @@ async function connectXeravionMail(){
   if(frame.dataset.loaded==='1')send();else{frame.addEventListener('load',()=>{frame.dataset.loaded='1';send()},{once:true});if(frame.src==='about:blank'||!frame.src.startsWith(target.origin+'/panel'))frame.src=XERAVION_MAIL_URL+'?embed=1';}
  }catch(e){status.textContent='Koneksi gagal';hint.textContent=e?.message||String(e);console.error('XERAVION Mail connection:',e)}
 }
-function openXeravionMailStandalone(){window.open(XERAVION_MAIL_URL,'_blank','noopener,noreferrer')}
 let selectedCreditMember=null;
 function showAdminTab(tab){
  const allowed=['overview','form','listings','orders','credits','mail'];

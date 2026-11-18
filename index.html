@@ -484,14 +484,13 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 
 <style id="xeravion-credit-scene-and-corner-emblem">
 #creditPoints .credit-promo{position:relative!important;isolation:isolate;overflow:hidden!important}
-#creditPoints .credit-scene{position:absolute!important;left:-8px!important;bottom:-20px!important;width:min(66%,410px)!important;max-width:none!important;z-index:0!important;pointer-events:none!important;opacity:.23;filter:saturate(.9) brightness(.86) drop-shadow(0 0 14px rgba(216,165,67,.16))}
+#creditPoints .credit-scene{position:absolute!important;right:0!important;left:auto!important;bottom:-18px!important;width:min(61%,420px)!important;max-width:none!important;z-index:1!important;pointer-events:none!important;opacity:.38;filter:saturate(1.02) brightness(.94) drop-shadow(0 0 16px rgba(216,165,67,.20));-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 22%,#000 52%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 22%,#000 52%)}
 #creditPoints .credit-scene img{display:block!important;width:100%!important;height:auto!important;object-fit:contain!important}
-#creditPoints .credit-promo>div:not(.credit-scene){position:relative;z-index:2}
-#creditPoints .credit-promo>div:first-of-type{max-width:none!important}
+#creditPoints .credit-promo>div:first-of-type{position:relative!important;z-index:2!important;max-width:none!important}
 #creditPoints .credit-promo>.credit-orb{position:absolute!important;right:18px!important;bottom:14px!important;top:auto!important;width:104px!important;height:104px!important;display:grid!important;place-items:center!important;z-index:4!important}
 #creditPoints .credit-orb img{width:100%!important;height:100%!important;object-fit:contain!important}
 @media(max-width:600px){
- #creditPoints .credit-scene{left:-12px!important;bottom:-14px!important;width:76%!important;opacity:.19}
+ #creditPoints .credit-scene{right:-8px!important;left:auto!important;bottom:-14px!important;width:72%!important;opacity:.34;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 24%,#000 58%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.12) 24%,#000 58%)}
  #creditPoints .credit-promo>.credit-orb{right:12px!important;bottom:12px!important;width:78px!important;height:78px!important}
 }
 </style>

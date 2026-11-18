@@ -1800,134 +1800,125 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  const KEY='xeravion_preferred_language';
  const LANGS=['id','en','ms','ar','es','pt','fr','de','ja','ko','zh-CN','th','vi','tl'];
  const SKIP_TAGS=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','SELECT','OPTION','CODE','PRE','SVG']);
- const SKIP_SELECTOR='.language-picker,[data-no-translate],.code,.price,.brand,.brand-copy,.gameicon,.stock,.detail-code,[contenteditable="true"]';
+ const SKIP_SELECTOR='.language-picker,[data-no-translate],[contenteditable="true"]';
  const ATTRS=['placeholder','title','aria-label','alt'];
- const textOriginals=new WeakMap(), attrOriginals=new WeakMap(), translatedLang=new WeakMap();
- const cache=new Map(), pending=new Map();
- let active='id', generation=0, observer=null, queue=Promise.resolve();
- const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
- function readLanguage(){
-  try{const value=localStorage.getItem(KEY);return LANGS.includes(value)?value:'id';}
-  catch(_){return 'id';}
- }
+ const originals=new WeakMap(), lastApplied=new WeakMap(), attrOriginals=new WeakMap();
+ const attrLastApplied=new WeakMap(), cache=new Map();
+ let active='id', generation=0, observer=null, work=Promise.resolve(), pendingRoots=[];
+ const isValid=lang=>LANGS.includes(lang);
+ function readLanguage(){try{const v=localStorage.getItem(KEY);return isValid(v)?v:'id';}catch(_){return 'id';}}
  function saveLanguage(lang){try{localStorage.setItem(KEY,lang);}catch(_){}}
- function isSkippable(el){
-  if(!el)return true;
-  if(SKIP_TAGS.has(el.tagName))return true;
-  try{return !!el.closest(SKIP_SELECTOR);}catch(_){return false;}
- }
- function sourceText(node){
-  if(!textOriginals.has(node))textOriginals.set(node,node.nodeValue);
-  return textOriginals.get(node);
- }
- function normalizeOutput(value,source,lang){
-  let out=(value||'').trim();
-  if(!out)out=source;
-  if(lang==='en'){
-   out=out.replace(/\bfamous\b/gi,'renowned');
-  }
-  return out;
- }
- async function requestTranslation(source,lang){
-  const key=lang+'|'+source;
-  if(cache.has(key))return cache.get(key);
-  if(pending.has(key))return pending.get(key);
-  const task=(async()=>{
-   const endpoint='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(source);
-   let lastError;
-   for(let attempt=0;attempt<2;attempt++){
+ function skipped(el){if(!el)return true;if(SKIP_TAGS.has(el.tagName))return true;try{return !!el.closest(SKIP_SELECTOR);}catch(_){return false;}}
+ function sourceOf(node){if(!originals.has(node))originals.set(node,node.nodeValue);return originals.get(node);}
+ function keyFor(lang,text){return lang+'|'+text;}
+ function fixGlossary(value,lang){return lang==='en'?value.replace(/\bfamous\b/gi,'renowned'):value;}
+ async function translateBatch(texts,lang,token){
+  const unique=[...new Set(texts)];
+  const missing=unique.filter(value=>!cache.has(keyFor(lang,value)));
+  for(let offset=0;offset<missing.length;offset+=12){
+   if(token!==generation||active!==lang)return;
+   const batch=missing.slice(offset,offset+12);
+   try{
+    const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),20000);
+    let response;
     try{
-     const controller=new AbortController();
-     const timeout=setTimeout(()=>controller.abort(),12000);
-     let response;
-     try{response=await fetch(endpoint,{method:'GET',mode:'cors',credentials:'omit',signal:controller.signal,cache:'no-store'});}
-     finally{clearTimeout(timeout);}
-     if(!response.ok)throw new Error('Translation HTTP '+response.status);
-     const data=await response.json();
-     const translated=(data[0]||[]).map(part=>part&&part[0]||'').join('');
-     const output=normalizeOutput(translated,source,lang);
-     cache.set(key,output);
-     return output;
-    }catch(error){lastError=error;if(attempt===0)await sleep(350);}
+     response=await fetch('/api/translate',{
+      method:'POST',headers:{'content-type':'application/json','accept':'application/json'},
+      credentials:'same-origin',cache:'no-store',signal:controller.signal,
+      body:JSON.stringify({target:lang,texts:batch})
+     });
+    }finally{clearTimeout(timeout);}
+    if(!response.ok)throw new Error('Translation endpoint HTTP '+response.status);
+    const payload=await response.json();
+    if(!Array.isArray(payload.translations)||payload.translations.length!==batch.length)throw new Error('Invalid translation response');
+    batch.forEach((source,index)=>{
+     const result=String(payload.translations[index]||source).trim()||source;
+     cache.set(keyFor(lang,source),fixGlossary(result,lang));
+    });
+   }catch(error){
+    console.warn('XERAVION language service:',error);
+    batch.forEach(source=>cache.set(keyFor(lang,source),source));
    }
-   console.warn('XERAVION translation failed:',lastError);
-   return source;
-  })();
-  pending.set(key,task);
-  try{return await task;}finally{pending.delete(key);}
+  }
  }
  function collect(root){
-  const nodes=[], attrs=[];
-  if(!root)return {nodes,attrs};
+  const textItems=[], attrItems=[];
+  if(!root)return {textItems,attrItems};
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
-   const node=walker.currentNode, parent=node.parentElement;
-   if(isSkippable(parent))continue;
-   const raw=sourceText(node), trimmed=raw.trim();
-   if(!trimmed||!/[A-Za-zÀ-ÿ]/.test(trimmed)||translatedLang.get(node)===active)continue;
-   nodes.push({node,raw,trimmed});
+   const node=walker.currentNode,parent=node.parentElement;
+   if(skipped(parent))continue;
+   const raw=sourceOf(node), value=raw.trim();
+   if(!value||!/[A-Za-zÀ-ÿ]/.test(value))continue;
+   textItems.push({node,raw,value});
   }
   const elements=[];
   if(root.nodeType===1)elements.push(root);
   if(root.querySelectorAll)elements.push(...root.querySelectorAll('*'));
   for(const el of elements){
-   if(isSkippable(el))continue;
+   if(skipped(el))continue;
    for(const name of ATTRS){
     if(!el.hasAttribute(name))continue;
-    let originals=attrOriginals.get(el);
-    if(!originals){originals={};attrOriginals.set(el,originals);}
-    if(!(name in originals))originals[name]=el.getAttribute(name);
-    const src=originals[name]||'';
-    if(/[A-Za-zÀ-ÿ]/.test(src)&&el.getAttribute('data-xer-lang-'+name)!==active)
-     attrs.push({el,name,src});
+    let map=attrOriginals.get(el);
+    if(!map){map={};attrOriginals.set(el,map);}
+    if(!(name in map))map[name]=el.getAttribute(name);
+    const value=map[name]||'';
+    if(value&&/[A-Za-zÀ-ÿ]/.test(value))attrItems.push({el,name,value});
    }
   }
-  return {nodes,attrs};
+  return {textItems,attrItems};
  }
- function restore(root){
-  if(!root)return;
-  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ function restoreAll(){
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
    const node=walker.currentNode;
-   if(textOriginals.has(node)){
-    node.nodeValue=textOriginals.get(node);
-    translatedLang.delete(node);
-   }
+   if(!originals.has(node))continue;
+   const source=originals.get(node);
+   lastApplied.set(node,source);
+   if(node.nodeValue!==source)node.nodeValue=source;
   }
-  const elements=[];
-  if(root.nodeType===1)elements.push(root);
-  if(root.querySelectorAll)elements.push(...root.querySelectorAll('*'));
-  for(const el of elements){
-   const originals=attrOriginals.get(el);
-   if(originals)for(const name of Object.keys(originals))el.setAttribute(name,originals[name]);
-   for(const name of ATTRS)el.removeAttribute('data-xer-lang-'+name);
+  const all=[document.body,...document.body.querySelectorAll('*')];
+  for(const el of all){
+   const map=attrOriginals.get(el);
+   if(!map)continue;
+   let applied=attrLastApplied.get(el);
+   if(!applied){applied={};attrLastApplied.set(el,applied);}
+   for(const name of Object.keys(map)){
+    applied[name]=map[name];
+    if(el.getAttribute(name)!==map[name])el.setAttribute(name,map[name]);
+    el.removeAttribute('data-xer-lang-'+name);
+   }
   }
  }
  async function translateRoot(root,lang,token){
   if(!root||lang==='id'||token!==generation)return;
-  const {nodes,attrs}=collect(root);
-  let cursor=0;
-  const jobs=nodes.map(item=>async()=>{
-   const result=await requestTranslation(item.trimmed,lang);
-   if(token!==generation||active!==lang||!item.node.isConnected)return;
+  const {textItems,attrItems}=collect(root);
+  const allTexts=[...textItems.map(item=>item.value),...attrItems.map(item=>item.value)];
+  await translateBatch(allTexts,lang,token);
+  if(token!==generation||active!==lang)return;
+  for(const item of textItems){
+   if(!item.node.isConnected)continue;
+   const translated=cache.get(keyFor(lang,item.value))||item.value;
    const leading=item.raw.match(/^\s*/)?.[0]||'';
    const trailing=item.raw.match(/\s*$/)?.[0]||'';
-   item.node.nodeValue=leading+result+trailing;
-   translatedLang.set(item.node,lang);
-  }).concat(attrs.map(item=>async()=>{
-   const result=await requestTranslation(item.src,lang);
-   if(token!==generation||active!==lang||!item.el.isConnected)return;
-   item.el.setAttribute(item.name,result);
-   item.el.setAttribute('data-xer-lang-'+item.name,lang);
-  }));
-  while(cursor<jobs.length&&token===generation){
-   const batch=jobs.slice(cursor,cursor+3);
-   await Promise.all(batch.map(job=>job().catch(error=>console.warn('XERAVION translation task:',error))));
-   cursor+=batch.length;
+   const output=leading+translated+trailing;
+   lastApplied.set(item.node,output);
+   if(item.node.nodeValue!==output)item.node.nodeValue=output;
+  }
+  for(const item of attrItems){
+   if(!item.el.isConnected)continue;
+   const output=cache.get(keyFor(lang,item.value))||item.value;
+   let applied=attrLastApplied.get(item.el);
+   if(!applied){applied={};attrLastApplied.set(item.el,applied);}
+   applied[item.name]=output;
+   if(item.el.getAttribute(item.name)!==output){
+    item.el.setAttribute(item.name,output);
+    item.el.setAttribute('data-xer-lang-'+item.name,lang);
+   }
   }
  }
  async function applyLanguage(lang){
-  if(!LANGS.includes(lang))return;
+  if(!isValid(lang))return;
   active=lang;
   const token=++generation;
   saveLanguage(lang);
@@ -1935,40 +1926,63 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   document.documentElement.dir=lang==='ar'?'rtl':'ltr';
   const picker=document.getElementById('siteLanguage');
   if(picker&&picker.value!==lang)picker.value=lang;
-  restore(document.body);
+  restoreAll();
   if(lang!=='id')await translateRoot(document.body,lang,token);
  }
- window.translateXeravionSite=function(lang){applyLanguage(lang);};
- window.getXeravionLanguage=function(){return active;};
- function watchDynamicContent(){
-  if(observer||!document.body)return;
-  observer=new MutationObserver(records=>{
-   if(active==='id')return;
-   const added=[];
-   for(const record of records){
-    for(const node of record.addedNodes){
-     if(node.nodeType===1&&node!==document.body)added.push(node);
+ function scheduleDynamic(root){
+  if(!root||root.nodeType!==1)return;
+  pendingRoots.push(root);
+  if(work._scheduled)return;
+  work._scheduled=true;
+  work=work.then(async()=>{
+   while(pendingRoots.length){
+    const batch=pendingRoots.splice(0,20), token=generation, lang=active;
+    if(lang==='id')continue;
+    for(const root of batch){
+     if(token!==generation||lang!==active)break;
+     if(root.isConnected)await translateRoot(root,lang,token);
     }
    }
-   if(!added.length)return;
-   const token=generation, lang=active;
-   queue=queue.then(async()=>{
-    for(const node of added){
-     if(token!==generation||lang!==active)break;
-     if(node.isConnected)await translateRoot(node,lang,token);
+  }).catch(error=>console.warn('XERAVION dynamic language update:',error));
+  work.finally(()=>{work._scheduled=false;if(pendingRoots.length)scheduleDynamic(pendingRoots.shift());});
+ }
+ function observe(){
+  if(observer||!document.body)return;
+  observer=new MutationObserver(records=>{
+   const added=[];
+   for(const record of records){
+    if(record.type==='characterData'){
+     const node=record.target, current=node.nodeValue;
+     if(lastApplied.has(node)&&lastApplied.get(node)===current)continue;
+     originals.set(node,current);
+     lastApplied.delete(node);
+     if(active!=='id'&&node.parentElement&&!skipped(node.parentElement))scheduleDynamic(node.parentElement);
+    }else if(record.type==='attributes'){
+     const el=record.target,name=record.attributeName;
+     if(!ATTRS.includes(name)||skipped(el))continue;
+     const applied=attrLastApplied.get(el);
+     if(applied&&applied[name]===el.getAttribute(name))continue;
+     let map=attrOriginals.get(el);
+     if(!map){map={};attrOriginals.set(el,map);}
+     map[name]=el.getAttribute(name);
+     if(active!=='id')scheduleDynamic(el);
+    }else{
+     for(const node of record.addedNodes)if(node.nodeType===1)scheduleDynamic(node);
     }
-   }).catch(error=>console.warn('XERAVION dynamic translation:',error));
+   }
   });
-  observer.observe(document.body,{childList:true,subtree:true});
+  observer.observe(document.body,{childList:true,subtree:true,characterData:true,characterDataOldValue:true,attributes:true,attributeFilter:ATTRS});
  }
  function initialize(){
-  const lang=readLanguage();
+  const saved=readLanguage();
   active='id';
   const picker=document.getElementById('siteLanguage');
-  if(picker)picker.value=lang;
-  watchDynamicContent();
-  if(lang!=='id')applyLanguage(lang);
+  if(picker)picker.value=saved;
+  observe();
+  if(saved!=='id')applyLanguage(saved);
  }
+ window.translateXeravionSite=applyLanguage;
+ window.getXeravionLanguage=()=>active;
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initialize,{once:true});
  else initialize();
  window.addEventListener('pageshow',()=>{
@@ -1976,7 +1990,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   if(saved!==active)applyLanguage(saved);
  });
  window.addEventListener('storage',event=>{
-  if(event.key===KEY&&LANGS.includes(event.newValue)&&event.newValue!==active)applyLanguage(event.newValue);
+  if(event.key===KEY&&isValid(event.newValue)&&event.newValue!==active)applyLanguage(event.newValue);
  });
 })();
 </script>

@@ -658,7 +658,39 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #productDetailModal .detail-media:before{opacity:.28;background-size:28px 28px,28px 28px,100% 100%}
 }
 </style>
-
+<style id="xeravion-starlight-promo-slide">
+.starlight-slide{background:linear-gradient(120deg,#081d43,#211044 62%,#101b3a)!important}
+.starlight-slide>img{opacity:.28!important;object-fit:cover!important;object-position:center 28%!important;filter:saturate(1.25)}
+.starlight-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,12,34,.78),rgba(10,10,36,.68)),linear-gradient(0deg,rgba(7,8,25,.7),transparent 75%)}
+.starlight-content{position:absolute;inset:12px 42px 38px;z-index:2;display:flex;flex-direction:column;justify-content:center;gap:7px;color:#fff}
+.starlight-heading{display:flex;flex-direction:column;gap:2px}
+.starlight-heading span{font-size:8px;letter-spacing:2px;color:#9eeaff;font-weight:900}
+.starlight-heading strong{font-size:clamp(14px,2.4vw,22px);color:#ffe3a3;text-shadow:0 2px 12px #000}
+.starlight-heading small{font-size:9px;color:#e5eaff}
+.starlight-products{display:flex;gap:8px;max-width:440px}
+.starlight-product{display:grid;grid-template-columns:42px 1fr;grid-template-rows:auto auto;align-items:center;column-gap:7px;flex:1;min-width:0;padding:5px 8px;border-radius:10px;background:rgba(6,15,39,.82);border:1px solid rgba(98,203,255,.62);box-shadow:0 0 13px rgba(39,145,255,.22)}
+.starlight-product.premium{border-color:rgba(201,139,255,.78);box-shadow:0 0 13px rgba(172,87,255,.24)}
+.starlight-product img{grid-row:1/3;width:42px;height:42px;object-fit:contain;border-radius:6px;background:#fff}
+.starlight-product b{font-size:8px;letter-spacing:1px;color:#8de6ff}
+.starlight-product.premium b{color:#d7a8ff}
+.starlight-product strong{font-size:clamp(11px,2vw,16px);color:#ffe3a3;white-space:nowrap}
+.starlight-terms{font-size:8px;line-height:1.25;color:#eef3ff}
+.starlight-terms b{color:#ffdf79}
+.starlight-contact{align-self:flex-start;padding:6px 12px;border-radius:20px;background:linear-gradient(110deg,#f8e2a6,#b77d2c);color:#17101a;font-size:8px;font-weight:950;letter-spacing:.5px;text-decoration:none;box-shadow:0 3px 14px #dca64c55}
+@media(max-width:760px){
+ .starlight-content{inset:10px 34px 32px;gap:5px}
+ .starlight-heading span{font-size:7px;letter-spacing:1.3px}
+ .starlight-heading strong{font-size:15px}
+ .starlight-heading small{font-size:8px}
+ .starlight-products{gap:6px}
+ .starlight-product{grid-template-columns:32px 1fr;column-gap:5px;padding:4px 5px}
+ .starlight-product img{width:32px;height:32px}
+ .starlight-product b{font-size:7px}
+ .starlight-product strong{font-size:11px}
+ .starlight-terms{font-size:7px}
+ .starlight-contact{font-size:7px;padding:5px 9px}
+}
+</style>
 <style id="xeravion-starlight-slider-style">#gameSlider .starlight-slide{background:#6650d9!important}#gameSlider .starlight-slide>img{width:100%;height:100%;object-fit:contain!important;object-position:center center!important;transform:none!important;background:#6650d9}#gameSlider .starlight-slide .slide-shade{display:none!important}@media(max-width:760px){#gameSlider .starlight-slide>img{object-fit:contain!important}}</style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -667,4 +699,918 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 <article class="game-slide active"><img src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Artwork event kolaborasi Mobile Legends Bang Bang x SpongeBob" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>MLBB × SPONGEBOB • UNDERSEA BASH</span><strong>MOBILE LEGENDS</strong><small>Event kolaborasi berlangsung 11 November – 10 Desember</small></div></article>
 <article class="game-slide"><img src="https://play-lh.googleusercontent.com/J7yc5dVCW8CnEPsroJy-gnNjMEYMYu4UKj843o8njDItR30Gb_7xcrKgR5tFcK5zTqL69Kz79VWFaxfbg5AAvw=w1600" alt="Artwork PUBG Mobile" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>V4.7 • ARCTIC CHRONICLES</span><strong>PUBG MOBILE</strong><small>Mode Ancient Beast sudah hadir di Erangel</small></div></article>
 <article class="game-slide"><img src="https://cdn1.katadata.co.id/media/images/thumb/2026/11/10/Free_Fire_Storm_Arena-2026_11_10-14_01_55_8dd6fe596193688685ef9faded2f522b_960x640_thumb.png" alt="Artwork Free Fire" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>STORM ARENA • FFWS GLOBAL FINALS</span><strong>FREE FIRE</strong><small>Event November berlangsung hingga 29 November</small></div></article>
-<article class="game-slide shirt-slide"><img src="/assets/xeravion-official-shirt-banner.jpg" alt="Kaos resmi XERAVION dengan logo emas berlatar gaming" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>OFFICIAL MERCHANDISE • XERAVION</span><strong>KAOS RESMI XERAVION</strong><small>Kenakan identitas XERAVION. Tersedia melalui pemesanan admin.</small><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20memesan%20kaos%20resmi%20XERAVION." target="_blank" rel="noopener">PESAN KAOS VIA WHATSAPP ↗</a></div></article><article class="game-slide starlight-slide"><img src="/assets/xeravion-starlight-november.png" alt="Promosi Starlight November XERAVION: kartu Basic Rp. 45.000 dan Premium Rp. 65.000" loading="lazy"><div class="slide-shade"></div></article>
+<article class="game-slide starlight-slide"><img src="/assets/xeravion-starlight-november.png" alt="Promosi Starlight November XERAVION: kartu Basic Rp. 45.000 dan Premium Rp. 65.000" loading="lazy"><div class="slide-shade"></div></article><article class="game-slide shirt-slide"><img src="/assets/xeravion-official-shirt-banner.jpg" alt="Kaos resmi XERAVION dengan logo emas berlatar gaming" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>OFFICIAL MERCHANDISE • XERAVION</span><strong>KAOS RESMI XERAVION</strong><small>Kenakan identitas XERAVION. Tersedia melalui pemesanan admin.</small><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20memesan%20kaos%20resmi%20XERAVION." target="_blank" rel="noopener">PESAN KAOS VIA WHATSAPP ↗</a></div></article></div><button class="slider-arrow prev" type="button" aria-label="Slide sebelumnya" onclick="moveGameSlide(-1)">‹</button><button class="slider-arrow next" type="button" aria-label="Slide berikutnya" onclick="moveGameSlide(1)">›</button><div class="slider-bottom"><label>PLAY • COLLECT • CONNECT</label><div class="slider-dots"><button class="slider-dot active" type="button" aria-label="Mobile Legends" onclick="showGameSlide(0)"></button><button class="slider-dot" type="button" aria-label="PUBG Mobile" onclick="showGameSlide(1)"></button><button class="slider-dot" type="button" aria-label="Free Fire" onclick="showGameSlide(2)"></button><button class="slider-dot" type="button" aria-label="Kaos resmi XERAVION" onclick="showGameSlide(3)"></button><button class="slider-dot" type="button" aria-label="Starlight Member Card" onclick="showGameSlide(4)"></button></div></div></div></div>
+<div class="stats"><div class="stat"><b id="countStat">0</b><span>Listing akun</span></div><div class="stat"><b>3+</b><span>Kategori game</span></div><div class="stat"><b>Top Up Game</b><span>Segera Hadir</span></div></div>
+<div id="gameCategoryHub" class="game-category-hub">
+ <div class="sectionhead"><div><div class="eyebrow">PILIH DUNIA GAME</div><h2>Jelajahi kategori</h2></div><p>Pilih game untuk melihat akun yang tersedia</p></div>
+ <div class="game-category-grid">
+  <a class="game-category-card ml" href="?game=ml"><img class="game-category-image" src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Mobile Legends" loading="lazy"><span class="game-category-shade"></span><strong>Mobile Legends</strong><small id="stockMl">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
+  <a class="game-category-card pubg" href="?game=pubg"><img class="game-category-image" src="https://play-lh.googleusercontent.com/J7yc5dVCW8CnEPsroJy-gnNjMEYMYu4UKj843o8njDItR30Gb_7xcrKgR5tFcK5zTqL69Kz79VWFaxfbg5AAvw=w1600" alt="PUBG Mobile" loading="lazy"><span class="game-category-shade"></span><strong>PUBG Mobile</strong><small id="stockPubg">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
+  <a class="game-category-card ff" href="?game=ff"><img class="game-category-image" src="https://cdn1.katadata.co.id/media/images/thumb/2026/11/10/Free_Fire_Storm_Arena-2026_11_10-14_01_55_8dd6fe596193688685ef9faded2f522b_960x640_thumb.png" alt="Free Fire" loading="lazy"><span class="game-category-shade"></span><strong>Free Fire</strong><small id="stockFf">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
+ </div>
+</div>
+<section class="topup-coming" id="topup" aria-labelledby="topupTitle">
+ <div class="topup-copy">
+  <div class="eyebrow">LAYANAN XERAVION</div>
+  <div class="topup-heading"><h2 id="topupTitle">Game Top Up</h2><span class="topup-badge">SEGERA HADIR</span></div>
+  <p>Layanan top up sedang kami siapkan. Nantikan segera!</p>
+ </div>
+ <div class="topup-mark" aria-hidden="true"><span>⚡</span></div>
+</section>
+<div class="sectionhead"><div><div class="eyebrow">STORE COLLECTION</div><h2>Etalase akun</h2></div><p id="resultCount">0 akun</p></div><div class="tools"><div class="search"><input id="search" type="search" placeholder="Cari nama, kode stok, atau deskripsi…" oninput="render()"></div><select id="sort" onchange="render()"><option value="code" selected>Kode listing (A-Z)</option><option value="new">Terbaru</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></div>
+<div class="chips"><button class="chip active" onclick="setGame('Semua',this)">Semua game</button><button class="chip" onclick="setGame('Mobile Legends',this)">Mobile Legends</button><button class="chip" onclick="setGame('PUBG Mobile',this)">PUBG Mobile</button><button class="chip" onclick="setGame('Free Fire',this)">Free Fire</button><button class="chip" onclick="setGame('Lainnya',this)">Lainnya</button></div><div class="grid" id="products"></div><p class="hint" style="margin:18px 0 40px">Informasi akun ditampilkan sesuai data yang dimasukkan admin. Pastikan proses jual beli dan pengalihan akun mematuhi ketentuan penerbit game. Jangan pernah membagikan password, OTP, atau data pemulihan melalui halaman publik.</p></section>
+<section class="admin" id="admin"><div class="adminbar"><div><div class="eyebrow">XERAVION ADMIN CONTROL CENTER</div><h2>Admin Control Center</h2><div class="hint">Satu pusat kendali untuk toko, member, transaksi, dan email.</div></div><div class="navright"><button class="btn" onclick="signOutAdmin()">Keluar admin</button><button class="btn" onclick="showCatalog()">← Lihat toko</button></div></div>
+<nav class="xer-admin-tabs" role="tablist" aria-label="Navigasi dashboard admin">
+ <button type="button" class="xer-admin-tab active" data-tab="overview" onclick="showAdminTab('overview')">Ringkasan</button>
+ <button type="button" class="xer-admin-tab" data-tab="form" onclick="showAdminTab('form')">Tambah etalase</button>
+ <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing</button>
+ <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
+ <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Credit Points</button>
+ <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
+</nav>
+<div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Kelola Credit Points</button></div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-mail">
+ <div class="panel" style="padding:0;overflow:hidden">
+  <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
+ </div>
+</div>
+<div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="notice" style="margin:0 0 14px"><strong>Ganti seluruh foto listing Mobile Legends</strong><div class="hint" style="margin:5px 0 9px">Hapus file foto utama dan galeri yang sedang dipakai listing Mobile Legends saja. Data akun, harga, stok, PUBG, dan Free Fire tetap aman. Setelah dibersihkan, unggah foto MLBB baru tanpa watermark.</div><button class="btn gold" type="button" id="cleanupMlPhotosBtn" onclick="cleanupMobileLegendsPhotos()">Hapus foto lama MLBB</button><span class="hint" id="cleanupMlPhotosStatus" style="display:block;margin-top:7px"></span></div><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><select id="newGame"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>Lainnya</option></select><input id="newPrice" type="number" min="1" placeholder="Harga (Rp) *"><input id="newCode" placeholder="Kode listing *"><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newGallery" placeholder="URL foto tambahan, satu URL per baris (opsional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div><input class="wide" id="newImageUrl" placeholder="Atau tempel URL gambar (opsional)"><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar listing akun</h3><div class="hint">Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.</div></div><input id="adminSearch" placeholder="Cari nama atau kode…" oninput="renderAdmin()"></div><div class="admin-game-tabs" id="adminGameTabs" role="tablist" aria-label="Filter listing berdasarkan game"></div><div class="admin-game-heading"><span id="adminGameHeading">SEMUA GAME</span><span id="adminGameCount">0 listing</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama akun</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminRows"></tbody></table></div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
+ <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Catat pesanan manual. Invoice hanya bisa dikirim setelah pembayaran lunas dan pesanan selesai.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
+ <div class="notice">Untuk memberi cashback 3%, pilih member terlebih dahulu melalui panel Credit Points di bawah. Email pembeli harus sama dengan email member tersebut. Pesanan tamu tetap bisa dibuat, tetapi tidak memperoleh cashback member.</div>
+ <div class="formgrid">
+  <select id="orderProduct" class="wide"><option value="">Pilih akun dari katalog…</option></select>
+  <input id="orderBuyerName" placeholder="Nama pembeli">
+  <input id="orderBuyerEmail" type="email" placeholder="Email pembeli untuk invoice">
+  <input id="orderBuyerWhatsapp" placeholder="WhatsApp pembeli (opsional)">
+  <select id="orderPaymentMethod"><option value="QRIS">QRIS</option><option value="BCA">BCA</option><option value="DANA">DANA</option><option value="GoPay">GoPay</option><option value="ShopeePay">ShopeePay</option><option value="SeaBank">SeaBank</option></select>
+  <button class="btn gold" onclick="createXeravionOrder()">Buat pesanan</button>
+ </div>
+ <p id="orderAdminMessage" class="hint" aria-live="polite"></p>
+ <div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice</th><th>Pembeli</th><th>Detail</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="xeravionOrderRows"><tr><td colspan="6">Tekan Muat ulang untuk melihat pesanan.</td></tr></tbody></table></div>
+</div></div>
+<div class="xer-admin-tab-panel" id="adminTab-credits"><div class="panel" id="creditAdminPanel">
+ <div class="sectionhead"><div><h3 style="margin:0">XERAVION Credit Points · Admin</h3><div class="hint">Cari member, catat transaksi selesai, atau batalkan cashback saat transaksi dibatalkan.</div></div></div>
+ <div class="formgrid">
+  <input id="creditMemberQuery" placeholder="Cari email member…" class="wide">
+  <button class="btn" onclick="searchCreditMembers()">Cari member</button>
+ </div>
+ <div id="creditMemberResults" class="hint" style="margin-top:12px">Cari member untuk melihat saldo dan memilih akun.</div>
+ <div class="formgrid" style="margin-top:18px">
+  <div class="wide" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Member terpilih (pilih dari hasil pencarian)"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div>
+  <input id="creditPurchaseRef" placeholder="Kode / referensi transaksi">
+  <input id="creditPurchaseAmount" type="number" min="1" placeholder="Nilai transaksi (Rp)">
+  <label class="hint wide" style="display:flex;gap:9px;align-items:center"><input type="checkbox" id="creditUsedPoints"> Pesanan ini menggunakan Credit Points (tidak mendapat cashback)</label>
+  <button class="btn gold" onclick="completeCreditPurchase()">Konfirmasi transaksi selesai & berikan cashback</button>
+  <input id="creditReverseRef" placeholder="Referensi transaksi yang dibatalkan">
+  <input id="creditReverseReason" placeholder="Alasan pembatalan (opsional)">
+  <button class="btn" onclick="reverseCreditPurchase()">Batalkan cashback transaksi</button>
+ </div>
+ <p id="creditAdminMessage" class="hint" aria-live="polite"></p>
+</div></div>
+</section>
+<section class="how" id="how"><div class="eyebrow">SIMPLE & CLEAR ORDER FLOW</div><h2 style="margin:7px 0 17px">Cara order</h2><div class="stats order-steps" style="margin:0"><div class="stat"><b>01</b><span>Pilih game dan akun yang diminati</span></div><div class="stat"><b>02</b><span>Buka detail, periksa foto dan deskripsi</span></div><div class="stat"><b>03</b><span>Hubungi admin untuk cek stok dan konfirmasi</span></div><div class="stat"><b>04</b><span>Sepakati pembayaran dan proses serah terima</span></div></div><div class="trust-grid"><article class="trust-card"><span class="trust-icon">⌕</span><h3>Informasi transparan</h3><p>Baca deskripsi, harga, foto, kode listing, dan status stok sebelum menghubungi admin.</p></article><article class="trust-card"><span class="trust-icon">▣</span><h3>Komunikasi langsung</h3><p>Setiap pertanyaan dan konfirmasi transaksi dilakukan melalui WhatsApp resmi XERAVION.</p></article><article class="trust-card"><span class="trust-icon">◇</span><h3>Periksa sebelum deal</h3><p>Pastikan detail akun, metode pembayaran, dan proses pengalihan akses disepakati sebelum membayar.</p></article></div><p class="trade-note">Catatan: XERAVION adalah etalase dan penghubung pembeli dengan admin. Periksa ketentuan penerbit game terkait jual beli atau pengalihan akun. Jangan pernah membagikan OTP atau data pemulihan melalui halaman publik.</p></section>
+
+<section class="how" id="creditPoints">
+  <div class="eyebrow">XERAVION LOYALTY PROGRAM</div>
+  <div class="sectionhead"><div><h2>XERAVION Credit Points</h2><p>Kumpulkan poin dari transaksi yang memenuhi syarat dan tukarkan dengan reward pilihan.</p></div><button class="btn gold" onclick="openMember()">Gabung / Masuk</button></div>
+  <div class="credit-promo"><div class="credit-scene" aria-hidden="true"><img src="/assets/file_000000005c808207b2a045ea48abfdb7.png" alt="" loading="lazy"></div><div><span class="credit-kicker">PLAY • COLLECT • REDEEM</span><h2>Setiap transaksi punya nilai lebih.</h2><p>Buat akun gratis untuk melihat saldo, riwayat poin, dan hadiah yang tersedia.</p><button class="btn gold" onclick="openMember()">Mulai kumpulkan poin ↗</button></div><div class="credit-orb"><img src="/assets/xeravion-xp-loyalty-transparent.png" alt="Logo asli XERAVION XP Loyalty" loading="lazy"></div></div>
+  <div class="credit-benefits"><article><b>01 · Kumpulkan</b><span>Dapatkan poin setelah transaksi berhasil diverifikasi admin.</span></article><article><b>02 · Pantau</b><span>Lihat saldo dan setiap perubahan poin di akunmu.</span></article><article><b>03 · Tukarkan</b><span>Gunakan poin untuk diskon atau reward akun yang tersedia.</span></article></div>
+  <p class="hint">Poin bukan uang tunai dan tidak dapat diuangkan. Syarat, jumlah poin, dan reward akan ditampilkan secara transparan di akun anggota.</p>
+</section>
+<section class="how payment-section" id="payment"><div class="eyebrow">FLEXIBLE PAYMENT OPTIONS</div><h2 style="margin:7px 0 10px">Metode pembayaran</h2><p class="payment-intro">Pembayaran dilakukan secara manual setelah admin mengonfirmasi stok, harga akhir, dan instruksi transaksi melalui WhatsApp.</p><div class="payment-grid">
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-qris"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/qris.svg" alt="Logo resmi QRIS" loading="lazy"></span><div><b>QRIS</b><small>Konfirmasi QRIS resmi dari admin</small></div></article>
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-bca"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/bca.svg" alt="Logo BCA" loading="lazy"></span><div><b>BCA</b><small>Rekening tujuan diberikan melalui WhatsApp</small></div></article>
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-dana"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/dana.svg" alt="Logo resmi DANA" loading="lazy"></span><div><b>DANA</b><small>Konfirmasi nomor akun penerima dari admin</small></div></article>
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-gopay"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/gopay.svg" alt="Logo resmi GoPay" loading="lazy"></span><div><b>GoPay</b><small>Konfirmasi nomor akun penerima dari admin</small></div></article>
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-shopee"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/shopee-pay.svg" alt="Logo resmi ShopeePay" loading="lazy"></span><div><b>ShopeePay</b><small>Konfirmasi nomor akun penerima dari admin</small></div></article>
+<article class="payment-card"><span class="payment-logo-wrap payment-logo-seabank"><img class="payment-logo" src="https://raw.githubusercontent.com/hafidznoor/idn-finlogos/main/icons/seabank.svg" alt="Logo resmi SeaBank" loading="lazy"></span><div><b>SeaBank</b><small>Rekening tujuan diberikan melalui WhatsApp</small></div></article>
+</div><p class="payment-warning">Penting: jangan transfer sebelum menerima instruksi resmi dari admin XERAVION. Pastikan nama penerima dan nominal sesuai, lalu kirim bukti pembayaran melalui percakapan WhatsApp yang sama. Jangan pernah membagikan PIN atau OTP.</p><a class="btn gold payment-contact" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20menanyakan%20metode%20pembayaran." target="_blank" rel="noopener noreferrer">TANYA METODE PEMBAYARAN ↗</a></section>
+<section class="how about-section" id="about"><div class="eyebrow">ABOUT XERAVION</div><h2 style="margin:7px 0 10px">Mengenal XERAVION</h2><div class="about-panel"><p><b>XERAVION</b> adalah etalase digital yang bergerak di bidang informasi dan pemasaran akun game. Kami membantu calon pembeli menemukan pilihan akun game melalui katalog yang tertata, informasi listing, foto, harga, dan komunikasi langsung dengan admin.</p><div class="about-points"><article><b>Fokus utama</b><span>Jual-beli akun game melalui komunikasi langsung antara calon pembeli dan admin.</span></article><article><b>Kategori game</b><span>Mobile Legends, PUBG Mobile, Free Fire, serta kategori lain sesuai ketersediaan listing.</span></article><article><b>Cara layanan</b><span>Jelajahi katalog, periksa detail akun, lalu hubungi admin untuk konfirmasi stok, harga, dan proses transaksi.</span></article><article><b>Komitmen informasi</b><span>Informasi publik ditampilkan berdasarkan data listing yang dimasukkan admin. Calon pembeli dianjurkan memeriksa dan mengonfirmasi semua detail sebelum bertransaksi.</span></article></div><p class="about-disclaimer">XERAVION merupakan etalase independen dan bukan situs resmi atau mitra yang mewakili penerbit game, kecuali dinyatakan secara resmi. Jual-beli atau pengalihan akun dapat tunduk pada ketentuan masing-masing penerbit game.</p></div></section>
+<section class="how faq-section" id="faq"><div class="eyebrow">HELP CENTER</div><h2 style="margin:7px 0 10px">FAQ · Pertanyaan umum</h2><p class="payment-intro">Jawaban singkat seputar katalog, detail akun, pemesanan, dan pembayaran di XERAVION.</p><div class="faq-list">
+<details class="faq-item"><summary>Bagaimana cara membeli akun di XERAVION?</summary><p>Pilih game dan listing yang diminati, buka <b>Lihat Detail Akun</b>, periksa informasi serta foto, lalu tekan tombol WhatsApp untuk menghubungi admin. Admin akan membantu mengecek stok dan menjelaskan langkah berikutnya.</p></details>
+<details class="faq-item"><summary>Apakah foto akun bisa lebih dari satu?</summary><p>Bisa. Listing dapat menampilkan beberapa foto yang bisa digeser. Jika admin hanya mengunggah satu foto, listing tetap dapat ditampilkan dengan satu foto saja.</p></details>
+<details class="faq-item"><summary>Apakah stok yang terlihat pasti masih tersedia?</summary><p>Status di katalog mengikuti pembaruan admin. Untuk memastikan akun belum terjual atau sedang dipesan, tanyakan kembali kepada admin melalui WhatsApp sebelum melakukan pembayaran.</p></details>
+<details class="faq-item"><summary>Informasi apa yang ditampilkan pada listing?</summary><p>Listing menampilkan informasi yang dimasukkan admin, seperti nama akun, game, deskripsi, foto, harga, kode listing, dan status. ID serta server akun tidak ditampilkan pada halaman publik demi mengurangi risiko penyalahgunaan.</p></details>
+<details class="faq-item"><summary>Metode pembayaran apa saja yang tersedia?</summary><p>Pembayaran diproses secara manual setelah admin mengonfirmasi transaksi. Metode yang dapat ditanyakan adalah QRIS, BCA, DANA, GoPay, ShopeePay, dan SeaBank. Detail penerima diberikan langsung oleh admin.</p></details>
+<details class="faq-item"><summary>Kapan saya harus melakukan pembayaran?</summary><p>Jangan transfer sebelum admin mengonfirmasi stok, harga akhir, metode pembayaran, dan instruksi transaksi. Periksa nama penerima serta nominal sebelum menyelesaikan pembayaran.</p></details>
+<details class="faq-item"><summary>Bagaimana proses serah terima akun?</summary><p>Proses dan detail pengalihan akses harus dibicarakan langsung dengan admin sebelum pembayaran. Pastikan semua hal penting dipahami dan periksa ketentuan penerbit game terkait jual beli atau pengalihan akun.</p></details>
+<details class="faq-item"><summary>Apakah aman membagikan OTP atau data pemulihan?</summary><p>Jangan pernah mengirimkan PIN, password email pribadi, OTP, atau kode pemulihan melalui halaman publik atau kepada pihak yang tidak terverifikasi. Hubungi admin melalui WhatsApp resmi XERAVION jika membutuhkan bantuan.</p></details>
+<details class="faq-item"><summary>Bagaimana jika saya punya pertanyaan lain?</summary><p>Hubungi admin melalui tombol WhatsApp di halaman ini. Sertakan kode listing agar admin lebih mudah mengetahui akun yang sedang kamu tanyakan.</p></details>
+</div><a class="btn gold payment-contact" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener noreferrer">TANYA ADMIN VIA WHATSAPP ↗</a></section>
+</main><footer class="footer" id="contact"><div class="wrap"><div class="footer-contact"><div class="footer-contact-heading"><strong>Hubungi XERAVION</strong><span>Tim support siap membantu pertanyaan seputar katalog dan layanan.</span></div><a class="footer-support-link" href="mailto:support@xeravion.my.id" aria-label="Kirim email ke support XERAVION"><svg class="support-brand-icon email" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="support-link-copy"><span class="contact-label">EMAIL SUPPORT</span><strong>support@xeravion.my.id</strong></span></a><a class="footer-support-link" href="https://wa.me/6287714947270?text=Halo%20tim%20support%20XERAVION%2C%20saya%20ingin%20bertanya." target="_blank" rel="noopener noreferrer" aria-label="Hubungi support XERAVION melalui WhatsApp"><svg class="support-brand-icon whatsapp" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l6-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9 9 0 0 1-4.6-1.3l-.3-.2-3.5.9.9-3.4-.2-.4A9 9 0 1 1 12 21Zm5-6.7c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2-.8 1-1 1.1-.4.2-.7 0a8.4 8.4 0 0 1-2.5-1.5 9.2 9.2 0 0 1-1.7-2.1c-.2-.3 0-.5.2-.7l.5-.6.3-.6c.1-.2 0-.4 0-.6l-1-2.2c-.2-.5-.5-.4-.7-.4H7c-.2 0-.6.1-.9.4s-1.2 1.2-1.2 2.8 1.2 3.2 1.4 3.4a12.5 12.5 0 0 0 4.8 4.2c.7.3 1.3.5 1.8.6.8.2 1.5.2 2 .1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.3-.3-.6-.4Z"/></svg><span class="support-link-copy"><span class="contact-label">WHATSAPP</span><strong>+62 877-1494-7270 ↗</strong></span></a><a class="footer-support-link" href="https://t.me/xeravionid" target="_blank" rel="noopener noreferrer" aria-label="Hubungi admin XERAVION melalui Telegram"><svg class="support-brand-icon telegram" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 2.4 19.9 21c-.3 1.3-1 1.6-2.1 1l-5.8-4.3-2.8 2.7c-.3.3-.6.6-1.2.6l.4-5.9L19.2 5c.5-.4-.1-.6-.7-.2L5.2 13.4l-5.8-1.8c-1.3-.4-1.3-1.3.3-1.9L21.9 1.2c1.1-.4 2 .3 1.6 1.2Z"/></svg><span class="support-link-copy"><span class="contact-label">TELEGRAM</span><strong>@xeravionid ↗</strong></span></a></div><div class="footerin"><div>© 2026 XERAVION · Premium Game Account Store</div><div>Kontak resmi XERAVION</div></div></div></footer>
+
+<div class="modalback" id="memberModal" onclick="if(event.target===this)closeMember()"><div class="modal member-modal" role="dialog" aria-modal="true" aria-labelledby="memberTitle">
+  <button class="member-close" onclick="closeMember()" aria-label="Tutup">×</button>
+  <div class="eyebrow">XERAVION MEMBERS</div><h3 id="memberTitle">Member Points</h3>
+  <div id="memberAuth">
+    <p>Masuk atau daftar menggunakan email untuk mulai mengumpulkan Credit Points.</p>
+    <div class="member-tabs"><button id="memberLoginTab" class="active" onclick="setMemberMode('login')">Masuk</button><button id="memberSignupTab" onclick="setMemberMode('signup')">Daftar</button></div>
+    <input id="memberName" class="field member-name hidden" type="text" autocomplete="name" placeholder="Nama tampilan">
+    <div id="memberIdentifierWrap"><input id="memberEmail" class="field" type="email" inputmode="email" autocomplete="email" placeholder="Alamat email" aria-label="Alamat email"></div>
+    <div class="password-toggle-wrap"><input id="memberPassword" class="field" type="password" autocomplete="current-password" placeholder="Password (minimal 8 karakter)"><button type="button" class="password-toggle" aria-label="Tampilkan kata sandi" aria-pressed="false" onclick="togglePasswordVisibility('memberPassword',this)">Lihat</button></div>
+    <button class="btn gold member-submit" id="memberSubmit" onclick="submitMemberAuth()">Masuk</button>
+    <button class="member-link" onclick="resetMemberPassword()">Lupa password? (email)</button>
+    <p class="hint" id="memberAuthMessage" aria-live="polite"></p>
+  </div>
+  <div id="memberAccount" class="hidden">
+    <div class="member-balance"><span>SALDO CREDIT POINTS</span><strong id="memberBalance">0 XP</strong><small id="memberDisplayName">Member XERAVION</small></div>
+    <div class="member-rewards"><h4>Cara kerja Credit Points</h4><div class="reward-list"><div class="reward-row"><div><strong>Cashback 3%</strong><small>Poin masuk setelah pembayaran dan transaksi dikonfirmasi selesai oleh admin.</small></div></div><div class="reward-row"><div><strong>1 poin = Rp10</strong><small>Setiap poin dapat mengurangi harga pembelian akun sebesar Rp10.</small></div></div><div class="reward-row"><div><strong>Maksimal diskon 10%</strong><small>Poin hanya dapat dipakai untuk pembelian akun XERAVION, maksimal 10% dari harga akun.</small></div></div><div class="reward-row"><div><strong>Masa berlaku 12 bulan</strong><small>Poin yang paling dekat kedaluwarsa akan digunakan lebih dahulu. Tidak dapat diuangkan atau ditransfer.</small></div></div></div></div>
+    <div class="member-history"><h4>Riwayat poin</h4><div id="memberHistoryList"><p class="hint">Memuat riwayat…</p></div></div>
+    <div class="member-history"><h4>Riwayat pesanan</h4><div id="memberOrderHistory"><p class="hint">Memuat pesanan…</p></div></div>
+    <div class="modalactions"><button class="btn" onclick="memberSignOut()">Keluar</button><button class="btn gold" onclick="refreshMemberPanel()">Perbarui</button></div>
+  </div>
+</div></div>
+<div class="modalback" id="loginModal"><div class="modal"><h3>Login Admin XERAVION</h3><p>Masuk menggunakan email dan password akun admin Supabase yang sudah kamu buat.</p><input id="adminEmail" class="field" type="email" autocomplete="username" placeholder="Email admin"><div class="password-toggle-wrap admin-password-wrap"><input id="adminPassword" class="field" type="password" autocomplete="current-password" placeholder="Password admin" style="margin-top:10px"><button type="button" class="password-toggle" aria-label="Tampilkan kata sandi" aria-pressed="false" onclick="togglePasswordVisibility('adminPassword',this)">Lihat</button></div><div class="modalactions"><button class="btn" onclick="closeLogin()">Batal</button><button class="btn gold" onclick="loginAdmin()">Masuk</button></div><p id="loginError" class="hint"></p></div></div>
+<div class="modalback detail-back" id="productDetailModal" onclick="if(event.target===this)closeProductDetail()"><div class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><button class="detail-close" type="button" aria-label="Tutup detail" onclick="closeProductDetail()">×</button><div id="detailContent"></div></div></div>
+<div class="image-preview-modal" id="imagePreviewModal" onclick="if(event.target===this)closeImagePreview()"><button class="image-preview-close" type="button" onclick="closeImagePreview()" aria-label="Tutup preview">×</button><button class="image-preview-nav prev" id="imagePreviewPrev" type="button" onclick="moveImagePreview(-1)" aria-label="Foto sebelumnya">‹</button><img id="imagePreviewFull" alt="Preview foto akun" onpointerdown="previewPointerDown(event)" onpointermove="previewPointerMove(event)" onpointerup="previewPointerUp(event)" onpointercancel="previewPointerUp(event)" ondblclick="resetPreviewZoom()"><button class="image-preview-nav next" id="imagePreviewNext" type="button" onclick="moveImagePreview(1)" aria-label="Foto berikutnya">›</button><span id="imagePreviewCount" class="image-preview-count"></span></div><div class="modalback" id="confirmModal"><div class="modal"><h3>Hapus listing?</h3><p>Listing ini akan dihapus dari database XERAVION.</p><div class="modalactions"><button class="btn" onclick="closeModal()">Batal</button><button class="btn gold" id="confirmDelete">Ya, hapus</button></div></div></div>
+</div>
+<script>document.querySelector('.notice').textContent='Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.';</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],deleteId=null,items=[],xeravionAdminVerified=false;
+const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,game:r.game,price:Number(r.price),desc:r.description||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
+function waLink(p){let msg=`Halo admin XERAVION, saya tertarik dengan akun ${p.code} - ${p.name} (${p.game}) dengan harga ${rupiah(p.price)}. Apakah akun ini masih tersedia?`;return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`}
+async function shareListing(id){
+ const p=items.find(x=>Number(x.id)===Number(id));if(!p)return;
+ try{
+  const{data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError||!session)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
+  const{data:allowed,error}=await supabaseClient.rpc('is_admin');
+  if(error||!allowed){xeravionAdminVerified=false;render();throw new Error('Fitur bagikan hanya dapat digunakan oleh admin XERAVION.');}
+  xeravionAdminVerified=true;
+  const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('game',p.game==='Mobile Legends'?'ml':p.game==='PUBG Mobile'?'pubg':p.game==='Free Fire'?'ff':'');if(!url.searchParams.get('game'))url.searchParams.delete('game');url.searchParams.set('listing',String(p.id));
+  const shareUrl=url.toString();
+  const shareData={title:'XERAVION | '+p.name,text:'Lihat listing '+p.code+' — '+p.name+' ('+p.game+') di XERAVION. Harga '+rupiah(p.price)+'.',url:shareUrl};
+  if(navigator.share){await navigator.share(shareData);return;}
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(shareUrl);alert('Link listing berhasil disalin. Silakan bagikan ke media sosial.');return;}
+  const fallback=document.createElement('textarea');fallback.value=shareUrl;fallback.setAttribute('readonly','');fallback.style.position='fixed';fallback.style.opacity='0';document.body.appendChild(fallback);fallback.select();const copied=document.execCommand('copy');fallback.remove();if(!copied)throw new Error('Browser tidak mengizinkan penyalinan link.');alert('Link listing berhasil disalin. Silakan bagikan ke media sosial.');
+ }catch(e){if(e&&e.name==='AbortError')return;console.error('XERAVION share listing:',e);alert(e&&e.message?e.message:'Gagal membagikan listing.');}
+}
+function openProductDetail(id,fromUrl=false){const p=items.find(x=>Number(x.id)===Number(id));if(!p)return;const gameKey=p.game==='Mobile Legends'?'ml':p.game==='PUBG Mobile'?'pubg':p.game==='Free Fire'?'ff':'';if(!fromUrl){const u=new URL(location.href);u.search='';if(gameKey)u.searchParams.set('game',gameKey);u.searchParams.set('listing',String(p.id));history.pushState({xeravionListing:String(p.id)},'',u)}document.body.classList.add('xeravion-listing-page');document.getElementById('detailContent').dataset.productId=p.id;const imgs=[...new Set([p.image,...(p.gallery||[])].map(safeImageUrl).filter(isValidListingPhoto))];const hero=imgs.length?'<button class="detail-image-trigger" type="button" onclick="openImagePreview(0)" aria-label="Perbesar foto akun"><img class="detail-image" id="detailHero" src="'+esc(imgs[0])+'" alt="Foto '+esc(p.name)+'" onerror="handleDetailHeroError(this)"><span class="image-zoom-hint">⌕ Perbesar foto</span></button>':'<div class="detail-image detail-placeholder">'+iconFor(p.game)+'</div>';const thumbs=imgs.length>1?'<div class="detail-thumbs" id="detailThumbs">'+imgs.map((u,i)=>'<button type="button" class="detail-thumb '+(i===0?'active':'')+'" onclick="setDetailImage('+i+')" aria-label="Foto '+(i+1)+'"><img src="'+esc(u)+'" alt="" onerror="handleDetailThumbError(this)"></button>').join('')+'</div>':'';const wa=p.stock==='Tersedia'?'<a class="buy" href="'+esc(waLink(p))+'" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>':'<button class="buy" type="button" disabled>'+esc(p.stock.toUpperCase())+'</button>';document.getElementById('detailContent').innerHTML='<div class="detail-layout"><div class="detail-media">'+hero+thumbs+'</div><div class="detail-body"><button class="detail-back-top" type="button" onclick="closeProductDetail()">← Kembali ke Listing</button><div class="detail-meta"><div class="detail-meta-main"><span class="game">'+esc(p.game.toUpperCase())+'</span><div class="detail-code">KODE LISTING: '+esc(p.code)+'</div></div><div class="detail-meta-status"><div class="detail-price">'+rupiah(p.price)+'</div><span class="detail-stock">'+esc(p.stock.toUpperCase())+'</span></div></div><h2 class="detail-title" id="detailTitle">'+esc(p.name)+'</h2><section class="detail-section"><h3>Deskripsi akun</h3><div class="detail-description">'+esc(p.desc||'Belum ada deskripsi tambahan.')+'</div></section><div class="detail-actions">'+(xeravionAdminVerified?'<button class="buy admin-share-buy detail-share-buy" type="button" onclick="shareListing('+Number(p.id)+')">↗ BAGIKAN POSTINGAN</button>':'')+wa+'</div></div></div>';document.getElementById('productDetailModal').classList.add('show');document.body.style.overflow='hidden'}function closeProductDetail(fromPop=false){const params=new URLSearchParams(location.search);if(!fromPop&&params.has('listing')){const u=new URL(location.href);u.searchParams.delete('listing');history.replaceState({},'',u)}document.body.classList.remove('xeravion-listing-page');const modal=document.getElementById('productDetailModal');if(modal)modal.classList.remove('show');document.body.style.overflow='';const content=document.getElementById('detailContent');if(content){content.innerHTML='';delete content.dataset.productId}}
+window.addEventListener('popstate',function(){const modal=document.getElementById('productDetailModal');if(modal&&modal.classList.contains('show'))closeProductDetail(true);const params=new URLSearchParams(location.search);if(params.has('listing')){const id=Number(params.get('listing'));if(items.some(p=>Number(p.id)===id))openProductDetail(id,true)}});
+document.addEventListener('keydown',function(event){if(event.key==='Escape'){const preview=document.getElementById('imagePreviewModal');if(preview&&preview.classList.contains('show'))closeImagePreview();else{const modal=document.getElementById('productDetailModal');if(modal&&modal.classList.contains('show'))closeProductDetail()}}});
+function handleDetailHeroError(img){const trigger=img.closest('.detail-image-trigger');if(trigger){trigger.outerHTML='<div class="detail-image detail-placeholder">'+iconFor((items.find(p=>Number(p.id)===Number(document.getElementById('detailContent').dataset.productId))||{}).game||'')+'</div>';}console.error('Foto utama gagal dimuat:',img.currentSrc||img.src)}
+function handleDetailThumbError(img){const button=img.closest('.detail-thumb');if(button)button.remove();const strip=document.getElementById('detailThumbs');if(strip&&strip.querySelectorAll('.detail-thumb').length<=1)strip.remove()}
+function isValidListingPhoto(value){if(!value)return false;try{const u=new URL(value,location.href);if(!['https:','http:'].includes(u.protocol))return false;return !(u.hostname===location.hostname&&(u.pathname==='/'||u.pathname==='/index.html'))}catch{return false}}function currentDetailImages(){const p=items.find(x=>Number(x.id)===Number(document.getElementById('detailContent').dataset.productId));return p?[p.image,...(p.gallery||[])].map(safeImageUrl).filter(isValidListingPhoto):[]}function setDetailImage(i){const imgs=currentDetailImages();if(!imgs[i])return;const hero=document.getElementById('detailHero');if(hero)hero.src=imgs[i];document.querySelectorAll('.detail-thumb').forEach((b,n)=>b.classList.toggle('active',n===i))}let previewImageIndex=0;let previewZoom=1,previewPanX=0,previewPanY=0,previewPointers=new Map(),previewStartDistance=0,previewStartZoom=1,previewStartX=0,previewStartY=0,previewLastTap=0;
+function applyPreviewTransform(){const img=document.getElementById('imagePreviewFull');if(img)img.style.transform='translate('+previewPanX+'px,'+previewPanY+'px) scale('+previewZoom+')'}
+function resetPreviewZoom(){previewZoom=1;previewPanX=0;previewPanY=0;applyPreviewTransform()}
+function previewPointerDown(e){e.preventDefault();e.currentTarget.setPointerCapture?.(e.pointerId);previewPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(previewPointers.size===1){previewStartX=e.clientX-previewPanX;previewStartY=e.clientY-previewPanY;const now=Date.now();if(now-previewLastTap<320){previewZoom=previewZoom>1.05?1:2.5;previewPanX=0;previewPanY=0;applyPreviewTransform()}previewLastTap=now}else if(previewPointers.size===2){const a=[...previewPointers.values()];previewStartDistance=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);previewStartZoom=previewZoom}}
+function previewPointerMove(e){if(!previewPointers.has(e.pointerId))return;previewPointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(previewPointers.size>=2){const a=[...previewPointers.values()],d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(previewStartDistance)previewZoom=Math.max(1,Math.min(5,previewStartZoom*d/previewStartDistance));}else if(previewZoom>1){previewPanX=e.clientX-previewStartX;previewPanY=e.clientY-previewStartY}applyPreviewTransform()}
+function previewPointerUp(e){previewPointers.delete(e.pointerId);if(previewPointers.size<2)previewStartDistance=0;if(previewZoom<=1.01)resetPreviewZoom()}
+function openImagePreview(i){const imgs=currentDetailImages();if(!imgs.length)return;previewImageIndex=Math.max(0,Math.min(i,imgs.length-1));resetPreviewZoom();document.getElementById('imagePreviewFull').src=imgs[previewImageIndex];document.getElementById('imagePreviewModal').classList.add('show');document.body.style.overflow='hidden';updateImagePreviewControls()}
+function closeImagePreview(){document.getElementById('imagePreviewModal').classList.remove('show');resetPreviewZoom();previewPointers.clear();document.body.style.overflow='hidden'}
+function moveImagePreview(step){const imgs=currentDetailImages();if(!imgs.length)return;previewImageIndex=(previewImageIndex+step+imgs.length)%imgs.length;resetPreviewZoom();document.getElementById('imagePreviewFull').src=imgs[previewImageIndex];setDetailImage(previewImageIndex);updateImagePreviewControls()}function updateImagePreviewControls(){const n=currentDetailImages().length,hasSlides=n>1,prev=document.getElementById('imagePreviewPrev'),next=document.getElementById('imagePreviewNext'),count=document.getElementById('imagePreviewCount');prev.hidden=!hasSlides;next.hidden=!hasSlides;count.hidden=!hasSlides;count.textContent=hasSlides?(previewImageIndex+1)+' / '+n:''}
+function gameLogo(game){return esc(String(game||'').toUpperCase())}
+function updateGameStockCounts(){const count=game=>items.filter(p=>p.game===game&&p.stock==='Tersedia').length;const values=[['stockMl','Mobile Legends'],['stockPubg','PUBG Mobile'],['stockFf','Free Fire']];for(const[id,game]of values){const el=document.getElementById(id);if(el)el.textContent='Stock Ready: '+count(game)+' akun';}}
+function render(){updateGameStockCounts();let q=document.getElementById('search').value.toLowerCase(),sort=document.getElementById('sort').value;let a=items.filter(p=>(activeGame==='Semua'||(activeGame==='Lainnya'?!['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game):p.game===activeGame))&&[p.name,p.code,p.game,p.desc].join(' ').toLowerCase().includes(q));if(sort==='code')a.sort((x,y)=>String(x.code||'').localeCompare(String(y.code||''),undefined,{numeric:true,sensitivity:'base'}));if(sort==='low')a.sort((x,y)=>x.price-y.price);if(sort==='high')a.sort((x,y)=>y.price-x.price);document.getElementById('resultCount').textContent=a.length+' akun';document.getElementById('countStat').textContent=items.length;document.getElementById('products').innerHTML=a.length?a.map(p=>`<article class="product"><div class="thumb ${gameClass(p.game)}">${safeImageUrl(p.image)?`<img src="${esc(safeImageUrl(p.image))}" alt="Foto ${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:`<span class="gameicon">${p.icon||iconFor(p.game)}</span>`}<span class="stock">${p.stock.toUpperCase()}</span></div><div class="prod"><div class="game game-brand">${gameLogo(p.game)}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc||'Detail akun dapat ditanyakan kepada admin.')}</div><div class="priceRow"><span class="price">${rupiah(p.price)}</span><span class="code">${esc(p.code)}</span></div><button class="buy detail-buy" type="button" onclick="openProductDetail(${Number(p.id)})">LIHAT DETAIL AKUN ↗</button>${xeravionAdminVerified?`<button class="buy admin-share-buy" type="button" onclick="shareListing(${Number(p.id)})">↗ BAGIKAN LISTING</button>`:``}${p.stock==='Tersedia'?`<a class="buy wa-buy" href="${esc(waLink(p))}" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>`:`<button class="buy wa-buy" type="button" disabled>${esc(p.stock.toUpperCase())}</button>`}</div></article>`).join(''):'<div class="empty">Belum ada akun yang cocok. Coba kata kunci atau kategori lain.</div>';renderAdmin()}
+function gameKeyToName(key){return key==='ml'?'Mobile Legends':key==='pubg'?'PUBG Mobile':key==='ff'?'Free Fire':''}
+function applyStoreRoute(){const params=new URLSearchParams(location.search),key=params.get('game')||'',game=gameKeyToName(key),hub=document.getElementById('gameCategoryHub'),head=document.querySelector('.catalog>.sectionhead'),tools=document.querySelector('.catalog .tools'),chips=document.querySelector('.catalog .chips'),grid=document.getElementById('products'),note=grid?.nextElementSibling,hero=document.querySelector('.catalog .hero'),stats=document.querySelector('.catalog .stats'),topup=document.getElementById('topup');const isGame=!!game;document.body.classList.toggle('xeravion-home-page',!isGame);document.body.classList.toggle('xeravion-game-page',isGame);if(hub)hub.style.display=isGame?'none':'block';[head,tools,chips,grid,note].forEach(el=>{if(el)el.style.display=isGame?'':'none'});if(hero)hero.style.display='';if(stats)stats.style.display='';if(topup)topup.style.display='';activeGame=isGame?game:'Semua';const old=document.getElementById('gameListingsHeading');if(old)old.remove();if(isGame){const h=document.createElement('div');h.id='gameListingsHeading';h.innerHTML='<div><div class="eyebrow">KOLEKSI XERAVION</div><h2>'+game+'</h2></div><a class="game-back-link" href="./">← Semua game</a>';head?.before(h);const label=document.getElementById('resultCount');if(label)label.textContent='Koleksi '+game;}const chipsWrap=document.querySelector('.catalog .chips');if(chipsWrap)chipsWrap.style.display='none';render();}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function safeImageUrl(value){try{const u=new URL(String(value||''),location.href);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}function setGame(g,el){activeGame=g;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render()}
+function renderSelectedImagePreviews(){
+ const box=document.getElementById('imagePreviewList');if(!box)return;box.innerHTML='';
+ selectedImageFiles.forEach((f,i)=>{
+  const card=document.createElement('div');card.className='upload-preview-item';
+  const img=document.createElement('img'),objectUrl=URL.createObjectURL(f);img.src=objectUrl;img.onload=()=>URL.revokeObjectURL(objectUrl);
+  const label=document.createElement('span');label.textContent=i===0?'Foto utama':'Foto '+(i+1);
+  const remove=document.createElement('button');remove.type='button';remove.className='upload-preview-remove';remove.textContent='×';remove.title='Hapus foto ini';remove.setAttribute('aria-label','Hapus '+label.textContent);remove.onclick=()=>removeSelectedImage(i);
+  card.append(img,label,remove);box.append(card);
+ });
+ selectedImageFile=selectedImageFiles[0]||null;
+}
+function syncSelectedImageInput(){
+ const input=document.getElementById('newImage');if(!input)return;
+ try{const transfer=new DataTransfer();selectedImageFiles.forEach(file=>transfer.items.add(file));input.files=transfer.files}catch(error){console.warn('Tidak dapat menyinkronkan daftar file pada browser ini:',error)}
+}
+function removeSelectedImage(index){
+ if(index<0||index>=selectedImageFiles.length)return;
+ selectedImageFiles.splice(index,1);syncSelectedImageInput();renderSelectedImagePreviews();
+}
+function previewFile(e){
+ const files=Array.from(e.target.files||[]);
+ if(files.length>8){alert('Pilih maksimal 8 foto sekaligus.');e.target.value='';return}
+ for(const f of files){if(f.size>5*1024*1024){alert('Setiap foto maksimal 5 MB: '+f.name);e.target.value='';return}if(!['image/jpeg','image/png','image/webp'].includes(f.type)){alert('Format foto hanya JPG, PNG, atau WEBP: '+f.name);e.target.value='';return}}
+ selectedImageFiles=files;syncSelectedImageInput();renderSelectedImagePreviews();
+ if(files.length)document.getElementById('newImageUrl').value='';
+}
+
+async function createXeravionWatermark(file){
+ const objectUrl=URL.createObjectURL(file);
+ try{
+  const source=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Foto asli tidak dapat dibaca.'));img.src=objectUrl});
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  canvas.width=source.naturalWidth||source.width;canvas.height=source.naturalHeight||source.height;
+  if(!canvas.width||!canvas.height)throw new Error('Dimensi foto tidak valid.');
+  ctx.drawImage(source,0,0,canvas.width,canvas.height);
+  const markUrl=new URL('/assets/file_000000002ce08211aeab8ae7fba25432.png?v=1',location.origin).href;
+  const mark=await new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=()=>reject(new Error('Watermark XERAVION gagal dimuat.'));img.src=markUrl});
+  const ratio=Math.min(canvas.width*.72/mark.naturalWidth,canvas.height*.32/mark.naturalHeight),w=mark.naturalWidth*ratio,h=mark.naturalHeight*ratio;
+  ctx.save();ctx.globalAlpha=.25;ctx.drawImage(mark,(canvas.width-w)/2,(canvas.height-h)/2,w,h);ctx.restore();
+  const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('Gagal membuat foto watermark.')),'image/webp',.94));
+  if(!blob||blob.size<1000)throw new Error('Hasil watermark kosong atau tidak valid.');
+  return new File([blob],'xeravion-'+Date.now()+'.webp',{type:'image/webp',lastModified:Date.now()});
+ }finally{URL.revokeObjectURL(objectUrl)}
+}
+async function saveProduct(){
+ const wasEditing=Boolean(editingId),name=document.getElementById('newName').value.trim(),game=document.getElementById('newGame').value,price=Number(document.getElementById('newPrice').value),code=document.getElementById('newCode').value.trim().toUpperCase(),desc=document.getElementById('newDesc').value.trim(),stock=document.getElementById('newStock').value,url=document.getElementById('newImageUrl').value.trim();
+ if(!name||!price||price<1||!code){alert('Nama, harga, dan kode listing wajib diisi.');return}
+ const old=items.find(x=>String(x.id)===String(editingId));let image=url||old?.image||'',uploadedUrls=[];
+ const saveButton=document.getElementById('saveBtn'),originalLabel=saveButton.textContent;saveButton.disabled=true;
+ try{
+  for(let i=0;i<selectedImageFiles.length;i++){
+   const file=selectedImageFiles[i];saveButton.textContent='Membuat watermark '+(i+1)+'/'+selectedImageFiles.length+'…';
+   const watermarked=await createXeravionWatermark(file);
+   if(!watermarked||watermarked.type!=='image/webp'||watermarked.size<1000)throw new Error('Hasil watermark foto '+file.name+' tidak valid.');
+   const path='accounts/'+Date.now()+'-'+Math.random().toString(36).slice(2)+'.webp';
+   saveButton.textContent='Mengunggah foto '+(i+1)+'/'+selectedImageFiles.length+'…';
+   const{data:uploaded,error:uploadError}=await supabaseClient.storage.from(IMAGE_BUCKET).upload(path,watermarked,{cacheControl:'0',upsert:false,contentType:'image/webp'});
+   if(uploadError)throw new Error('Gagal mengunggah '+file.name+': '+uploadError.message);
+   const{data:publicData}=supabaseClient.storage.from(IMAGE_BUCKET).getPublicUrl(uploaded.path);
+   const publicUrl=publicData?.publicUrl;
+   if(!publicUrl)throw new Error('URL foto '+file.name+' tidak berhasil dibuat.');
+   const check=await fetch(publicUrl,{method:'HEAD',cache:'no-store'});
+   if(!check.ok)throw new Error('Foto berhasil diunggah tetapi belum bisa dibaca (HTTP '+check.status+'). Listing tidak disimpan agar tidak menampilkan foto kosong.');
+   uploadedUrls.push(publicUrl+(publicUrl.includes('?')?'&':'?')+'v='+Date.now());
+  }
+  if(uploadedUrls.length)image=uploadedUrls[0];
+  if(!image)throw new Error('Belum ada foto utama. Pilih minimal satu foto atau masukkan URL gambar.');
+  const typedGallery=document.getElementById('newGallery').value.split(/\r?\n/).map(x=>safeImageUrl(x.trim())).filter(Boolean);
+  const gallery=[...(old?.gallery||[]).filter(u=>!/^https?:\/\/xeravion\.my\.id\/?(?:\?.*)?$/i.test(u)),...uploadedUrls.slice(1),...typedGallery].filter((v,i,a)=>a.indexOf(v)===i);
+  const payload={code,name,game,price,description:desc,image_url:image,status:stock,gallery_images:gallery};
+  saveButton.textContent='Menyimpan listing…';
+  const result=wasEditing?await supabaseClient.from('products').update(payload).eq('id',editingId):await supabaseClient.from('products').insert(payload);
+  if(result.error)throw new Error('Gagal menyimpan listing: '+result.error.message);
+  await loadProducts();resetForm();alert(wasEditing?'Listing berhasil diperbarui. Foto sudah diverifikasi dan diberi watermark.':'Listing berhasil ditambahkan. Foto sudah diverifikasi dan diberi watermark.');
+ }catch(error){console.error('XERAVION saveProduct:',error);alert(error?.message||'Proses unggah gagal. Data listing tidak diubah jika verifikasi foto gagal.')}
+ finally{saveButton.disabled=false;saveButton.textContent=editingId?'Simpan perubahan':originalLabel}
+}
+function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;adminGameFilter=p.game;selectedImageFile=null;selectedImageFiles=[];document.getElementById('newName').value=p.name;document.getElementById('newGame').value=p.game;renderAdmin();document.getElementById('newPrice').value=p.price;document.getElementById('newCode').value=p.code;document.getElementById('newDesc').value=p.desc;document.getElementById('newGallery').value=(p.gallery||[]).join('\n');document.getElementById('newStock').value=p.stock;pendingImage='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}if(p.image){im.src=p.image;im.style.display='block'}else im.style.display='none';document.getElementById('newImage').value='';document.getElementById('imagePreviewList').innerHTML='';document.getElementById('newImageUrl').value='';document.getElementById('formTitle').textContent='✎ Edit listing '+p.code;document.getElementById('saveBtn').textContent='Simpan perubahan';showAdminTab('form');document.getElementById('adminTab-form').scrollIntoView({behavior:'smooth',block:'start'})}
+function resetForm(){editingId=null;pendingImage='';selectedImageFile=null;selectedImageFiles=[];['newName','newPrice','newCode','newDesc','newGallery','newImageUrl','newImage'].forEach(id=>document.getElementById(id).value='');document.getElementById('newGame').selectedIndex=0;document.getElementById('newStock').value='Tersedia';document.getElementById('imagePreviewList').innerHTML='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}im.removeAttribute('src');im.style.display='none';document.getElementById('formTitle').textContent='＋ Tambah akun ke etalase';document.getElementById('saveBtn').textContent='Simpan listing'}
+async function cleanupMobileLegendsPhotos(){
+ const button=document.getElementById('cleanupMlPhotosBtn'),status=document.getElementById('cleanupMlPhotosStatus');
+ const say=message=>{if(status)status.textContent=message;console.log('[XERAVION MLBB cleanup]',message)};
+ if(!button)return;
+ if(button.disabled)return;
+ button.disabled=true;
+ try{
+  say('Memeriksa sesi admin…');
+  const{data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError)throw sessionError;
+  if(!session)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
+  const{data:allowed,error:adminError}=await supabaseClient.rpc('is_admin');
+  if(adminError)throw new Error('Verifikasi admin gagal: '+adminError.message);
+  if(!allowed)throw new Error('Akun ini tidak memiliki hak admin XERAVION.');
+  say('Memuat daftar foto Mobile Legends…');
+  const{data:rows,error:readError}=await supabaseClient.from('products').select('id,code,game,image_url,gallery_images');
+  if(readError)throw readError;
+  const mlRows=(rows||[]).filter(p=>String(p.game||'').trim().toLowerCase()==='mobile legends');
+  if(!mlRows.length){say('Tidak ada listing Mobile Legends.');alert('Tidak ditemukan listing Mobile Legends.');return}
+  const urls=mlRows.flatMap(p=>[p.image_url,...(Array.isArray(p.gallery_images)?p.gallery_images:[])].filter(Boolean));
+  const bucketPrefix='/storage/v1/object/public/'+IMAGE_BUCKET+'/';
+  const paths=[...new Set(urls.map(value=>{
+   try{const u=new URL(value,location.origin),at=u.pathname.indexOf(bucketPrefix);return at<0?null:decodeURIComponent(u.pathname.slice(at+bucketPrefix.length).split('?')[0])}catch(_){return null}
+  }).filter(Boolean))];
+  const external=urls.length-paths.length;
+  const confirmText='Akan menghapus '+paths.length+' file foto MLBB yang tersimpan di bucket '+IMAGE_BUCKET+' dan mengosongkan foto utama/galeri pada '+mlRows.length+' listing Mobile Legends. Data akun, harga, stok, serta game lain TIDAK dihapus.'+(external?'\n'+external+' URL foto eksternal/tidak dikenali hanya akan dilepas dari listing, bukan dihapus dari server asal.':'')+'\n\nLanjutkan?';
+  if(!confirm(confirmText)){say('Dibatalkan. Tidak ada perubahan.');return}
+  let removed=0,removeErrors=[];
+  for(let i=0;i<paths.length;i+=1000){
+   say('Menghapus file foto MLBB '+Math.min(i+1000,paths.length)+' dari '+paths.length+'…');
+   const{data,error}=await supabaseClient.storage.from(IMAGE_BUCKET).remove(paths.slice(i,i+1000));
+   if(error)removeErrors.push(error.message);else removed+=(data||[]).length;
+  }
+  say('Membersihkan referensi foto dari '+mlRows.length+' listing…');
+  let cleared=0,dbErrors=[];
+  for(const p of mlRows){
+   const{error}=await supabaseClient.from('products').update({image_url:null,gallery_images:[]}).eq('id',p.id);
+   if(error)dbErrors.push(p.code+': '+error.message);else cleared++;
+  }
+  await loadProducts();
+  const summary='Selesai. '+removed+' file foto MLBB terhapus dari Storage; foto dikosongkan pada '+cleared+'/'+mlRows.length+' listing.';
+  say(summary+(removeErrors.length?' Gagal hapus file: '+removeErrors.join('; '):'')+(dbErrors.length?' Gagal update data: '+dbErrors.join('; '):''));
+  alert(summary+(removeErrors.length?'\nSebagian file gagal dihapus: '+removeErrors.join('; '):'')+(dbErrors.length?'\nSebagian listing gagal dibersihkan: '+dbErrors.join('; '):'')+'\nSekarang unggah foto MLBB baru. Foto baru MLBB tidak diberi watermark.');
+ }catch(error){
+  const message=error?.message||String(error);say('Gagal: '+message);console.error('XERAVION MLBB cleanup:',error);alert('Pembersihan foto MLBB gagal: '+message);
+ }finally{button.disabled=false}
+}
+async function changeStock(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;let opts=['Tersedia','Pending','Terjual'],n=opts[(opts.indexOf(p.stock)+1)%opts.length];const{error}=await supabaseClient.from('products').update({status:n}).eq('id',id);if(error){alert('Gagal mengubah status: '+error.message);return}await loadProducts()}
+function askDelete(id){deleteId=id;document.getElementById('confirmModal').classList.add('show');document.getElementById('confirmDelete').onclick=async()=>{const{error}=await supabaseClient.from('products').delete().eq('id',deleteId);if(error){alert('Gagal menghapus: '+error.message);return}closeModal();await loadProducts()}}function closeModal(){document.getElementById('confirmModal').classList.remove('show');deleteId=null}
+function setAdminGame(game){adminGameFilter=game;renderAdmin()}
+function renderAdmin(){let q=(document.getElementById('adminSearch')?.value||'').toLowerCase(),games=['Mobile Legends','PUBG Mobile','Free Fire','Lainnya'],allGames=items.filter(p=>!games.slice(0,3).includes(p.game)).map(p=>p.game),tabs=['Semua',...games.slice(0,3),...([...new Set(allGames)].length?['Lainnya']:[])],countFor=g=>g==='Semua'?items.length:g==='Lainnya'?items.filter(p=>!games.slice(0,3).includes(p.game)).length:items.filter(p=>p.game===g).length;document.getElementById('totalAdmin').textContent=items.length;document.getElementById('availableAdmin').textContent=items.filter(x=>x.stock==='Tersedia').length;document.getElementById('soldAdmin').textContent=items.filter(x=>x.stock!=='Tersedia').length;const tabsEl=document.getElementById('adminGameTabs');if(tabsEl){tabsEl.innerHTML=tabs.map(g=>'<button type="button" role="tab" aria-selected="'+(adminGameFilter===g)+'" class="admin-game-tab '+(adminGameFilter===g?'active':'')+'" onclick="setAdminGame(\''+esc(g)+'\')">'+esc(g)+' <span>'+countFor(g)+'</span></button>').join('');if(!tabs.includes(adminGameFilter))adminGameFilter='Mobile Legends';}let list=items.filter(p=>(adminGameFilter==='Semua'||(adminGameFilter==='Lainnya'?!games.slice(0,3).includes(p.game):p.game===adminGameFilter))&&[p.code,p.name,p.game].join(' ').toLowerCase().includes(q));const heading=document.getElementById('adminGameHeading'),counter=document.getElementById('adminGameCount');if(heading)heading.textContent=adminGameFilter.toUpperCase();if(counter)counter.textContent=list.length+' listing';document.getElementById('adminRows').innerHTML=list.length?list.map(p=>`<tr><td>${esc(p.code)}</td><td><strong>${esc(p.name)}</strong><div class="hint">${esc(p.game)}</div></td><td>${rupiah(p.price)}</td><td><span class="status">${esc(p.stock)}</span></td><td><button class="smallbtn" onclick="editItem('${esc(p.id)}')">Edit</button><button class="smallbtn" onclick="changeStock('${esc(p.id)}')">Status</button><button class="smallbtn" onclick="askDelete('${esc(p.id)}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5"><div class="admin-game-empty">Belum ada listing '+esc(adminGameFilter)+'.<br>Tambahkan akun melalui formulir di atas dan pilih game yang sesuai.</div></td></tr>'}
+async function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){document.getElementById('loginModal').classList.add('show');return}const{data:allowed,error}=await supabaseClient.rpc('is_admin');if(error||!allowed){xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();alert('Akun ini tidak terdaftar sebagai admin XERAVION.');return}xeravionAdminVerified=true;render();showAdminPanel()}catch(e){console.error('XERAVION openAdmin error:',e);alert('Dashboard gagal dibuka: '+(e?.message||String(e)))}}async function loginAdmin(){let email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,msg=document.getElementById('loginError');msg.textContent='';if(!navigator.onLine){msg.textContent='Perangkat sedang offline. Periksa koneksi internet lalu coba lagi.';return}if(!email||!password){msg.textContent='Email dan password wajib diisi.';return}try{msg.textContent='Menghubungi server login...';const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('XERAVION Supabase login response:',error);msg.textContent='Login ditolak Supabase ('+(error.status||'tanpa status')+'): '+error.message;return}const{data:allowed,error:checkError}=await supabaseClient.rpc('is_admin');if(checkError||!allowed){console.error('XERAVION admin check:',checkError);xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();msg.textContent=checkError?'Login berhasil, tetapi pemeriksaan admin gagal: '+checkError.message:'Akun ini bukan admin XERAVION.';return}xeravionAdminVerified=true;localStorage.setItem(XERAVION_ADMIN_ACTIVITY_KEY,String(Date.now()));render();closeLogin();document.getElementById('adminPassword').value='';showAdminPanel();if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);xeravionAdminIdleTimer=setTimeout(()=>logoutXeravionAdminIdle(),XERAVION_ADMIN_IDLE_MS)}catch(e){console.error('XERAVION login network error:',e);msg.textContent='Koneksi login gagal: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'. Periksa koneksi atau pemblokiran browser.'}}const XERAVION_ADMIN_ROUTE='?admin-portal=xr-admin-7f3c9a';
+function isXeravionAdminRoute(){return new URLSearchParams(location.search).get('admin-portal')==='xr-admin-7f3c9a'}
+const XERAVION_ADMIN_IDLE_MS=600000;
+const XERAVION_ADMIN_ACTIVITY_KEY='xeravion-admin-last-activity-v1';
+let xeravionAdminIdleTimer=null;
+function resetXeravionAdminIdle(){if(!xeravionAdminVerified||!isXeravionAdminRoute())return;localStorage.setItem(XERAVION_ADMIN_ACTIVITY_KEY,String(Date.now()));if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);xeravionAdminIdleTimer=setTimeout(()=>logoutXeravionAdminIdle(),XERAVION_ADMIN_IDLE_MS)}
+async function logoutXeravionAdminIdle(){if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);localStorage.removeItem(XERAVION_ADMIN_ACTIVITY_KEY);xeravionAdminVerified=false;await supabaseClient.auth.signOut();document.getElementById('admin')?.classList.remove('active');document.getElementById('loginModal')?.classList.add('show');const msg=document.getElementById('loginError');if(msg)msg.textContent='Sesi admin berakhir setelah 10 menit tanpa aktivitas. Silakan login kembali.'}
+async function restoreXeravionAdminSession(){if(!isXeravionAdminRoute())return;try{const{data:{session},error}=await supabaseClient.auth.getSession();if(error||!session)return;const last=Number(localStorage.getItem(XERAVION_ADMIN_ACTIVITY_KEY)||0);if(!last||Date.now()-last>=XERAVION_ADMIN_IDLE_MS){await logoutXeravionAdminIdle();return}const{data:allowed,error:adminError}=await supabaseClient.rpc('is_admin');if(adminError||!allowed){await supabaseClient.auth.signOut();localStorage.removeItem(XERAVION_ADMIN_ACTIVITY_KEY);return}xeravionAdminVerified=true;document.getElementById('loginModal').classList.remove('show');render();showAdminPanel();if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);xeravionAdminIdleTimer=setTimeout(()=>logoutXeravionAdminIdle(),Math.max(0,XERAVION_ADMIN_IDLE_MS-(Date.now()-last)))}catch(e){console.error('Restore admin session failed:',e)}}
+function initXeravionAdminRoute(){if(!isXeravionAdminRoute())return;document.body.classList.add('xeravion-admin-route');document.querySelector('.top')?.classList.add('hidden');document.querySelector('footer')?.classList.add('hidden');document.getElementById('loginModal').classList.add('show');document.getElementById('loginModal').querySelector('.modal').insertAdjacentHTML('afterbegin','<div class="eyebrow">PRIVATE ADMIN ACCESS</div><p class="hint">Area khusus pengelola XERAVION.</p>');}
+function togglePasswordVisibility(inputId,button){const input=document.getElementById(inputId);if(!input||!button)return;const show=input.type==='password';input.type=show?'text':'password';button.textContent=show?'Sembunyi':'Lihat';button.setAttribute('aria-label',show?'Sembunyikan kata sandi':'Tampilkan kata sandi');button.setAttribute('aria-pressed',String(show));}
+function closeLogin(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent=''}function showAdminPanel(){sessionStorage.setItem('xeravion-admin-view','1');document.querySelector('.catalog').classList.add('hidden');document.getElementById('how').style.display='none';document.getElementById('creditPoints').style.display='none';document.getElementById('payment').style.display='none';document.getElementById('faq').style.display='none';document.getElementById('about').style.display='none';document.getElementById('admin').classList.add('active');window.scrollTo(0,0);loadProducts();loadXeravionOrders()}async function signOutAdmin(){if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);localStorage.removeItem(XERAVION_ADMIN_ACTIVITY_KEY);await supabaseClient.auth.signOut();xeravionAdminVerified=false;render();showCatalog();alert('Kamu sudah keluar dari Dashboard admin.')}function showCatalog(){sessionStorage.removeItem('xeravion-admin-view');document.querySelector('.catalog').classList.remove('hidden');document.getElementById('how').style.display='block';document.getElementById('creditPoints').style.display='block';document.getElementById('payment').style.display='block';document.getElementById('faq').style.display='block';document.getElementById('about').style.display='block';document.getElementById('admin').classList.remove('active');window.scrollTo(0,0)}
+
+const XERAVION_MAIL_URL='https://mail.xeravion.my.id/panel';
+async function connectXeravionMail(){
+ const frame=document.getElementById('xeravionMailFrame');
+ if(!frame||!xeravionAdminVerified)return;
+ try{
+  const {data:{session},error}=await supabaseClient.auth.getSession();
+  if(error||!session?.access_token)throw new Error(error?.message||'Sesi admin tidak ditemukan. Silakan login ulang.');
+  const target=new URL(XERAVION_MAIL_URL);
+  const send=()=>{
+   try{frame.contentWindow.postMessage({type:'XERAVION_ADMIN_SESSION',accessToken:session.access_token},target.origin)}
+   catch(e){console.error('XERAVION Mail connection:',e)}
+  };
+  if(frame.dataset.loaded==='1')send();
+  else{
+   frame.addEventListener('load',()=>{frame.dataset.loaded='1';send()},{once:true});
+   if(frame.src==='about:blank'||!frame.src.startsWith(target.origin+'/panel'))frame.src=XERAVION_MAIL_URL+'?embed=1';
+  }
+ }catch(e){console.error('XERAVION Mail connection:',e)}
+}
+let selectedCreditMember=null;
+function showAdminTab(tab){
+ const allowed=['overview','form','listings','orders','credits','mail'];
+ if(!allowed.includes(tab))tab='overview';
+ document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
+ document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
+ if(tab==='orders')loadXeravionOrders();
+ if(tab==='listings')renderAdmin();
+ if(tab==='form')populateOrderProducts();
+ if(tab==='mail')connectXeravionMail();
+}
+async function populateOrderProducts(){
+ const sel=document.getElementById('orderProduct');if(!sel)return;
+ const current=sel.value;
+ sel.innerHTML='<option value="">Pilih akun dari katalog…</option>'+items.filter(p=>p.stock==='Tersedia').map(p=>'<option value="'+p.id+'">'+esc(p.code)+' · '+esc(p.name)+' · '+rupiah(p.price)+'</option>').join('');
+ if(current&&[...sel.options].some(o=>o.value===current))sel.value=current;
+}
+async function createXeravionOrder(){
+ const msg=document.getElementById('orderAdminMessage'),productId=Number(document.getElementById('orderProduct').value),buyerName=document.getElementById('orderBuyerName').value.trim(),buyerEmail=document.getElementById('orderBuyerEmail').value.trim(),buyerWhatsapp=document.getElementById('orderBuyerWhatsapp').value.trim(),paymentMethod=document.getElementById('orderPaymentMethod').value;
+ const product=items.find(p=>Number(p.id)===productId);
+ if(!product){msg.textContent='Pilih akun yang masih tersedia.';return}
+ if(!buyerName||!buyerEmail||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)){msg.textContent='Isi nama dan alamat email pembeli yang valid.';return}
+ const selectedText=document.getElementById('creditSelectedMember')?.value||'';
+ const memberEmail=selectedText.split(' · ')[0].trim();
+ const linkedUser=selectedCreditMember&&memberEmail.toLowerCase()===buyerEmail.toLowerCase()?selectedCreditMember:null;
+ if(selectedCreditMember&&!linkedUser){msg.textContent='Email pembeli berbeda dari member terpilih. Pesanan tetap dibuat sebagai pesanan tamu; lepas pilihan member jika memang bukan pembeli tersebut.'}
+ msg.textContent='Menyimpan pesanan…';
+ try{
+  const payload={user_id:linkedUser,product_id:product.id,product_code:product.code,product_name:product.name,game:product.game,buyer_name:buyerName,buyer_email:buyerEmail,buyer_whatsapp:buyerWhatsapp||null,item_price:product.price,points_used:0,points_discount:0,amount_due:product.price,payment_method:paymentMethod};
+  const{data,error}=await supabaseClient.from('orders').insert(payload).select('id,invoice_number').single();
+  if(error)throw error;
+  msg.textContent='Pesanan dibuat: '+data.invoice_number+'. Status masih menunggu pembayaran.';
+  document.getElementById('orderBuyerName').value='';document.getElementById('orderBuyerEmail').value='';document.getElementById('orderBuyerWhatsapp').value='';
+  await loadXeravionOrders();
+ }catch(e){msg.textContent='Gagal membuat pesanan: '+(e.message||e)}
+}
+async function loadXeravionOrders(){
+ const body=document.getElementById('xeravionOrderRows');if(!body)return;body.innerHTML='<tr><td colspan="6">Memuat pesanan…</td></tr>';
+ try{
+  const{data,error}=await supabaseClient.from('orders').select('*').order('created_at',{ascending:false}).limit(50);if(error)throw error;
+  body.innerHTML=data?.length?data.map(o=>{
+   const status=(o.payment_status==='paid'?'Lunas':'Belum bayar')+' / '+(o.order_status==='completed'?'Selesai':o.order_status==='cancelled'?'Dibatalkan':o.order_status==='processing'?'Diproses':'Menunggu');
+   const emailState=o.invoice_send_status==='sent'?'<span style="color:#56d69a;font-weight:700">Terkirim ✓</span><div class="hint">'+(o.invoice_sent_at?new Date(o.invoice_sent_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'}):'')+'</div>':o.invoice_send_status==='failed'?'<span style="color:#f0a36b">Gagal</span>':'<span class="hint">Belum dikirim</span>';
+   const invoiceAction=o.invoice_send_status==='sent'?'<button class="smallbtn" type="button" disabled>Invoice terkirim ✓</button>':'<button class="smallbtn" onclick="sendXeravionInvoice(\''+o.id+'\')">'+(o.invoice_send_status==='failed'?'Coba kirim lagi':'Kirim invoice')+'</button>';
+   const actions=o.order_status==='cancelled'?'<span class="hint">Dibatalkan</span>':o.order_status==='completed'?invoiceAction:'<button class="smallbtn" onclick="completeXeravionOrder(\''+o.id+'\')">Lunas & selesai</button><button class="smallbtn" onclick="cancelXeravionOrder(\''+o.id+'\')">Batalkan</button>';
+   return '<tr><td><strong>'+esc(o.invoice_number)+'</strong><div class="hint">'+new Date(o.created_at).toLocaleDateString('id-ID')+'</div></td><td>'+esc(o.buyer_name)+'<div class="hint">'+esc(o.buyer_email)+'</div></td><td>'+esc(o.product_code)+' · '+esc(o.product_name)+'<div class="hint">'+esc(o.game)+' · '+esc(o.payment_method)+'</div></td><td>'+rupiah(o.amount_due)+'</td><td>'+esc(status)+'<div class="hint">Email: '+esc(o.invoice_send_status)+'</div></td><td>'+actions+'</td></tr>';
+  }).join(''):'<tr><td colspan="6">Belum ada pesanan.</td></tr>';
+ }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat: '+esc(e.message||e)+'</td></tr>'}
+}
+async function completeXeravionOrder(id){
+ const msg=document.getElementById('orderAdminMessage');if(!confirm('Pastikan dana sudah benar-benar diterima dan akun sudah diserahkan. Konfirmasi pembayaran dan penyelesaian pesanan?'))return;
+ try{
+  const{data:order,error:readError}=await supabaseClient.from('orders').select('*').eq('id',id).single();if(readError)throw readError;
+  if(order.order_status==='cancelled')throw new Error('Pesanan yang dibatalkan tidak dapat diselesaikan.');
+  if(order.payment_status!=='paid'||order.order_status!=='completed'){
+   const{error:updateError}=await supabaseClient.from('orders').update({payment_status:'paid',order_status:'completed',updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;
+  }
+  let bonusMessage='';
+  if(order.user_id){
+   const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:Number(order.points_used||0)>0});
+   if(bonusError)bonusMessage=' Cashback belum terkonfirmasi; coba ulangi konfirmasi atau periksa panel Credit Points: '+bonusError.message;
+   else bonusMessage=' Cashback '+Number(bonus||0).toLocaleString('id-ID')+' XP dicatat (jika belum pernah diberikan).';
+  }
+  if(order.product_id){const{error:stockError}=await supabaseClient.from('products').update({status:'Terjual'}).eq('id',order.product_id);if(stockError)bonusMessage+=' Status stok perlu diperbarui manual: '+stockError.message;}
+  msg.textContent='Pesanan berstatus lunas dan selesai.'+bonusMessage+' Invoice siap dikirim.';
+  await loadProducts();await loadXeravionOrders();
+ }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
+}
+async function cancelXeravionOrder(id){
+ if(!confirm('Batalkan pesanan ini? Jika cashback sudah diberikan, sistem juga akan mencoba mengoreksinya.'))return;
+ const msg=document.getElementById('orderAdminMessage');
+ try{
+  const{data:o,error:r}=await supabaseClient.from('orders').select('invoice_number,user_id').eq('id',id).single();if(r)throw r;
+  const{error}=await supabaseClient.from('orders').update({order_status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;
+  let note='Pesanan dibatalkan.';
+  if(o.user_id){
+   const{data:reversed,error:reverseError}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:o.invoice_number,p_reason:'Pesanan XERAVION dibatalkan'});
+   if(!reverseError)note+=' Cashback '+Number(reversed||0).toLocaleString('id-ID')+' XP telah dikoreksi.';
+   else if(!String(reverseError.message||'').includes('tidak ditemukan'))note+=' Perhatian: koreksi cashback perlu diperiksa manual ('+reverseError.message+').';
+  }
+  msg.textContent=note;await loadXeravionOrders();
+ }catch(e){msg.textContent='Gagal membatalkan pesanan: '+(e.message||e)}
+}
+async function sendXeravionInvoice(id){
+ const msg=document.getElementById('orderAdminMessage');if(!confirm('Kirim invoice ke email pembeli?'))return;msg.textContent='Mengirim invoice…';
+ try{const{data,error}=await supabaseClient.functions.invoke('send-xeravion-invoice',{body:{order_id:id}});if(error)throw error;if(data?.error)throw new Error(data.error);msg.textContent='Invoice '+data.invoice_number+' berhasil dikirim. ID email: '+data.email_id;await loadXeravionOrders()}catch(e){msg.textContent='Gagal mengirim invoice: '+(e.message||e)}
+}
+
+async function searchCreditMembers(){const q=document.getElementById('creditMemberQuery').value.trim(),out=document.getElementById('creditMemberResults'),msg=document.getElementById('creditAdminMessage');out.textContent='Mencari member…';msg.textContent='';try{const{data,error}=await supabaseClient.rpc('credit_admin_search_members',{p_query:q});if(error)throw error;out.innerHTML=data?.length?data.map(m=>'<div class="history-row"><span><strong>'+esc(m.display_name||'Member XERAVION')+'</strong><small>'+esc(m.email||'Email tidak tersedia')+' · Saldo '+Number(m.balance).toLocaleString('id-ID')+' XP</small></span><button class="smallbtn" onclick="selectCreditMember(\''+m.user_id+'\',\''+String(m.email||'').replace(/'/g,"\\'")+'\')">Pilih</button></div>').join(''):'<p class="hint">Member tidak ditemukan. Pastikan akun sudah mendaftar dan email terverifikasi.</p>'}catch(e){out.textContent='Gagal mencari member: '+(e.message||e);}}
+function selectCreditMember(id,email){selectedCreditMember=id;document.getElementById('creditSelectedMember').value=email+' · '+id;document.getElementById('creditAdminMessage').textContent='Member dipilih. Masukkan referensi dan nilai transaksi.'}
+function clearCreditMember(){selectedCreditMember=null;document.getElementById('creditSelectedMember').value='';document.getElementById('creditAdminMessage').textContent='Pilihan member dilepas. Pesanan baru akan dibuat tanpa tautan akun member.'}
+async function completeCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditPurchaseRef').value.trim(),amount=Number(document.getElementById('creditPurchaseAmount').value),used=document.getElementById('creditUsedPoints').checked;if(!selectedCreditMember){msg.textContent='Pilih member terlebih dahulu.';return}if(!ref||!Number.isSafeInteger(amount)||amount<=0){msg.textContent='Isi referensi transaksi dan nilai transaksi yang valid.';return}if(!confirm('Konfirmasi transaksi '+ref+' selesai? Cashback 3% akan dicatat satu kali.'))return;try{const{data,error}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:selectedCreditMember,p_purchase_reference:ref,p_purchase_amount:amount,p_used_points:used});if(error)throw error;msg.textContent=used?'Transaksi selesai. Tidak ada cashback karena pesanan menggunakan poin.':'Berhasil! Cashback '+Number(data||0).toLocaleString('id-ID')+' XP telah diberikan dan berlaku 12 bulan.';await searchCreditMembers()}catch(e){msg.textContent='Gagal memproses: '+(e.message||e)}}
+async function reverseCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditReverseRef').value.trim(),reason=document.getElementById('creditReverseReason').value.trim();if(!ref){msg.textContent='Masukkan referensi transaksi.';return}if(!confirm('Batalkan cashback untuk transaksi '+ref+'? Tindakan ini mencatat pengurangan poin dan tidak dapat dibatalkan otomatis.'))return;try{const{data,error}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:ref,p_reason:reason||'Transaksi dibatalkan'});if(error)throw error;msg.textContent='Cashback dibatalkan. '+Number(data||0).toLocaleString('id-ID')+' XP telah dikoreksi dari saldo member.'}catch(e){msg.textContent='Gagal membatalkan cashback: '+(e.message||e)}}
+let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}document.addEventListener('DOMContentLoaded',()=>{initXeravionAdminRoute();if(isXeravionAdminRoute())restoreXeravionAdminSession();['click','keydown','pointerdown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetXeravionAdminIdle,{passive:true}));const slider=document.getElementById('gameSlider');if(slider&&!isXeravionAdminRoute()){slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
+
+let memberMode='login',memberBusy=false;
+function openMember(){document.getElementById('memberModal').classList.add('show');loadMemberSession()}
+function closeMember(){document.getElementById('memberModal').classList.remove('show')}
+function setMemberMode(mode){memberMode=mode;document.getElementById('memberLoginTab').classList.toggle('active',mode==='login');document.getElementById('memberSignupTab').classList.toggle('active',mode==='signup');document.getElementById('memberName').classList.toggle('hidden',mode!=='signup');document.getElementById('memberSubmit').textContent=mode==='signup'?'Buat akun':'Masuk';document.getElementById('memberAuthMessage').textContent=''}
+async function submitMemberAuth(){if(memberBusy)return;const email=document.getElementById('memberEmail').value.trim(),password=document.getElementById('memberPassword').value,name=document.getElementById('memberName').value.trim(),msg=document.getElementById('memberAuthMessage');if(!email||!email.includes('@')){msg.textContent='Masukkan alamat email yang valid.';return}if(!password){msg.textContent='Password wajib diisi.';return}if(password.length<8){msg.textContent='Password minimal 8 karakter.';return}if(memberMode==='signup'&&!name){msg.textContent='Nama tampilan wajib diisi.';return}memberBusy=true;document.getElementById('memberSubmit').disabled=true;msg.textContent='Memproses…';try{if(memberMode==='signup'){const{data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{display_name:name},emailRedirectTo:location.origin}});if(error)throw error;if(data.session){msg.textContent='Akun berhasil dibuat.';await loadMemberSession()}else{msg.textContent='Pendaftaran diterima. Periksa email untuk verifikasi, lalu masuk setelah email dikonfirmasi.'}}else{const{error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;await loadMemberSession()}}catch(e){msg.textContent='Tidak dapat memproses akun: '+(e.message||'Kesalahan tidak diketahui')}finally{memberBusy=false;document.getElementById('memberSubmit').disabled=false}}
+async function resetMemberPassword(){const email=document.getElementById('memberEmail').value.trim(),msg=document.getElementById('memberAuthMessage');if(!email){msg.textContent='Masukkan email terlebih dahulu.';return}try{const{error}=await supabaseClient.auth.resetPasswordForEmail(email,{redirectTo:location.origin});if(error)throw error;msg.textContent='Tautan reset password dikirim jika email terdaftar. Periksa kotak masuk dan spam.'}catch(e){msg.textContent=e.message||'Gagal mengirim tautan reset.'}}
+async function loadMemberSession(){const auth=document.getElementById('memberAuth'),account=document.getElementById('memberAccount');try{const{data:{session}}=await supabaseClient.auth.getSession();auth.classList.toggle('hidden',!!session);account.classList.toggle('hidden',!session);if(session)await refreshMemberPanel()}catch(e){auth.classList.remove('hidden');account.classList.add('hidden');document.getElementById('memberAuthMessage').textContent='Gagal memuat sesi: '+e.message}}
+async function refreshMemberPanel(){
+ const{data:{user},error:userError}=await supabaseClient.auth.getUser();
+ if(userError)throw userError;
+ if(!user)return;
+ const history=document.getElementById('memberHistoryList'),ordersBox=document.getElementById('memberOrderHistory');
+ history.innerHTML='<p class="hint">Memuat riwayat poin…</p>';
+ ordersBox.innerHTML='<p class="hint">Memuat pesanan…</p>';
+ const[bal,profile,ledger,orders]=await Promise.all([
+  supabaseClient.rpc('get_my_credit_balance'),
+  supabaseClient.from('credit_profiles').select('display_name').eq('user_id',user.id).maybeSingle(),
+  supabaseClient.from('credit_ledger').select('id,points,event_type,description,created_at,expires_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(30),
+  supabaseClient.from('orders').select('id,invoice_number,product_code,product_name,game,item_price,points_discount,amount_due,payment_method,payment_status,order_status,created_at,invoice_send_status').eq('user_id',user.id).order('created_at',{ascending:false}).limit(20)
+ ]);
+ if(bal.error)throw bal.error;
+ if(profile.error)throw profile.error;
+ if(ledger.error)throw ledger.error;
+ if(orders.error)throw orders.error;
+ document.getElementById('memberBalance').textContent=Number(bal.data||0).toLocaleString('id-ID')+' XP';
+ document.getElementById('memberDisplayName').textContent=(profile.data?.display_name||user.user_metadata?.display_name||user.email||'Member XERAVION');
+ history.innerHTML=ledger.data?.length?ledger.data.map(x=>'<div class="history-row"><span><strong>'+esc(x.description)+'</strong><small>'+new Date(x.created_at).toLocaleString('id-ID')+(x.points>0&&x.expires_at?' · Kedaluwarsa '+new Date(x.expires_at).toLocaleDateString('id-ID'):'')+'</small></span><span>'+(x.points>0?'+':'')+Number(x.points).toLocaleString('id-ID')+' XP</span></div>').join(''):'<p class="hint">Belum ada riwayat poin. Poin akan masuk setelah transaksi selesai dan diverifikasi admin.</p>';
+ const paymentLabel=v=>v==='paid'?'Lunas':v==='refunded'?'Dikembalikan':'Menunggu pembayaran';
+ const orderLabel=v=>v==='completed'?'Selesai':v==='processing'?'Diproses':v==='cancelled'?'Dibatalkan':'Menunggu diproses';
+ ordersBox.innerHTML=orders.data?.length?orders.data.map(o=>'<article class="history-row member-order-row"><span><strong>'+esc(o.product_name)+' · '+esc(o.product_code)+'</strong><small>'+esc(o.invoice_number)+' · '+new Date(o.created_at).toLocaleDateString('id-ID')+'<br>'+esc(o.game)+' · '+esc(o.payment_method)+'<br>Pembayaran: '+paymentLabel(o.payment_status)+' · Pesanan: '+orderLabel(o.order_status)+(o.points_discount>0?' · Diskon poin '+rupiah(o.points_discount):'')+'</small></span><span><strong>'+rupiah(o.amount_due)+'</strong><small>'+(o.invoice_send_status==='sent'?'Invoice email terkirim':'Invoice email belum dikirim')+'</small></span></article>').join(''):'<p class="hint">Belum ada pesanan yang terhubung ke akun ini. Jika pernah membeli, hubungi admin agar pesanan ditautkan ke akun member dengan email yang sama.</p>';
+}
+async function redeemMemberReward(){alert('Poin digunakan saat pembelian akun melalui admin. Hubungi admin XERAVION untuk menghitung diskon maksimal 10% dan memproses pesanan.')}
+async function memberSignOut(){await supabaseClient.auth.signOut();document.getElementById('memberAccount').classList.add('hidden');document.getElementById('memberAuth').classList.remove('hidden');setMemberMode('login');alert('Kamu sudah keluar dari akun member XERAVION.')}
+
+
+/* Keep the current buyer route intact on refresh. Category and shared-listing
+   state are restored by the URL and loadProducts()/applyStoreRoute(). */
+async function restoreAdminAfterRefresh(){
+ if(sessionStorage.getItem('xeravion-admin-view')!=='1')return;
+ try{
+  const{data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError||!session)throw new Error('Sesi admin tidak tersedia');
+  const{data:allowed,error}=await supabaseClient.rpc('is_admin');
+  if(error||!allowed)throw new Error('Akun bukan admin');
+  xeravionAdminVerified=true;
+  render();
+  showAdminPanel();
+ }catch(e){
+  sessionStorage.removeItem('xeravion-admin-view');
+  console.warn('XERAVION admin refresh restore skipped:',e);
+ }
+}
+loadProducts();
+restoreAdminAfterRefresh();
+</script>
+
+<style id="xeravion-responsive-detail-images">
+/* Keep full account screenshots visible on every screen size. */
+.detail-layout,.detail-media,.detail-body{min-width:0;max-width:100%;box-sizing:border-box}
+.detail-media{overflow:hidden}
+.detail-image{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;min-height:0!important;max-height:68vh!important;object-fit:contain!important;object-position:center!important;aspect-ratio:auto!important}
+.detail-placeholder{min-height:220px!important;height:auto!important}
+.detail-thumbs{width:100%;max-width:100%;box-sizing:border-box;overflow-x:auto;overscroll-behavior-x:contain}
+.detail-thumb img{object-fit:contain!important}
+@media(max-width:760px){
+  .detail-layout{grid-template-columns:minmax(0,1fr)!important}
+  .detail-media{width:100%;padding:58px 14px 8px!important;gap:10px}
+  .detail-image{max-height:58vh!important;border-radius:12px}
+  .detail-body{width:100%;padding:18px 16px 30px!important}
+}
+@media(max-width:380px){
+  .detail-media{padding-left:10px!important;padding-right:10px!important}
+  .detail-image{max-height:52vh!important}
+}
+</style>
+
+
+<style id="xeravion-credit-admin-mobile">
+#creditAdminPanel{overflow:hidden}
+#creditAdminPanel .formgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:12px}
+#creditAdminPanel input:not([type=checkbox]),#creditAdminPanel button{width:100%;min-width:0;box-sizing:border-box}
+#creditAdminPanel .formgrid .wide{grid-column:1/-1}
+#creditAdminPanel label.wide{grid-column:1/-1;display:flex!important;align-items:center;gap:10px;line-height:1.5}
+#creditAdminPanel input[type=checkbox]{appearance:auto!important;-webkit-appearance:checkbox!important;width:22px!important;height:22px!important;min-width:22px;flex:0 0 22px;margin:0;accent-color:#d6ae62}
+#creditMemberResults .history-row{gap:12px;align-items:center;flex-wrap:wrap}
+#creditMemberResults .history-row>span{min-width:0;overflow-wrap:anywhere;flex:1}
+#creditMemberResults .smallbtn{white-space:nowrap;min-width:76px}
+#creditAdminMessage{overflow-wrap:anywhere}
+@media(max-width:600px){
+ #creditAdminPanel .formgrid{grid-template-columns:minmax(0,1fr)}
+ #creditAdminPanel .formgrid .wide,#creditAdminPanel label.wide{grid-column:1}
+ #creditAdminPanel .formgrid button{min-height:50px}
+}
+</style>
+<style id="xeravion-orders-mobile">
+#xeravionOrdersPanel{overflow:hidden}
+#xeravionOrdersPanel .formgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#xeravionOrdersPanel .formgrid .wide{grid-column:1/-1}
+#xeravionOrdersPanel input,#xeravionOrdersPanel select,#xeravionOrdersPanel button{min-width:0;max-width:100%;box-sizing:border-box}
+#xeravionOrdersPanel .admin-table-wrap{overflow-x:auto}
+#xeravionOrdersPanel .adminlist{min-width:720px}
+@media(max-width:600px){#xeravionOrdersPanel .formgrid{grid-template-columns:1fr}#xeravionOrdersPanel .formgrid .wide{grid-column:1}#xeravionOrdersPanel .formgrid button{min-height:48px}}
+</style><style id="xeravion-admin-tabs-style">
+.xer-admin-tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 14px;margin:12px 0 16px;position:sticky;top:0;z-index:20;background:rgba(9,10,16,.96);backdrop-filter:blur(12px);scrollbar-width:thin}
+.xer-admin-tab{flex:0 0 auto;border:1px solid rgba(211,177,112,.38);border-radius:999px;padding:11px 16px;background:#11121a;color:#d8c9a8;font:inherit;font-size:14px;font-weight:700;white-space:nowrap;cursor:pointer}
+.xer-admin-tab.active{background:linear-gradient(110deg,#f0d99e,#a97832);color:#17120a;border-color:#e3c47e}
+.xer-admin-tab-panel{display:none}
+.xer-admin-tab-panel.active{display:block;animation:xerTabIn .18s ease-out}
+.xer-admin-shortcuts{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.xer-admin-welcome{margin-top:12px}
+@keyframes xerTabIn{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.xer-admin-tabs{margin-left:-2px;margin-right:-2px;padding-top:10px;padding-bottom:12px}.xer-admin-tab{padding:10px 13px;font-size:13px}.xer-admin-shortcuts{display:grid;grid-template-columns:1fr 1fr}.xer-admin-shortcuts .btn{min-width:0}}
+</style><style id="xeravion-topup-coming-style">
+.nav-coming{display:inline-flex;align-items:center;margin-left:5px;padding:2px 6px;border-radius:999px;background:linear-gradient(110deg,#f2d99b,#b27a35);color:#18130b;font-size:9px;font-weight:900;letter-spacing:.5px;vertical-align:middle}
+.topup-coming{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;overflow:hidden;margin:10px 0 14px;padding:12px 16px;border:1px solid rgba(222,185,112,.48);border-radius:22px;background:radial-gradient(ellipse at 90% 10%,rgba(75,91,190,.26),transparent 48%),linear-gradient(120deg,#11131e 0%,#17121c 58%,#21182a 100%);box-shadow:0 18px 48px rgba(0,0,0,.22)}
+.topup-copy{position:relative;z-index:1;max-width:650px}.topup-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.topup-heading h2{margin:1px 0 4px;font-size:clamp(18px,3vw,23px);color:#f4e5c4}.topup-badge{display:inline-flex;padding:6px 10px;border:1px solid rgba(238,202,133,.6);border-radius:999px;background:rgba(202,157,76,.14);color:#f0d69f;font-size:10px;font-weight:900;letter-spacing:1.2px}.topup-copy p{max-width:570px;margin:0 0 7px;color:#c9c4d0;line-height:1.4;font-size:12px}.topup-games{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:7px}.topup-games span{padding:4px 8px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.05);color:#e6e0d4;font-size:12px}.topup-copy small{color:#d5b779;font-size:10px;font-weight:800;letter-spacing:2px}.topup-mark{flex:0 0 76px;width:76px;height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(230,194,126,.45);border-radius:28px;background:linear-gradient(145deg,rgba(239,213,155,.17),rgba(89,104,199,.13));transform:rotate(5deg);box-shadow:0 12px 36px rgba(0,0,0,.25)}.topup-mark span{font-size:19px}.topup-mark b{color:#f5dfad;font-size:16px;line-height:.92;letter-spacing:2px;text-align:center}.topup-mark i{margin-top:5px;color:#b8c3ff;font-size:8px;font-style:normal;font-weight:900;letter-spacing:1px}
+@media(max-width:600px){.topup-coming{align-items:center;margin:8px 0 10px;padding:10px 11px;gap:8px}.topup-mark{flex-basis:54px;width:54px;height:54px;border-radius:19px}.topup-mark span{font-size:13px}.topup-mark b{font-size:11px}.topup-mark i{font-size:6px;margin-top:6px}.topup-copy p{font-size:13px}}
+</style><style id="xeravion-topup-clean-style">
+.topup-coming{align-items:center;gap:20px;margin:16px 0 28px;padding:20px 24px;border-radius:18px}
+.topup-copy{max-width:none;display:flex;flex-direction:column;gap:7px}
+.topup-copy>.eyebrow{font-size:9px;letter-spacing:2.4px}
+.topup-heading{gap:12px;align-items:center}
+.topup-heading h2{margin:0;font-size:clamp(20px,3vw,26px);line-height:1.2}
+.topup-badge{padding:6px 10px;font-size:9px;letter-spacing:1px;white-space:nowrap}
+.topup-copy p{margin:0;max-width:none;font-size:13px;line-height:1.6;color:#c9c4d0}
+.topup-mark{flex:0 0 54px;width:54px;height:54px;border-radius:16px;transform:none}
+.topup-mark span{font-size:23px}
+@media(max-width:600px){
+ .topup-coming{margin:12px 0 20px;padding:16px;gap:12px}
+ .topup-copy{gap:6px}
+ .topup-heading{gap:8px}
+ .topup-heading h2{font-size:20px}
+ .topup-badge{padding:5px 8px;font-size:8px}
+ .topup-copy p{font-size:12px}
+ .topup-mark{flex-basis:44px;width:44px;height:44px;border-radius:13px}
+ .topup-mark span{font-size:19px}
+}
+</style><style id="xeravion-member-order-polish">
+.member-order-row{align-items:flex-start;gap:14px}
+.member-order-row>span:last-child{text-align:right;white-space:nowrap}
+.member-order-row small{display:block;line-height:1.55}
+@media(max-width:480px){.member-order-row{flex-direction:column;gap:7px}.member-order-row>span:last-child{text-align:left;white-space:normal}}
+</style>
+<style id="xeravion-header-nav-balance">
+/* Header navigation: remove duplicate Catalog link and balance spacing */
+.navlinks{gap:clamp(14px,1.45vw,19px);align-items:center}
+.navlinks a{white-space:nowrap}
+@media(min-width:761px) and (max-width:1050px){.navlinks{gap:12px;font-size:12px}.navright{gap:6px}.navright .btn{padding:9px 10px;font-size:10px}}
+</style>
+<style id="xeravion-original-payment-logos">
+.payment-logo-wrap{width:82px;height:52px;flex:0 0 82px;padding:7px 9px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#fff;border-radius:10px}
+.payment-logo-wrap img{display:block;width:100%;height:100%;object-fit:contain}
+.payment-logo-qris img{width:100%;height:auto;max-height:100%}
+.payment-logo-dana img,.payment-logo-gopay img,.payment-logo-shopee img{max-width:100%;max-height:100%}
+.payment-logo-bank{background:linear-gradient(145deg,#e9d49d,#b58a3b);color:#211707}
+.payment-logo-bank svg{width:34px;height:34px}
+@media(max-width:420px){.payment-logo-wrap{width:64px;height:44px;flex-basis:64px;padding:6px 7px}}
+</style>
+<style id="xeravion-admin-listing-share-style">.admin-share-buy{margin-top:7px!important;background:linear-gradient(120deg,#15243b,#101827)!important;border:1px solid #6482b5!important;color:#dceaff!important}.admin-share-buy:hover{border-color:#9fc6ff!important;box-shadow:0 0 15px #5489d633!important}.detail-share-buy{order:0!important;width:100%!important;min-height:46px!important;margin:0!important;border-radius:12px!important;font-size:12px!important;letter-spacing:.5px!important}</style><style id="xeravion-image-preview-styles">.detail-image-trigger{position:relative;display:block;width:100%;padding:0;border:0;background:transparent;cursor:zoom-in}.detail-image-trigger .detail-image{cursor:zoom-in}.image-zoom-hint{position:absolute;right:12px;bottom:12px;padding:7px 10px;border:1px solid #e8cc9180;border-radius:20px;background:#080b13d9;color:#f4dfad;font-size:11px}.image-preview-modal{display:none;position:fixed!important;inset:0!important;z-index:10050!important;background:rgba(3,5,10,.98);align-items:center;justify-content:center;padding:54px 56px;pointer-events:auto!important;touch-action:pan-y}.image-preview-modal.show{display:flex}.image-preview-modal>img{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px}.image-preview-close,.image-preview-nav{position:absolute;display:grid;place-items:center;border:1px solid #e8cc91aa;background:#111827ef;color:#f8e4b5;border-radius:50%;cursor:pointer}.image-preview-close{top:18px;right:18px;width:42px;height:42px;font-size:28px}.image-preview-nav{position:fixed!important;top:50vh!important;transform:translateY(-50%)!important;width:42px;height:42px;font-size:30px;z-index:10052!important;margin:0!important}.image-preview-nav.prev{left:12px!important;right:auto!important}.image-preview-nav.next{right:12px!important;left:auto!important}.image-preview-nav[hidden],.image-preview-count[hidden]{display:none!important}.image-preview-count{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#f4dfad;background:#111827d9;border-radius:20px;padding:6px 12px;font-size:12px}@media(max-width:600px){.image-preview-modal{padding:58px 42px}.image-preview-nav{width:38px;height:38px;top:50vh!important}.image-preview-nav.prev{left:8px!important;right:auto!important}.image-preview-nav.next{right:8px!important;left:auto!important}}</style><style id="xeravion-separated-store-pages">
+/* Homepage is a game selector only; account inventory lives on each game's own route. */
+/* Keep the original homepage sections visible after introducing game routes. */
+body.xeravion-home-page #catalog>.sectionhead,
+body.xeravion-home-page #catalog>.tools,
+body.xeravion-home-page #catalog>.chips,
+body.xeravion-home-page #catalog>#products,
+body.xeravion-home-page #catalog>#products+p{display:none!important}
+body.xeravion-home-page .game-category-hub{display:block!important;margin:clamp(34px,8vh,90px) auto 70px;max-width:1050px}
+body.xeravion-home-page .game-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+body.xeravion-home-page .game-category-card{min-height:clamp(230px,34vw,360px);padding:22px;border-color:#b99555aa;box-shadow:0 18px 42px #0008;justify-content:flex-end}
+.game-category-card{isolation:isolate}
+.game-category-image{position:absolute!important;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .45s ease}
+.game-category-shade{position:absolute!important;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(5,9,17,.02) 5%,rgba(5,9,17,.22) 38%,rgba(5,8,14,.96) 100%)}
+.game-category-card:hover .game-category-image{transform:scale(1.06)}
+.game-category-card strong{font-size:clamp(18px,2vw,24px);text-shadow:0 2px 12px #000}
+.game-category-card small{font-size:13px;color:#f4e9d3;text-shadow:0 2px 8px #000}
+.game-category-card b{font-size:10px;color:#f3d28b;letter-spacing:1.4px}
+body.xeravion-game-page main>section:not(#catalog){display:none!important}
+body.xeravion-game-page #catalog>.hero,
+body.xeravion-game-page #catalog>.stats,
+body.xeravion-game-page #catalog>#gameCategoryHub,
+body.xeravion-game-page #catalog>.topup-coming{display:none!important}
+body.xeravion-game-page #catalog{padding-top:24px;min-height:75vh}
+body.xeravion-game-page #gameListingsHeading{margin:18px 0 24px}
+body.xeravion-game-page #catalog>.sectionhead{margin-top:0}
+@media(max-width:700px){
+ body.xeravion-home-page .game-category-hub{margin:28px auto 45px}
+ body.xeravion-home-page .game-category-grid{grid-template-columns:1fr;gap:13px}
+ body.xeravion-home-page .game-category-card{min-height:190px}
+ body.xeravion-game-page #catalog{padding-top:14px}
+}
+
+.payment-logo-wrap{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:11px}
+.payment-logo-wrap .payment-symbol{display:grid;place-items:center;width:100%;height:100%;border-radius:10px;font-size:15px;font-weight:900;letter-spacing:-.04em;background:linear-gradient(145deg,#f5dfa9,#bb8b3d);color:#17120a}
+.payment-logo-dana .payment-symbol,.payment-logo-gopay .payment-symbol{background:linear-gradient(145deg,#b5e7ff,#3a8bd8);color:#08213b}
+.payment-logo-shopee .payment-symbol{background:linear-gradient(145deg,#ffd1a0,#ed7844);color:#4a1b0a}
+
+</style><style id="xeravion-admin-route-visibility-fix">
+/* Dashboard harus tetap dapat tampil di homepage maupun halaman kategori game. */
+body.xeravion-home-page main>section#admin.active,
+body.xeravion-game-page main>section#admin.active{display:block!important}
+</style>
+
+<style id="xeravion-detail-mobile-fix">
+/* Detail listing: compact mobile layout and always-visible back navigation */
+#productDetailModal .detail-back-top{
+ display:inline-flex!important;align-items:center;justify-content:center;align-self:flex-start;
+ gap:7px;padding:9px 13px;margin:0 0 14px;border:1px solid #8f7545;border-radius:9px;
+ background:rgba(232,204,145,.08);color:#f1dba9;font:600 12px inherit;cursor:pointer;
+}
+#productDetailModal .detail-body{justify-content:flex-start!important}
+#productDetailModal .detail-title{font-size:clamp(19px,2.2vw,27px)!important;line-height:1.25!important;margin:5px 0 6px!important}
+#productDetailModal .detail-price{font-size:clamp(21px,2.4vw,29px)!important;margin:0}
+#productDetailModal .detail-section{margin-top:11px!important}
+#productDetailModal .detail-description{font-size:14px!important;line-height:1.6!important;margin:6px 0 16px!important}
+#productDetailModal .detail-actions{margin-top:18px!important}
+#productDetailModal .detail-actions .buy{min-height:48px!important;font-size:13px!important}
+@media(max-width:760px){
+ body.xeravion-listing-page #productDetailModal .detail-media,
+ #productDetailModal .detail-media{padding:12px 12px 6px!important;gap:8px!important}
+ body.xeravion-listing-page #productDetailModal .detail-image,
+ #productDetailModal .detail-image{width:100%!important;max-height:38vh!important;min-height:0!important;height:auto!important;object-fit:contain!important;border-radius:10px!important}
+ #productDetailModal .detail-thumbs{gap:6px!important}
+ #productDetailModal .detail-thumb{width:54px!important;height:46px!important;flex-basis:54px!important}
+ body.xeravion-listing-page #productDetailModal .detail-body,
+ #productDetailModal .detail-body{padding:12px 16px calc(22px + env(safe-area-inset-bottom))!important}
+ #productDetailModal .detail-back-top{font-size:11px!important;padding:8px 11px!important;margin-bottom:10px!important}
+ #productDetailModal .detail-meta .game,
+ #productDetailModal .detail-stock{font-size:9px!important}
+ #productDetailModal .detail-code{font-size:10px!important}
+ #productDetailModal .detail-section h3{font-size:14px!important;margin-bottom:8px!important}
+ #productDetailModal .detail-actions .buy{min-height:46px!important;font-size:12px!important}
+}
+</style>
+
+<style id="xeravion-image-preview-layer-fix">
+/* Keep image lightbox above the full-screen listing detail modal */
+body.xeravion-listing-page .image-preview-modal{z-index:10050!important}
+body.xeravion-listing-page .image-preview-modal.show{display:flex!important;visibility:visible!important;opacity:1!important}
+body.xeravion-listing-page .image-preview-modal>img{position:relative;z-index:1;max-width:100%;max-height:100%;object-fit:contain;touch-action:pinch-zoom}
+body.xeravion-listing-page .image-preview-close,
+body.xeravion-listing-page .image-preview-nav,
+body.xeravion-listing-page .image-preview-count{z-index:2}
+body.xeravion-listing-page .detail-image-trigger,
+body.xeravion-listing-page .detail-image-trigger img{pointer-events:auto!important}
+</style>
+
+<style id="xeravion-category-compact-row">
+/* Compact game category cards in a horizontal row */
+.game-category-grid{
+ display:flex!important;flex-wrap:nowrap!important;gap:10px!important;
+ overflow-x:auto!important;overflow-y:hidden!important;
+ padding:4px 2px 12px!important;scroll-snap-type:x mandatory;
+ -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+}
+.game-category-card{
+ flex:0 0 168px!important;width:168px!important;min-width:168px!important;
+ height:132px!important;min-height:132px!important;padding:12px!important;
+ border-radius:13px!important;gap:5px!important;scroll-snap-align:start;
+}
+.game-category-card strong{font-size:14px!important;line-height:1.2!important}
+.game-category-card small{font-size:10px!important}
+.game-category-card b{font-size:9px!important;letter-spacing:.8px!important;margin-top:3px!important}
+.game-category-image{object-position:center!important}
+@media(max-width:700px){
+ .game-category-hub{margin:18px 0 26px!important}
+ .game-category-hub>.sectionhead{margin-bottom:10px!important}
+ .game-category-grid{gap:8px!important}
+ .game-category-card{flex-basis:142px!important;width:142px!important;min-width:142px!important;height:112px!important;min-height:112px!important;padding:10px!important}
+ .game-category-card strong{font-size:12px!important}
+ .game-category-card small{font-size:9px!important}
+ .game-category-card b{font-size:8px!important}
+}
+</style>
+<script id="xeravion-use-ml-hero-art">
+(function(){
+ const hero=document.querySelector('#gameSlider .game-slide img[alt*="Mobile Legends"]')||document.querySelector('#gameSlider .game-slide img');
+ const category=document.querySelector('#gameCategoryHub .game-category-card.ml .game-category-image');
+ if(hero&&category){category.src=hero.currentSrc||hero.src;category.removeAttribute('srcset');}
+})();
+</script>
+
+<style id="xeravion-payment-official-logos">
+#payment .payment-logo-wrap{width:72px!important;height:48px!important;flex:0 0 72px!important;padding:6px 8px!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;background:#fff!important;border-radius:10px!important}
+#payment .payment-logo{display:block!important;width:auto!important;height:auto!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important}
+#payment .payment-logo-bca .payment-logo{width:80px!important;max-height:30px!important}
+#payment .payment-logo-qris .payment-logo{width:80px!important;max-height:30px!important}
+@media(max-width:420px){#payment .payment-logo-wrap{width:62px!important;height:44px!important;flex-basis:62px!important;padding:5px 6px!important}}
+</style>
+
+<style id="xeravion-category-three-up-size">
+/* Three category cards stay visible side by side, with a little more room */
+body.xeravion-home-page #gameCategoryHub .game-category-grid{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:10px!important;
+ overflow:visible!important;
+ overflow-x:visible!important;
+ padding:4px 0 10px!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card{
+ width:auto!important;min-width:0!important;max-width:none!important;
+ flex:initial!important;height:148px!important;min-height:148px!important;
+ padding:11px!important;gap:6px!important;border-radius:13px!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card strong{
+ font-size:clamp(11px,3.2vw,15px)!important;line-height:1.18!important;
+}
+body.xeravion-home-page #gameCategoryHub .game-category-card small{font-size:10px!important}
+body.xeravion-home-page #gameCategoryHub .game-category-card b{
+ font-size:9px!important;letter-spacing:.5px!important;margin-top:2px!important;
+}
+@media(min-width:701px){
+ body.xeravion-home-page #gameCategoryHub .game-category-card{height:190px!important;min-height:190px!important;padding:16px!important}
+}
+</style>
+
+<style id="xeravion-topup-stat-type-scale">
+/* Keep the upcoming top-up label visually balanced with the other stats */
+#catalog .stats .stat:nth-child(3) b{
+ font-size:14px!important;line-height:1.25!important;letter-spacing:0!important;
+ white-space:nowrap!important;
+}
+@media(max-width:420px){
+ #catalog .stats .stat:nth-child(3) b{font-size:12px!important}
+}
+</style>
+
+<style id="xeravion-detail-watermark-final-layer">
+/* Keep the XERAVION emblem centered behind both the account photo and details. */
+#productDetailModal .detail-modal{
+ position:relative!important;
+ isolation:isolate!important;
+}
+#productDetailModal .detail-modal:before{
+ content:""!important;
+ display:block!important;
+ position:absolute!important;
+ inset:0!important;
+ z-index:0!important;
+ pointer-events:none!important;
+ background-image:url("/assets/file_0000000027ec8211877e42918a96984e.png")!important;
+ background-repeat:no-repeat!important;
+ background-position:center center!important;
+ background-size:min(66vw,290px) min(66vw,290px)!important;
+ opacity:.15!important;
+}
+#productDetailModal .detail-body:before{content:none!important;display:none!important}
+#productDetailModal .detail-modal:after{
+ content:"PREMIUM GAME ACCOUNT STORE"!important;
+ display:block!important;
+ position:absolute!important;
+ z-index:0!important;
+ left:50%!important;
+ top:calc(50% + 145px)!important;
+ transform:translateX(-50%)!important;
+ width:max-content!important;
+ max-width:90%!important;
+ pointer-events:none!important;
+ color:#e8cc91!important;
+ font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;
+ font-size:clamp(8px,2.2vw,11px)!important;
+ font-weight:800!important;
+ letter-spacing:clamp(1.5px,.55vw,3px)!important;
+ line-height:1.4!important;
+ text-align:center!important;
+ white-space:nowrap!important;
+ opacity:.15!important;
+ text-shadow:none!important;
+}
+#productDetailModal .detail-layout{
+ position:relative!important;
+ z-index:1!important;
+}
+@media(max-width:760px){
+ #productDetailModal .detail-modal:before{
+  background-size:min(62vw,260px) min(62vw,260px)!important;
+  background-position:center center!important;
+  opacity:.15!important;
+ }
+}
+</style>
+<style id="xeravion-mobile-header-left-align">
+/* At 100% Chrome zoom on phones, align the brand to the left edge. */
+@media(max-width:760px){
+ .top .nav{align-items:flex-start!important}
+ .top .nav>.brand{flex:1 1 100%!important;width:100%!important;justify-content:flex-start!important;margin:0!important;padding:0!important}
+ .top .nav>.brand .brand-logo{margin:0!important}
+ .top .nav>.brand .brand-copy{text-align:left!important}
+ .top .nav>.navright{width:100%;justify-content:flex-start!important}
+}
+</style>
+<style id="xeravion-touch-header-zoom-fix">
+/* Keep the phone header layout stable when Chrome zoom changes the CSS viewport. */
+@media (pointer:coarse) and (hover:none){
+ .top .nav{height:auto!important;min-height:68px!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;padding-top:9px!important;padding-bottom:9px!important}
+ .top .nav>.brand{order:0!important;flex:0 0 auto!important;width:auto!important;max-width:100%!important;justify-content:flex-start!important;align-items:center!important;margin:0!important;padding:0!important}
+ .top .nav>.brand .brand-logo{width:38px!important;height:38px!important;min-width:38px!important;flex:0 0 38px!important;margin:0!important}
+ .top .nav>.brand .brand-copy{text-align:left!important;min-width:0!important}
+ .top .nav>.brand .brand-copy b{font-size:16px!important;letter-spacing:1.8px!important;white-space:nowrap!important}
+ .top .nav>.brand .brand-copy small{font-size:7px!important;letter-spacing:1.2px!important;white-space:nowrap!important}
+ .top .nav>.navright{order:1!important;flex:1 0 100%!important;width:100%!important;display:flex!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:6px!important}
+ .top .nav>.navright .btn{padding:9px 10px!important;font-size:10px!important;white-space:nowrap!important}
+}
+</style>
+<style id="xeravion-mobile-brand-final-left">
+/* Final override: keep logo and wordmark together on the left on phone screens. */
+@media(max-width:760px){
+ .top .wrap.nav{
+  display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;
+  justify-content:flex-start!important;align-items:center!important;
+  column-gap:9px!important;row-gap:8px!important;
+ }
+ .top .wrap.nav>a.brand{
+  display:flex!important;flex:0 1 auto!important;width:auto!important;
+  max-width:100%!important;align-self:center!important;
+  justify-content:flex-start!important;align-items:center!important;
+  margin:0 auto 0 0!important;padding:0!important;
+  position:static!important;transform:none!important;text-align:left!important;
+ }
+ .top .wrap.nav>a.brand img.brand-logo{
+  display:block!important;position:static!important;
+  width:38px!important;height:38px!important;flex:0 0 38px!important;
+  margin:0!important;transform:none!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy{
+  display:block!important;flex:0 1 auto!important;
+  min-width:0!important;margin:0!important;text-align:left!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy b,
+ .top .wrap.nav>a.brand .brand-copy small{
+  display:block!important;text-align:left!important;white-space:nowrap!important;
+ }
+ .top .wrap.nav>.navright{
+  display:flex!important;flex:1 0 100%!important;width:100%!important;
+  justify-content:flex-start!important;align-items:center!important;
+  margin:0!important;
+ }
+}
+</style>
+<style id="xeravion-mobile-header-single-row">
+/* Phone header: brand, Member Points, Dashboard and Login share one horizontal row. */
+@media(max-width:760px){
+ .top .wrap.nav{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:space-between!important;
+  gap:6px!important;min-height:62px!important;height:auto!important;
+  padding-top:7px!important;padding-bottom:7px!important;
+ }
+ .top .wrap.nav>a.brand{
+  flex:0 1 auto!important;width:auto!important;min-width:0!important;
+  max-width:none!important;margin:0!important;gap:6px!important;
+  justify-content:flex-start!important;align-items:center!important;
+ }
+ .top .wrap.nav>a.brand img.brand-logo{
+  width:32px!important;height:32px!important;min-width:32px!important;
+  flex:0 0 32px!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy{min-width:0!important}
+ .top .wrap.nav>a.brand .brand-copy b{
+  font-size:clamp(11px,3.5vw,15px)!important;
+  letter-spacing:1px!important;line-height:1.1!important;
+ }
+ .top .wrap.nav>a.brand .brand-copy small{
+  font-size:clamp(5px,1.55vw,7px)!important;
+  letter-spacing:.55px!important;margin-top:2px!important;
+ }
+ .top .wrap.nav>.navright{
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  display:flex!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:flex-end!important;
+  gap:3px!important;margin:0!important;
+ }
+ .top .wrap.nav>.navright .btn{
+  flex:0 1 auto!important;min-width:0!important;
+  padding:7px 6px!important;font-size:clamp(7px,1.9vw,9px)!important;
+  line-height:1.15!important;white-space:nowrap!important;
+  border-radius:8px!important;
+ }
+}
+@media(max-width:370px){
+ .top .wrap.nav{gap:4px!important;padding-left:8px!important;padding-right:8px!important}
+ .top .wrap.nav>a.brand{gap:4px!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:28px!important;height:28px!important;min-width:28px!important;flex-basis:28px!important}
+ .top .wrap.nav>a.brand .brand-copy b{font-size:10px!important;letter-spacing:.65px!important}
+ .top .wrap.nav>a.brand .brand-copy small{font-size:5px!important;letter-spacing:.25px!important}
+ .top .wrap.nav>.navright{gap:2px!important}
+ .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
+}
+</style>
+</body></html>

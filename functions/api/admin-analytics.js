@@ -62,13 +62,6 @@ export async function onRequestGet({ request, env }) {
     const query = `query XERAVIONTraffic {
       viewer {
         zones(filter: { zoneTag: "${env.CF_ZONE_ID}" }) {
-          total: httpRequests1dGroups(
-            limit: 1
-            filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
-          ) {
-            sum { requests pageViews }
-            uniq { uniques }
-          }
           daily: httpRequests1dGroups(
             limit: 40
             filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
@@ -103,15 +96,14 @@ export async function onRequestGet({ request, env }) {
       pageViews: Number(row.sum?.pageViews || 0),
       uniqueVisitors: Number(row.uniq?.uniques || 0)
     }));
-    const total = zone.total?.[0] || {};
     return json({
       periodDays: days,
       startDate,
       endDate,
       totals: {
-        requests: Number(total.sum?.requests ?? daily.reduce((n, row) => n + row.requests, 0)),
-        pageViews: Number(total.sum?.pageViews ?? daily.reduce((n, row) => n + row.pageViews, 0)),
-        uniqueVisitors: Number(total.uniq?.uniques ?? 0)
+        requests: daily.reduce((n, row) => n + row.requests, 0),
+        pageViews: daily.reduce((n, row) => n + row.pageViews, 0),
+        uniqueVisitorsDailySum: daily.reduce((n, row) => n + row.uniqueVisitors, 0)
       },
       daily
     });

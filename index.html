@@ -1803,44 +1803,14 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  const SKIP_SELECTOR='.language-picker,[data-no-translate],[contenteditable="true"]';
  const ATTRS=['placeholder','title','aria-label','alt'];
  const originals=new WeakMap(), applied=new WeakMap(), attrOriginals=new WeakMap(), attrApplied=new WeakMap();
- const cache=new Map(), activeRequests=new Map();
- let active='id', generation=0, observer=null, queue=[], running=false;
+ const cache=new Map();
+ let active='id', generation=0, observer=null, queue=[], scheduled=false;
  const valid=lang=>LANGS.includes(lang);
- const cacheKey=(lang,value)=>lang+'|'+value;
  function readLanguage(){try{const v=localStorage.getItem(KEY);return valid(v)?v:'id';}catch(_){return 'id';}}
  function saveLanguage(lang){try{localStorage.setItem(KEY,lang);}catch(_){}}
  function skipped(el){if(!el)return true;if(SKIP_TAGS.has(el.tagName))return true;try{return !!el.closest(SKIP_SELECTOR);}catch(_){return false;}}
- function sourceOf(node){if(!originals.has(node))originals.set(node,node.nodeValue);return originals.get(node);}
- function normalize(value,lang){return lang==='en'?value.replace(/\bfamous\b/gi,'renowned'):value;}
- async function translateOne(source,lang,token){
-  const key=cacheKey(lang,source);
-  if(cache.has(key))return cache.get(key);
-  if(activeRequests.has(key))return activeRequests.get(key);
-  const task=(async()=>{
-   const endpoint='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(source);
-   let lastError;
-   for(let attempt=0;attempt<2;attempt++){
-    if(token!==generation||lang!==active)return null;
-    try{
-     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
-     let response;
-     try{response=await fetch(endpoint,{method:'GET',mode:'cors',credentials:'omit',cache:'no-store',signal:controller.signal});}
-     finally{clearTimeout(timer);}
-     if(!response.ok)throw new Error('Translation HTTP '+response.status);
-     const data=await response.json();
-     const value=(data[0]||[]).map(part=>part&&part[0]||'').join('').trim();
-     if(!value)throw new Error('Empty translation result');
-     const output=normalize(value,lang);
-     cache.set(key,output);
-     return output;
-    }catch(error){lastError=error;if(attempt===0)await new Promise(resolve=>setTimeout(resolve,300));}
-   }
-   console.warn('XERAVION translation failed:',lastError);
-   return null;
-  })();
-  activeRequests.set(key,task);
-  try{return await task;}finally{activeRequests.delete(key);}
- }
+ function originalText(node){if(!originals.has(node))originals.set(node,node.nodeValue);return originals.get(node);}
+ function normalize(value,lang){return lang==='en'?value.replace(/\\bfamous\\b/gi,'renowned'):value;}
  function collect(root){
   const texts=[],attrs=[];
   if(!root)return {texts,attrs};
@@ -1848,7 +1818,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   while(walker.nextNode()){
    const node=walker.currentNode,parent=node.parentElement;
    if(skipped(parent))continue;
-   const raw=sourceOf(node),value=raw.trim();
+   const raw=originalText(node),value=raw.trim();
    if(value&&/[A-Za-zÀ-ÿ]/.test(value))texts.push({node,raw,value});
   }
   const elements=[];
@@ -1887,7 +1857,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   if(token!==generation||active!==lang||!value)return;
   if(item.node){
    if(!item.node.isConnected)return;
-   const leading=item.raw.match(/^\s*/)?.[0]||'',trailing=item.raw.match(/\s*$/)?.[0]||'';
+   const leading=item.raw.match(/^\\s*/)?.[0]||'',trailing=item.raw.match(/\\s*$/)?.[0]||'';
    const output=leading+value+trailing;
    applied.set(item.node,output);
    if(item.node.nodeValue!==output)item.node.nodeValue=output;
@@ -1901,20 +1871,40 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
    }
   }
  }
+ async function translateBatch(items,lang,token){
+  const pending=items.filter(item=>!cache.has(lang+'|'+item.value));
+  const unique=[...new Set(pending.map(item=>item.value))];
+  const resultMap=new Map();
+  for(const value of unique){const cached=cache.get(lang+'|'+value);if(cached)resultMap.set(value,cached);}
+  for(let offset=0;offset<unique.length;offset+=10){
+   if(token!==generation||active!==lang)return;
+   const texts=unique.slice(offset,offset+10);
+   try{
+    const response=await fetch('/api/translate',{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},cache:'no-store',body:JSON.stringify({target:lang,texts})});
+    if(!response.ok)throw new Error('Translation endpoint HTTP '+response.status);
+    const payload=await response.json();
+    if(!Array.isArray(payload.translations)||payload.translations.length!==texts.length)throw new Error('Invalid translation response');
+    payload.translations.forEach((value,index)=>{
+     if(typeof value==='string'&&value.trim()){
+      const output=normalize(value.trim(),lang);
+      cache.set(lang+'|'+texts[index],output);resultMap.set(texts[index],output);
+     }
+    });
+   }catch(error){console.warn('XERAVION translation batch failed:',error);}
+  }
+  if(token!==generation||active!==lang)return;
+  for(const item of items){
+   const value=resultMap.get(item.value)||cache.get(lang+'|'+item.value);
+   if(value)applyOutput(item,value,lang,token);
+  }
+ }
  async function translateRoot(root,lang,token){
   if(!root||lang==='id'||token!==generation)return;
-  const {texts,attrs}=collect(root);
-  const items=[...texts.map(item=>({node:item.node,raw:item.raw,value:item.value})),...attrs.map(item=>({el:item.el,name:item.name,value:item.value}))];
-  let cursor=0;
-  async function worker(){
-   while(cursor<items.length){
-    if(token!==generation||active!==lang)return;
-    const item=items[cursor++];
-    const result=await translateOne(item.value,lang,token);
-    if(result)applyOutput(item,result,lang,token);
-   }
-  }
-  await Promise.all(Array.from({length:Math.min(5,items.length)},worker));
+  const found=collect(root);
+  const items=[...found.texts.map(x=>({node:x.node,raw:x.raw,value:x.value})),...found.attrs.map(x=>({el:x.el,name:x.name,value:x.value}))];
+  const uniqueItems=[],seen=new Set();
+  for(const item of items){const key=(item.node?'t':'a')+'|'+item.value+'|'+(item.name||'');if(!seen.has(key)){seen.add(key);uniqueItems.push(item);}}
+  await translateBatch(uniqueItems,lang,token);
  }
  async function applyLanguage(lang){
   if(!valid(lang))return;
@@ -1927,19 +1917,19 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  }
  function schedule(root){
   if(!root||root.nodeType!==1)return;
-  queue.push(root);if(running)return;running=true;
+  queue.push(root);if(scheduled)return;scheduled=true;
   Promise.resolve().then(async()=>{
    try{
     while(queue.length){
-     const batch=queue.splice(0,10),token=generation,lang=active;
+     const batch=queue.splice(0,8),token=generation,lang=active;
      if(lang==='id')continue;
-     for(const root of batch){
+     for(const node of batch){
       if(token!==generation||lang!==active)break;
-      if(root.isConnected)await translateRoot(root,lang,token);
+      if(node.isConnected)await translateRoot(node,lang,token);
      }
     }
-   }catch(error){console.warn('XERAVION dynamic translation:',error);}
-   finally{running=false;if(queue.length)schedule(queue.shift());}
+   }catch(error){console.warn('XERAVION dynamic translation observer:',error);}
+   finally{scheduled=false;if(queue.length)schedule(queue.shift());}
   });
  }
  function observe(){
@@ -1963,10 +1953,19 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   });
   observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:ATTRS});
  }
- function initialize(){
+ async function initialize(){
   const lang=readLanguage();active='id';
   const picker=document.getElementById('siteLanguage');if(picker)picker.value=lang;
-  observe();if(lang!=='id')applyLanguage(lang);
+  observe();
+  if(lang!=='id'){
+   try{
+    const health=await fetch('/api/translate',{headers:{accept:'application/json'},cache:'no-store'});
+    if(!health.ok)throw new Error('Translation service unavailable: '+health.status);
+    const status=await health.json();
+    if(status.status!=='ready')throw new Error('Translation service is not ready');
+    await applyLanguage(lang);
+   }catch(error){console.error('XERAVION language service:',error);}
+  }
  }
  window.translateXeravionSite=applyLanguage;
  window.getXeravionLanguage=()=>active;

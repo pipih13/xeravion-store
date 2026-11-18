@@ -1815,9 +1815,9 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  async function translateBatch(texts,lang,token){
   const unique=[...new Set(texts)];
   const missing=unique.filter(value=>!cache.has(keyFor(lang,value)));
-  for(let offset=0;offset<missing.length;offset+=12){
+  for(let offset=0;offset<missing.length;offset+=2){
    if(token!==generation||active!==lang)return;
-   const batch=missing.slice(offset,offset+12);
+   const batch=missing.slice(offset,offset+2);
    try{
     const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),20000);
     let response;
@@ -1837,7 +1837,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
     });
    }catch(error){
     console.warn('XERAVION language service:',error);
-    batch.forEach(source=>cache.set(keyFor(lang,source),source));
+    // Do not cache failures: a later page update or language switch can retry.
    }
   }
  }

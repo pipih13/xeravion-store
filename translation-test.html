@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XERAVION Translation Diagnostics</title>
+<style>
+body{margin:0;padding:24px;background:#101114;color:#f4f4f4;font:16px system-ui,sans-serif}
+main{max-width:620px;margin:30px auto;background:#1b1d22;border:1px solid #383b43;border-radius:16px;padding:22px}
+h1{font-size:22px;margin:0 0 8px}p{color:#b9bbc2;line-height:1.5}
+label{display:block;margin:16px 0 6px;color:#d9d9df}
+select,button{width:100%;padding:13px;border-radius:10px;border:1px solid #555;background:#252830;color:white;font:inherit}
+button{margin-top:18px;background:#c59a4a;color:#171717;font-weight:700;border:0}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#111319;padding:14px;border-radius:10px;min-height:70px;color:#d9e5ff}
+small{color:#9b9da5}
+</style>
+</head>
+<body><main>
+<h1>XERAVION — Tes Terjemahan</h1>
+<p>Halaman diagnostik ini menguji permintaan POST ke Cloudflare Pages Function. Tidak mengubah data toko atau akun.</p>
+<label for="target">Bahasa tujuan</label>
+<select id="target">
+<option value="en">English</option><option value="ms">Melayu</option><option value="ja">日本語</option><option value="ar">العربية</option><option value="es">Español</option><option value="fr">Français</option>
+</select>
+<label for="source">Teks uji</label>
+<pre id="source">Halo, selamat datang di XERAVION.</pre>
+<button id="run" type="button">Uji terjemahan sekarang</button>
+<h2>Hasil</h2>
+<pre id="result">Belum diuji.</pre>
+<small>Endpoint: /api/translate · Cloudflare Pages</small>
+</main>
+<script>
+document.getElementById('run').addEventListener('click',async()=>{
+ const button=document.getElementById('run'),result=document.getElementById('result');
+ button.disabled=true;button.textContent='Sedang menguji...';result.textContent='Mengirim permintaan POST...';
+ try{
+  const response=await fetch('/api/translate',{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},cache:'no-store',body:JSON.stringify({target:document.getElementById('target').value,texts:[document.getElementById('source').textContent.trim()]})});
+  const body=await response.text();let parsed;try{parsed=JSON.parse(body)}catch(_){parsed=body}
+  result.textContent='HTTP '+response.status+'\n'+(typeof parsed==='string'?parsed:JSON.stringify(parsed,null,2));
+ }catch(error){result.textContent='GAGAL MEMANGGIL API\n'+String(error)}
+ finally{button.disabled=false;button.textContent='Uji terjemahan sekarang'}
+});
+</script>
+</body></html>

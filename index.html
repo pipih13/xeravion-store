@@ -1902,9 +1902,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   if(!root||lang==='id'||token!==generation)return;
   const found=collect(root);
   const items=[...found.texts.map(x=>({node:x.node,raw:x.raw,value:x.value})),...found.attrs.map(x=>({el:x.el,name:x.name,value:x.value}))];
-  const uniqueItems=[],seen=new Set();
-  for(const item of items){const key=(item.node?'t':'a')+'|'+item.value+'|'+(item.name||'');if(!seen.has(key)){seen.add(key);uniqueItems.push(item);}}
-  await translateBatch(uniqueItems,lang,token);
+  await translateBatch(items,lang,token);
  }
  async function applyLanguage(lang){
   if(!valid(lang))return;

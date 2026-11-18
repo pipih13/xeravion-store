@@ -1364,6 +1364,21 @@ async function restoreAdminAfterRefresh(){
   console.warn('XERAVION admin refresh restore skipped:',e);
  }
 }
+function recoverStoreInteractionState(){
+ const detail=document.getElementById('productDetailModal');
+ const preview=document.getElementById('imagePreviewModal');
+ const detailOpen=!!(detail&&detail.classList.contains('show'));
+ const previewOpen=!!(preview&&preview.classList.contains('show'));
+ if(!detailOpen&&!previewOpen){
+  document.body.classList.remove('xeravion-listing-page');
+  document.body.style.overflow='';
+  document.documentElement.style.overflow='';
+ }
+ document.body.style.pointerEvents='auto';
+}
+window.addEventListener('pageshow',recoverStoreInteractionState);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)recoverStoreInteractionState()});
+setTimeout(recoverStoreInteractionState,0);
 loadProducts();
 restoreAdminAfterRefresh();
 </script>

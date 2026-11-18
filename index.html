@@ -1906,27 +1906,46 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  }
  async function translateBatch(items,lang,token){
   const unique=[...new Set(items.map(item=>item.value).filter(value=>!cache.has(lang+'|'+value)))];
-  const translated=new Map();
-  for(let offset=0;offset<unique.length;offset+=10){
-   if(token!==generation||active!==lang)return;
-   const texts=unique.slice(offset,offset+10);
-   try{
-    const response=await fetch('/api/translate',{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},cache:'no-store',body:JSON.stringify({target:lang,texts})});
-    if(!response.ok)throw new Error('Pages Function HTTP '+response.status);
-    const payload=await response.json();
-    if(!Array.isArray(payload.translations)||payload.translations.length!==texts.length)throw new Error('Invalid translation response');
-    payload.translations.forEach((value,index)=>{
-     if(typeof value==='string'&&value.trim()){
-      const output=normalize(value.trim(),lang);cache.set(lang+'|'+texts[index],output);translated.set(texts[index],output);
-     }
-    });
-   }catch(error){console.warn('XERAVION Pages translation unavailable; trying browser fallback:',error);}
+  const batches=[];
+  let current=[],size=0;
+  for(const value of unique){
+   if(current.length>=10||size+value.length>28000){if(current.length)batches.push(current);current=[];size=0;}
+   current.push(value);size+=value.length;
   }
-  for(const item of items){
-   if(token!==generation||active!==lang)return;
-   let value=translated.get(item.value)||cache.get(lang+'|'+item.value);
-   if(!value)value=await browserFallback(item.value,lang);
-   if(value)applyOutput(item,value,lang,token);
+  if(current.length)batches.push(current);
+  let cursor=0;
+  async function runBatch(){
+   while(cursor<batches.length){
+    if(token!==generation||active!==lang)return;
+    const texts=batches[cursor++];
+    let translated=new Map();
+    try{
+     const response=await fetch('/api/translate',{method:'POST',headers:{'content-type':'application/json','accept':'application/json'},cache:'no-store',body:JSON.stringify({target:lang,texts})});
+     if(!response.ok)throw new Error('Pages Function HTTP '+response.status);
+     const payload=await response.json();
+     if(!Array.isArray(payload.translations)||payload.translations.length!==texts.length)throw new Error('Invalid translation response');
+     payload.translations.forEach((value,index)=>{
+      if(typeof value==='string'&&value.trim()){
+       const output=normalize(value.trim(),lang);cache.set(lang+'|'+texts[index],output);translated.set(texts[index],output);
+      }
+     });
+    }catch(error){console.warn('XERAVION Pages translation unavailable; trying browser fallback:',error);}
+    for(const item of items){
+     if(token!==generation||active!==lang)return;
+     if(!texts.includes(item.value))continue;
+     let value=translated.get(item.value)||cache.get(lang+'|'+item.value);
+     if(!value)value=await browserFallback(item.value,lang);
+     if(value)applyOutput(item,value,lang,token);
+    }
+   }
+  }
+  await Promise.all(Array.from({length:Math.min(5,batches.length)},runBatch));
+  // Apply any cached values for repeated strings after all batches finish.
+  if(token===generation&&active===lang){
+   for(const item of items){
+    const value=cache.get(lang+'|'+item.value);
+    if(value)applyOutput(item,value,lang,token);
+   }
   }
  }
  async function translateRoot(root,lang,token){

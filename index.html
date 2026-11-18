@@ -1797,7 +1797,8 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
 <script id="xeravion-multilanguage-and-game-slides">
 (function(){
  const originals=new WeakMap(), attrOriginals=new WeakMap(), cache=new Map();
- let active='id',running=false,sequence=0;\n const STORAGE_KEY='xeravion_preferred_language';
+ let active='id',running=false,sequence=0;
+ const STORAGE_KEY='xeravion_preferred_language';
  const ignored=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','SELECT','OPTION','CODE','PRE']);
  const attrs=['placeholder','title','aria-label','alt'];
  function collect(){
@@ -1820,7 +1821,8 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   }catch(e){console.error('XERAVION language translation:',e);alert('Terjemahan gagal dimuat. Periksa koneksi internet lalu coba lagi.');if(select)select.value=active;}
   finally{running=false;if(select)select.disabled=false;}
  }
- window.translateXeravionSite=translateXeravionSite;\n try{const saved=localStorage.getItem(STORAGE_KEY);const allowed=['id','en','ms','ar','es','pt','fr','de','ja','ko','zh-CN','th','vi','tl'];if(saved&&allowed.includes(saved)){const picker=document.getElementById('siteLanguage');if(picker)picker.value=saved;if(saved!=='id')translateXeravionSite(saved);}}catch(e){}
+ window.translateXeravionSite=translateXeravionSite;
+ try{const saved=localStorage.getItem(STORAGE_KEY);const allowed=['id','en','ms','ar','es','pt','fr','de','ja','ko','zh-CN','th','vi','tl'];if(saved&&allowed.includes(saved)){const picker=document.getElementById('siteLanguage');if(picker)picker.value=saved;if(saved!=='id')translateXeravionSite(saved);}}catch(e){}
 })();
 </script>
 </body></html>

@@ -285,7 +285,7 @@ async function rotateMailboxToken(request, env) {
 async function listMailboxes(request, env) {
   if (!(await adminAuthorized(request, env))) return json({ error: "Unauthorized" }, 401);
   const result = await env.DB.prepare(
-    "SELECT id,address,mailbox_type,game_code,is_active,created_at FROM mailboxes ORDER BY created_at DESC"
+    "SELECT id,address,mailbox_type,game_code,is_active,created_at FROM mailboxes ORDER BY CASE WHEN mailbox_type = 'support' THEN 0 ELSE 1 END, game_code ASC, address COLLATE NOCASE ASC"
   ).all();
   return json({ mailboxes: result.results || [] });
 }

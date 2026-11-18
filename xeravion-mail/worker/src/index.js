@@ -551,6 +551,32 @@ pre{color:#d8eaff!important;background:#080f1b!important;border-color:#29476b!im
 let adminKey='',selectedAddress='',mailboxCache=[];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function copyText(value){
+  const text=String(value??'');
+  if(!text) throw new Error('Tidak ada teks untuk disalin.');
+  if(navigator.clipboard && window.isSecureContext){
+    try{await navigator.clipboard.writeText(text);return true}catch(error){}
+  }
+  const area=document.createElement('textarea');
+  area.value=text;area.setAttribute('readonly','');
+  area.style.cssText='position:fixed;left:0;top:0;width:1px;height:1px;padding:0;opacity:0;z-index:-1';
+  document.body.appendChild(area);
+  area.focus();area.select();area.setSelectionRange(0,area.value.length);
+  let copied=false;
+  try{copied=document.execCommand('copy')}catch(error){}
+  area.blur();area.remove();
+  if(!copied) throw new Error('Penyalinan diblokir browser. Tekan lama teks password lalu pilih Salin.');
+  return true;
+}
+function bindCopyButton(id,value){
+  const btn=$(id);if(!btn)return;
+  btn.onclick=async()=>{
+    const original=btn.textContent;
+    try{await copyText(value);btn.textContent='Berhasil disalin ✓';btn.disabled=true;
+      setTimeout(()=>{if(btn.isConnected){btn.textContent=original;btn.disabled=false}},1800);
+    }catch(error){alert(error.message)}
+  };
+}
 async function api(path,opts){opts=opts||{};opts.headers=Object.assign({},opts.headers||{},{Authorization:'Bearer '+adminKey});if(opts.body)opts.headers['Content-Type']='application/json';const r=await fetch(path,opts);let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||('HTTP '+r.status));return data}
 function message(text,error){$('loginMsg').innerHTML='<div class="notice '+(error?'error':'')+'">'+esc(text)+'</div>'}
 async function login(){if(!adminKey){message('Sesi admin XERAVION belum diterima. Buka panel ini dari Dashboard Admin utama.',true);return}try{await api('/admin/mailboxes');$('login').classList.add('hidden');$('app').classList.remove('hidden');$('loginMsg').innerHTML='';await loadMailboxes();await loadStats();await loadAuditLogs();const savedAddress=sessionStorage.getItem('xerMailSelectedAddress')||'';if(savedAddress&&mailboxCache.some(m=>m.address===savedAddress)){await selectMailbox(savedAddress);const savedMessage=sessionStorage.getItem('xerMailSelectedMessage')||'';if(savedMessage)await readMessage(savedMessage)}else{sessionStorage.removeItem('xerMailSelectedAddress');sessionStorage.removeItem('xerMailSelectedMessage')}}catch(e){adminKey='';message('Sesi admin ditolak atau server bermasalah: '+e.message,true)}}

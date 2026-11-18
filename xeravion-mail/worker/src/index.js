@@ -583,7 +583,22 @@ async function login(){if(!adminKey){message('Sesi admin XERAVION belum diterima
 async function loadStats(){const d=await api('/admin/stats');$('stats').innerHTML='<span class="pill">Total mailbox: '+d.mailboxes.total+'</span><span class="pill">Aktif: '+d.mailboxes.active+'</span><span class="pill">Nonaktif: '+d.mailboxes.inactive+'</span><span class="pill">Total email: '+d.messages.total+'</span><span class="pill">Belum dibaca: '+d.messages.unread+'</span>'}
 async function loadAuditLogs(){const d=await api('/admin/audit-logs?limit=50');const names={mailbox_created:'Mailbox dibuat',email_deleted:'Email dihapus',mailbox_activated:'Mailbox diaktifkan',mailbox_deactivated:'Mailbox dinonaktifkan',password_manual_set:'Password manual diatur',password_random_set:'Password acak dibuat'};const logs=d.logs||[];$('auditLogs').innerHTML=logs.length?logs.map(x=>'<div class="message"><strong>'+esc(names[x.action]||x.action)+'</strong><small>'+esc(x.target)+' · '+esc(new Date(x.created_at).toLocaleString('id-ID'))+'</small></div>').join(''):'<div class="empty">Belum ada aktivitas tercatat.</div>'}
 async function loadMailboxes(){const d=await api('/admin/mailboxes');mailboxCache=d.mailboxes||[];renderMailboxes()}
-function renderMailboxes(){const q=$('mailboxSearch').value.trim().toLowerCase();const list=mailboxCache.filter(m=>(m.address+' '+(m.game_code||'')+' '+m.mailbox_type).toLowerCase().includes(q));$('mailboxes').innerHTML=list.length?list.map(m=>'<button class="mailbox '+(m.address===selectedAddress?'active':'')+'" data-address="'+esc(m.address)+'"><strong>'+esc(m.address)+'</strong><small>'+esc(m.mailbox_type==='support'?'Support — admin only':(m.game_code||'game').toUpperCase())+' · '+(m.is_active?'Aktif':'Nonaktif')+'</small></button>').join(''):'<div class="empty">Tidak ada mailbox yang cocok.</div>';document.querySelectorAll('.mailbox').forEach(b=>b.addEventListener('click',()=>selectMailbox(b.dataset.address)))}
+function renderMailboxes(){
+  const q=$('mailboxSearch').value.trim().toLowerCase();
+  const list=mailboxCache
+    .filter(m=>(m.address+' '+(m.game_code||'')+' '+m.mailbox_type).toLowerCase().includes(q))
+    .sort((a,b)=>{
+      const aSupport=a.mailbox_type==='support'?0:1;
+      const bSupport=b.mailbox_type==='support'?0:1;
+      if(aSupport!==bSupport)return aSupport-bSupport;
+      const gameCompare=String(a.game_code||'').localeCompare(String(b.game_code||''));
+      if(gameCompare!==0)return gameCompare;
+      const numberOf=m=>Number((String(m.address||'').match(/(\\d+)@/)||[])[1]||0);
+      return numberOf(a)-numberOf(b);
+    });
+  $('mailboxes').innerHTML=list.length?list.map(m=>'<button class="mailbox '+(m.address===selectedAddress?'active':'')+'" data-address="'+esc(m.address)+'"><strong>'+esc(m.address)+'</strong><small>'+esc(m.mailbox_type==='support'?'Support — admin only':(m.game_code||'game').toUpperCase())+' · '+(m.is_active?'Aktif':'Nonaktif')+'</small></button>').join(''):'<div class="empty">Tidak ada mailbox yang cocok.</div>';
+  document.querySelectorAll('.mailbox').forEach(b=>b.addEventListener('click',()=>selectMailbox(b.dataset.address)));
+}
 async function changeMailboxStatus(){const m=mailboxCache.find(x=>x.address===selectedAddress);if(!m)return;const next=!Boolean(m.is_active);if(!confirm((next?'Aktifkan':'Nonaktifkan')+' mailbox '+selectedAddress+'?'))return;try{$('statusBtn').disabled=true;await api('/admin/mailboxes/status',{method:'POST',body:JSON.stringify({address:selectedAddress,isActive:next})});await loadMailboxes();await loadStats();await selectMailbox(selectedAddress)}catch(e){alert(e.message)}finally{$('statusBtn').disabled=false}}
 async function createMailbox(){try{$('createBtn').disabled=true;const v=$('kind').value;const body=v==='support'?{type:'support'}:{game:v};const d=await api('/admin/mailboxes',{method:'POST',body:JSON.stringify(body)});$('createResult').innerHTML='<div class="notice"><strong>Alamat dibuat: '+esc(d.address)+'</strong>'+(d.password?'<p>Password acak awal:</p><pre>'+esc(d.password)+'</pre><button class="secondary" id="copyPassword">Salin password</button><p class="muted">Simpan password ini. Anda juga bisa menggantinya dengan password manual atau membuat password acak baru dari pengaturan mailbox.</p>':'<p>'+esc(d.note||'')+'</p>')+'</div>';if(d.password)bindCopyButton('copyPassword',d.password);await loadMailboxes();if(d.address)await selectMailbox(d.address)}catch(e){$('createResult').innerHTML='<div class="notice error">'+esc(e.message)+'</div>'}finally{$('createBtn').disabled=false}}
 

@@ -1,13 +1,13 @@
-// Cloudflare Pages Function: batched public-site translations for XERAVION.
-// Accepts a small batch to avoid dozens of browser-side cross-origin requests.
+// Cloudflare Pages Function: same-origin translation service for XERAVION.
 const ALLOWED_LANGUAGES = new Set(["en","ms","ar","es","pt","fr","de","ja","ko","zh-CN","th","vi","tl"]);
+const memoryCache = new Map();
 
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
       "content-type": "application/json; charset=utf-8",
-      "cache-control": "public, max-age=300, s-maxage=3600",
+      "cache-control": "no-store",
       "x-content-type-options": "nosniff"
     }
   });
@@ -15,39 +15,66 @@ function json(data, status = 200) {
 
 function normalize(value, source, target) {
   const output = String(value || "").trim() || source;
-  return target === "en" ? output.replace(/\bfamous\b/gi, "renowned") : output;
+  return target === "en" ? output.replace(/\\bfamous\\b/gi, "renowned") : output;
 }
 
 async function translateOne(source, target) {
+  const key = target + "|" + source;
+  if (memoryCache.has(key)) return memoryCache.get(key);
+
   const url = new URL("https://translate.googleapis.com/translate_a/single");
   url.searchParams.set("client", "gtx");
-  url.searchParams.set("sl", "auto");
+  url.searchParams.set("sl", "id");
   url.searchParams.set("tl", target);
   url.searchParams.set("dt", "t");
   url.searchParams.set("q", source);
 
-  let lastError;
+  let translated = "";
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const response = await fetch(url.toString(), {
         headers: { "accept": "application/json" },
         cf: { cacheTtl: 3600, cacheEverything: true }
       });
-      if (!response.ok) throw new Error("Translation provider HTTP " + response.status);
+      if (!response.ok) throw new Error("Google translation HTTP " + response.status);
       const payload = await response.json();
-      const translated = (payload[0] || []).map(part => part && part[0] || "").join("");
-      return normalize(translated, source, target);
+      translated = (payload[0] || []).map(part => part && part[0] || "").join("").trim();
+      if (!translated) throw new Error("Empty Google translation");
+      break;
     } catch (error) {
-      lastError = error;
-      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 250 * (attempt + 1)));
+      console.warn("XERAVION primary translation attempt failed:", error);
+      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 300 * (attempt + 1)));
     }
   }
-  console.warn("XERAVION translation provider failed:", lastError);
-  return null;
+
+  // Secondary provider for short strings if Google's unofficial endpoint is unavailable.
+  if (!translated && new TextEncoder().encode(source).length <= 450) {
+    try {
+      const fallback = new URL("https://api.mymemory.translated.net/get");
+      fallback.searchParams.set("q", source);
+      fallback.searchParams.set("langpair", "id|" + target);
+      const response = await fetch(fallback.toString(), { headers: { "accept": "application/json" } });
+      if (response.ok) {
+        const data = await response.json();
+        const candidate = data?.responseData?.translatedText;
+        if (typeof candidate === "string" && candidate.trim() &&
+            Number(data?.responseStatus || 200) === 200) translated = candidate.trim();
+      }
+    } catch (error) {
+      console.warn("XERAVION fallback translation failed:", error);
+    }
+  }
+
+  const result = translated ? normalize(translated, source, target) : null;
+  if (result) {
+    memoryCache.set(key, result);
+    if (memoryCache.size > 1500) memoryCache.delete(memoryCache.keys().next().value);
+  }
+  return result;
 }
 
 export async function onRequestGet() {
-  return json({ service: "xeravion-translation", status: "ready", languages: [...ALLOWED_LANGUAGES] }, 200);
+  return json({ service: "xeravion-translation", status: "ready", languages: [...ALLOWED_LANGUAGES] });
 }
 
 export async function onRequestPost({ request }) {
@@ -66,7 +93,7 @@ export async function onRequestPost({ request }) {
 
     const translations = new Array(clean.length);
     let cursor = 0;
-    const workers = Array.from({ length: Math.min(3, clean.length) }, async () => {
+    const workers = Array.from({ length: Math.min(2, clean.length) }, async () => {
       while (cursor < clean.length) {
         const index = cursor++;
         translations[index] = await translateOne(clean[index], target);
@@ -75,6 +102,7 @@ export async function onRequestPost({ request }) {
     await Promise.all(workers);
     return json({ target, translations });
   } catch (error) {
-    return json({ error: "Translation request could not be processed.", detail: error?.message || String(error) }, 400);
+    console.error("XERAVION translation request error:", error);
+    return json({ error: "Translation request could not be processed." }, 400);
   }
 }

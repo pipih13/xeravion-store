@@ -246,9 +246,13 @@ async function createMailbox(request, env) {
     address = prefix + String(max + 1).padStart(3, "0") + "@" + DOMAIN;
   }
 
+  // Keep the legacy token-hash column populated for game mailboxes.
+  // Buyer authentication uses password-based sessions; this random legacy hash
+  // is never returned to the client and cannot be used to sign in.
+  tokenHash = gameCode ? await sha256(randomToken()) : null;
   await env.DB.prepare(
     "INSERT INTO mailboxes (id,address,mailbox_type,game_code,access_token_hash) VALUES (?,?,?,?,?)"
-  ).bind(id, address, gameCode ? "game_account" : "support", gameCode, null).run();
+  ).bind(id, address, gameCode ? "game_account" : "support", gameCode, tokenHash).run();
   let password = null;
   if (gameCode) { password = randomPassword(); await saveMailboxPassword(env,id,password); }
   await logAdminAction(env, "mailbox_created", address, { mailbox_type: gameCode ? "game_account" : "support", game_code: gameCode, password_created: !!password });

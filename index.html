@@ -867,6 +867,28 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 </div>
 <script>document.querySelector('.notice').textContent='Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.';</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script id="xeravion-emergency-interaction-reset">
+(function(){
+ try{
+  const params=new URLSearchParams(location.search);
+  const hasListing=params.has('listing');
+  const detail=document.getElementById('productDetailModal');
+  const preview=document.getElementById('imagePreviewModal');
+  const login=document.getElementById('loginModal');
+  const confirm=document.getElementById('confirmModal');
+  if(preview)preview.classList.remove('show');
+  if(!hasListing){
+   if(detail)detail.classList.remove('show');
+   document.body.classList.remove('xeravion-listing-page');
+   document.body.style.overflow='';
+   document.documentElement.style.overflow='';
+  }
+  [login,confirm].forEach(el=>{if(el)el.classList.remove('show')});
+  document.body.style.pointerEvents='auto';
+  document.documentElement.style.pointerEvents='auto';
+ }catch(error){console.warn('XERAVION interaction recovery:',error)}
+})();
+</script>
 <script>
 const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],deleteId=null,items=[],xeravionAdminVerified=false;
 const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,price:Number(r.price),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}

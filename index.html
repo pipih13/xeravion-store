@@ -1,22 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<script>
-/* Reloading a category/detail URL must return to the storefront root. */
-(function(){
- try{
-  var entry=window.performance&&performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
-  var legacy=window.performance&&performance.navigation&&performance.navigation.type===1;
-  var isReload=(entry&&entry.type==='reload')||legacy;
-  var params=new URLSearchParams(window.location.search);
-  if(isReload&&(params.has('game')||params.has('listing'))){
-   params.delete('game');params.delete('listing');
-   var clean=window.location.pathname+(params.toString()?'?'+params.toString():'');
-   window.location.replace(clean||'/');
-  }
- }catch(e){console.warn('XERAVION refresh route fallback:',e)}
-})();
-</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#080807"><meta name="description" content="XERAVION adalah etalase digital akun game Mobile Legends, PUBG Mobile, dan Free Fire. Jelajahi katalog, lihat detail akun, dan hubungi admin untuk cek stok serta transaksi."><meta name="robots" content="index,follow,max-image-preview:large"><meta name="googlebot" content="index,follow"><meta name="author" content="XERAVION"><link rel="canonical" href="https://xeravion.my.id/"><meta property="og:locale" content="id_ID"><link rel="icon" type="image/png" href="/assets/file_0000000027ec8211877e42918a96984e.png"><meta property="og:type" content="website"><meta property="og:site_name" content="XERAVION"><meta property="og:title" content="XERAVION — Premium Game Account Store"><meta property="og:description" content="Etalase akun game pilihan. Telusuri katalog dan hubungi admin XERAVION untuk konfirmasi ketersediaan."><meta property="og:url" content="https://xeravion.my.id/"><meta property="og:image" content="https://xeravion.my.id/assets/file_0000000027ec8211877e42918a96984e.png"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="XERAVION — Premium Game Account Store"><meta name="twitter:description" content="Etalase akun game pilihan. Telusuri katalog dan hubungi admin XERAVION."><title>Jual Akun Mobile Legends, PUBG & Free Fire | XERAVION</title><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"XERAVION","url":"https://xeravion.my.id/","logo":"https://xeravion.my.id/assets/file_0000000027ec8211877e42918a96984e.png","description":"Etalase digital dan layanan informasi akun game Mobile Legends, PUBG Mobile, dan Free Fire. Calon pembeli dapat melihat katalog dan menghubungi admin untuk konfirmasi ketersediaan.","contactPoint":{"@type":"ContactPoint","telephone":"+6287714947270","email":"support@xeravion.my.id","contactType":"customer service","availableLanguage":"Indonesian"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"XERAVION","url":"https://xeravion.my.id/","inLanguage":"id-ID","description":"Etalase akun game Mobile Legends, PUBG Mobile, dan Free Fire."}</script>
 <style>
 :root{--site-primary:#c49a4a;--site-secondary:#241c10;--site-background:#0b0a08;--site-on-primary:#160f05;--site-on-secondary:#f5e8c9;--site-on-background:#f4efe5;--site-font-body:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--site-font-heading:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--site-heading-scale:1;--site-spacing-scale:1;--site-radius-scale:1;--site-decoration-opacity:1;--gold:#e3c27c;--muted:#a99d89;--line:#3b301f;--panel:#15120d;--panel2:#1d180f;--green:#56d69a;--red:#ff8585}
@@ -700,7 +684,7 @@ async function changeStock(id){let p=items.find(x=>String(x.id)===String(id));if
 function askDelete(id){deleteId=id;document.getElementById('confirmModal').classList.add('show');document.getElementById('confirmDelete').onclick=async()=>{const{error}=await supabaseClient.from('products').delete().eq('id',deleteId);if(error){alert('Gagal menghapus: '+error.message);return}closeModal();await loadProducts()}}function closeModal(){document.getElementById('confirmModal').classList.remove('show');deleteId=null}
 function setAdminGame(game){adminGameFilter=game;renderAdmin()}
 function renderAdmin(){let q=(document.getElementById('adminSearch')?.value||'').toLowerCase(),games=['Mobile Legends','PUBG Mobile','Free Fire','Lainnya'],allGames=items.filter(p=>!games.slice(0,3).includes(p.game)).map(p=>p.game),tabs=['Semua',...games.slice(0,3),...([...new Set(allGames)].length?['Lainnya']:[])],countFor=g=>g==='Semua'?items.length:g==='Lainnya'?items.filter(p=>!games.slice(0,3).includes(p.game)).length:items.filter(p=>p.game===g).length;document.getElementById('totalAdmin').textContent=items.length;document.getElementById('availableAdmin').textContent=items.filter(x=>x.stock==='Tersedia').length;document.getElementById('soldAdmin').textContent=items.filter(x=>x.stock!=='Tersedia').length;const tabsEl=document.getElementById('adminGameTabs');if(tabsEl){tabsEl.innerHTML=tabs.map(g=>'<button type="button" role="tab" aria-selected="'+(adminGameFilter===g)+'" class="admin-game-tab '+(adminGameFilter===g?'active':'')+'" onclick="setAdminGame(\''+esc(g)+'\')">'+esc(g)+' <span>'+countFor(g)+'</span></button>').join('');if(!tabs.includes(adminGameFilter))adminGameFilter='Mobile Legends';}let list=items.filter(p=>(adminGameFilter==='Semua'||(adminGameFilter==='Lainnya'?!games.slice(0,3).includes(p.game):p.game===adminGameFilter))&&[p.code,p.name,p.game].join(' ').toLowerCase().includes(q));const heading=document.getElementById('adminGameHeading'),counter=document.getElementById('adminGameCount');if(heading)heading.textContent=adminGameFilter.toUpperCase();if(counter)counter.textContent=list.length+' listing';document.getElementById('adminRows').innerHTML=list.length?list.map(p=>`<tr><td>${esc(p.code)}</td><td><strong>${esc(p.name)}</strong><div class="hint">${esc(p.game)}</div></td><td>${rupiah(p.price)}</td><td><span class="status">${esc(p.stock)}</span></td><td><button class="smallbtn" onclick="editItem('${esc(p.id)}')">Edit</button><button class="smallbtn" onclick="changeStock('${esc(p.id)}')">Status</button><button class="smallbtn" onclick="askDelete('${esc(p.id)}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5"><div class="admin-game-empty">Belum ada listing '+esc(adminGameFilter)+'.<br>Tambahkan akun melalui formulir di atas dan pilih game yang sesuai.</div></td></tr>'}
-async function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){document.getElementById('loginModal').classList.add('show');return}const{data:allowed,error}=await supabaseClient.rpc('is_admin');if(error||!allowed){xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();alert('Akun ini tidak terdaftar sebagai admin XERAVION.');return}xeravionAdminVerified=true;render();showAdminPanel()}catch(e){console.error('XERAVION openAdmin error:',e);alert('Dashboard gagal dibuka: '+(e?.message||String(e)))}}async function loginAdmin(){let email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,msg=document.getElementById('loginError');msg.textContent='';if(!navigator.onLine){msg.textContent='Perangkat sedang offline. Periksa koneksi internet lalu coba lagi.';return}if(!email||!password){msg.textContent='Email dan password wajib diisi.';return}try{msg.textContent='Menghubungi server login...';const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('XERAVION Supabase login response:',error);msg.textContent='Login ditolak Supabase ('+(error.status||'tanpa status')+'): '+error.message;return}const{data:allowed,error:checkError}=await supabaseClient.rpc('is_admin');if(checkError||!allowed){console.error('XERAVION admin check:',checkError);xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();msg.textContent=checkError?'Login berhasil, tetapi pemeriksaan admin gagal: '+checkError.message:'Akun ini bukan admin XERAVION.';return}xeravionAdminVerified=true;render();closeLogin();document.getElementById('adminPassword').value='';showAdminPanel()}catch(e){console.error('XERAVION login network error:',e);msg.textContent='Koneksi login gagal: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'. Periksa koneksi atau pemblokiran browser.'}}function closeLogin(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent=''}function showAdminPanel(){document.querySelector('.catalog').classList.add('hidden');document.getElementById('how').style.display='none';document.getElementById('faq').style.display='none';document.getElementById('about').style.display='none';document.getElementById('admin').classList.add('active');window.scrollTo(0,0);loadProducts();loadXeravionOrders()}async function signOutAdmin(){await supabaseClient.auth.signOut();xeravionAdminVerified=false;render();showCatalog();alert('Kamu sudah keluar dari Dashboard admin.')}function showCatalog(){document.querySelector('.catalog').classList.remove('hidden');document.getElementById('how').style.display='block';document.getElementById('faq').style.display='block';document.getElementById('about').style.display='block';document.getElementById('admin').classList.remove('active');window.scrollTo(0,0)}
+async function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){document.getElementById('loginModal').classList.add('show');return}const{data:allowed,error}=await supabaseClient.rpc('is_admin');if(error||!allowed){xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();alert('Akun ini tidak terdaftar sebagai admin XERAVION.');return}xeravionAdminVerified=true;render();showAdminPanel()}catch(e){console.error('XERAVION openAdmin error:',e);alert('Dashboard gagal dibuka: '+(e?.message||String(e)))}}async function loginAdmin(){let email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,msg=document.getElementById('loginError');msg.textContent='';if(!navigator.onLine){msg.textContent='Perangkat sedang offline. Periksa koneksi internet lalu coba lagi.';return}if(!email||!password){msg.textContent='Email dan password wajib diisi.';return}try{msg.textContent='Menghubungi server login...';const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('XERAVION Supabase login response:',error);msg.textContent='Login ditolak Supabase ('+(error.status||'tanpa status')+'): '+error.message;return}const{data:allowed,error:checkError}=await supabaseClient.rpc('is_admin');if(checkError||!allowed){console.error('XERAVION admin check:',checkError);xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();msg.textContent=checkError?'Login berhasil, tetapi pemeriksaan admin gagal: '+checkError.message:'Akun ini bukan admin XERAVION.';return}xeravionAdminVerified=true;render();closeLogin();document.getElementById('adminPassword').value='';showAdminPanel()}catch(e){console.error('XERAVION login network error:',e);msg.textContent='Koneksi login gagal: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'. Periksa koneksi atau pemblokiran browser.'}}function closeLogin(){document.getElementById('loginModal').classList.remove('show');document.getElementById('loginError').textContent=''}function showAdminPanel(){sessionStorage.setItem('xeravion-admin-view','1');document.querySelector('.catalog').classList.add('hidden');document.getElementById('how').style.display='none';document.getElementById('faq').style.display='none';document.getElementById('about').style.display='none';document.getElementById('admin').classList.add('active');window.scrollTo(0,0);loadProducts();loadXeravionOrders()}async function signOutAdmin(){await supabaseClient.auth.signOut();xeravionAdminVerified=false;render();showCatalog();alert('Kamu sudah keluar dari Dashboard admin.')}function showCatalog(){sessionStorage.removeItem('xeravion-admin-view');document.querySelector('.catalog').classList.remove('hidden');document.getElementById('how').style.display='block';document.getElementById('faq').style.display='block';document.getElementById('about').style.display='block';document.getElementById('admin').classList.remove('active');window.scrollTo(0,0)}
 
 let selectedCreditMember=null;
 function showAdminTab(tab){
@@ -831,23 +815,25 @@ async function redeemMemberReward(){alert('Poin digunakan saat pembelian akun me
 async function memberSignOut(){await supabaseClient.auth.signOut();document.getElementById('memberAccount').classList.add('hidden');document.getElementById('memberAuth').classList.remove('hidden');setMemberMode('login');alert('Kamu sudah keluar dari akun member XERAVION.')}
 
 
-/* On manual refresh, always return to the storefront homepage.
-   Directly opened shared listing links still work on a normal navigation. */
-(function normalizeRefreshRoute(){
- const nav=performance.getEntriesByType('navigation')[0];
- const legacyReload=performance.navigation&&performance.navigation.type===1;
- if((!nav||nav.type!=='reload')&&!legacyReload)return;
- const url=new URL(location.href);
- const hadStoreRoute=url.searchParams.has('game')||url.searchParams.has('listing');
- if(hadStoreRoute){
-  url.searchParams.delete('game');
-  url.searchParams.delete('listing');
-  history.replaceState({},'',url.pathname+url.search+url.hash);
+/* Keep the current buyer route intact on refresh. Category and shared-listing
+   state are restored by the URL and loadProducts()/applyStoreRoute(). */
+async function restoreAdminAfterRefresh(){
+ if(sessionStorage.getItem('xeravion-admin-view')!=='1')return;
+ try{
+  const{data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+  if(sessionError||!session)throw new Error('Sesi admin tidak tersedia');
+  const{data:allowed,error}=await supabaseClient.rpc('is_admin');
+  if(error||!allowed)throw new Error('Akun bukan admin');
+  xeravionAdminVerified=true;
+  render();
+  showAdminPanel();
+ }catch(e){
+  sessionStorage.removeItem('xeravion-admin-view');
+  console.warn('XERAVION admin refresh restore skipped:',e);
  }
- document.body.classList.remove('xeravion-listing-page','xeravion-game-page');
- document.body.classList.add('xeravion-home-page');
-})();
+}
 loadProducts();
+restoreAdminAfterRefresh();
 </script>
 
 <style id="xeravion-responsive-detail-images">

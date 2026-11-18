@@ -709,7 +709,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #gameSlider .starlight-copy a{font-size:8px;padding:6px 13px}
 }
 </style><style id="xeravion-language-picker-style">
-.language-picker{display:inline-flex;align-items:center;gap:5px;padding:0 8px;border:1px solid #64502e;border-radius:10px;background:#100e0b;color:#e8cc91;height:38px;flex:0 0 auto}.language-picker span{font-size:14px}.language-picker select{max-width:94px;width:auto;border:0;outline:0;background:transparent;color:#f5ead4;font-size:10px;font-weight:750;padding:5px 0}.language-picker option{background:#17130d;color:#f5ead4}@media(max-width:760px){.top .navright{gap:5px}.language-picker{height:34px;padding:0 5px;gap:3px}.language-picker select{max-width:72px;font-size:9px}.top .navright .btn{padding:8px 7px;font-size:9px}}
+.language-picker{display:inline-flex;align-items:center;gap:4px;padding:0 7px;border:1px solid #64502e;border-radius:10px;background:#100e0b;color:#e8cc91;height:36px;min-height:36px;box-sizing:border-box;flex:0 0 auto;align-self:center}.language-picker span{font-size:12px;line-height:1}.language-picker select{max-width:82px;width:auto;height:100%;border:0;outline:0;background:transparent;color:#f5ead4;font-size:10px;font-weight:750;padding:0}.language-picker option{background:#17130d;color:#f5ead4}.top .navright .btn{min-height:36px;box-sizing:border-box}@media(max-width:760px){.top .navright{gap:5px}.language-picker{height:32px;min-height:32px;padding:0 5px;gap:3px;border-radius:9px}.language-picker span{font-size:11px}.language-picker select{max-width:68px;font-size:9px}.top .navright .btn{min-height:32px;padding:7px 7px;font-size:9px}}
 </style>
 </head>
 <body><div class="app">
@@ -1797,7 +1797,7 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
 <script id="xeravion-multilanguage-and-game-slides">
 (function(){
  const originals=new WeakMap(), attrOriginals=new WeakMap(), cache=new Map();
- let active='id',running=false,sequence=0;
+ let active='id',running=false,sequence=0;\n const STORAGE_KEY='xeravion_preferred_language';
  const ignored=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','SELECT','OPTION','CODE','PRE']);
  const attrs=['placeholder','title','aria-label','alt'];
  function collect(){
@@ -1813,14 +1813,14 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   const select=document.getElementById('siteLanguage');if(running){if(select)select.value=active;return;}running=true;const id=++sequence;if(select)select.disabled=true;
   try{
    const found=collect();
-   if(lang==='id'){found.texts.forEach(n=>{if(originals.has(n))n.nodeValue=originals.get(n);});found.attrsToTranslate.forEach(x=>{const m=attrOriginals.get(x.el);if(m&&m[x.a]!==undefined)x.el.setAttribute(x.a,m[x.a]);});document.documentElement.lang='id';active='id';return;}
+   if(lang==='id'){found.texts.forEach(n=>{if(originals.has(n))n.nodeValue=originals.get(n);});found.attrsToTranslate.forEach(x=>{const m=attrOriginals.get(x.el);if(m&&m[x.a]!==undefined)x.el.setAttribute(x.a,m[x.a]);});document.documentElement.lang='id';active='id';try{localStorage.setItem(STORAGE_KEY,'id');}catch(e){}return;}
    const jobs=found.texts.map(n=>({type:'text',node:n,source:(()=>{if(!originals.has(n))originals.set(n,n.nodeValue);return originals.get(n);})()})).concat(found.attrsToTranslate.map(x=>({type:'attr',...x})));
    await pool(jobs,async job=>{const translated=await one(job.source,lang);if(id!==sequence)return;if(job.type==='text'){if(job.node.isConnected)job.node.nodeValue=translated;}else if(job.el.isConnected)job.el.setAttribute(job.a,translated);},5);
-   if(id===sequence){document.documentElement.lang=lang;active=lang;}
+   if(id===sequence){document.documentElement.lang=lang;active=lang;try{localStorage.setItem(STORAGE_KEY,lang);}catch(e){}}
   }catch(e){console.error('XERAVION language translation:',e);alert('Terjemahan gagal dimuat. Periksa koneksi internet lalu coba lagi.');if(select)select.value=active;}
   finally{running=false;if(select)select.disabled=false;}
  }
- window.translateXeravionSite=translateXeravionSite;
+ window.translateXeravionSite=translateXeravionSite;\n try{const saved=localStorage.getItem(STORAGE_KEY);const allowed=['id','en','ms','ar','es','pt','fr','de','ja','ko','zh-CN','th','vi','tl'];if(saved&&allowed.includes(saved)){const picker=document.getElementById('siteLanguage');if(picker)picker.value=saved;if(saved!=='id')translateXeravionSite(saved);}}catch(e){}
 })();
 </script>
 </body></html>

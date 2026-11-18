@@ -547,6 +547,76 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 .password-toggle-wrap .password-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:1px solid rgba(218,184,105,.45);background:rgba(12,12,12,.92);color:#e8cd91;border-radius:8px;padding:7px 10px;font-size:12px;font-weight:700;cursor:pointer;z-index:2}
 .admin-password-wrap .field{margin-top:0!important}
 </style>
+
+<style id="xeravion-desktop-header-alignment-final">
+/* Desktop only: vertically center Member Points and Login with the logo/wordmark. */
+@media (min-width:761px){
+ .top .wrap.nav{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  min-height:82px!important;
+  height:82px!important;
+  gap:clamp(10px,1.5vw,20px)!important;
+ }
+ .top .wrap.nav>a.brand{
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  align-self:center!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+ }
+ .top .wrap.nav>a.brand>img.brand-logo{display:block!important;align-self:center!important;margin:0!important}
+ .top .wrap.nav>a.brand>.brand-copy{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-self:center!important;
+  margin:0!important;
+  padding:0!important;
+  line-height:1.15!important;
+  transform:none!important;
+ }
+ .top .wrap.nav>.navlinks{
+  display:flex!important;
+  flex:1 1 auto!important;
+  align-items:center!important;
+  align-self:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+ }
+ .top .wrap.nav>.navright{
+  display:flex!important;
+  flex:0 0 auto!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  align-self:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+ }
+ .top .wrap.nav>.navright>.btn{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  align-self:center!important;
+  height:42px!important;
+  min-height:42px!important;
+  line-height:1!important;
+  margin:0!important;
+  padding:0 14px!important;
+  box-sizing:border-box!important;
+ }
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/file_0000000027ec8211877e42918a96984e.png" alt="Logo XERAVION" width="40" height="40"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

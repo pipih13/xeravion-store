@@ -709,7 +709,7 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #gameSlider .starlight-copy a{font-size:8px;padding:6px 13px}
 }
 </style><style id="xeravion-language-picker-style">
-.goog-te-banner-frame.skiptranslate{display:none!important}body{top:0!important}.goog-te-gadget{display:none!important}#google_translate_element{display:none!important}.language-picker{display:inline-flex;align-items:center;gap:5px;padding:0 8px;border:1px solid #64502e;border-radius:10px;background:#100e0b;color:#e8cc91;height:38px;flex:0 0 auto}.language-picker span{font-size:14px}.language-picker select{max-width:94px;width:auto;border:0;outline:0;background:transparent;color:#f5ead4;font-size:10px;font-weight:750;padding:5px 0}.language-picker option{background:#17130d;color:#f5ead4}@media(max-width:760px){.top .navright{gap:5px}.language-picker{height:34px;padding:0 5px;gap:3px}.language-picker select{max-width:72px;font-size:9px}.top .navright .btn{padding:8px 7px;font-size:9px}}
+.language-picker{display:inline-flex;align-items:center;gap:5px;padding:0 8px;border:1px solid #64502e;border-radius:10px;background:#100e0b;color:#e8cc91;height:38px;flex:0 0 auto}.language-picker span{font-size:14px}.language-picker select{max-width:94px;width:auto;border:0;outline:0;background:transparent;color:#f5ead4;font-size:10px;font-weight:750;padding:5px 0}.language-picker option{background:#17130d;color:#f5ead4}@media(max-width:760px){.top .navright{gap:5px}.language-picker{height:34px;padding:0 5px;gap:3px}.language-picker select{max-width:72px;font-size:9px}.top .navright .btn{padding:8px 7px;font-size:9px}}
 </style>
 </head>
 <body><div class="app">
@@ -1794,11 +1794,20 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
 .xer-traffic-bar{width:min(28px,70%);min-height:3px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#f5dfaa,#a77a32);box-shadow:0 0 14px #c99a4a35}
 @media(max-width:600px){.xer-traffic-stats{grid-template-columns:1fr 1fr}.xer-traffic-stats .stat:last-child{grid-column:1/-1}.xer-traffic-chart{gap:5px}.xer-traffic-day{flex-basis:34px;min-width:34px}}
 </style>
-<div id="google_translate_element" aria-hidden="true"></div>
 <script id="xeravion-multilanguage-and-game-slides">
-let xeravionPendingLanguage='id';
-function applyXeravionLanguage(){const combo=document.querySelector('.goog-te-combo');if(!combo)return false;combo.value=xeravionPendingLanguage;combo.dispatchEvent(new Event('change'));return true;}
-function translateXeravionSite(lang){if(!lang)return;xeravionPendingLanguage=lang;if(!applyXeravionLanguage()&&!window.xeravionTranslateLoading){window.xeravionTranslateLoading=true;const script=document.createElement('script');script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';script.async=true;document.head.appendChild(script);}}
-function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:'id',includedLanguages:'en,ms,ar,es,pt,fr,de,ja,ko,zh-CN,th,vi,tl',autoDisplay:false},'google_translate_element');setTimeout(applyXeravionLanguage,500);}
+(function(){
+ const languageNames={id:'Indonesia',en:'English',ms:'Melayu',ar:'العربية',es:'Español',pt:'Português',fr:'Français',de:'Deutsch',ja:'日本語',ko:'한국어','zh-CN':'中文',th:'ไทย',vi:'Tiếng Việt',tl:'Filipino'};
+ const originalText=new WeakMap(), originalAttrs=new WeakMap();
+ let activeLanguage='id',busy=false;
+ const skipTags=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','SELECT','OPTION','CODE','PRE']);
+ function nodes(){const out=[];const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||skipTags.has(p.tagName)||p.closest('.language-picker,[data-no-translate],#google_translate_element'))return NodeFilter.FILTER_REJECT;const v=n.nodeValue.trim();return v?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});while(walker.nextNode())out.push(walker.currentNode);return out;}
+ async function translateBatch(texts,lang){const joined=texts.map((t,i)=>'['+i+'] '+t).join('\n');const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=id&tl='+encodeURIComponent(lang)+'&dt=t&q='+encodeURIComponent(joined);const res=await fetch(url);if(!res.ok)throw new Error('Terjemahan tidak tersedia');const data=await res.json();const translated=(data[0]||[]).map(x=>x[0]||'').join('');return texts.map((t,i)=>{const m=translated.match(new RegExp('\\\\['+i+'\\\\]\\\\s*([\\\\s\\\\S]*?)(?=\\\\['+(i+1)+'\\\\]\\\\s*|$)'));return m?m[1].trim():t;});}
+ async function translatePage(lang){if(busy)return;busy=true;const select=document.getElementById('siteLanguage');if(select)select.disabled=true;try{
+   const all=nodes();if(lang==='id'){all.forEach(n=>{if(originalText.has(n))n.nodeValue=originalText.get(n);});document.documentElement.lang='id';activeLanguage='id';return;}
+   const batchSize=35;for(let i=0;i<all.length;i+=batchSize){const batch=all.slice(i,i+batchSize);const source=batch.map(n=>{if(!originalText.has(n))originalText.set(n,n.nodeValue);return originalText.get(n);});const result=await translateBatch(source,lang);batch.forEach((n,j)=>{if(n.isConnected)n.nodeValue=result[j]||source[j];});}
+   document.documentElement.lang=lang;activeLanguage=lang;
+ }catch(e){alert('Maaf, terjemahan belum tersedia. Silakan coba lagi.');if(select)select.value=activeLanguage;}finally{busy=false;if(select)select.disabled=false;}}
+ window.translateXeravionSite=translatePage;
+})();
 </script>
 </body></html>

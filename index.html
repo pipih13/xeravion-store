@@ -1943,13 +1943,25 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
   const picker=document.getElementById('siteLanguage');if(picker)picker.value=lang;
   if(lang==='id'){location.reload();return;}
   applying=true;
-  // Re-render listing and detail using manually supplied English fields, then translate fixed interface labels.
-  refreshDynamic();
-  if(typeof window.render==='function')window.render();
-  const detail=document.getElementById('detailContent'),detailId=detail&&detail.dataset.productId;
-  if(detailId&&document.getElementById('productDetailModal')?.classList.contains('show')&&typeof window.openProductDetail==='function')window.openProductDetail(Number(detailId),true);
-  translateTree(document.body);
-  applying=false;
+  try{
+   // Keep language switching resilient: a catalogue/detail rendering problem must not
+   // abort translation of the rest of the page or leave the observer permanently paused.
+   try{
+    refreshDynamic();
+    if(typeof window.render==='function')window.render();
+   }catch(error){console.error('XERAVION English catalogue render:',error);}
+   try{
+    const detail=document.getElementById('detailContent'),detailId=detail&&detail.dataset.productId;
+    if(detailId&&document.getElementById('productDetailModal')?.classList.contains('show')&&typeof window.openProductDetail==='function')window.openProductDetail(Number(detailId),true);
+   }catch(error){console.error('XERAVION English detail render:',error);}
+   translateTree(document.body);
+  }catch(error){
+   console.error('XERAVION language switch failed:',error);
+  }finally{
+   applying=false;
+   document.documentElement.lang='en';
+   if(picker)picker.value='en';
+  }
  }
  function init(){
   const picker=document.getElementById('siteLanguage');if(picker)picker.value=read();

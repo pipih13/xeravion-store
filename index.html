@@ -921,6 +921,17 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <div class="melo-status-grid"><div class="stat"><b id="dwigitalEnvironment">—</b><span>Mode API</span></div><div class="stat"><b id="dwigitalTier">—</b><span>Level akun</span></div><div class="stat"><b id="dwigitalBalance">—</b><span>Saldo uji</span></div></div>
   <div class="melo-actions"><button class="btn gold" type="button" id="dwigitalTestBtn" onclick="testDwigitalConnection()">Uji koneksi</button><button class="btn" type="button" onclick="loadDwigitalCatalog()">Muat katalog MLBB</button></div>
   <div id="dwigitalStatus" class="notice" role="status" aria-live="polite">Mode aman: Development. Pesanan sungguhan tidak akan dibuat dari panel ini.</div>
+  <div class="melo-markup-box" id="dwigitalNicknameTest">
+   <h4>Uji pengecekan User ID / Zone ID MLBB</h4>
+   <p class="hint">Khusus admin dan API Development. Pilih paket dari katalog lalu masukkan ID akun untuk menguji respons nickname. Pengujian ini tidak memesan produk, tidak memotong saldo, dan tidak menentukan negara akun.</p>
+   <div class="formgrid">
+    <div><label for="dwigitalCheckVariant">Variant ID paket *</label><input id="dwigitalCheckVariant" type="number" min="1" step="1" placeholder="Pilih dari katalog"></div>
+    <div><label for="dwigitalCheckUser">User ID *</label><input id="dwigitalCheckUser" type="text" maxlength="64" autocomplete="off" placeholder="Masukkan User ID"></div>
+    <div><label for="dwigitalCheckZone">Zone ID *</label><input id="dwigitalCheckZone" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan Zone ID"></div>
+    <div style="display:flex;align-items:end"><button class="btn gold" type="button" id="dwigitalCheckBtn" onclick="testDwigitalNickname()">Uji nickname (Development)</button></div>
+   </div>
+   <div id="dwigitalNicknameResult" class="notice" role="status" aria-live="polite">Belum ada pengecekan. Negara akun akan tetap berstatus belum diketahui.</div>
+  </div>
   <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Katalog dimuat per halaman agar panel tetap ringan.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button></div></div>
   <div id="dwigitalProductList" class="melo-product-list"><div class="melo-empty">Tekan “Muat katalog MLBB” untuk mengambil produk.</div></div><div id="dwigitalPagination" class="melo-pagination" aria-live="polite"></div>
   <div class="melo-markup-box" id="dwigitalCompareBox">
@@ -1533,6 +1544,35 @@ async function dwigitalRequest(path){
  return data;
 }
 function formatDwigitalMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID');}
+async function testDwigitalNickname(){
+ if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
+ const variantId=Number(document.getElementById('dwigitalCheckVariant')?.value);
+ const target=(document.getElementById('dwigitalCheckUser')?.value||'').trim();
+ const targetZone=(document.getElementById('dwigitalCheckZone')?.value||'').trim();
+ const result=document.getElementById('dwigitalNicknameResult'),btn=document.getElementById('dwigitalCheckBtn');
+ if(!Number.isSafeInteger(variantId)||variantId<=0){if(result)result.textContent='Pilih produk dari katalog terlebih dahulu agar Variant ID sesuai.';return;}
+ if(!target||!targetZone){if(result)result.textContent='User ID dan Zone ID wajib diisi untuk MLBB.';return;}
+ if(btn){btn.disabled=true;btn.textContent='Memeriksa…'}
+ if(result)result.textContent='Mengirim permintaan ke Dwigital Development…';
+ try{
+  const{data:{session},error}=await supabaseClient.auth.getSession();
+  if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
+  const response=await fetch('/api/dwigital/nickname',{
+   method:'POST',
+   headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',Accept:'application/json'},
+   body:JSON.stringify({variant_id:variantId,target,target_zone:targetZone}),
+   cache:'no-store'
+  });
+  const payload=await response.json().catch(()=>null);
+  if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
+  if(result)result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Akun ditemukan pada simulasi Development. Status negara: BELUM DIKETAHUI. Ini bukan verifikasi akun live dan belum dapat digunakan untuk transaksi.';
+  setDwigitalStatus('Pengecekan nickname Development berhasil. Tidak ada pesanan dibuat. Negara akun tetap belum diketahui.','ok');
+ }catch(e){
+  if(result)result.textContent='Pengecekan gagal: '+(e.message||String(e));
+  setDwigitalStatus('Pengecekan nickname gagal: '+(e.message||String(e)),'error');
+ }finally{if(btn){btn.disabled=false;btn.textContent='Uji nickname (Development)'}}
+}
+
 async function testDwigitalConnection(){
  if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
  const btn=document.getElementById('dwigitalTestBtn');if(btn){btn.disabled=true;btn.textContent='Menguji…'}
@@ -1620,7 +1660,7 @@ async function compareDwigitalMelo(){
   setDwigitalStatus('Perbandingan gagal: '+(e.message||String(e)),'error');
  }finally{if(btn){btn.disabled=false;btn.textContent='Bandingkan harga dengan Melo'}}
 }
-function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price};updateDwigitalMarkupPreview();}
+function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price,variantId:p.variant_id};updateDwigitalMarkupPreview();const variant=document.getElementById('dwigitalCheckVariant');if(variant&&p.variant_id)variant.value=p.variant_id;const test=document.getElementById('dwigitalNicknameTest');if(test)test.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function updateDwigitalMarkupPreview(){const out=document.getElementById('dwigitalMarkupPreview');if(!out)return;if(!dwigitalSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}const margin=Math.max(0,Number(document.getElementById('dwigitalMarkup')?.value||0));out.textContent=dwigitalSelectedProduct.name+' · Modal '+formatDwigitalMoney(dwigitalSelectedProduct.price)+' + Margin '+formatDwigitalMoney(margin)+' = Harga simulasi '+formatDwigitalMoney(dwigitalSelectedProduct.price+margin)+'.';}
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
 async function loadXeravionAnalytics(){

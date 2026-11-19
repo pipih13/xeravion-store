@@ -33,8 +33,11 @@ export async function onRequestPost({ request, env }) {
     if (!/^[A-Za-z0-9#._-]{2,64}$/.test(target)) {
       return json({ error: "User ID tidak valid. Gunakan 1–64 huruf, angka, #, titik, garis bawah, atau strip.", code: "invalid_target" }, 400);
     }
-    if (targetZone && !/^[A-Za-z0-9._-]{1,32}$/.test(targetZone)) {
-      return json({ error: "Zone ID tidak valid.", code: "invalid_target_zone" }, 400);
+    if (!targetZone) {
+      return json({ error: "Zone ID / ID server wajib diisi untuk Mobile Legends.", code: "invalid_target_zone" }, 400);
+    }
+    if (!/^[A-Za-z0-9._-]{1,32}$/.test(targetZone)) {
+      return json({ error: "Zone ID / ID server tidak sesuai format Dwigital.", code: "invalid_target_zone" }, 400);
     }
 
     // Confirm the selected variant is an actual MLBB game package with nickname support.
@@ -49,7 +52,21 @@ export async function onRequestPost({ request, env }) {
     }
     const productName = String(product.product || product.name || "").toLowerCase();
     if (product.type !== "game" || !productName.includes("mobile legends") || product.nickname_check !== true || product.zone_required !== true) {
-      return json({ error: "Pilih paket Mobile Legends yang mendukung cek nickname dan membutuhkan Zone ID.", code: "unsupported_variant" }, 400);
+      return json({ error: "Variant verifikasi harus berasal dari paket Mobile Legends dengan nickname_check=true dan zone_required=true menurut katalog Dwigital.", code: "unsupported_variant" }, 400);
+    }
+    const fields = Array.isArray(product.fields) ? product.fields : [];
+    const targetField = fields.find(field => field?.name === "target");
+    const zoneField = fields.find(field => field?.name === "target_zone");
+    for (const [value, field, label] of [[target, targetField, "User ID"], [targetZone, zoneField, "Zone ID / ID server"]]) {
+      if (field?.pattern) {
+        try {
+          if (!(new RegExp(field.pattern).test(value))) {
+            return json({ error: label + " tidak sesuai format resmi paket Dwigital.", code: "invalid_target" }, 400);
+          }
+        } catch {
+          return json({ error: "Pola validasi paket Dwigital tidak dapat dibaca.", code: "invalid_supplier_pattern" }, 502);
+        }
+      }
     }
     const productEnvironment = String(product.environment || detailPayload.meta?.environment || "").toLowerCase();
     if (!["development", "sandbox"].includes(productEnvironment)) {
@@ -66,7 +83,7 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify({
         variant_id: variantId,
         target,
-        ...(targetZone ? { target_zone: targetZone } : {})
+        target_zone: targetZone
       }),
       signal: AbortSignal.timeout(15000)
     });
@@ -125,15 +142,11 @@ export async function onRequestPost({ request, env }) {
       nickname: String(payload.data.nickname || ""),
       target,
       target_zone: targetZone || null,
-      region,
-      region_status: regionStatus,
-      account_allowed: accountAllowed,
+      region: null,
+      region_status: "not_provided_by_supplier",
+      account_allowed: null,
       order_enabled: false,
-      message: regionStatus === "verified_unsupported_region"
-        ? "Akun terdeteksi bukan Indonesia. Akun tidak memenuhi wilayah yang didukung."
-        : regionStatus === "verified_supported"
-          ? "Wilayah Indonesia terdeteksi dari data eksplisit supplier. Tetap belum dapat melakukan transaksi."
-          : "Supplier hanya mengembalikan nickname tanpa negara akun. Wilayah belum diketahui; transaksi harus dihentikan."
+      message: "Pengecekan mengikuti validasi User ID dan Zone ID Dwigital. API nickname tidak menyatakan negara akun."
     });
   } catch (error) {
     return json({

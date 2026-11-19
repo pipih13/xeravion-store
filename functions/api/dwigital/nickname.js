@@ -37,6 +37,25 @@ export async function onRequestPost({ request, env }) {
       return json({ error: "Zone ID tidak valid.", code: "invalid_target_zone" }, 400);
     }
 
+    // Confirm the selected variant is an actual MLBB game package with nickname support.
+    const detailResponse = await fetch("https://dwigital.id/api/v1/products/" + variantId, {
+      headers: { "Authorization": "Bearer " + key, "Accept": "application/json" },
+      signal: AbortSignal.timeout(15000)
+    });
+    const detailPayload = await detailResponse.json().catch(() => null);
+    const product = detailPayload?.data;
+    if (!detailResponse.ok || detailPayload?.success !== true || !product) {
+      return json({ error: "Paket tidak ditemukan pada katalog Dwigital Development.", code: "variant_unavailable" }, 400);
+    }
+    const productName = String(product.product || product.name || "").toLowerCase();
+    if (product.type !== "game" || !productName.includes("mobile legends") || product.nickname_check !== true || product.zone_required !== true) {
+      return json({ error: "Pilih paket Mobile Legends yang mendukung cek nickname dan membutuhkan Zone ID.", code: "unsupported_variant" }, 400);
+    }
+    const productEnvironment = String(product.environment || detailPayload.meta?.environment || "").toLowerCase();
+    if (productEnvironment && !["development", "sandbox"].includes(productEnvironment)) {
+      return json({ error: "Detail paket bukan dari Development/Sandbox. Permintaan dihentikan.", code: "unsafe_environment" }, 502);
+    }
+
     const upstream = await fetch("https://dwigital.id/api/v1/nickname", {
       method: "POST",
       headers: {

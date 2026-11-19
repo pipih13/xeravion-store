@@ -1461,11 +1461,30 @@ function changeMeloPage(delta){
  document.getElementById('meloProductArea')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function selectMeloProduct(index){
- const p=window._xerMeloProducts?.[index];if(!p)return;
+ const p=(window._xerMeloProducts||[])[Number(index)];
+ const out=document.getElementById('meloMarkupPreview');
+ if(!p){if(out)out.textContent='Produk tidak ditemukan. Muat ulang katalog lalu coba lagi.';return;}
  const smart=!!window._xerMeloSmart;const sku=smart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
- meloSelectedProduct={name:p.name||p.product_name||sku,sku,price:Number(p.price??p.sell_price??p.amount??0)};
+ const rawPrice=Number(p.price??p.sell_price??p.amount??0);
+ if(!Number.isFinite(rawPrice)||rawPrice<=0){if(out)out.textContent='Harga modal produk tidak valid; belum dapat dihitung.';return;}
+ meloSelectedProduct={name:p.name||p.product_name||sku,sku,price:rawPrice};
  updateMeloMarkupPreview();
+ const buttons=document.querySelectorAll('.melo-calc-btn');
+ buttons.forEach(btn=>{const chosen=Number(btn.dataset.meloIndex)===Number(index);btn.textContent=chosen?'Dipilih ✓':'Hitung harga';btn.classList.toggle('selected',chosen);});
+ if(out)out.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+window.selectMeloProduct=selectMeloProduct;
+(function bindMeloCalcButtons(){
+ const list=document.getElementById('meloProductList');
+ if(!list||list.dataset.calcBound==='1')return;
+ list.dataset.calcBound='1';
+ list.addEventListener('click',event=>{
+  const btn=event.target.closest('.melo-calc-btn');
+  if(!btn||btn.disabled)return;
+  event.preventDefault();
+  selectMeloProduct(btn.dataset.meloIndex);
+ });
+})();
 function updateMeloMarkupPreview(){
  const out=document.getElementById('meloMarkupPreview');if(!out)return;
  if(!meloSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}

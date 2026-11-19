@@ -805,6 +805,22 @@ body.xeravion-game-page:has(.item-gaming-page-head) #catalog{max-width:1240px;ma
 body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display:none}
 @media(max-width:700px){.item-gaming-title-row{align-items:flex-start;flex-direction:column}.item-gaming-banner{border-radius:12px}.item-platform-filter{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 8px}.item-platform-filter button{white-space:nowrap}.item-gaming-types{align-items:flex-start}.item-gaming-types>span{width:100%}.item-gaming-types button{font-size:10px;padding:7px 9px}}
 </style>
+<style id="xeravion-melo-admin-style">
+.melo-badge{display:inline-flex;align-items:center;border:1px solid #80663a;border-radius:999px;padding:7px 11px;color:#e5c783;font-size:10px;font-weight:850;white-space:nowrap}
+.melo-badge.ok{border-color:#286b4b;color:#76e0aa;background:#10251b}.melo-badge.error{border-color:#8a3b3b;color:#ffaaaa;background:#2a1111}
+.melo-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.melo-status-grid .stat{min-width:0}.melo-status-grid .stat b{font-size:clamp(13px,2vw,19px);overflow-wrap:anywhere}
+.melo-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.melo-actions .btn{min-height:40px}
+.melo-catalog-head,.melo-product-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
+.melo-catalog-head h4,.melo-product-heading h4,.melo-markup-box h4{margin:0 0 5px;color:#f1d89e}
+.melo-catalog-controls{display:flex;gap:8px;min-width:min(100%,360px)}.melo-catalog-controls select,.melo-catalog-controls input,.melo-markup-box input{background:#0e0c09;border:1px solid #51432b;border-radius:9px;color:#f5ead4;padding:10px;min-width:0}.melo-catalog-controls select{width:110px}.melo-catalog-controls input{flex:1;width:150px}
+.melo-brand-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.melo-brand{text-align:left;display:flex;flex-direction:column;gap:5px;padding:12px;border:1px solid #51432b;border-radius:10px;background:#100e0b;color:#f5ead4;min-width:0}.melo-brand span,.melo-product small{font-size:10px;color:#a99d89}.melo-product-area{margin-top:18px;padding:14px;border:1px solid #51432b;border-radius:13px;background:#0d0b09}
+.melo-product-list{display:grid;gap:7px;margin-top:12px}.melo-product{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid #3e3322;border-radius:9px;background:#15110b}.melo-product>div:first-child{min-width:0;display:grid;gap:5px}.melo-product strong{font-size:12px;overflow-wrap:anywhere}.melo-product-price{display:flex;align-items:flex-end;flex-direction:column;gap:6px;white-space:nowrap;color:#e8cc91;font-size:12px;font-weight:800}
+.melo-empty{padding:18px;border:1px dashed #51432b;border-radius:10px;color:#b4a78f;font-size:12px;line-height:1.6}
+.melo-markup-box{margin-top:18px;padding:15px;border:1px solid #51432b;border-radius:12px;background:#15110b}.melo-markup-box label{display:block;margin:10px 0 6px;color:#b4a78f;font-size:11px}.melo-markup-box input{width:100%;max-width:260px}.melo-footnote{margin-top:16px;line-height:1.7}
+@media(max-width:600px){.melo-status-grid{gap:7px}.melo-status-grid .stat{padding:11px 8px}.melo-status-grid .stat span{font-size:9px}.melo-catalog-head{align-items:stretch;flex-direction:column}.melo-catalog-controls{width:100%;min-width:0}.melo-brand-list{grid-template-columns:1fr}.melo-product{align-items:flex-start;flex-direction:column}.melo-product-price{align-items:flex-start;flex-direction:row;flex-wrap:wrap}.melo-actions .btn{flex:1 1 calc(50% - 8px)}}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo-lightning.gif" alt="Logo XERAVION" width="54" height="54" decoding="async"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -847,6 +863,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
+ <button type="button" class="xer-admin-tab" data-tab="melo" onclick="showAdminTab('melo')">Melo H2H</button>
  <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
 </nav>
 <div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button></div></div></div>
@@ -862,6 +879,35 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <div class="xer-traffic-chart-wrap"><h4>Kunjungan per hari</h4><div id="xerTrafficChart" class="xer-traffic-chart"><div class="hint">Tekan Muat ulang untuk mengambil statistik.</div></div></div>
   <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
   <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
+ </div>
+</div>
+<div class="xer-admin-tab-panel" id="adminTab-melo">
+ <div class="panel xer-melo-panel">
+  <div class="sectionhead"><div><div class="eyebrow">RESELLER API · SANDBOX</div><h3 style="margin:4px 0">Melo H2H Integration</h3><div class="hint">Hubungkan XERAVION ke katalog dan saldo Melo. Kredensial disimpan hanya di Cloudflare Pages.</div></div><span id="meloConnectionBadge" class="melo-badge">Belum diuji</span></div>
+  <div class="melo-status-grid">
+   <div class="stat"><b id="meloProfileName">—</b><span>Profil / akun</span></div>
+   <div class="stat"><b id="meloProfileTier">—</b><span>Tier akun</span></div>
+   <div class="stat"><b id="meloBalance">—</b><span>Saldo Melo (MC / IDR)</span></div>
+  </div>
+  <div class="melo-actions">
+   <button class="btn gold" type="button" id="meloTestBtn" onclick="testMeloConnection()">Uji koneksi API</button>
+   <button class="btn" type="button" onclick="loadMeloBalance()">Perbarui saldo</button>
+   <button class="btn" type="button" onclick="loadMeloCategories('regular')">Muat brand reguler</button>
+   <button class="btn" type="button" onclick="loadMeloCategories('smart')">Muat brand Smart</button>
+  </div>
+  <div id="meloStatus" class="notice" role="status" aria-live="polite">Mode aman: Sandbox. Belum ada pesanan yang dapat dibuat dari halaman ini.</div>
+  <div class="melo-catalog-head"><div><h4>Katalog supplier</h4><p class="hint">Pilih katalog reguler atau Smart. Daftar harga diambil dari akun Melo sesuai tier.</p></div><div class="melo-catalog-controls"><select id="meloCatalogMode" aria-label="Jenis katalog" onchange="loadMeloCategories(this.value)"><option value="regular">Reguler</option><option value="smart">Smart</option></select><input id="meloCatalogSearch" placeholder="Cari brand atau produk…" oninput="filterMeloCatalog()"></div></div>
+  <div id="meloBrandList" class="melo-brand-list"><div class="melo-empty">Tekan “Muat brand reguler” atau “Muat brand Smart” untuk mengambil katalog.</div></div>
+  <div id="meloProductArea" class="melo-product-area hidden">
+   <div class="melo-product-heading"><h4 id="meloProductTitle">Daftar produk</h4><button class="btn" type="button" onclick="closeMeloProducts()">Tutup</button></div>
+   <div id="meloProductList" class="melo-product-list"></div>
+  </div>
+  <div class="melo-markup-box">
+   <h4>Simulasi harga jual XERAVION</h4><p class="hint">Kalkulasi saja, belum mengubah harga toko atau membuat pesanan.</p>
+   <label for="meloMarkup">Margin tambahan (Rp)</label><input id="meloMarkup" type="number" min="0" step="100" value="1000" oninput="updateMeloMarkupPreview()">
+   <div id="meloMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div>
+  </div>
+  <p class="hint melo-footnote">Tahap ini hanya menguji koneksi, membaca profil/saldo, dan menampilkan katalog. Belum ada tombol pembelian, transaksi live, perubahan stok, atau sinkronisasi otomatis. Semua transaksi harus tetap melalui persetujuan admin setelah pengujian Sandbox.</p>
  </div>
 </div>
 <div class="xer-admin-tab-panel" id="adminTab-mail">
@@ -1290,7 +1336,7 @@ async function connectXeravionMail(){
 }
 let selectedCreditMember=null;
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','orders','credits','analytics','mail'];
+ const allowed=['overview','form','listings','item-listings','orders','credits','analytics','melo','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
@@ -1299,8 +1345,108 @@ function showAdminTab(tab){
  if(tab==='item-listings')renderItemGamingAdmin();
  if(tab==='form')populateOrderProducts();
  if(tab==='analytics')loadXeravionAnalytics();
+ if(tab==='melo')testMeloConnection();
  if(tab==='mail')connectXeravionMail();
 }
+
+let meloCachedBrands=[];
+let meloSelectedProduct=null;
+function meloAuthHeaders(token){return {Authorization:'Bearer '+token,Accept:'application/json'};}
+async function meloRequest(path){
+ const{data:{session},error}=await supabaseClient.auth.getSession();
+ if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
+ const response=await fetch('/api/melo/'+path,{headers:meloAuthHeaders(session.access_token),cache:'no-store'});
+ let data;try{data=await response.json()}catch{throw new Error('Respons server Melo tidak valid.')}
+ if(!response.ok)throw new Error(data.error||('Melo API HTTP '+response.status));
+ return data;
+}
+function setMeloStatus(message,type='info'){
+ const el=document.getElementById('meloStatus');if(el)el.textContent=message;
+ const badge=document.getElementById('meloConnectionBadge');if(badge){badge.textContent=type==='ok'?'Terhubung':type==='error'?'Perlu diperiksa':'Belum diuji';badge.className='melo-badge '+(type==='ok'?'ok':type==='error'?'error':'');}
+}
+function formatMeloMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID');}
+function extractMeloData(payload){return payload?.data??payload?.result??payload;}
+async function testMeloConnection(){
+ if(!xeravionAdminVerified){setMeloStatus('Silakan login sebagai admin XERAVION.','error');return;}
+ const btn=document.getElementById('meloTestBtn');if(btn){btn.disabled=true;btn.textContent='Menguji…'}
+ setMeloStatus('Memeriksa kredensial dan menghubungi endpoint profil Melo…');
+ try{
+  const payload=await meloRequest('profile');
+  const d=extractMeloData(payload)||{};const profile=d.profile||d;
+  const name=profile.nickname||profile.name||profile.username||profile.email||profile.id||'Akun Melo aktif';
+  const tier=profile.tier_name||profile.tier?.name||profile.tier||profile.profile_tier||'—';
+  const n=document.getElementById('meloProfileName'),t=document.getElementById('meloProfileTier');
+  if(n)n.textContent=String(name);if(t)t.textContent=typeof tier==='object'?JSON.stringify(tier):String(tier);
+  setMeloStatus('Koneksi API Melo berhasil. Profil berhasil dibaca. Mode integrasi tetap Sandbox; belum ada transaksi dibuat.','ok');
+  await loadMeloBalance(true);
+ }catch(e){setMeloStatus('Uji koneksi gagal: '+(e.message||String(e)), 'error');}
+ finally{if(btn){btn.disabled=false;btn.textContent='Uji koneksi API'}}
+}
+async function loadMeloBalance(silent=false){
+ try{
+  const payload=await meloRequest('profile/balance');const d=extractMeloData(payload)||{};
+  const b=d.balance??d.wallet_balance??d.available_balance??d;
+  const amount=typeof b==='object'?(b.amount??b.balance??b.mc??b.idr):b;
+  const el=document.getElementById('meloBalance');
+  if(el)el.textContent=amount===undefined||amount===null?'Data saldo tidak tersedia':formatMeloMoney(amount);
+  if(!silent)setMeloStatus('Saldo Melo berhasil diperbarui.','ok');
+ }catch(e){if(!silent)setMeloStatus('Gagal memuat saldo: '+(e.message||String(e)),'error');}
+}
+async function loadMeloCategories(mode){
+ if(!xeravionAdminVerified){setMeloStatus('Silakan login sebagai admin.','error');return;}
+ const smart=mode==='smart';const path=smart?'smart-pricelists/categories':'pricelists/categories';
+ const list=document.getElementById('meloBrandList');if(list)list.innerHTML='<div class="melo-empty">Memuat brand dari Melo…</div>';
+ const select=document.getElementById('meloCatalogMode');if(select)select.value=smart?'smart':'regular';
+ try{
+  const payload=await meloRequest(path);const d=extractMeloData(payload);
+  meloCachedBrands=Array.isArray(d)?d:(Array.isArray(d?.data)?d.data:[]);
+  renderMeloBrands();setMeloStatus('Berhasil memuat '+meloCachedBrands.length+' brand katalog '+(smart?'Smart':'reguler')+'.','ok');
+ }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setMeloStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
+}
+function filterMeloCatalog(){renderMeloBrands();}
+function renderMeloBrands(){
+ const list=document.getElementById('meloBrandList');if(!list)return;
+ const q=(document.getElementById('meloCatalogSearch')?.value||'').toLowerCase();
+ const rows=meloCachedBrands.filter(b=>[b.name,b.slug,b.category?.name].join(' ').toLowerCase().includes(q));
+ list.innerHTML=rows.length?rows.map(b=>'<button type="button" class="melo-brand" data-brand="'+Number(b.brand_id||b.id||0)+'" data-slug="'+esc(b.slug||'')+'" onclick="loadMeloProducts(Number(this.dataset.brand),this.dataset.slug)"><strong>'+esc(b.name||'Brand')+'</strong><span>'+esc(b.category?.name||'Tanpa kategori')+' · '+(Array.isArray(b.type)?b.type.length:0)+' tipe</span></button>').join(''):'<div class="melo-empty">Brand tidak ditemukan.</div>';
+}
+async function loadMeloProducts(brandId,slug){
+ const smart=document.getElementById('meloCatalogMode')?.value==='smart';
+ const path=(smart?'smart-pricelists':'pricelists')+(brandId?'?brand_id='+encodeURIComponent(brandId)+'&limit=500':'/'+encodeURIComponent(slug)+'?limit=500');
+ const area=document.getElementById('meloProductArea'),list=document.getElementById('meloProductList');
+ if(area)area.classList.remove('hidden');if(list)list.innerHTML='<div class="melo-empty">Mengambil daftar harga…</div>';
+ const brand=meloCachedBrands.find(b=>Number(b.brand_id||b.id)===Number(brandId));
+ const title=document.getElementById('meloProductTitle');if(title)title.textContent='Produk · '+(brand?.name||slug);
+ try{
+  const payload=await meloRequest(path);const d=extractMeloData(payload);const products=Array.isArray(d)?d:(Array.isArray(d?.data)?d.data:[]);
+  renderMeloProducts(products,smart);setMeloStatus('Berhasil memuat '+products.length+' produk dari '+(brand?.name||slug)+'.','ok');
+ }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setMeloStatus('Daftar produk gagal dimuat: '+(e.message||String(e)),'error');}
+}
+function renderMeloProducts(products,smart){
+ const list=document.getElementById('meloProductList');if(!list)return;
+ if(!products.length){list.innerHTML='<div class="melo-empty">Belum ada produk pada katalog ini.</div>';return;}
+ window._xerMeloProducts=products;window._xerMeloSmart=smart;
+ list.innerHTML=products.map((p,i)=>{
+  const sku=smart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
+  const price=Number(p.price??p.sell_price??p.amount??0);
+  const active=String(p.status||'active').toLowerCase()==='active'&&p.out_of_stock!==true;
+  return '<article class="melo-product"><div><strong>'+esc(p.name||p.product_name||sku||'Produk')+'</strong><small>SKU: '+esc(sku||'—')+' · '+(active?'Aktif':'Tidak tersedia')+'</small></div><div class="melo-product-price">'+formatMeloMoney(price)+'<button type="button" class="smallbtn" '+(!active?'disabled':'')+' onclick="selectMeloProduct('+i+')">Hitung harga</button></div></article>';
+ }).join('');
+}
+function selectMeloProduct(index){
+ const p=window._xerMeloProducts?.[index];if(!p)return;
+ const smart=!!window._xerMeloSmart;const sku=smart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
+ meloSelectedProduct={name:p.name||p.product_name||sku,sku,price:Number(p.price??p.sell_price??p.amount??0)};
+ updateMeloMarkupPreview();
+}
+function updateMeloMarkupPreview(){
+ const out=document.getElementById('meloMarkupPreview');if(!out)return;
+ if(!meloSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}
+ const margin=Math.max(0,Number(document.getElementById('meloMarkup')?.value||0));
+ out.textContent=meloSelectedProduct.name+' · Modal '+formatMeloMoney(meloSelectedProduct.price)+' + Margin '+formatMeloMoney(margin)+' = Harga simulasi '+formatMeloMoney(meloSelectedProduct.price+margin)+'.';
+}
+function closeMeloProducts(){document.getElementById('meloProductArea')?.classList.add('hidden');}
+
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
 async function loadXeravionAnalytics(){
  const status=document.getElementById('xerTrafficStatus'),chart=document.getElementById('xerTrafficChart');

@@ -11,6 +11,14 @@ export async function onRequestGet() {
     mode: "preparation",
     orders_enabled: false,
     supplier_orders_enabled: false,
+    supported_regions: ["ID"],
+    region_policy: {
+      mode: "indonesia_only",
+      allowed_country_codes: ["ID"],
+      reject_non_indonesia: true,
+      reject_unknown_region: true,
+      require_explicit_supplier_region: true
+    },
     games: TOPUP_GAMES,
     verification_states: TOPUP_VERIFICATION_STATES,
     safety: {

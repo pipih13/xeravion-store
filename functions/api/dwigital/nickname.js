@@ -84,12 +84,12 @@ export async function onRequestPost({ request, env }) {
       return json({
         success: false,
         code,
-        error: messages[code] || "Dwigital Development tidak dapat memeriksa akun saat ini."
+        error: messages[code] || String(payload?.message || "Dwigital Development tidak dapat memeriksa akun saat ini.")
       }, [422, 429, 503].includes(upstream.status) ? upstream.status : 502);
     }
 
     const environment = String(payload.data.environment || "").toLowerCase();
-    if (environment && !["development", "sandbox"].includes(environment)) {
+    if (!["development", "sandbox"].includes(environment)) {
       return json({
         error: "Respons supplier bukan dari Development/Sandbox. Hasil ditolak.",
         code: "unsafe_environment"

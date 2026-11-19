@@ -925,7 +925,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <h4>Uji pengecekan User ID / Zone ID MLBB</h4>
    <p class="hint">Khusus admin dan API Development. Pilih paket dari katalog lalu masukkan ID akun untuk menguji respons nickname. Pengujian ini tidak memesan produk, tidak memotong saldo, dan tidak menentukan negara akun.</p>
    <div class="formgrid">
-    <div><label for="dwigitalCheckVariant">Variant ID paket *</label><input id="dwigitalCheckVariant" type="number" min="1" step="1" placeholder="Pilih dari katalog"></div>
+    <div><label for="dwigitalCheckVariant">Pilih paket MLBB yang mendukung cek nickname *</label><select id="dwigitalCheckVariant" onchange="onDwigitalNicknameVariantChange()"><option value="">Muat katalog terlebih dahulu</option></select></div>
     <div><label for="dwigitalCheckUser">User ID *</label><input id="dwigitalCheckUser" type="text" maxlength="64" autocomplete="off" placeholder="Masukkan User ID"></div>
     <div><label for="dwigitalCheckZone">Zone ID *</label><input id="dwigitalCheckZone" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan Zone ID"></div>
     <div style="display:flex;align-items:end"><button class="btn gold" type="button" id="dwigitalCheckBtn" onclick="testDwigitalNickname()">Uji nickname (Development)</button></div>
@@ -1590,10 +1590,36 @@ async function loadDwigitalCatalog(page=1){
   const payload=await dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page='+Math.max(1,page)+'&per_page=1000');
   if(payload.environment!=='development')throw new Error('Respons katalog bukan Development.');
   const rows=Array.isArray(payload.data)?payload.data:[];dwigitalCurrentPage=Number(payload.page||page);dwigitalLastPage=Number(payload.last_page||1);window._xerDwigitalProducts=rows;
+  populateDwigitalNicknameVariants();
   renderDwigitalCatalogByRegion();
   const nav=document.getElementById('dwigitalPagination');if(nav)nav.innerHTML=rows.length?'<span class="hint">Halaman '+dwigitalCurrentPage+' / '+dwigitalLastPage+' · '+Number(payload.total||rows.length).toLocaleString('id-ID')+' paket</span><div class="melo-page-buttons"><button type="button" class="btn" '+(dwigitalCurrentPage<=1?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage-1)+')">Sebelumnya</button><button type="button" class="btn" '+(dwigitalCurrentPage>=dwigitalLastPage?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage+1)+')">Berikutnya</button></div>':'';
   setDwigitalStatus('Berhasil memuat '+rows.length+' paket dari Dwigital Development. Harga yang tampil adalah harga modal akun. Tidak ada transaksi dibuat.','ok');
  }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setDwigitalStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
+}
+function isDwigitalNicknameEligible(p){
+ const name=String(p.product||p.name||'').toLowerCase();
+ return p.type==='game'&&name.includes('mobile legends')&&p.nickname_check===true&&p.zone_required===true;
+}
+function populateDwigitalNicknameVariants(){
+ const select=document.getElementById('dwigitalCheckVariant');if(!select)return;
+ const rows=window._xerDwigitalProducts||[];
+ const eligible=rows.filter(isDwigitalNicknameEligible);
+ const previous=select.value;
+ select.innerHTML='<option value="">Pilih paket yang mendukung nickname + Zone ID</option>'+eligible.map(p=>'<option value="'+esc(p.variant_id)+'">'+esc(p.name||p.product||'Mobile Legends')+' · '+esc(p._xerRegion?.label||classifyDwigitalRegion(p).label)+' · ID '+esc(p.variant_id)+'</option>').join('');
+ if(previous&&eligible.some(p=>String(p.variant_id)===previous))select.value=previous;
+ const btn=document.getElementById('dwigitalCheckBtn');
+ if(btn)btn.disabled=!select.value;
+ const out=document.getElementById('dwigitalNicknameResult');
+ if(out&&!eligible.length)out.textContent='Belum ada paket MLBB dengan nickname_check dan Zone ID pada katalog yang dimuat. Tombol uji belum bisa digunakan. Coba muat katalog ulang atau periksa dukungan paket di Dwigital.';
+ else if(out)out.textContent='Ditemukan '+eligible.length+' paket MLBB yang mendukung cek nickname dan Zone ID. Pilih salah satu paket untuk mengaktifkan tombol uji.';
+}
+function onDwigitalNicknameVariantChange(){
+ const select=document.getElementById('dwigitalCheckVariant');
+ const btn=document.getElementById('dwigitalCheckBtn');
+ const out=document.getElementById('dwigitalNicknameResult');
+ const chosen=(window._xerDwigitalProducts||[]).find(p=>String(p.variant_id)===String(select?.value));
+ if(btn)btn.disabled=!chosen||!isDwigitalNicknameEligible(chosen);
+ if(out)out.textContent=chosen?'Paket siap diuji: '+(chosen.name||chosen.product)+' · Variant ID '+chosen.variant_id+'. Hasil Development tetap simulasi dan tidak menunjukkan negara akun.':'Pilih paket MLBB yang mendukung nickname + Zone ID.';
 }
 function classifyDwigitalRegion(p){
  const labels=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
@@ -1714,7 +1740,7 @@ async function compareDwigitalMelo(){
   setDwigitalStatus('Perbandingan gagal: '+(e.message||String(e)),'error');
  }finally{if(btn){btn.disabled=false;btn.textContent='Bandingkan harga dengan Melo'}}
 }
-function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price,variantId:p.variant_id};updateDwigitalMarkupPreview();const variant=document.getElementById('dwigitalCheckVariant');if(variant&&p.variant_id)variant.value=p.variant_id;const supported=String(p.product||'').toLowerCase().includes('mobile legends')&&p.nickname_check===true&&p.zone_required===true;const testBtn=document.getElementById('dwigitalCheckBtn'),result=document.getElementById('dwigitalNicknameResult');if(testBtn)testBtn.disabled=!supported;if(result)result.textContent=supported?'Paket MLBB terpilih: '+(p.name||p.product)+' · Variant ID '+p.variant_id+'. Masukkan User ID dan Zone ID untuk menguji respons simulasi Development.':'Paket terpilih tidak mendukung cek nickname MLBB + Zone ID. Pilih paket Mobile Legends dengan fitur cek nickname.';const test=document.getElementById('dwigitalNicknameTest');if(test)test.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price,variantId:p.variant_id};updateDwigitalMarkupPreview();if(isDwigitalNicknameEligible(p)){const variant=document.getElementById('dwigitalCheckVariant');if(variant){variant.value=String(p.variant_id);onDwigitalNicknameVariantChange();}}const test=document.getElementById('dwigitalNicknameTest');if(test)test.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function updateDwigitalMarkupPreview(){const out=document.getElementById('dwigitalMarkupPreview');if(!out)return;if(!dwigitalSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}const margin=Math.max(0,Number(document.getElementById('dwigitalMarkup')?.value||0));out.textContent=dwigitalSelectedProduct.name+' · Modal '+formatDwigitalMoney(dwigitalSelectedProduct.price)+' + Margin '+formatDwigitalMoney(margin)+' = Harga simulasi '+formatDwigitalMoney(dwigitalSelectedProduct.price+margin)+'.';}
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
 async function loadXeravionAnalytics(){

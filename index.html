@@ -845,11 +845,11 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing Akun</button>
  <button type="button" class="xer-admin-tab" data-tab="item-listings" onclick="showAdminTab('item-listings')">Item Gaming</button>
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
- <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Credit Points</button>
+ <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
  <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
 </nav>
-<div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Kelola Credit Points</button></div></div></div>
+<div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-analytics">
  <div class="panel xer-traffic-panel">
   <div class="sectionhead"><div><h3 style="margin:0">XERAVION Visitor Analytics</h3><div class="hint">Pantau lalu lintas toko langsung dari Cloudflare.</div></div><button class="btn" type="button" onclick="loadXeravionAnalytics()">Muat ulang</button></div>
@@ -904,18 +904,18 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice</th><th>Pembeli</th><th>Detail</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="xeravionOrderRows"><tr><td colspan="6">Tekan Muat ulang untuk melihat pesanan.</td></tr></tbody></table></div>
 </div></div>
 <div class="xer-admin-tab-panel" id="adminTab-credits"><div class="panel" id="creditAdminPanel">
- <div class="sectionhead"><div><h3 style="margin:0">XERAVION Credit Points · Admin</h3><div class="hint">Cari member dan lakukan koreksi poin jika diperlukan. Cashback transaksi rutin diproses otomatis melalui Invoice.</div></div></div>
+ <div class="sectionhead"><div><h3 style="margin:0">Koreksi & Riwayat Credit Points</h3><div class="hint">Pilih member untuk melihat seluruh riwayat poin masuk, penggunaan, cashback, pengembalian, dan koreksi saldo.</div></div></div>
  <div class="formgrid">
   <input id="creditMemberQuery" placeholder="Cari nama atau email member…" class="wide" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCreditMembers()}">
   <button class="btn" type="button" id="creditMemberSearchButton" onclick="searchCreditMembers()">Cari member</button>
  </div>
  <div id="creditMemberResults" class="hint" style="margin-top:12px">Ketik nama atau email, lalu tekan Cari member. Pilih akun dari hasil pencarian.</div>
  <div class="formgrid" style="margin-top:18px">
-  <div class="wide"><div class="hint" style="margin-bottom:6px">MEMBER YANG DIPILIH</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Belum ada member dipilih"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div><div class="hint" style="margin-top:6px">Kolom ini menampilkan akun tujuan cashback. Pilih member dari hasil pencarian di atas.</div></div>
-  <input id="creditReverseRef" placeholder="Referensi transaksi yang dibatalkan">
-  <input id="creditReverseReason" placeholder="Alasan pembatalan (opsional)">
-  <button class="btn" onclick="reverseCreditPurchase()">Batalkan cashback transaksi</button>
+  <div class="wide"><div class="hint" style="margin-bottom:6px">MEMBER YANG DIPILIH</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><input id="creditSelectedMember" style="flex:1;min-width:220px" readonly placeholder="Belum ada member dipilih"><button class="btn" type="button" onclick="clearCreditMember()">Lepas pilihan</button></div></div>
  </div>
+ <div id="creditHistorySummary" class="notice" style="margin-top:14px">Pilih member untuk melihat saldo dan riwayat Credit Points.</div>
+ <div class="admin-table-wrap" style="margin-top:12px"><table class="adminlist"><thead><tr><th>Tanggal</th><th>Aktivitas</th><th>Detail / Referensi</th><th>Perubahan</th></tr></thead><tbody id="creditHistoryRows"><tr><td colspan="4">Belum ada member dipilih.</td></tr></tbody></table></div>
+ <div class="notice" style="margin-top:16px"><strong>Pembatalan pesanan</strong><div class="hint">Untuk mengembalikan Credit Points yang dipakai dan membalik cashback transaksi, buka tab Invoice lalu gunakan tombol Batalkan pada pesanan terkait. Sistem mencatat pengembalian dan pembatalan di riwayat member.</div></div>
  <p id="creditAdminMessage" class="hint" aria-live="polite"></p>
 </div></div>
 </section>
@@ -1475,17 +1475,37 @@ async function searchCreditMembers(){
   out.innerHTML='<p class="hint">Pencarian gagal: '+esc(e.message||String(e))+'</p>';
  }finally{if(btn){btn.disabled=false;btn.textContent='Cari member'}}
 }
+async function loadCreditMemberHistory(userId){
+ const summary=document.getElementById('creditHistorySummary'),rows=document.getElementById('creditHistoryRows');
+ if(!userId||!summary||!rows)return;
+ summary.textContent='Memuat riwayat poin…';rows.innerHTML='<tr><td colspan="4">Memuat…</td></tr>';
+ try{
+  const {data,error}=await supabaseClient.rpc('credit_admin_member_history',{p_user_id:userId});
+  if(error)throw error;
+  const member=window.creditMemberCache?.[userId]||{};
+  summary.innerHTML='<strong>'+esc(member.display_name||'Member XERAVION')+'</strong><div class="hint">'+esc(member.email||'')+' · Saldo saat ini: <strong>'+Number(member.balance||0).toLocaleString('id-ID')+' XP</strong></div>';
+  if(!Array.isArray(data)||!data.length){rows.innerHTML='<tr><td colspan="4">Belum ada riwayat poin.</td></tr>';return}
+  rows.innerHTML=data.map(x=>{
+   const positive=Number(x.points)>0;
+   const when=new Date(x.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'});
+   return '<tr><td>'+esc(when)+'</td><td>'+esc(x.event_type||'Aktivitas')+'</td><td>'+esc(x.description||'')+(x.reference?'<div class="hint">'+esc(x.reference)+'</div>':'')+(x.expires_at?'<div class="hint">Kedaluwarsa: '+esc(new Date(x.expires_at).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta'}))+'</div>':'')+'</td><td style="font-weight:700;color:'+(positive?'#56d69a':'#f0a36b')+'">'+(positive?'+':'')+Number(x.points).toLocaleString('id-ID')+' XP</td></tr>';
+  }).join('');
+ }catch(e){summary.textContent='Gagal memuat riwayat: '+(e.message||e);rows.innerHTML='<tr><td colspan="4">Riwayat tidak dapat dimuat.</td></tr>'}
+}
 function selectCreditMember(id){
  const chosen=window.creditMemberCache?.[id];
  if(!chosen){document.getElementById('creditAdminMessage').textContent='Data member tidak ditemukan. Silakan cari ulang.';return}
  selectedCreditMember=id;
  document.getElementById('creditSelectedMember').value=(chosen.display_name||'Member')+' · '+(chosen.email||'Email tidak tersedia');
- document.getElementById('creditAdminMessage').textContent='Member dipilih. Cashback akan masuk ke akun ini.';
+ document.getElementById('creditAdminMessage').textContent='Member dipilih. Memuat riwayat poin…';
+ loadCreditMemberHistory(id);
 }
 function clearCreditMember(){
  selectedCreditMember=null;
  document.getElementById('creditSelectedMember').value='';
  document.getElementById('creditAdminMessage').textContent='Pilihan member dilepas.';
+ document.getElementById('creditHistorySummary').textContent='Pilih member untuk melihat saldo dan riwayat Credit Points.';
+ document.getElementById('creditHistoryRows').innerHTML='<tr><td colspan="4">Belum ada member dipilih.</td></tr>';
 }
 async function reverseCreditPurchase(){const msg=document.getElementById('creditAdminMessage'),ref=document.getElementById('creditReverseRef').value.trim(),reason=document.getElementById('creditReverseReason').value.trim();if(!ref){msg.textContent='Masukkan referensi transaksi.';return}if(!confirm('Batalkan cashback untuk transaksi '+ref+'? Tindakan ini mencatat pengurangan poin dan tidak dapat dibatalkan otomatis.'))return;try{const{data,error}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:ref,p_reason:reason||'Transaksi dibatalkan'});if(error)throw error;msg.textContent='Cashback dibatalkan. '+Number(data||0).toLocaleString('id-ID')+' XP telah dikoreksi dari saldo member.'}catch(e){msg.textContent='Gagal membatalkan cashback: '+(e.message||e)}}
 let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const slides=[...document.querySelectorAll('#gameSlider .game-slide')],dots=[...document.querySelectorAll('#gameSlider .slider-dot')];if(!slides.length)return;gameSlideIndex=(index+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===gameSlideIndex));dots.forEach((d,i)=>d.classList.toggle('active',i===gameSlideIndex))}function moveGameSlide(direction){showGameSlide(gameSlideIndex+direction);restartGameSlideTimer()}function restartGameSlideTimer(){if(gameSlideTimer)clearInterval(gameSlideTimer);if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)gameSlideTimer=setInterval(()=>showGameSlide(gameSlideIndex+1),5000)}function enableGameSliderSwipe(slider){

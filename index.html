@@ -901,6 +901,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <div id="meloProductArea" class="melo-product-area hidden">
    <div class="melo-product-heading"><h4 id="meloProductTitle">Daftar produk</h4><button class="btn" type="button" onclick="closeMeloProducts()">Tutup</button></div>
    <div id="meloProductList" class="melo-product-list"></div>
+   <div id="meloPagination" class="melo-pagination" aria-live="polite"></div>
   </div>
   <div class="melo-markup-box">
    <h4>Simulasi harga jual XERAVION</h4><p class="hint">Kalkulasi saja, belum mengubah harga toko atau membuat pesanan.</p>
@@ -1410,22 +1411,54 @@ async function loadMeloCategories(mode){
   setMeloStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');
  }
 }
+const MELO_PRODUCTS_PER_PAGE=20;
+let meloCurrentPage=1;
+let meloSearchTimer=null;
 function filterMeloCatalog(){
- const q=(document.getElementById('meloCatalogSearch')?.value||'').toLowerCase();
- const rows=(window._xerMeloAllProducts||[]).filter(p=>[p.name,p.product_name,p.sku_code,p.smart_sku_code,p.brand,p.brand_name].join(' ').toLowerCase().includes(q));
- renderMeloProducts(rows,!!window._xerMeloSmart,false);
+ clearTimeout(meloSearchTimer);
+ meloSearchTimer=setTimeout(()=>{
+  const q=(document.getElementById('meloCatalogSearch')?.value||'').trim().toLowerCase();
+  const all=window._xerMeloAllProducts||[];
+  const rows=q?all.filter(p=>[p.name,p.product_name,p.sku_code,p.smart_sku_code,p.brand,p.brand_name].join(' ').toLowerCase().includes(q)):all;
+  window._xerMeloFilteredProducts=rows;
+  meloCurrentPage=1;
+  renderMeloPage();
+ },150);
 }
 function renderMeloProducts(products,smart,saveAll=true){
- const list=document.getElementById('meloProductList');if(!list)return;
  if(saveAll)window._xerMeloAllProducts=products;
- window._xerMeloProducts=products;window._xerMeloSmart=smart;
- if(!products.length){list.innerHTML='<div class="melo-empty">Produk tidak ditemukan pada katalog ini.</div>';return;}
- list.innerHTML=products.map((p,i)=>{
-  const sku=smart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
+ window._xerMeloSmart=smart;
+ window._xerMeloFilteredProducts=products;
+ meloCurrentPage=1;
+ renderMeloPage();
+}
+function renderMeloPage(){
+ const list=document.getElementById('meloProductList');if(!list)return;
+ const products=window._xerMeloFilteredProducts||[];
+ window._xerMeloProducts=products;
+ const total=products.length;
+ const pages=Math.max(1,Math.ceil(total/MELO_PRODUCTS_PER_PAGE));
+ meloCurrentPage=Math.min(Math.max(1,meloCurrentPage),pages);
+ const start=(meloCurrentPage-1)*MELO_PRODUCTS_PER_PAGE;
+ const visible=products.slice(start,start+MELO_PRODUCTS_PER_PAGE);
+ if(!total){list.innerHTML='<div class="melo-empty">Produk tidak ditemukan pada katalog ini.</div>';}
+ else list.innerHTML=visible.map((p,offset)=>{
+  const sku=window._xerMeloSmart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
   const price=Number(p.price??p.sell_price??p.amount??0);
   const active=String(p.status||'active').toLowerCase()==='active'&&p.out_of_stock!==true;
-  return '<article class="melo-product"><div><strong>'+esc(p.name||p.product_name||sku||'Produk')+'</strong><small>'+esc(p.brand_name||p.brand||'')+' · SKU: '+esc(sku||'—')+' · '+(active?'Aktif':'Tidak tersedia')+'</small></div><div class="melo-product-price">'+formatMeloMoney(price)+'<button type="button" class="smallbtn" '+(!active?'disabled':'')+' onclick="selectMeloProduct('+i+')">Hitung harga</button></div></article>';
+  return '<article class="melo-product"><div><strong>'+esc(p.name||p.product_name||sku||'Produk')+'</strong><small>'+esc(p.brand_name||p.brand||'')+' · SKU: '+esc(sku||'—')+' · '+(active?'Aktif':'Tidak tersedia')+'</small></div><div class="melo-product-price">'+formatMeloMoney(price)+'<button type="button" class="smallbtn" '+(!active?'disabled':'')+' onclick="selectMeloProduct('+(start+offset)+')">Hitung harga</button></div></article>';
  }).join('');
+ const nav=document.getElementById('meloPagination');
+ if(nav){
+  nav.innerHTML=total?'<span class="hint">Menampilkan '+(start+1)+'–'+Math.min(start+MELO_PRODUCTS_PER_PAGE,total)+' dari '+total.toLocaleString('id-ID')+' produk</span><div class="melo-page-buttons"><button type="button" class="btn" '+(meloCurrentPage===1?'disabled':'')+' onclick="changeMeloPage(-1)">Sebelumnya</button><span class="hint">Halaman '+meloCurrentPage+' / '+pages+'</span><button type="button" class="btn" '+(meloCurrentPage===pages?'disabled':'')+' onclick="changeMeloPage(1)">Berikutnya</button></div>':'';
+ }
+}
+function changeMeloPage(delta){
+ const products=window._xerMeloFilteredProducts||[];
+ const pages=Math.max(1,Math.ceil(products.length/MELO_PRODUCTS_PER_PAGE));
+ meloCurrentPage=Math.min(pages,Math.max(1,meloCurrentPage+delta));
+ renderMeloPage();
+ document.getElementById('meloProductArea')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function selectMeloProduct(index){
  const p=window._xerMeloProducts?.[index];if(!p)return;

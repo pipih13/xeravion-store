@@ -96,6 +96,28 @@ export async function onRequestPost({ request, env }) {
       }, 502);
     }
 
+    // Future provider region fields are accepted only when explicitly returned.
+    // Current Dwigital docs return nickname only, so region remains unknown.
+    const rawRegion = String(
+      payload.data.country_code ||
+      payload.data.region_code ||
+      payload.data.country ||
+      payload.data.region ||
+      ""
+    ).trim().toUpperCase();
+    const regionAliases = {
+      ID: "ID", INDONESIA: "ID", INDONESIAN: "ID",
+      MY: "MY", MALAYSIA: "MY",
+      PH: "PH", PHILIPPINES: "PH", PHILIPPINE: "PH",
+      SG: "SG", SINGAPORE: "SG",
+      TH: "TH", THAILAND: "TH",
+      VN: "VN", VIETNAM: "VN",
+      BR: "BR", BRAZIL: "BR", BRASIL: "BR"
+    };
+    const region = regionAliases[rawRegion] || null;
+    const regionStatus = !region ? "unknown" : region === "ID" ? "verified_supported" : "verified_unsupported_region";
+    const accountAllowed = regionStatus === "verified_supported";
+
     return json({
       success: true,
       mode: "development_simulation",
@@ -103,10 +125,15 @@ export async function onRequestPost({ request, env }) {
       nickname: String(payload.data.nickname || ""),
       target,
       target_zone: targetZone || null,
-      region: null,
-      region_status: "unknown",
+      region,
+      region_status: regionStatus,
+      account_allowed: accountAllowed,
       order_enabled: false,
-      message: "Nickname diterima dari simulasi Development. Ini bukan bukti negara/region akun dan bukan verifikasi akun live."
+      message: regionStatus === "verified_unsupported_region"
+        ? "Akun terdeteksi bukan Indonesia. Akun tidak memenuhi wilayah yang didukung."
+        : regionStatus === "verified_supported"
+          ? "Wilayah Indonesia terdeteksi dari data eksplisit supplier. Tetap belum dapat melakukan transaksi."
+          : "Supplier hanya mengembalikan nickname tanpa negara akun. Wilayah belum diketahui; transaksi harus dihentikan."
     });
   } catch (error) {
     return json({

@@ -1027,7 +1027,38 @@ function closeImagePreview(){document.getElementById('imagePreviewModal').classL
 function moveImagePreview(step){const imgs=currentDetailImages();if(!imgs.length)return;previewImageIndex=(previewImageIndex+step+imgs.length)%imgs.length;resetPreviewZoom();document.getElementById('imagePreviewFull').src=imgs[previewImageIndex];setDetailImage(previewImageIndex);updateImagePreviewControls()}function updateImagePreviewControls(){const n=currentDetailImages().length,hasSlides=n>1,prev=document.getElementById('imagePreviewPrev'),next=document.getElementById('imagePreviewNext'),count=document.getElementById('imagePreviewCount');prev.hidden=!hasSlides;next.hidden=!hasSlides;count.hidden=!hasSlides;count.textContent=hasSlides?(previewImageIndex+1)+' / '+n:''}
 function gameLogo(game){return esc(String(game||'').toUpperCase())}
 function updateGameStockCounts(){const count=game=>items.filter(p=>p.game===game&&p.stock==='Tersedia').length;const values=[['stockMl','Mobile Legends'],['stockPubg','PUBG Mobile'],['stockFf','Free Fire'],['stockEf','eFootball'],['stockCoc','Clash of Clans']];for(const[id,game]of values){const el=document.getElementById(id);if(el)el.textContent='Stock Ready: '+count(game)+' akun';}}
-function render(){updateGameStockCounts();let q=document.getElementById('search').value.toLowerCase(),sort=document.getElementById('sort').value;const itemPlatforms=['Roblox','Steam','PUBG Mobile','Free Fire','Mobile Legends','Call of Duty Mobile','Genshin Impact','Honor of Kings','Clash of Clans','eFootball','Lainnya'];let a=items.filter(p=>p.stock==='Tersedia'&&(activeGame==='Semua'||(activeGame==='Item Gaming'?(['Item Gaming',...itemPlatforms].includes(p.game)&&(activeItemPlatform==='Semua'||p.game===activeItemPlatform)):activeGame==='Lainnya'?!['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game):p.game===activeGame)&&[p.name,p.code,p.game,p.desc].join(' ').toLowerCase().includes(q));if(sort==='code')a.sort((x,y)=>String(x.code||'').localeCompare(String(y.code||''),undefined,{numeric:true,sensitivity:'base'}));if(sort==='low')a.sort((x,y)=>x.price-y.price);if(sort==='high')a.sort((x,y)=>y.price-x.price);document.getElementById('resultCount').textContent=a.length+(activeGame==='Item Gaming'?' produk tersedia':' akun tersedia');document.getElementById('countStat').textContent=items.filter(p=>p.stock==='Tersedia').length;document.getElementById('products').innerHTML=a.length?a.map(p=>`<article class="product"><div class="thumb ${gameClass(p.game)}">${safeImageUrl(p.image)?`<img src="${esc(safeImageUrl(p.image))}" alt="Foto ${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:`<span class="gameicon">${p.icon||iconFor(p.game)}</span>`}<span class="stock">${p.stock.toUpperCase()}</span></div><div class="prod"><div class="game game-brand">${gameLogo(p.game)}</div><h3>${esc(window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.name_en||p.name):p.name)}</h3><div class="desc">${esc((window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.description_en||p.desc):p.desc)||(window.getXeravionLanguage&&getXeravionLanguage()==='en'?'Ask the admin for more account details.':'Detail akun dapat ditanyakan kepada admin.'))}</div><div class="priceRow"><span class="price">${rupiah(p.price)}</span><span class="code">${esc(p.code)}</span></div><button class="buy detail-buy" type="button" onclick="openProductDetail(${Number(p.id)})">${activeGame==='Item Gaming'?'LIHAT DETAIL PRODUK ↗':'LIHAT DETAIL AKUN ↗'}</button>${xeravionAdminVerified?`<button class="buy admin-share-buy" type="button" onclick="shareListing(${Number(p.id)})">↗ BAGIKAN LISTING</button>`:``}${p.stock==='Tersedia'?`<a class="buy wa-buy" href="${esc(waLink(p))}" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>`:`<button class="buy wa-buy" type="button" disabled>${esc(p.stock.toUpperCase())}</button>`}</div></article>`).join(''):'<div class="empty">Belum ada akun yang cocok. Coba kata kunci atau kategori lain.</div>';renderAdmin()}
+function render(){
+ updateGameStockCounts();
+ const q=(document.getElementById('search')?.value||'').trim().toLowerCase();
+ const sort=document.getElementById('sort')?.value||'';
+ const itemPlatforms=['Roblox','Steam','PUBG Mobile','Free Fire','Mobile Legends','Call of Duty Mobile','Genshin Impact','Honor of Kings','Clash of Clans','eFootball'];
+ const matchesItemPlatform=p=>{
+  if(activeItemPlatform==='Semua')return true;
+  if(activeItemPlatform==='Lainnya')return !itemPlatforms.includes(p.game)&&p.game!=='Item Gaming';
+  return p.game===activeItemPlatform;
+ };
+ const matchesGame=p=>{
+  if(activeGame==='Semua')return true;
+  if(activeGame==='Item Gaming')return (p.game==='Item Gaming'||itemPlatforms.includes(p.game)||(!itemPlatforms.includes(p.game)&&p.game!=='Semua'))&&matchesItemPlatform(p);
+  if(activeGame==='Lainnya')return !['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game);
+  return p.game===activeGame;
+ };
+ let a=items.filter(p=>{
+  if(p.stock!=='Tersedia'||!matchesGame(p))return false;
+  if(!q)return true;
+  return [p.name,p.name_en,p.code,p.game,p.desc,p.description_en].join(' ').toLowerCase().includes(q);
+ });
+ if(sort==='code')a.sort((x,y)=>String(x.code||'').localeCompare(String(y.code||''),undefined,{numeric:true,sensitivity:'base'}));
+ if(sort==='low')a.sort((x,y)=>x.price-y.price);
+ if(sort==='high')a.sort((x,y)=>y.price-x.price);
+ const resultCount=document.getElementById('resultCount');
+ if(resultCount)resultCount.textContent=a.length+(activeGame==='Item Gaming'?' produk tersedia':' akun tersedia');
+ const countStat=document.getElementById('countStat');
+ if(countStat)countStat.textContent=items.filter(p=>p.stock==='Tersedia').length;
+ const products=document.getElementById('products');
+ if(products)products.innerHTML=a.length?a.map(p=>`<article class="product"><div class="thumb ${gameClass(p.game)}">${safeImageUrl(p.image)?`<img src="${esc(safeImageUrl(p.image))}" alt="Foto ${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:`<span class="gameicon">${p.icon||iconFor(p.game)}</span>`}<span class="stock">${p.stock.toUpperCase()}</span></div><div class="prod"><div class="game game-brand">${gameLogo(p.game)}</div><h3>${esc(window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.name_en||p.name):p.name)}</h3><div class="desc">${esc((window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.description_en||p.desc):p.desc)||(window.getXeravionLanguage&&getXeravionLanguage()==='en'?'Ask the admin for more product details.':'Detail produk dapat ditanyakan kepada admin.'))}</div><div class="priceRow"><span class="price">${rupiah(p.price)}</span><span class="code">${esc(p.code)}</span></div><button class="buy detail-buy" type="button" onclick="openProductDetail(${Number(p.id)})">${activeGame==='Item Gaming'?'LIHAT DETAIL PRODUK ↗':'LIHAT DETAIL AKUN ↗'}</button>${xeravionAdminVerified?`<button class="buy admin-share-buy" type="button" onclick="shareListing(${Number(p.id)})">↗ BAGIKAN LISTING</button>`:''}${p.stock==='Tersedia'?`<a class="buy wa-buy" href="${esc(waLink(p))}" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>`:`<button class="buy wa-buy" type="button" disabled>${esc(p.stock.toUpperCase())}</button>`}</div></article>`).join(''):'<div class="empty">Belum ada produk yang cocok. Coba kata kunci atau kategori lain.</div>';
+ renderAdmin();
+}
 function gameKeyToName(key){return key==='ml'?'Mobile Legends':key==='pubg'?'PUBG Mobile':key==='ff'?'Free Fire':key==='efootball'?'eFootball':key==='coc'?'Clash of Clans':key==='item-gaming'?'Item Gaming':''}
 function updateStoreSeo(game,key){
  const base='https://xeravion.my.id/';

@@ -35,7 +35,13 @@ export async function onRequestGet({ request, env }) {
       zone_label: p.zone_label || null,
       nickname_check: p.nickname_check === true,
       delivery: p.delivery || null,
-      stock: p.stock ?? null
+      stock: p.stock ?? null,
+      region: p.region ?? p.region_name ?? null,
+      country: p.country ?? p.country_name ?? null,
+      country_code: p.country_code ?? null,
+      server: p.server ?? p.server_name ?? null,
+      note: p.note ?? null,
+      fields: Array.isArray(p.fields) ? p.fields : []
     }));
     const output = {
       success: true,

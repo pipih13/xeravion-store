@@ -30,7 +30,7 @@ export async function onRequestPost({ request, env }) {
     if (!Number.isSafeInteger(variantId) || variantId <= 0) {
       return json({ error: "variant_id wajib berupa angka paket yang valid.", code: "invalid_variant_id" }, 400);
     }
-    if (!/^[A-Za-z0-9#._-]{1,64}$/.test(target)) {
+    if (!/^[A-Za-z0-9#._-]{2,64}$/.test(target)) {
       return json({ error: "User ID tidak valid. Gunakan 1–64 huruf, angka, #, titik, garis bawah, atau strip.", code: "invalid_target" }, 400);
     }
     if (targetZone && !/^[A-Za-z0-9._-]{1,32}$/.test(targetZone)) {
@@ -52,7 +52,7 @@ export async function onRequestPost({ request, env }) {
       return json({ error: "Pilih paket Mobile Legends yang mendukung cek nickname dan membutuhkan Zone ID.", code: "unsupported_variant" }, 400);
     }
     const productEnvironment = String(product.environment || detailPayload.meta?.environment || "").toLowerCase();
-    if (productEnvironment && !["development", "sandbox"].includes(productEnvironment)) {
+    if (!["development", "sandbox"].includes(productEnvironment)) {
       return json({ error: "Detail paket bukan dari Development/Sandbox. Permintaan dihentikan.", code: "unsafe_environment" }, 502);
     }
 
@@ -85,7 +85,7 @@ export async function onRequestPost({ request, env }) {
         success: false,
         code,
         error: messages[code] || "Dwigital Development tidak dapat memeriksa akun saat ini."
-      }, upstream.status >= 400 ? 502 : 502);
+      }, [422, 429, 503].includes(upstream.status) ? upstream.status : 502);
     }
 
     const environment = String(payload.data.environment || "").toLowerCase();

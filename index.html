@@ -905,7 +905,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   </div>
   <div class="melo-markup-box">
    <h4>Simulasi harga jual XERAVION</h4><p class="hint">Kalkulasi saja, belum mengubah harga toko atau membuat pesanan.</p>
-   <label for="meloMarkup">Margin tambahan (Rp)</label><input id="meloMarkup" type="number" min="0" step="100" value="1000" oninput="updateMeloMarkupPreview()">
+   <label for="meloMarkup">Margin tambahan (Rp)</label><input id="meloMarkup" type="number" min="0" step="1" value="300" inputmode="numeric" oninput="updateMeloMarkupPreview()"><p class="hint">Margin awal XERAVION: Rp300 per produk. Admin dapat mengubahnya untuk simulasi; harga toko dan transaksi tidak berubah.</p>
    <div id="meloMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div>
   </div>
   <p class="hint melo-footnote">Tahap ini hanya menguji koneksi, membaca profil/saldo, dan menampilkan katalog. Belum ada tombol pembelian, transaksi live, perubahan stok, atau sinkronisasi otomatis. Semua transaksi harus tetap melalui persetujuan admin setelah pengujian Sandbox.</p>

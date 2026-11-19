@@ -1600,6 +1600,9 @@ function classifyDwigitalRegion(p){
  const codeMap={ID:'ID',MY:'MY',PH:'PH',SG:'SG',TH:'TH',VN:'VN',BN:'BN',KH:'KH',LA:'LA',MM:'MM',TL:'TL'};
  if(codeMap[rawCode])return {key:rawCode,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'})[rawCode]};
  const raw=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
+ const regionLabels=[p.region,p.country,p.server,p.note,p.name,p.product].filter(Boolean).join(' ').toLowerCase();
+ const codeRules=[['ID','id'],['MY','my'],['PH','ph'],['SG','sg'],['TH','th'],['VN','vn'],['BN','bn'],['KH','kh'],['LA','la'],['MM','mm'],['TL','tl']];
+ for(const [key,code] of codeRules){if(new RegExp('(?:^|[\\s()[\\]_-])'+code+'(?:$|[\\s()[\\]_-])','i').test(regionLabels))return {key,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'})[key]};}
  const rules=[
   ['ID',/indonesia|indonesian|server\s*id\b|region\s*id\b|\bid\s*(server|region)\b/i],
   ['MY',/malaysia|malaysian|server\s*my\b|region\s*my\b/i],

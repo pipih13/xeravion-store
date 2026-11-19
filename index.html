@@ -1187,78 +1187,8 @@ async function saveProduct(){
  }catch(error){console.error('XERAVION saveProduct:',error);alert(error?.message||'Proses unggah gagal. Data listing tidak diubah jika verifikasi foto gagal.')}
  finally{saveButton.disabled=false;saveButton.textContent=editingId?'Simpan perubahan':originalLabel}
 }
-function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;adminGameFilter=p.game;selectedImageFile=null;selectedImageFiles=[];document.getElementById('newName').value=p.name;document.getElementById('newNameEn').value=p.name_en||'';document.getElementById('newDescEn').value=p.description_en||'';document.getElementById('newCatalogType').value=p.catalog_type||'account';updateCatalogGameOptions(p.game);toggleCatalogMediaFields();renderAdmin();document.getElementById('newPrice').value=p.price;document.getElementById('newCode').value=p.code;document.getElementById('newDesc').value=p.desc;document.getElementById('newGallery').value=(p.gallery||[]).join('\n');document.getElementById('newStock').value=p.stock;pendingImage='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}if(p.image){im.src=p.image;im.style.display='block'}else im.style.display='none';document.getElementById('newImage').value='';document.getElementById('imagePreviewList').innerHTML='';document.getElementById('formTitle').textContent='✎ Edit listing '+p.code;document.getElementById('saveBtn').textContent='Simpan perubahan';showAdminTab('form');document.getElementById('adminTab-form').scrollIntoView({behavior:'smooth',block:'start'})}
+function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)return;editingId=id;adminGameFilter=p.game;selectedImageFile=null;selectedImageFiles=[];document.getElementById('newName').value=p.name;document.getElementById('newNameEn').value=p.name_en||'';document.getElementById('newDescEn').value=p.description_en||'';document.getElementById('newCatalogType').value=p.catalog_type||'account';updateCatalogGameOptions(p.game);toggleCatalogMediaFields();renderAdmin();document.getElementById('newPrice').value=p.price;document.getElementById('newCode').value=p.code;document.getElementById('newDesc').value=p.desc;document.getElementById('newStock').value=p.stock;pendingImage='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}if(p.image){im.src=p.image;im.style.display='block'}else im.style.display='none';document.getElementById('newImage').value='';document.getElementById('imagePreviewList').innerHTML='';document.getElementById('formTitle').textContent='✎ Edit listing '+p.code;document.getElementById('saveBtn').textContent='Simpan perubahan';showAdminTab('form');document.getElementById('adminTab-form').scrollIntoView({behavior:'smooth',block:'start'})}
 function resetForm(){editingId=null;pendingImage='';selectedImageFile=null;selectedImageFiles=[];['newName','newNameEn','newPrice','newCode','newDesc','newDescEn','newImage'].forEach(id=>document.getElementById(id).value='');document.getElementById('newCatalogType').value='account';updateCatalogGameOptions('Mobile Legends');toggleCatalogMediaFields();refreshListingCode();document.getElementById('newStock').value='Tersedia';document.getElementById('imagePreviewList').innerHTML='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}im.removeAttribute('src');im.style.display='none';toggleCatalogMediaFields();document.getElementById('formTitle').textContent='＋ Tambah listing ke etalase';document.getElementById('saveBtn').textContent='Simpan listing'}
-async function cleanupMobileLegendsPhotos(){
- const button=document.getElementById('cleanupMlPhotosBtn'),status=document.getElementById('cleanupMlPhotosStatus');
- const say=message=>{if(status)status.textContent=message;console.log('[XERAVION MLBB cleanup]',message)};
- if(!button)return;
- if(button.disabled)return;
- button.disabled=true;
- try{
-  say('Memeriksa sesi admin…');
-  const{data:{session},error:sessionError}=await supabaseClient.auth.getSession();
-  if(sessionError)throw sessionError;
-  if(!session)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
-  const{data:allowed,error:adminError}=await supabaseClient.rpc('is_admin');
-  if(adminError)throw new Error('Verifikasi admin gagal: '+adminError.message);
-  if(!allowed)throw new Error('Akun ini tidak memiliki hak admin XERAVION.');
-  say('Memuat daftar foto Mobile Legends…');
-  const{data:rows,error:readError}=await supabaseClient.from('products').select('id,code,game,image_url,gallery_images');
-  if(readError)throw readError;
-  const mlRows=(rows||[]).filter(p=>String(p.game||'').trim().toLowerCase()==='mobile legends');
-  if(!mlRows.length){say('Tidak ada listing Mobile Legends.');alert('Tidak ditemukan listing Mobile Legends.');return}
-  const urls=mlRows.flatMap(p=>[p.image_url,...(Array.isArray(p.gallery_images)?p.gallery_images:[])].filter(Boolean));
-  const bucketPrefix='/storage/v1/object/public/'+IMAGE_BUCKET+'/';
-  const paths=[...new Set(urls.map(value=>{
-   try{const u=new URL(value,location.origin),at=u.pathname.indexOf(bucketPrefix);return at<0?null:decodeURIComponent(u.pathname.slice(at+bucketPrefix.length).split('?')[0])}catch(_){return null}
-  }).filter(Boolean))];
-  const external=urls.length-paths.length;
-  const confirmText='Akan menghapus '+paths.length+' file foto MLBB yang tersimpan di bucket '+IMAGE_BUCKET+' dan mengosongkan foto utama/galeri pada '+mlRows.length+' listing Mobile Legends. Data akun, harga, stok, serta game lain TIDAK dihapus.'+(external?'\n'+external+' URL foto eksternal/tidak dikenali hanya akan dilepas dari listing, bukan dihapus dari server asal.':'')+'\n\nLanjutkan?';
-  if(!confirm(confirmText)){say('Dibatalkan. Tidak ada perubahan.');return}
-  let removed=0,removeErrors=[];
-  for(let i=0;i<paths.length;i+=1000){
-   say('Menghapus file foto MLBB '+Math.min(i+1000,paths.length)+' dari '+paths.length+'…');
-   const{data,error}=await supabaseClient.storage.from(IMAGE_BUCKET).remove(paths.slice(i,i+1000));
-   if(error)removeErrors.push(error.message);else removed+=(data||[]).length;
-  }
-  say('Membersihkan referensi foto dari '+mlRows.length+' listing…');
-  let cleared=0,dbErrors=[];
-  for(const p of mlRows){
-   const{error}=await supabaseClient.from('products').update({image_url:null,gallery_images:[]}).eq('id',p.id);
-   if(error)dbErrors.push(p.code+': '+error.message);else cleared++;
-  }
-  await loadProducts();
-  const summary='Selesai. '+removed+' file foto MLBB terhapus dari Storage; foto dikosongkan pada '+cleared+'/'+mlRows.length+' listing.';
-  say(summary+(removeErrors.length?' Gagal hapus file: '+removeErrors.join('; '):'')+(dbErrors.length?' Gagal update data: '+dbErrors.join('; '):''));
-  alert(summary+(removeErrors.length?'\nSebagian file gagal dihapus: '+removeErrors.join('; '):'')+(dbErrors.length?'\nSebagian listing gagal dibersihkan: '+dbErrors.join('; '):'')+'\nSekarang unggah foto MLBB baru. Foto baru MLBB tidak diberi watermark.');
- }catch(error){
-  const message=error?.message||String(error);say('Gagal: '+message);console.error('XERAVION MLBB cleanup:',error);alert('Pembersihan foto MLBB gagal: '+message);
- }finally{button.disabled=false}
-}
-async function changeStock(id){
- const p=items.find(x=>String(x.id)===String(id));
- if(!p){alert('Listing tidak ditemukan. Muat ulang daftar listing.');return}
- const opts=['Tersedia','Pending','Terjual'];
- const current=String(p.stock||'Pending');
- const index=opts.indexOf(current);
- const next=opts[(index<0?0:index+1)%opts.length];
- const buttons=[...document.querySelectorAll('#adminRows button')];
- const btn=buttons.find(b=>b.getAttribute('onclick')===`changeStock('${id}')`);
- if(btn){btn.disabled=true;btn.textContent='Menyimpan…'}
- try{
-  const{data,error}=await supabaseClient.from('products').update({status:next}).eq('id',id).select('id,status').single();
-  if(error)throw error;
-  if(!data)throw new Error('Database tidak mengembalikan listing yang diperbarui. Periksa hak akses admin.');
-  p.stock=data.status;
-  renderAdmin();
-  alert('Status listing '+p.code+' berhasil diubah menjadi '+data.status+'.');
- }catch(error){
-  console.error('XERAVION changeStock:',error);
-  alert('Status gagal diubah: '+(error?.message||String(error)));
-  if(btn){btn.disabled=false;btn.textContent='Status'}
- }
-}
 function askDelete(id){deleteId=id;document.getElementById('confirmModal').classList.add('show');document.getElementById('confirmDelete').onclick=async()=>{const{error}=await supabaseClient.from('products').delete().eq('id',deleteId);if(error){alert('Gagal menghapus: '+error.message);return}closeModal();await loadProducts()}}function closeModal(){document.getElementById('confirmModal').classList.remove('show');deleteId=null}
 function setAdminGame(game){adminGameFilter=game;renderAdmin()}
 function renderAdmin(){let q=(document.getElementById('adminSearch')?.value||'').toLowerCase(),games=['Mobile Legends','PUBG Mobile','Free Fire','eFootball','Clash of Clans'],knownGames=games,accountItems=items.filter(p=>p.catalog_type!=='item'),allGames=accountItems.filter(p=>!knownGames.includes(p.game)).map(p=>p.game),tabs=['Semua',...games,...([...new Set(allGames)].length?['Lainnya']:[])],countFor=g=>g==='Semua'?accountItems.length:g==='Lainnya'?accountItems.filter(p=>!knownGames.includes(p.game)).length:accountItems.filter(p=>p.game===g).length;document.getElementById('totalAdmin').textContent=items.length;document.getElementById('availableAdmin').textContent=items.filter(x=>x.stock==='Tersedia').length;document.getElementById('soldAdmin').textContent=items.filter(x=>x.stock!=='Tersedia').length;const tabsEl=document.getElementById('adminGameTabs');if(tabsEl){tabsEl.innerHTML=tabs.map(g=>'<button type="button" role="tab" aria-selected="'+(adminGameFilter===g)+'" class="admin-game-tab '+(adminGameFilter===g?'active':'')+'" onclick="setAdminGame(\''+esc(g)+'\')">'+esc(g)+' <span>'+countFor(g)+'</span></button>').join('');if(!tabs.includes(adminGameFilter))adminGameFilter='Mobile Legends';}let list=items.filter(p=>p.catalog_type!=='item'&&(adminGameFilter==='Semua'||(adminGameFilter==='Lainnya'?!knownGames.includes(p.game):p.game===adminGameFilter))&&[p.code,p.name,p.game].join(' ').toLowerCase().includes(q));const heading=document.getElementById('adminGameHeading'),counter=document.getElementById('adminGameCount');if(heading)heading.textContent=adminGameFilter.toUpperCase();if(counter)counter.textContent=list.length+' listing';document.getElementById('adminRows').innerHTML=list.length?list.map(p=>`<tr><td>${esc(p.code)}</td><td><strong>${esc(p.name)}</strong><div class="hint">${esc(p.game)}</div></td><td>${rupiah(p.price)}</td><td><span class="status">${esc(p.stock)}</span></td><td><button class="smallbtn" onclick="editItem('${esc(p.id)}')">Edit</button><button class="smallbtn" onclick="changeStock('${esc(p.id)}')">Status</button><button class="smallbtn" onclick="askDelete('${esc(p.id)}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5"><div class="admin-game-empty">Belum ada listing '+esc(adminGameFilter)+'.<br>Tambahkan akun melalui formulir di atas dan pilih game yang sesuai.</div></td></tr>'}

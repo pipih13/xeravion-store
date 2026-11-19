@@ -13,11 +13,15 @@ export async function onRequestGet({ request, env }) {
     if (!result.ok) return json({ error: result.error }, result.status);
 
     const data = result.payload.data || {};
+    const tier = data.tier && typeof data.tier === "object" ? data.tier : {};
     return json({
       success: true,
       data: {
         name: data.name || null,
-        tier: data.tier || null,
+        tier: tier.name || null,
+        tier_code: tier.code || null,
+        rate_limit: tier.rate_limit ?? null,
+        max_ips: tier.max_ips ?? null,
         h2h_balance: data.h2h_balance ?? null,
         is_sandbox_mode: data.is_sandbox_mode ?? null,
         webhook_configured: Boolean(data.webhook_url)

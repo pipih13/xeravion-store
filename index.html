@@ -1596,31 +1596,45 @@ async function loadDwigitalCatalog(page=1){
  }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setDwigitalStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
 }
 function classifyDwigitalRegion(p){
- const rawCode=String(p.country_code||'').trim().toUpperCase();
- const codeMap={ID:'ID',MY:'MY',PH:'PH',SG:'SG',TH:'TH',VN:'VN',BN:'BN',KH:'KH',LA:'LA',MM:'MM',TL:'TL'};
- if(codeMap[rawCode])return {key:rawCode,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'})[rawCode]};
- const raw=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
- const regionLabels=[p.region,p.country,p.server,p.note,p.name,p.product].filter(Boolean).join(' ').toLowerCase();
- const codeRules=[['ID','id'],['MY','my'],['PH','ph'],['SG','sg'],['TH','th'],['VN','vn'],['BN','bn'],['KH','kh'],['LA','la'],['MM','mm'],['TL','tl']];
- for(const [key,code] of codeRules){if(new RegExp('(?:^|[\\s()[\\]_-])'+code+'(?:$|[\\s()[\\]_-])','i').test(regionLabels))return {key,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'})[key]};}
- const rules=[
-  ['ID',/indonesia|indonesian|server\s*id\b|region\s*id\b|\bid\s*(server|region)\b/i],
-  ['MY',/malaysia|malaysian|server\s*my\b|region\s*my\b/i],
-  ['PH',/philippines|philippine|pilipinas|server\s*ph\b|region\s*ph\b/i],
-  ['SG',/singapore|singaporean|server\s*sg\b|region\s*sg\b/i],
-  ['TH',/thailand|thai server|server\s*th\b|region\s*th\b/i],
-  ['VN',/vietnam|vietnamese|server\s*vn\b|region\s*vn\b/i],
-  ['BN',/brunei( darussalam)?|server\s*bn\b|region\s*bn\b/i],
-  ['KH',/cambodia|khmer|kampuchea|server\s*kh\b|region\s*kh\b/i],
-  ['LA',/laos|lao server|lao pdr|server\s*la\b|region\s*la\b/i],
-  ['MM',/myanmar|burma|server\s*mm\b|region\s*mm\b/i],
-  ['TL',/timor[- ]leste|east timor|server\s*tl\b|region\s*tl\b/i]
+ const labels=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
+ // Explicit country/region wording in the product label wins over generic supplier metadata.
+ const explicitCountries=[
+  ['ID','Indonesia',/\bindonesia\b|\bindonesian\b|server\s*id\b|region\s*id\b/i],
+  ['MY','Malaysia',/\bmalaysia\b|\bmalaysian\b|server\s*my\b|region\s*my\b/i],
+  ['PH','Filipina',/\bphilippines?\b|\bpilipinas\b|server\s*ph\b|region\s*ph\b/i],
+  ['SG','Singapura',/\bsingapore\b|\bsingaporean\b|server\s*sg\b|region\s*sg\b/i],
+  ['TH','Thailand',/\bthailand\b|\bthai server\b|server\s*th\b|region\s*th\b/i],
+  ['VN','Vietnam',/\bvietnam\b|\bvietnamese\b|server\s*vn\b|region\s*vn\b/i],
+  ['BN','Brunei Darussalam',/\bbrunei( darussalam)?\b|server\s*bn\b|region\s*bn\b/i],
+  ['KH','Kamboja',/\bcambodia\b|\bkhmer\b|\bkampuchea\b|server\s*kh\b|region\s*kh\b/i],
+  ['LA','Laos',/\blaos\b|\blao server\b|\blao pdr\b|server\s*la\b|region\s*la\b/i],
+  ['MM','Myanmar',/\bmyanmar\b|\bburma\b|server\s*mm\b|region\s*mm\b/i],
+  ['TL','Timor-Leste',/\btimor[- ]leste\b|\beast timor\b|server\s*tl\b|region\s*tl\b/i]
  ];
- const labels={ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'};
- for(const [key,re] of rules)if(re.test(raw))return {key,label:labels[key]};
- if(/global|worldwide|international|all region|all server/i.test(raw))return {key:'GLOBAL',label:'Global'};
- if(/\bsea\b|south\s*east\s*asia|southeast\s*asia/i.test(raw))return {key:'SEA',label:'SEA umum'};
- if(/\b(japan|japanese|korea|korean|taiwan|hong kong|macau|usa|united states|north america|brazil|latin america|europe|eu server|turkey|middle east|mena|india)\b/i.test(raw))return {key:'OTHER_COUNTRY',label:'Negara di luar SEA'};
+ const seaKeys=new Set(['ID','MY','PH','SG','TH','VN','BN','KH','LA','MM','TL']);
+ for(const [key,label,re] of explicitCountries)if(re.test(labels))return {key,label};
+ if(/\bglobal\b|\bworldwide\b|\binternational\b|\ball region\b|\ball server\b/i.test(labels))return {key:'GLOBAL',label:'Global'};
+ if(/\bsea\b|south\s*east\s*asia|southeast\s*asia/i.test(labels))return {key:'SEA',label:'SEA umum'};
+ // Named non-SEA regions/countries, including Brazil, must not be mistaken for Indonesia.
+ const outside=[
+  ['Brazil',/\bbrazil\b|\bbrasil\b/i],
+  ['Jepang',/\bjapan\b|\bjapanese\b/i],
+  ['Korea',/\bkorea\b|\bkorean\b/i],
+  ['Taiwan',/\btaiwan\b/i],
+  ['Hong Kong',/\bhong kong\b/i],
+  ['Makau',/\bmacau\b/i],
+  ['Amerika Serikat',/\busa\b|\bunited states\b|\bnorth america\b/i],
+  ['Eropa',/\beurope\b|\beu server\b/i],
+  ['Turki',/\bturkey\b/i],
+  ['Timur Tengah',/\bmiddle east\b|\bmena\b/i],
+  ['India',/\bindia\b/i],
+  ['Amerika Latin',/\blatin america\b/i]
+ ];
+ for(const [label,re] of outside)if(re.test(labels))return {key:'OTHER_COUNTRY',label};
+ // Use structured country code only when product labels do not name a conflicting country.
+ const rawCode=String(p.country_code||'').trim().toUpperCase();
+ const codeLabels={ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'};
+ if(codeLabels[rawCode])return {key:rawCode,label:codeLabels[rawCode]};
  return {key:'UNKNOWN',label:'Belum teridentifikasi'};
 }
 function renderDwigitalCatalogByRegion(){

@@ -1566,8 +1566,13 @@ async function testDwigitalNickname(){
   });
   const payload=await response.json().catch(()=>null);
   if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
-  if(result)result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Akun ditemukan pada simulasi Development. Status negara: BELUM DIKETAHUI. Ini bukan verifikasi akun live dan belum dapat digunakan untuk transaksi.';
-  setDwigitalStatus('Pengecekan nickname Development berhasil. Tidak ada pesanan dibuat. Negara akun tetap belum diketahui.','ok');
+  const regionLabel=payload.region==='ID'?'Indonesia':payload.region||'Belum diketahui';
+  if(result){
+   if(payload.region_status==='verified_unsupported_region')result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah terdeteksi: '+regionLabel+'. DITOLAK: hanya akun Indonesia yang didukung.';
+   else if(payload.region_status==='verified_supported')result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah terdeteksi: Indonesia. Catatan: hasil Development tetap simulasi dan transaksi belum dibuka.';
+   else result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah akun: BELUM DIKETAHUI. DITAHAN: supplier belum mengirim kode negara yang valid. Jangan lanjutkan transaksi.';
+  }
+  setDwigitalStatus(payload.region_status==='verified_unsupported_region'?'Akun di luar Indonesia ditolak. Tidak ada pesanan dibuat.':payload.region_status==='verified_supported'?'Kode wilayah Indonesia diterima dari respons supplier. Mode Development: tidak ada pesanan dibuat.':'Nickname diterima, tetapi wilayah tidak tersedia. Verifikasi dihentikan demi keamanan. Tidak ada pesanan dibuat.',payload.region_status==='verified_supported'?'ok':'error');
  }catch(e){
   if(result)result.textContent='Pengecekan gagal: '+(e.message||String(e));
   setDwigitalStatus('Pengecekan nickname gagal: '+(e.message||String(e)),'error');

@@ -9,7 +9,7 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const q = (url.searchParams.get("q") || "mobile legends").slice(0, 80);
     const page = Math.max(1, Math.min(20, Number(url.searchParams.get("page") || 1)));
-    const perPage = Math.max(1, Math.min(200, Number(url.searchParams.get("per_page") || 100)));
+    const perPage = Math.max(1, Math.min(1000, Number(url.searchParams.get("per_page") || 1000)));
     const query = new URLSearchParams({ type: "game", q, page: String(page), per_page: String(perPage) });
     const cacheKey = new Request("https://xeravion.my.id/__internal/dwigital-catalog-" + encodeURIComponent(q.toLowerCase()) + "-" + page + "-" + perPage);
     const cache = caches.default;

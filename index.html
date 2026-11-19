@@ -963,6 +963,26 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
     <div class="modalactions"><button class="btn" onclick="memberSignOut()">Keluar</button><button class="btn gold" onclick="refreshMemberPanel()">Perbarui</button></div>
   </div>
 </div></div>
+<div class="modalback" id="publicInvoiceModal" onclick="if(event.target===this)closePublicInvoice()">
+ <div class="modal member-modal" role="dialog" aria-modal="true" aria-labelledby="publicInvoiceTitle">
+  <button class="member-close" onclick="closePublicInvoice()" aria-label="Tutup">×</button>
+  <div class="eyebrow">XERAVION TRANSACTION</div><h3 id="publicInvoiceTitle">Cek Invoice</h3>
+  <p>Masukkan nomor invoice dan alamat email yang digunakan saat pembelian. Tidak perlu membuat akun atau login.</p>
+  <div id="publicInvoiceRequest">
+   <label class="hint" for="publicInvoiceNumber">Nomor invoice</label><input id="publicInvoiceNumber" class="field" autocomplete="off" placeholder="Contoh: XRV-...">
+   <label class="hint" for="publicInvoiceEmail" style="display:block;margin-top:10px">Email pembelian</label><input id="publicInvoiceEmail" class="field" type="email" inputmode="email" autocomplete="email" placeholder="nama@email.com">
+   <button class="btn gold member-submit" id="publicInvoiceSendCode" onclick="requestPublicInvoiceCode()">Kirim kode verifikasi ke email</button>
+  </div>
+  <div id="publicInvoiceVerify" class="hidden">
+   <p class="hint">Masukkan kode 6 digit yang dikirim ke email pembelian. Kode berlaku 10 menit.</p>
+   <input id="publicInvoiceCode" class="field" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Kode verifikasi 6 digit">
+   <button class="btn gold member-submit" onclick="verifyPublicInvoiceCode()">Verifikasi & lihat invoice</button>
+   <button class="member-link" onclick="requestPublicInvoiceCode()">Kirim ulang kode</button>
+  </div>
+  <div id="publicInvoiceResult" class="hidden"></div>
+  <p class="hint" id="publicInvoiceMessage" aria-live="polite"></p>
+ </div>
+</div>
 <div class="modalback" id="loginModal"><div class="modal"><h3>Login Admin XERAVION</h3><p>Masuk menggunakan email dan password akun admin Supabase yang sudah kamu buat.</p><input id="adminEmail" class="field" type="email" autocomplete="username" placeholder="Email admin"><div class="password-toggle-wrap admin-password-wrap"><input id="adminPassword" class="field" type="password" autocomplete="current-password" placeholder="Password admin" style="margin-top:10px"><button type="button" class="password-toggle" aria-label="Tampilkan kata sandi" aria-pressed="false" onclick="togglePasswordVisibility('adminPassword',this)">Lihat</button></div><div class="modalactions"><button class="btn" onclick="closeLogin()">Batal</button><button class="btn gold" onclick="loginAdmin()">Masuk</button></div><p id="loginError" class="hint"></p></div></div>
 <div class="modalback detail-back" id="productDetailModal" onclick="if(event.target===this)closeProductDetail()"><div class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><button class="detail-close" type="button" aria-label="Tutup detail" onclick="closeProductDetail()">×</button><div id="detailContent"></div></div></div>
 <div class="image-preview-modal" id="imagePreviewModal" onclick="if(event.target===this)closeImagePreview()"><button class="image-preview-close" type="button" onclick="closeImagePreview()" aria-label="Tutup preview">×</button><button class="image-preview-nav prev" id="imagePreviewPrev" type="button" onclick="moveImagePreview(-1)" aria-label="Foto sebelumnya">‹</button><img id="imagePreviewFull" alt="Preview foto akun" onpointerdown="previewPointerDown(event)" onpointermove="previewPointerMove(event)" onpointerup="previewPointerUp(event)" onpointercancel="previewPointerUp(event)" ondblclick="resetPreviewZoom()"><button class="image-preview-nav next" id="imagePreviewNext" type="button" onclick="moveImagePreview(1)" aria-label="Foto berikutnya">›</button><span id="imagePreviewCount" class="image-preview-count"></span></div><div class="modalback" id="confirmModal"><div class="modal"><h3>Hapus listing?</h3><p>Listing ini akan dihapus dari database XERAVION.</p><div class="modalactions"><button class="btn" onclick="closeModal()">Batal</button><button class="btn gold" id="confirmDelete">Ya, hapus</button></div></div></div>
@@ -2172,3 +2192,61 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
 .game-category-card.item-gaming:before{background:radial-gradient(circle at 20% 15%,#f4d38b55,transparent 48%)}
 .game-category-card.item-gaming .game-category-art{font-size:38px;filter:drop-shadow(0 6px 14px #0008)}
 </style>
+<style id="xeravion-public-invoice-style">
+#publicInvoiceLauncher{position:fixed;right:14px;bottom:18px;z-index:35;border:1px solid #b58b3b;border-radius:999px;padding:12px 17px;background:linear-gradient(135deg,#f0d69b,#a8792b);color:#171006;font-size:12px;font-weight:900;box-shadow:0 8px 28px #0009}
+#publicInvoiceModal .modal{max-height:88vh;overflow:auto}
+#publicInvoiceResult .invoice-result-card{margin-top:14px;padding:15px;border:1px solid #66512e;border-radius:12px;background:#100e0a}
+#publicInvoiceResult .invoice-result-card h4{color:#e8cc91;margin:0 0 12px}
+#publicInvoiceResult .invoice-result-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #342b1d;font-size:12px}
+#publicInvoiceResult .invoice-result-row span:first-child{color:#b4a78f}
+#publicInvoiceResult .invoice-result-row strong{text-align:right;overflow-wrap:anywhere}
+#publicInvoiceResult .invoice-result-total{color:#e8cc91;font-size:16px}
+@media(max-width:600px){#publicInvoiceLauncher{right:10px;bottom:12px;padding:10px 13px;font-size:11px}}
+</style>
+<button id="publicInvoiceLauncher" type="button" onclick="openPublicInvoice()">Cek Invoice</button>
+<script id="xeravion-public-invoice-script">
+function openPublicInvoice(){
+ const m=document.getElementById('publicInvoiceModal');m.classList.add('show');
+ document.getElementById('publicInvoiceMessage').textContent='';
+}
+function closePublicInvoice(){document.getElementById('publicInvoiceModal').classList.remove('show')}
+function resetPublicInvoiceView(){
+ document.getElementById('publicInvoiceRequest').classList.remove('hidden');
+ document.getElementById('publicInvoiceVerify').classList.add('hidden');
+ document.getElementById('publicInvoiceResult').classList.add('hidden');
+ document.getElementById('publicInvoiceResult').innerHTML='';
+}
+async function requestPublicInvoiceCode(){
+ const invoice=document.getElementById('publicInvoiceNumber').value.trim().toUpperCase();
+ const email=document.getElementById('publicInvoiceEmail').value.trim();
+ const msg=document.getElementById('publicInvoiceMessage'),btn=document.getElementById('publicInvoiceSendCode');
+ if(!invoice||!email){msg.textContent='Nomor invoice dan email pembelian wajib diisi.';return}
+ btn.disabled=true;btn.textContent='Mengirim kode…';msg.textContent='';
+ try{
+  const{data,error}=await supabaseClient.functions.invoke('invoice-email-verification',{body:{action:'request',invoice_number:invoice,email}});
+  if(error)throw error;if(data?.error)throw new Error(data.error);
+  document.getElementById('publicInvoiceRequest').classList.add('hidden');
+  document.getElementById('publicInvoiceVerify').classList.remove('hidden');
+  msg.textContent=data.message||'Jika data cocok, kode verifikasi dikirim ke email pembelian.';
+ }catch(e){msg.textContent='Gagal meminta kode: '+(e.message||e)}
+ finally{btn.disabled=false;btn.textContent='Kirim kode verifikasi ke email'}
+}
+async function verifyPublicInvoiceCode(){
+ const invoice=document.getElementById('publicInvoiceNumber').value.trim().toUpperCase();
+ const email=document.getElementById('publicInvoiceEmail').value.trim();
+ const code=document.getElementById('publicInvoiceCode').value.trim();
+ const msg=document.getElementById('publicInvoiceMessage');msg.textContent='Memverifikasi…';
+ try{
+  const{data,error}=await supabaseClient.functions.invoke('invoice-email-verification',{body:{action:'verify',invoice_number:invoice,email,code}});
+  if(error)throw error;if(data?.error)throw new Error(data.error);
+  const o=data.invoice;if(!o)throw new Error('Data invoice tidak ditemukan.');
+  const money=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
+  const row=(label,value)=>'<div class="invoice-result-row"><span>'+label+'</span><strong>'+value+'</strong></div>';
+  const status=(o.payment_status==='paid'?'LUNAS':'BELUM LUNAS')+' · '+(o.order_status==='completed'?'SELESAI':o.order_status==='cancelled'?'DIBATALKAN':'DIPROSES');
+  document.getElementById('publicInvoiceResult').innerHTML='<div class="invoice-result-card"><h4>Invoice '+esc(o.invoice_number)+'</h4>'+row('Nama pembeli',esc(o.buyer_name))+row('Tanggal',new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'}))+row('Game',esc(o.game))+row('Kode akun',esc(o.product_code))+row('Nama akun',esc(o.product_name))+row('Harga akun',money(o.item_price))+row('Poin digunakan',Number(o.points_used||0).toLocaleString('id-ID')+' XP')+row('Diskon poin','-'+money(o.points_discount))+row('Cashback',Number(o.cashback_points||0).toLocaleString('id-ID')+' XP')+row('Metode pembayaran',esc(o.payment_method))+row('Status',status)+'<div class="invoice-result-row invoice-result-total"><span>Total dibayar</span><strong>'+money(o.amount_due)+'</strong></div></div>';
+  document.getElementById('publicInvoiceVerify').classList.add('hidden');
+  document.getElementById('publicInvoiceResult').classList.remove('hidden');
+  msg.textContent='Verifikasi berhasil. Simpan atau screenshot halaman invoice ini sebagai bukti transaksi.';
+ }catch(e){msg.textContent='Verifikasi gagal: '+(e.message||e)}
+}
+</script>

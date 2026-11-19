@@ -806,6 +806,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 @media(max-width:700px){.item-gaming-title-row{align-items:flex-start;flex-direction:column}.item-gaming-banner{border-radius:12px}.item-platform-filter{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 8px}.item-platform-filter button{white-space:nowrap}.item-gaming-types{align-items:flex-start}.item-gaming-types>span{width:100%}.item-gaming-types button{font-size:10px;padding:7px 9px}}
 </style>
 <style id="xeravion-melo-admin-style">
+.xer-dwigital-panel .melo-catalog-head{align-items:end}.xer-dwigital-panel .melo-catalog-controls{flex-wrap:wrap}.xer-dwigital-panel .melo-catalog-controls input{flex:1;min-width:130px}.dwigital-product{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid #3e3322;border-radius:9px;background:#15110b}.dwigital-product>div:first-child{min-width:0;display:grid;gap:5px}.dwigital-product strong{font-size:12px;overflow-wrap:anywhere}.dwigital-product small{font-size:10px;color:#a99d89}.dwigital-product-price{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap;color:#e8cc91;font-size:12px;font-weight:800}@media(max-width:600px){.dwigital-product{align-items:flex-start;flex-direction:column}.dwigital-product-price{align-items:flex-start;flex-direction:row;flex-wrap:wrap}}
 .melo-badge{display:inline-flex;align-items:center;border:1px solid #80663a;border-radius:999px;padding:7px 11px;color:#e5c783;font-size:10px;font-weight:850;white-space:nowrap}
 .melo-badge.ok{border-color:#286b4b;color:#76e0aa;background:#10251b}.melo-badge.error{border-color:#8a3b3b;color:#ffaaaa;background:#2a1111}
 .melo-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
@@ -864,6 +865,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
  <button type="button" class="xer-admin-tab" data-tab="melo" onclick="showAdminTab('melo')">Melo H2H</button>
+ <button type="button" class="xer-admin-tab" data-tab="dwigital" onclick="showAdminTab('dwigital')">Dwigital</button>
  <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
 </nav>
 <div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total listing</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button></div></div></div>
@@ -909,6 +911,18 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <div id="meloMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div>
   </div>
   <p class="hint melo-footnote">Tahap ini hanya menguji koneksi, membaca profil/saldo, dan menampilkan katalog. Belum ada tombol pembelian, transaksi live, perubahan stok, atau sinkronisasi otomatis. Semua transaksi harus tetap melalui persetujuan admin setelah pengujian Sandbox.</p>
+ </div>
+</div>
+<div class="xer-admin-tab-panel" id="adminTab-dwigital">
+ <div class="panel xer-dwigital-panel">
+  <div class="sectionhead"><div><div class="eyebrow">RESELLER API · DEVELOPMENT</div><h3 style="margin:4px 0">Dwigital Supplier</h3><div class="hint">Supplier kedua untuk membandingkan katalog dan harga modal. Hanya API Development; tidak ada pembelian atau pemotongan saldo.</div></div><span id="dwigitalConnectionBadge" class="melo-badge">Belum diuji</span></div>
+  <div class="melo-status-grid"><div class="stat"><b id="dwigitalEnvironment">—</b><span>Mode API</span></div><div class="stat"><b id="dwigitalTier">—</b><span>Level akun</span></div><div class="stat"><b id="dwigitalBalance">—</b><span>Saldo uji</span></div></div>
+  <div class="melo-actions"><button class="btn gold" type="button" id="dwigitalTestBtn" onclick="testDwigitalConnection()">Uji koneksi</button><button class="btn" type="button" onclick="loadDwigitalCatalog()">Muat katalog MLBB</button></div>
+  <div id="dwigitalStatus" class="notice" role="status" aria-live="polite">Mode aman: Development. Pesanan sungguhan tidak akan dibuat dari panel ini.</div>
+  <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Katalog dimuat per halaman agar panel tetap ringan.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button></div></div>
+  <div id="dwigitalProductList" class="melo-product-list"><div class="melo-empty">Tekan “Muat katalog MLBB” untuk mengambil produk.</div></div><div id="dwigitalPagination" class="melo-pagination" aria-live="polite"></div>
+  <div class="melo-markup-box"><h4>Simulasi harga jual XERAVION</h4><p class="hint">Hanya simulasi. Tidak mengubah harga toko, stok, atau membuat pesanan.</p><label for="dwigitalMarkup">Margin tambahan (Rp)</label><input id="dwigitalMarkup" type="number" min="0" step="1" value="300" inputmode="numeric" oninput="updateDwigitalMarkupPreview()"><div id="dwigitalMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div></div>
+  <p class="hint melo-footnote">Tahap Development hanya untuk uji koneksi, membaca saldo uji, katalog, harga, dan simulasi. Tidak ada endpoint order, deposit, webhook, atau transaksi yang diaktifkan di XERAVION.</p>
  </div>
 </div>
 <div class="xer-admin-tab-panel" id="adminTab-mail">
@@ -1347,6 +1361,7 @@ function showAdminTab(tab){
  if(tab==='form')populateOrderProducts();
  if(tab==='analytics')loadXeravionAnalytics();
  if(tab==='melo')testMeloConnection();
+ if(tab==='dwigital')testDwigitalConnection();
  if(tab==='mail')connectXeravionMail();
 }
 
@@ -1493,6 +1508,47 @@ function updateMeloMarkupPreview(){
 }
 function closeMeloProducts(){document.getElementById('meloProductArea')?.classList.add('hidden');}
 
+let dwigitalSelectedProduct=null;
+let dwigitalCurrentPage=1;
+let dwigitalLastPage=1;
+function setDwigitalStatus(message,type='info'){
+ const el=document.getElementById('dwigitalStatus');if(el)el.textContent=message;
+ const badge=document.getElementById('dwigitalConnectionBadge');if(badge){badge.textContent=type==='ok'?'Development aktif':type==='error'?'Perlu diperiksa':'Belum diuji';badge.className='melo-badge '+(type==='ok'?'ok':type==='error'?'error':'');}
+}
+async function dwigitalRequest(path){
+ const{data:{session},error}=await supabaseClient.auth.getSession();
+ if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
+ const response=await fetch('/api/dwigital/'+path,{headers:{Authorization:'Bearer '+session.access_token,Accept:'application/json'},cache:'no-store'});
+ let data;try{data=await response.json()}catch{throw new Error('Respons server Dwigital tidak valid.')}
+ if(!response.ok)throw new Error(data.error||('Dwigital API HTTP '+response.status));
+ if(data.environment&&data.environment!=='development')throw new Error('API tidak berada pada mode Development.');
+ return data;
+}
+function formatDwigitalMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID');}
+async function testDwigitalConnection(){
+ if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
+ const btn=document.getElementById('dwigitalTestBtn');if(btn){btn.disabled=true;btn.textContent='Menguji…'}
+ setDwigitalStatus('Memeriksa API key Development Dwigital…');
+ try{const payload=await dwigitalRequest('profile');const d=payload.data||{};const env=document.getElementById('dwigitalEnvironment'),tier=document.getElementById('dwigitalTier'),bal=document.getElementById('dwigitalBalance');if(env)env.textContent=payload.environment||'development';if(tier)tier.textContent=d.tier||'—';if(bal)bal.textContent=d.balance==null?'—':formatDwigitalMoney(d.balance);setDwigitalStatus('Koneksi Dwigital berhasil. Mode Development terverifikasi. Saldo uji tidak dipotong oleh pengujian ini.','ok');}
+ catch(e){setDwigitalStatus('Uji koneksi gagal: '+(e.message||String(e)),'error');}
+ finally{if(btn){btn.disabled=false;btn.textContent='Uji koneksi'}}
+}
+async function loadDwigitalCatalog(page=1){
+ if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin.','error');return;}
+ const q=(document.getElementById('dwigitalCatalogSearch')?.value||'mobile legends').trim()||'mobile legends';
+ const list=document.getElementById('dwigitalProductList');if(list)list.innerHTML='<div class="melo-empty">Mengambil katalog Dwigital…</div>';setDwigitalStatus('Mengambil katalog '+q+' dari Dwigital Development…');
+ try{
+  const payload=await dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page='+Math.max(1,page)+'&per_page=100');
+  if(payload.environment!=='development')throw new Error('Respons katalog bukan Development.');
+  const rows=Array.isArray(payload.data)?payload.data:[];dwigitalCurrentPage=Number(payload.page||page);dwigitalLastPage=Number(payload.last_page||1);window._xerDwigitalProducts=rows;
+  if(!rows.length){if(list)list.innerHTML='<div class="melo-empty">Tidak ada produk yang cocok dengan pencarian ini.</div>';}
+  else if(list)list.innerHTML=rows.map((p,i)=>{const price=Number(p.price||0);const available=p.stock===0?'Stok habis':'Tersedia / sesuai provider';return '<article class="dwigital-product"><div><strong>'+esc(p.name||p.product||('Produk '+p.variant_id))+'</strong><small>'+esc(p.product||'Game')+' · ID paket: '+esc(p.variant_id)+' · '+esc(p.delivery||'automatic')+' · '+available+'</small></div><div class="dwigital-product-price">'+formatDwigitalMoney(price)+'<button type="button" class="smallbtn" onclick="selectDwigitalProduct('+i+')">Hitung harga</button></div></article>';}).join('');
+  const nav=document.getElementById('dwigitalPagination');if(nav)nav.innerHTML=rows.length?'<span class="hint">Halaman '+dwigitalCurrentPage+' / '+dwigitalLastPage+' · '+Number(payload.total||rows.length).toLocaleString('id-ID')+' paket</span><div class="melo-page-buttons"><button type="button" class="btn" '+(dwigitalCurrentPage<=1?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage-1)+')">Sebelumnya</button><button type="button" class="btn" '+(dwigitalCurrentPage>=dwigitalLastPage?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage+1)+')">Berikutnya</button></div>':'';
+  setDwigitalStatus('Berhasil memuat '+rows.length+' paket dari Dwigital Development. Harga yang tampil adalah harga modal akun. Tidak ada transaksi dibuat.','ok');
+ }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setDwigitalStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
+}
+function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price};updateDwigitalMarkupPreview();}
+function updateDwigitalMarkupPreview(){const out=document.getElementById('dwigitalMarkupPreview');if(!out)return;if(!dwigitalSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}const margin=Math.max(0,Number(document.getElementById('dwigitalMarkup')?.value||0));out.textContent=dwigitalSelectedProduct.name+' · Modal '+formatDwigitalMoney(dwigitalSelectedProduct.price)+' + Margin '+formatDwigitalMoney(margin)+' = Harga simulasi '+formatDwigitalMoney(dwigitalSelectedProduct.price+margin)+'.';}
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
 async function loadXeravionAnalytics(){
  const status=document.getElementById('xerTrafficStatus'),chart=document.getElementById('xerTrafficChart');

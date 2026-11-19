@@ -1612,14 +1612,19 @@ function populateDwigitalNicknameVariants(){
  const select=document.getElementById('dwigitalCheckVariant');if(!select)return;
  const rows=window._xerDwigitalProducts||[];
  const eligible=rows.filter(isDwigitalNicknameEligible);
+ // Dwigital documents that one variant_id from a game is enough to check
+ // all player IDs for that same game; it need not be repeated per denomination.
  const previous=select.value;
- select.innerHTML='<option value="">Pilih paket yang mendukung nickname + Zone ID</option>'+eligible.map(p=>'<option value="'+esc(p.variant_id)+'">'+esc(p.name||p.product||'Mobile Legends')+' · '+esc(p._xerRegion?.label||classifyDwigitalRegion(p).label)+' · ID '+esc(p.variant_id)+'</option>').join('');
- if(previous&&eligible.some(p=>String(p.variant_id)===previous))select.value=previous;
+ const chosen=eligible.find(p=>String(p.variant_id)===previous)||eligible[0]||null;
+ select.innerHTML=chosen
+  ? '<option value="'+esc(chosen.variant_id)+'">'+esc(chosen.name||chosen.product||'Mobile Legends')+' · ID '+esc(chosen.variant_id)+' (paket verifikasi)</option>'
+  : '<option value="">Belum ada paket verifikasi MLBB</option>';
+ if(chosen)select.value=String(chosen.variant_id);
  const btn=document.getElementById('dwigitalCheckBtn');
- if(btn)btn.disabled=!select.value;
+ if(btn)btn.disabled=!chosen;
  const out=document.getElementById('dwigitalNicknameResult');
- if(out&&!eligible.length)out.textContent='Belum ada paket MLBB dengan nickname_check dan Zone ID pada katalog yang dimuat. Tombol uji belum bisa digunakan. Coba muat katalog ulang atau periksa dukungan paket di Dwigital.';
- else if(out)out.textContent='Ditemukan '+eligible.length+' paket MLBB yang mendukung cek nickname dan Zone ID. Pilih salah satu paket untuk mengaktifkan tombol uji.';
+ if(out&&!chosen)out.textContent='Dwigital belum menyediakan paket MLBB yang mendukung cek nickname + Zone ID pada katalog ini.';
+ else if(out)out.textContent='Paket verifikasi MLBB sudah dipilih otomatis. Satu variant ID ini digunakan untuk cek ID MLBB; tidak perlu setiap nominal punya tombol cek sendiri. Catatan: hasil nickname tidak menyatakan negara akun.';
 }
 function onDwigitalNicknameVariantChange(){
  const select=document.getElementById('dwigitalCheckVariant');
@@ -1627,7 +1632,7 @@ function onDwigitalNicknameVariantChange(){
  const out=document.getElementById('dwigitalNicknameResult');
  const chosen=(window._xerDwigitalProducts||[]).find(p=>String(p.variant_id)===String(select?.value));
  if(btn)btn.disabled=!chosen||!isDwigitalNicknameEligible(chosen);
- if(out)out.textContent=chosen?'Paket siap diuji: '+(chosen.name||chosen.product)+' · Variant ID '+chosen.variant_id+'. Hasil Development tetap simulasi dan tidak menunjukkan negara akun.':'Pilih paket MLBB yang mendukung nickname + Zone ID.';
+ if(out)out.textContent=chosen?'Paket verifikasi MLBB siap digunakan. Satu variant ID dapat dipakai untuk cek ID game yang sama; hasil nickname tidak mengungkap negara akun.':'Belum ada paket verifikasi MLBB.';
 }
 function classifyDwigitalRegion(p){
  const labels=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();

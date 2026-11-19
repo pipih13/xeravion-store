@@ -881,6 +881,15 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <input id="orderBuyerEmail" type="email" placeholder="Email pembeli untuk invoice">
   <input id="orderBuyerWhatsapp" placeholder="WhatsApp pembeli (opsional)">
   <select id="orderPaymentMethod"><option value="QRIS">QRIS</option><option value="BCA">BCA</option><option value="DANA">DANA</option><option value="GoPay">GoPay</option><option value="ShopeePay">ShopeePay</option><option value="SeaBank">SeaBank</option></select>
+  <div class="wide notice" style="margin:0">
+   <strong>Member & XERAVION Credit Points</strong>
+   <div class="hint" style="margin:5px 0 9px">Pilih member agar cashback 3% dapat masuk otomatis setelah transaksi lunas. Email pembeli harus sama dengan email member.</div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="orderMemberQuery" placeholder="Cari member berdasarkan nama/email" style="flex:1;min-width:180px"><button class="btn" type="button" onclick="searchOrderMembers()">Cari member</button></div>
+   <div id="orderMemberResults" class="hint" style="margin-top:8px">Belum ada member dipilih.</div>
+   <div id="orderSelectedMember" class="hint" style="margin-top:6px">Member: tidak dipilih (tanpa cashback)</div>
+  </div>
+  <select id="orderCreditMode" class="wide" onchange="updateOrderCreditMode()"><option value="none">Bayar tanpa menggunakan Credit Points · Cashback 3%</option><option value="use">Gunakan Credit Points · Tanpa cashback</option></select>
+  <div id="orderPointsWrap" class="wide" style="display:none"><input id="orderPointsToUse" type="number" min="1" step="1" value="1" placeholder="Jumlah Credit Points yang digunakan"><div id="orderPointsHint" class="hint">1 XP = Rp10. Maksimal penggunaan 10% dari harga akun.</div></div>
   <button class="btn gold" onclick="createXeravionOrder()">Buat pesanan</button>
  </div>
  <p id="orderAdminMessage" class="hint" aria-live="polite"></p>
@@ -1306,22 +1315,58 @@ async function populateOrderProducts(){
  sel.innerHTML='<option value="">Pilih akun dari katalog…</option>'+items.filter(p=>p.stock==='Tersedia').map(p=>'<option value="'+p.id+'">'+esc(p.code)+' · '+esc(p.name)+' · '+rupiah(p.price)+'</option>').join('');
  if(current&&[...sel.options].some(o=>o.value===current))sel.value=current;
 }
+let orderSelectedMemberId=null;
+function updateOrderCreditMode(){
+ const mode=document.getElementById('orderCreditMode')?.value||'none';
+ const wrap=document.getElementById('orderPointsWrap');
+ if(wrap)wrap.style.display=mode==='use'?'block':'none';
+ const hint=document.getElementById('orderPointsHint');
+ const product=items.find(p=>Number(p.id)===Number(document.getElementById('orderProduct')?.value));
+ if(hint&&product)hint.textContent='Maksimal '+Math.floor(Number(product.price)*0.10/10).toLocaleString('id-ID')+' XP · setara '+rupiah(Math.floor(Number(product.price)*0.10/10)*10)+'. 1 XP = Rp10.';
+}
+async function searchOrderMembers(){
+ const q=document.getElementById('orderMemberQuery').value.trim(),out=document.getElementById('orderMemberResults');
+ if(!q){out.textContent='Masukkan nama atau email member.';return}
+ out.textContent='Mencari member…';
+ try{
+  const{data,error}=await supabaseClient.rpc('credit_admin_search_members',{p_query:q});
+  if(error)throw error;
+  if(!Array.isArray(data)||!data.length){out.textContent='Member tidak ditemukan.';return}
+  window.orderMemberCache=Object.fromEntries(data.map(m=>[String(m.user_id),m]));
+  out.innerHTML=data.map(m=>'<div class="history-row"><span><strong>'+esc(m.display_name||'Member XERAVION')+'</strong><small>'+esc(m.email||'Email tidak tersedia')+' · Saldo '+Number(m.balance||0).toLocaleString('id-ID')+' XP</small></span><button class="smallbtn" type="button" onclick="selectOrderMember(\''+String(m.user_id)+'\')">Pilih</button></div>').join('');
+ }catch(e){out.textContent='Gagal mencari member: '+(e.message||e)}
+}
+function selectOrderMember(id){
+ const m=window.orderMemberCache?.[id];if(!m)return;
+ orderSelectedMemberId=id;
+ document.getElementById('orderSelectedMember').textContent='Member dipilih: '+(m.display_name||'Member')+' · '+(m.email||'');
+ document.getElementById('orderSelectedMember').dataset.email=m.email||'';
+}
 async function createXeravionOrder(){
  const msg=document.getElementById('orderAdminMessage'),productId=Number(document.getElementById('orderProduct').value),buyerName=document.getElementById('orderBuyerName').value.trim(),buyerEmail=document.getElementById('orderBuyerEmail').value.trim(),buyerWhatsapp=document.getElementById('orderBuyerWhatsapp').value.trim(),paymentMethod=document.getElementById('orderPaymentMethod').value;
  const product=items.find(p=>Number(p.id)===productId);
  if(!product){msg.textContent='Pilih akun yang masih tersedia.';return}
  if(!buyerName||!buyerEmail||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail)){msg.textContent='Isi nama dan alamat email pembeli yang valid.';return}
- const selectedText=document.getElementById('creditSelectedMember')?.value||'';
- const memberEmail=selectedText.split(' · ')[0].trim();
- const linkedUser=selectedCreditMember&&memberEmail.toLowerCase()===buyerEmail.toLowerCase()?selectedCreditMember:null;
- if(selectedCreditMember&&!linkedUser){msg.textContent='Email pembeli berbeda dari member terpilih. Pesanan tetap dibuat sebagai pesanan tamu; lepas pilihan member jika memang bukan pembeli tersebut.'}
- msg.textContent='Menyimpan pesanan…';
+ const mode=document.getElementById('orderCreditMode').value;
+ const points=mode==='use'?Number(document.getElementById('orderPointsToUse').value||0):0;
+ if(mode==='use'&&(!Number.isSafeInteger(points)||points<=0)){msg.textContent='Masukkan jumlah Credit Points yang valid.';return}
+ if(orderSelectedMemberId){
+  const memberEmail=document.getElementById('orderSelectedMember').dataset.email||'';
+  if(memberEmail.toLowerCase()!==buyerEmail.toLowerCase()){msg.textContent='Email pembeli harus sama dengan email member yang dipilih.';return}
+ }
+ if(points>0&&!orderSelectedMemberId){msg.textContent='Pilih member terlebih dahulu untuk menggunakan Credit Points.';return}
+ msg.textContent='Menyimpan pesanan dan memproses Credit Points…';
  try{
-  const payload={user_id:linkedUser,product_id:product.id,product_code:product.code,product_name:product.name,game:product.game,buyer_name:buyerName,buyer_email:buyerEmail,buyer_whatsapp:buyerWhatsapp||null,item_price:product.price,points_used:0,points_discount:0,amount_due:product.price,payment_method:paymentMethod};
-  const{data,error}=await supabaseClient.from('orders').insert(payload).select('id,invoice_number').single();
+  const{data,error}=await supabaseClient.rpc('admin_create_xeravion_order',{
+   p_product_id:product.id,p_buyer_name:buyerName,p_buyer_email:buyerEmail,
+   p_buyer_whatsapp:buyerWhatsapp||null,p_payment_method:paymentMethod,
+   p_member_user_id:orderSelectedMemberId,p_points_to_use:points
+  });
   if(error)throw error;
-  msg.textContent='Pesanan dibuat: '+data.invoice_number+'. Status masih menunggu pembayaran.';
+  msg.textContent='Pesanan '+data.invoice_number+' dibuat. Total pembayaran '+rupiah(data.amount_due)+'. '+(points>0?'Poin telah dipotong dan akan dikembalikan jika pesanan dibatalkan.':'Cashback 3% akan diproses setelah pembayaran lunas.');
   document.getElementById('orderBuyerName').value='';document.getElementById('orderBuyerEmail').value='';document.getElementById('orderBuyerWhatsapp').value='';
+  document.getElementById('orderPointsToUse').value='1';
+  orderSelectedMemberId=null;document.getElementById('orderSelectedMember').textContent='Member: tidak dipilih (tanpa cashback)';document.getElementById('orderSelectedMember').dataset.email='';
   await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal membuat pesanan: '+(e.message||e)}
 }
@@ -1339,41 +1384,29 @@ async function loadXeravionOrders(){
  }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat: '+esc(e.message||e)+'</td></tr>'}
 }
 async function completeXeravionOrder(id){
- const msg=document.getElementById('orderAdminMessage');if(!confirm('Pastikan dana sudah benar-benar diterima dan akun sudah diserahkan. Konfirmasi pembayaran dan penyelesaian pesanan?'))return;
+ const msg=document.getElementById('orderAdminMessage');
+ if(!confirm('Pastikan dana sudah benar-benar diterima dan akun sudah diserahkan. Sistem akan menyelesaikan pesanan, memproses cashback bila berhak, lalu membuat dan mengirim invoice. Lanjutkan?'))return;
  try{
-  const{data:order,error:readError}=await supabaseClient.from('orders').select('*').eq('id',id).single();if(readError)throw readError;
-  if(order.order_status==='cancelled')throw new Error('Pesanan yang dibatalkan tidak dapat diselesaikan.');
-  if(order.payment_status!=='paid'||order.order_status!=='completed'){
-   const{error:updateError}=await supabaseClient.from('orders').update({payment_status:'paid',order_status:'completed',updated_at:new Date().toISOString()}).eq('id',id);if(updateError)throw updateError;
-  }
-  let bonusMessage='';
-  if(order.user_id){
-   const{data:bonus,error:bonusError}=await supabaseClient.rpc('award_purchase_cashback',{p_user_id:order.user_id,p_purchase_reference:order.invoice_number,p_purchase_amount:order.amount_due,p_used_points:Number(order.points_used||0)>0});
-   if(bonusError)bonusMessage=' Cashback belum terkonfirmasi; coba ulangi konfirmasi atau periksa panel Credit Points: '+bonusError.message;
-   else bonusMessage=' Cashback '+Number(bonus||0).toLocaleString('id-ID')+' XP dicatat (jika belum pernah diberikan).';
-  }
-  if(order.product_id){const{error:stockError}=await supabaseClient.from('products').update({status:'Terjual'}).eq('id',order.product_id);if(stockError)bonusMessage+=' Status stok perlu diperbarui manual: '+stockError.message;}
-  msg.textContent='Pesanan berstatus lunas dan selesai.'+bonusMessage+' Invoice siap dikirim.';
+  msg.textContent='Mengonfirmasi pembayaran dan memproses Credit Points…';
+  const{data:result,error}=await supabaseClient.rpc('admin_complete_xeravion_order',{p_order_id:id});
+  if(error)throw error;
+  msg.textContent='Pesanan lunas & selesai. Cashback: '+Number(result.cashback_points||0).toLocaleString('id-ID')+' XP. Membuat dan mengirim invoice…';
   await loadProducts();await loadXeravionOrders();
+  await sendXeravionInvoice(id,true);
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
 async function cancelXeravionOrder(id){
- if(!confirm('Batalkan pesanan ini? Jika cashback sudah diberikan, sistem juga akan mencoba mengoreksinya.'))return;
+ if(!confirm('Batalkan pesanan ini? Cashback yang sudah diberikan akan dikoreksi dan Credit Points yang digunakan akan dikembalikan.'))return;
  const msg=document.getElementById('orderAdminMessage');
  try{
-  const{data:o,error:r}=await supabaseClient.from('orders').select('invoice_number,user_id').eq('id',id).single();if(r)throw r;
-  const{error}=await supabaseClient.from('orders').update({order_status:'cancelled',updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;
-  let note='Pesanan dibatalkan.';
-  if(o.user_id){
-   const{data:reversed,error:reverseError}=await supabaseClient.rpc('reverse_purchase_cashback',{p_purchase_reference:o.invoice_number,p_reason:'Pesanan XERAVION dibatalkan'});
-   if(!reverseError)note+=' Cashback '+Number(reversed||0).toLocaleString('id-ID')+' XP telah dikoreksi.';
-   else if(!String(reverseError.message||'').includes('tidak ditemukan'))note+=' Perhatian: koreksi cashback perlu diperiksa manual ('+reverseError.message+').';
-  }
-  msg.textContent=note;await loadXeravionOrders();
+  const{data,error}=await supabaseClient.rpc('admin_cancel_xeravion_order',{p_order_id:id});
+  if(error)throw error;
+  msg.textContent='Pesanan dibatalkan. Cashback dikoreksi: '+Number(data.cashback_reversed||0).toLocaleString('id-ID')+' XP. Poin dikembalikan: '+Number(data.points_refunded||0).toLocaleString('id-ID')+' XP.';
+  await loadProducts();await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal membatalkan pesanan: '+(e.message||e)}
 }
-async function sendXeravionInvoice(id){
- const msg=document.getElementById('orderAdminMessage');if(!confirm('Kirim invoice ke email pembeli?'))return;msg.textContent='Mengirim invoice…';
+async function sendXeravionInvoice(id,auto=false){
+ const msg=document.getElementById('orderAdminMessage');if(!auto&&!confirm('Kirim ulang invoice ke email pembeli?'))return;msg.textContent='Mengirim invoice…';
  try{const{data,error}=await supabaseClient.functions.invoke('send-xeravion-invoice',{body:{order_id:id}});if(error)throw error;if(data?.error)throw new Error(data.error);msg.textContent='Invoice '+data.invoice_number+' berhasil dikirim. ID email: '+data.email_id;await loadXeravionOrders()}catch(e){msg.textContent='Gagal mengirim invoice: '+(e.message||e)}
 }
 

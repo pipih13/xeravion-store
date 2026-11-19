@@ -932,7 +932,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    </div>
    <div id="dwigitalNicknameResult" class="notice" role="status" aria-live="polite">Belum ada pengecekan. Negara akun akan tetap berstatus belum diketahui.</div>
   </div>
-  <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Pilih wilayah untuk memisahkan paket Indonesia, negara SEA, SEA umum, dan Global. Paket tanpa label wilayah yang jelas masuk ke Belum teridentifikasi.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button><select id="dwigitalRegionFilter" aria-label="Filter wilayah paket" onchange="renderDwigitalCatalogByRegion()"><option value="all">Semua wilayah</option><option value="ID">Indonesia</option><option value="MY">Malaysia</option><option value="PH">Filipina</option><option value="SG">Singapura</option><option value="TH">Thailand</option><option value="VN">Vietnam</option><option value="SEA_OTHER">SEA lainnya</option><option value="SEA">SEA umum</option><option value="GLOBAL">Global</option><option value="UNKNOWN">Belum teridentifikasi</option></select></div></div>
+  <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Pilih wilayah untuk memisahkan paket Indonesia, negara SEA, SEA umum, dan Global. Paket tanpa label wilayah yang jelas masuk ke Belum teridentifikasi.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button><select id="dwigitalRegionFilter" aria-label="Filter wilayah paket" onchange="renderDwigitalCatalogByRegion()"><option value="all">Semua wilayah</option><option value="ID">Indonesia</option><option value="MY">Malaysia</option><option value="PH">Filipina</option><option value="SG">Singapura</option><option value="TH">Thailand</option><option value="VN">Vietnam</option><option value="BN">Brunei Darussalam</option><option value="KH">Kamboja</option><option value="LA">Laos</option><option value="MM">Myanmar</option><option value="TL">Timor-Leste</option><option value="SEA">SEA umum</option><option value="OTHER_COUNTRY">Negara di luar SEA</option><option value="GLOBAL">Global</option><option value="UNKNOWN">Belum teridentifikasi</option></select></div></div>
   <div id="dwigitalRegionSummary" class="hint" aria-live="polite" style="margin:8px 0 12px">Wilayah paket akan dikelompokkan berdasarkan label yang tersedia dari supplier.</div>
   <div id="dwigitalProductList" class="melo-product-list"><div class="melo-empty">Tekan “Muat katalog MLBB” untuk mengambil produk.</div></div><div id="dwigitalPagination" class="melo-pagination" aria-live="polite"></div>
   <div class="melo-markup-box" id="dwigitalCompareBox">
@@ -1587,7 +1587,7 @@ async function loadDwigitalCatalog(page=1){
  const q=(document.getElementById('dwigitalCatalogSearch')?.value||'mobile legends').trim()||'mobile legends';
  const list=document.getElementById('dwigitalProductList');if(list)list.innerHTML='<div class="melo-empty">Mengambil katalog Dwigital…</div>';setDwigitalStatus('Mengambil katalog '+q+' dari Dwigital Development…');
  try{
-  const payload=await dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page='+Math.max(1,page)+'&per_page=100');
+  const payload=await dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page='+Math.max(1,page)+'&per_page=1000');
   if(payload.environment!=='development')throw new Error('Respons katalog bukan Development.');
   const rows=Array.isArray(payload.data)?payload.data:[];dwigitalCurrentPage=Number(payload.page||page);dwigitalLastPage=Number(payload.last_page||1);window._xerDwigitalProducts=rows;
   renderDwigitalCatalogByRegion();
@@ -1596,32 +1596,40 @@ async function loadDwigitalCatalog(page=1){
  }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setDwigitalStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
 }
 function classifyDwigitalRegion(p){
- const parts=[p.region,p.country,p.country_code,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.example,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
- const explicitCode=(code)=>new RegExp('(^|[^a-z])'+code.toLowerCase()+'([^a-z]|$)').test(parts);
- const countryRules=[
+ const rawCode=String(p.country_code||'').trim().toUpperCase();
+ const codeMap={ID:'ID',MY:'MY',PH:'PH',SG:'SG',TH:'TH',VN:'VN',BN:'BN',KH:'KH',LA:'LA',MM:'MM',TL:'TL'};
+ if(codeMap[rawCode])return {key:rawCode,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'})[rawCode]};
+ const raw=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
+ const rules=[
   ['ID',/indonesia|indonesian|server\s*id\b|region\s*id\b|\bid\s*(server|region)\b/i],
   ['MY',/malaysia|malaysian|server\s*my\b|region\s*my\b/i],
   ['PH',/philippines|philippine|pilipinas|server\s*ph\b|region\s*ph\b/i],
   ['SG',/singapore|singaporean|server\s*sg\b|region\s*sg\b/i],
   ['TH',/thailand|thai server|server\s*th\b|region\s*th\b/i],
-  ['VN',/vietnam|vietnamese|server\s*vn\b|region\s*vn\b/i]
+  ['VN',/vietnam|vietnamese|server\s*vn\b|region\s*vn\b/i],
+  ['BN',/brunei( darussalam)?|server\s*bn\b|region\s*bn\b/i],
+  ['KH',/cambodia|khmer|kampuchea|server\s*kh\b|region\s*kh\b/i],
+  ['LA',/laos|lao server|lao pdr|server\s*la\b|region\s*la\b/i],
+  ['MM',/myanmar|burma|server\s*mm\b|region\s*mm\b/i],
+  ['TL',/timor[- ]leste|east timor|server\s*tl\b|region\s*tl\b/i]
  ];
- for(const [code,re] of countryRules){if(re.test(parts)||explicitCode(code))return {key:code,label:({ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam'})[code]};}
- if(/global|worldwide|international|all region|all server/i.test(parts))return {key:'GLOBAL',label:'Global'};
- if(/\bsea\b|south\s*east\s*asia|southeast\s*asia/i.test(parts))return {key:'SEA',label:'SEA umum'};
- if(/brunei|cambodia|khmer|laos|lao server|myanmar|burma|timor[- ]leste/i.test(parts))return {key:'SEA_OTHER',label:'SEA lainnya'};
+ const labels={ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'};
+ for(const [key,re] of rules)if(re.test(raw))return {key,label:labels[key]};
+ if(/global|worldwide|international|all region|all server/i.test(raw))return {key:'GLOBAL',label:'Global'};
+ if(/\bsea\b|south\s*east\s*asia|southeast\s*asia/i.test(raw))return {key:'SEA',label:'SEA umum'};
+ if(/\b(japan|japanese|korea|korean|taiwan|hong kong|macau|usa|united states|north america|brazil|latin america|europe|eu server|turkey|middle east|mena|india)\b/i.test(raw))return {key:'OTHER_COUNTRY',label:'Negara di luar SEA'};
  return {key:'UNKNOWN',label:'Belum teridentifikasi'};
 }
 function renderDwigitalCatalogByRegion(){
  const list=document.getElementById('dwigitalProductList');if(!list)return;
  const rows=window._xerDwigitalProducts||[];
- const counts={ID:0,MY:0,PH:0,SG:0,TH:0,VN:0,SEA_OTHER:0,SEA:0,GLOBAL:0,UNKNOWN:0};
+ const counts={ID:0,MY:0,PH:0,SG:0,TH:0,VN:0,BN:0,KH:0,LA:0,MM:0,TL:0,SEA:0,OTHER_COUNTRY:0,GLOBAL:0,UNKNOWN:0};
  rows.forEach(p=>{const r=classifyDwigitalRegion(p);p._xerRegion=r;counts[r.key]++;});
  const filter=document.getElementById('dwigitalRegionFilter')?.value||'all';
  const visible=filter==='all'?rows:rows.filter(p=>p._xerRegion.key===filter);
  const summary=document.getElementById('dwigitalRegionSummary');
- if(summary)summary.textContent='Paket pada halaman ini: Indonesia '+counts.ID+' · Malaysia '+counts.MY+' · Filipina '+counts.PH+' · Singapura '+counts.SG+' · Thailand '+counts.TH+' · Vietnam '+counts.VN+' · SEA lainnya '+counts.SEA_OTHER+' · SEA umum '+counts.SEA+' · Global '+counts.GLOBAL+' · Belum teridentifikasi '+counts.UNKNOWN+'.';
- if(!visible.length){list.innerHTML='<div class="melo-empty">Tidak ada paket pada kelompok wilayah ini di halaman katalog yang sedang dibuka.</div>';return;}
+ if(summary)summary.textContent='Total '+rows.length+' paket pada hasil katalog ini. Indonesia '+counts.ID+' · Malaysia '+counts.MY+' · Filipina '+counts.PH+' · Singapura '+counts.SG+' · Thailand '+counts.TH+' · Vietnam '+counts.VN+' · Brunei '+counts.BN+' · Kamboja '+counts.KH+' · Laos '+counts.LA+' · Myanmar '+counts.MM+' · Timor-Leste '+counts.TL+' · SEA umum '+counts.SEA+' · Negara di luar SEA '+counts.OTHER_COUNTRY+' · Global '+counts.GLOBAL+' · Belum teridentifikasi '+counts.UNKNOWN+'.';
+ if(!visible.length){list.innerHTML='<div class="melo-empty">Tidak ada paket pada kelompok wilayah ini dalam hasil katalog yang dimuat.</div>';return;}
  list.innerHTML=visible.map(p=>{const i=rows.indexOf(p),price=Number(p.price||0),available=p.stock===0?'Stok habis':'Tersedia / sesuai provider';return '<article class="dwigital-product"><div><strong>'+esc(p.name||p.product||('Produk '+p.variant_id))+'</strong><small>'+esc(p.product||'Game')+' · Wilayah: '+esc(p._xerRegion.label)+' · ID paket: '+esc(p.variant_id)+' · '+esc(p.delivery||'automatic')+' · '+available+'</small></div><div class="dwigital-product-price">'+formatDwigitalMoney(price)+'<button type="button" class="smallbtn" onclick="selectDwigitalProduct('+i+')">Hitung harga</button></div></article>';}).join('');
 }
 function normalizeSupplierProductName(value){

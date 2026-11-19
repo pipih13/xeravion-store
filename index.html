@@ -882,11 +882,19 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <input id="orderBuyerWhatsapp" placeholder="WhatsApp pembeli (opsional)">
   <select id="orderPaymentMethod"><option value="QRIS">QRIS</option><option value="BCA">BCA</option><option value="DANA">DANA</option><option value="GoPay">GoPay</option><option value="ShopeePay">ShopeePay</option><option value="SeaBank">SeaBank</option></select>
   <div class="wide notice" style="margin:0">
-   <strong>Member & XERAVION Credit Points</strong>
-   <div class="hint" style="margin:5px 0 9px">Pilih member agar cashback 3% dapat masuk otomatis setelah transaksi lunas. Email pembeli harus sama dengan email member.</div>
-   <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="orderMemberQuery" placeholder="Cari member berdasarkan nama/email" style="flex:1;min-width:180px"><button class="btn" type="button" onclick="searchOrderMembers()">Cari member</button></div>
-   <div id="orderMemberResults" class="hint" style="margin-top:8px">Belum ada member dipilih.</div>
-   <div id="orderSelectedMember" class="hint" style="margin-top:6px">Member: tidak dipilih (tanpa cashback)</div>
+   <strong>Jenis Pembeli</strong>
+   <div class="hint" style="margin:5px 0 9px">Pilih apakah pembeli merupakan member terdaftar atau non-member. Keduanya dapat menerima invoice melalui email.</div>
+   <select id="orderBuyerType" class="wide" style="margin-bottom:10px" onchange="changeOrderBuyerType()">
+    <option value="guest">Non-member · Invoice melalui email</option>
+    <option value="member">Member XERAVION · Cashback Credit Points</option>
+   </select>
+   <div id="orderMemberSearchArea" style="display:none">
+    <div class="hint" style="margin:5px 0 9px">Cari dan pilih akun member. Email pembeli harus sama dengan email member.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="orderMemberQuery" placeholder="Cari member berdasarkan nama/email" style="flex:1;min-width:180px"><button class="btn" type="button" onclick="searchOrderMembers()">Cari member</button></div>
+    <div id="orderMemberResults" class="hint" style="margin-top:8px">Belum ada member dipilih.</div>
+    <div id="orderSelectedMember" class="hint" style="margin-top:6px">Belum ada member dipilih.</div>
+   </div>
+   <div id="orderGuestInfo" class="hint" style="margin-top:8px">Non-member dipilih. Masukkan email pembeli di atas untuk menerima invoice. Tidak memerlukan akun atau verifikasi member.</div>
   </div>
   <select id="orderCreditMode" class="wide" onchange="updateOrderCreditMode()"><option value="none">Bayar tanpa menggunakan Credit Points · Cashback 3%</option><option value="use">Gunakan Credit Points · Tanpa cashback</option></select>
   <div id="orderPointsWrap" class="wide" style="display:none"><input id="orderPointsToUse" type="number" min="1" step="1" value="1" placeholder="Jumlah Credit Points yang digunakan"><div id="orderPointsHint" class="hint">1 XP = Rp10. Maksimal penggunaan 10% dari harga akun.</div></div>
@@ -1340,6 +1348,25 @@ function updateOrderCreditMode(){
  const product=items.find(p=>Number(p.id)===Number(document.getElementById('orderProduct')?.value));
  if(hint&&product)hint.textContent='Maksimal '+Math.floor(Number(product.price)*0.10/10).toLocaleString('id-ID')+' XP · setara '+rupiah(Math.floor(Number(product.price)*0.10/10)*10)+'. 1 XP = Rp10.';
 }
+function changeOrderBuyerType(){
+ const type=document.getElementById('orderBuyerType')?.value||'guest';
+ const memberArea=document.getElementById('orderMemberSearchArea');
+ const guestInfo=document.getElementById('orderGuestInfo');
+ const creditMode=document.getElementById('orderCreditMode');
+ const pointsWrap=document.getElementById('orderPointsWrap');
+ if(memberArea)memberArea.style.display=type==='member'?'block':'none';
+ if(guestInfo)guestInfo.style.display=type==='guest'?'block':'none';
+ if(type==='guest'){
+  orderSelectedMemberId=null;
+  const selected=document.getElementById('orderSelectedMember');
+  if(selected){selected.textContent='Belum ada member dipilih.';selected.dataset.email=''}
+  if(creditMode){creditMode.value='none';creditMode.disabled=true}
+  if(pointsWrap)pointsWrap.style.display='none';
+ }else{
+  if(creditMode)creditMode.disabled=false;
+ }
+ updateOrderCreditMode();
+}
 async function searchOrderMembers(){
  const q=document.getElementById('orderMemberQuery').value.trim(),out=document.getElementById('orderMemberResults');
  if(!q){out.textContent='Masukkan nama atau email member.';return}
@@ -1366,23 +1393,26 @@ async function createXeravionOrder(){
  const mode=document.getElementById('orderCreditMode').value;
  const points=mode==='use'?Number(document.getElementById('orderPointsToUse').value||0):0;
  if(mode==='use'&&(!Number.isSafeInteger(points)||points<=0)){msg.textContent='Masukkan jumlah Credit Points yang valid.';return}
- if(orderSelectedMemberId){
+ const buyerType=document.getElementById('orderBuyerType')?.value||'guest';
+ if(buyerType==='member'&&!orderSelectedMemberId){msg.textContent='Pilih akun member terlebih dahulu, atau ubah jenis pembeli menjadi Non-member.';return}
+ if(buyerType==='member'&&orderSelectedMemberId){
   const memberEmail=document.getElementById('orderSelectedMember').dataset.email||'';
   if(memberEmail.toLowerCase()!==buyerEmail.toLowerCase()){msg.textContent='Email pembeli harus sama dengan email member yang dipilih.';return}
  }
+ if(buyerType==='guest'&&points>0){msg.textContent='Non-member tidak dapat menggunakan Credit Points. Pilih Member jika ingin menggunakan poin.';return}
  if(points>0&&!orderSelectedMemberId){msg.textContent='Pilih member terlebih dahulu untuk menggunakan Credit Points.';return}
  msg.textContent='Menyimpan pesanan dan memproses Credit Points…';
  try{
   const{data,error}=await supabaseClient.rpc('admin_create_xeravion_order',{
    p_product_id:product.id,p_buyer_name:buyerName,p_buyer_email:buyerEmail,
    p_buyer_whatsapp:buyerWhatsapp||null,p_payment_method:paymentMethod,
-   p_member_user_id:orderSelectedMemberId,p_points_to_use:points
+   p_member_user_id:buyerType==='member'?orderSelectedMemberId:null,p_points_to_use:points
   });
   if(error)throw error;
   msg.textContent='Pesanan '+data.invoice_number+' dibuat. Total pembayaran '+rupiah(data.amount_due)+'. '+(points>0?'Poin telah dipotong dan akan dikembalikan jika pesanan dibatalkan.':'Cashback 3% akan diproses setelah pembayaran lunas.');
   document.getElementById('orderBuyerName').value='';document.getElementById('orderBuyerEmail').value='';document.getElementById('orderBuyerWhatsapp').value='';
   document.getElementById('orderPointsToUse').value='1';
-  orderSelectedMemberId=null;document.getElementById('orderSelectedMember').textContent='Member: tidak dipilih (tanpa cashback)';document.getElementById('orderSelectedMember').dataset.email='';
+  orderSelectedMemberId=null;document.getElementById('orderBuyerType').value='guest';changeOrderBuyerType();document.getElementById('orderMemberQuery').value='';document.getElementById('orderMemberResults').textContent='Belum ada member dipilih.';
   await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal membuat pesanan: '+(e.message||e)}
 }

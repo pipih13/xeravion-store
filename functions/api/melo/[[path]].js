@@ -43,7 +43,7 @@ async function requireAdmin(request) {
 }
 
 function allowedEndpoint(path) {
-  if (["profile", "profile/balance", "pricelists/categories", "smart-pricelists/categories", "smart-pricelists"].includes(path)) return true;
+  if (["profile", "profile/balance", "pricelists", "pricelists/categories", "smart-pricelists", "smart-pricelists/categories"].includes(path)) return true;
   return /^(pricelists|smart-pricelists)\/[a-z0-9][a-z0-9-]{0,100}$/.test(path);
 }
 
@@ -63,7 +63,7 @@ export async function onRequestGet({ request, env }) {
   if (!allowedEndpoint(path)) return json({ error: "Endpoint Melo tidak diizinkan oleh proxy XERAVION." }, 404);
 
   const target = new URL(MELO_BASE + "/" + path);
-  for (const key of ["limit", "cursor", "server", "search", "brand_id"]) {
+  for (const key of ["limit", "cursor", "server", "search", "brand_id", "format"]) {
     const value = incoming.searchParams.get(key);
     if (value !== null && value.length <= 500) target.searchParams.set(key, value);
   }

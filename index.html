@@ -1570,28 +1570,49 @@ async function compareDwigitalMelo(){
   if(dwigital.environment!=='development')throw new Error('Katalog Dwigital bukan mode Development.');
   const dRows=Array.isArray(dwigital.data)?dwigital.data:[];
   const mRows=Array.isArray(melo.data)?melo.data:[];
-  const dByName=new Map();
-  dRows.forEach(p=>{
-   const name=p.name||p.product||'';
-   const key=normalizeSupplierProductName(name);
-   if(key&&!dByName.has(key))dByName.set(key,p);
-  });
-  const matches=[];
-  mRows.forEach(p=>{
-   const name=p.name||p.product_name||'';
-   const key=normalizeSupplierProductName(name);
-   const d=dByName.get(key);
-   if(d){
-    const mp=Number(p.price??p.sell_price??p.amount??0),dp=Number(d.price??0);
-    if(mp>0&&dp>0)matches.push({name,mp,dp,cheaper:dp<mp?'Dwigital':mp<dp?'Melo':'Sama'});
+  const group=(rows,getName)=>{
+   const map=new Map();
+   rows.forEach(p=>{
+    const name=getName(p),key=normalizeSupplierProductName(name);
+    if(!key)return;
+    if(!map.has(key))map.set(key,[]);
+    map.get(key).push(p);
+   });
+   return map;
+  };
+  const dGroups=group(dRows,p=>p.name||'');
+  const mGroups=group(mRows,p=>p.name||p.product_name||'');
+  const matches=[],ambiguous=[];
+  for(const [key,mpList] of mGroups){
+   const dpList=dGroups.get(key)||[];
+   if(!dpList.length)continue;
+   if(mpList.length!==1||dpList.length!==1){
+    ambiguous.push({name:mpList[0].name||mpList[0].product_name||dpList[0]?.name||'Produk',meloCount:mpList.length,dwigitalCount:dpList.length,melo:mpList,dwigital:dpList});
+    continue;
    }
-  });
+   const m=mpList[0],d=dpList[0];
+   const mp=Number(m.price??m.sell_price??m.amount??0),dp=Number(d.price??0);
+   if(mp>0&&dp>0)matches.push({
+    name:m.name||m.product_name||d.name,
+    meloSku:m.sku_code||'—',dwigitalVariant:d.variant_id||'—',
+    meloDetail:[m.category_name,m.type_name,m.server_name].filter(Boolean).join(' · '),
+    dwigitalDetail:[d.product,d.target_label].filter(Boolean).join(' · '),
+    mp,dp,cheaper:dp<mp?'Dwigital':mp<dp?'Melo':'Sama'
+   });
+  }
   matches.sort((a,b)=>a.name.localeCompare(b.name,'id'));
+  ambiguous.sort((a,b)=>a.name.localeCompare(b.name,'id'));
   const money=v=>'Rp '+Number(v).toLocaleString('id-ID');
-  const matchHtml=matches.length?'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px">Produk dengan nama sama</th><th style="text-align:right;padding:8px">Dwigital</th><th style="text-align:right;padding:8px">Melo</th><th style="text-align:left;padding:8px">Lebih murah</th></tr></thead><tbody>'+matches.map(x=>'<tr><td style="padding:8px;border-top:1px solid #51432b">'+esc(x.name)+'</td><td style="padding:8px;text-align:right;border-top:1px solid #51432b">'+money(x.dp)+'</td><td style="padding:8px;text-align:right;border-top:1px solid #51432b">'+money(x.mp)+'</td><td style="padding:8px;border-top:1px solid #51432b">'+x.cheaper+'</td></tr>').join('')+'</tbody></table></div>':'<div class="melo-empty">Belum ada nama produk yang sama persis pada dua katalog. Jangan simpulkan harga termurah dari nama paket yang mirip; periksa detail paket secara manual.</div>';
-  const sample=(title,rows,kind)=>'<h5 style="margin:14px 0 6px">'+title+' ('+rows.length+' produk ditampilkan)</h5><div class="melo-empty">'+(rows.length?rows.slice(0,8).map(p=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #51432b"><span>'+esc(p.name||p.product_name||p.product||'Produk')+'</span><strong>'+money(kind==='dwigital'?p.price:(p.price??p.sell_price??p.amount??0))+'</strong></div>').join(''):'Tidak ada produk hasil pencarian.')+'</div>';
-  if(out)out.innerHTML='<p><strong>'+matches.length+'</strong> produk dengan nama sama ditemukan. Harga di bawah adalah harga modal katalog yang dibaca saat ini; cocokkan juga nominal/bonus sebelum mengambil keputusan.</p>'+matchHtml+sample('Dwigital',dRows,'dwigital')+sample('Melo reguler',mRows,'melo');
-  setDwigitalStatus('Perbandingan selesai: '+matches.length+' produk memiliki nama yang sama. Hanya membaca katalog; tidak ada transaksi.','ok');
+  const th='padding:8px;text-align:left;border-bottom:1px solid #665638';
+  const td='padding:8px;border-top:1px solid #51432b;vertical-align:top';
+  const verifiedHtml=matches.length?'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="'+th+'">Produk (nama unik di kedua katalog)</th><th style="'+th+'">Dwigital</th><th style="'+th+'">Melo</th><th style="'+th+'">Lebih murah</th></tr></thead><tbody>'+matches.map(x=>'<tr><td style="'+td+'">'+esc(x.name)+'<small style="display:block;opacity:.7">Melo SKU: '+esc(x.meloSku)+' · Dwigital variant: '+esc(x.dwigitalVariant)+'</small></td><td style="'+td+'">'+money(x.dp)+'</td><td style="'+td+'">'+money(x.mp)+'</td><td style="'+td+'">'+x.cheaper+'</td></tr>').join('')+'</tbody></table></div>':'<div class="melo-empty">Belum ada produk yang namanya unik dan sama persis pada kedua katalog. Belum ada pemenang harga yang dapat dipastikan.</div>';
+  const ambiguousHtml=ambiguous.length?'<h5 style="margin:16px 0 6px">Perlu pencocokan varian manual ('+ambiguous.length+' nama berulang)</h5><p class="hint">Nama ini muncul lebih dari sekali pada salah satu supplier. Tidak kami bandingkan agar harga paket yang berbeda tidak tertukar.</p><div class="melo-empty">'+ambiguous.map(x=>{
+   const mLines=x.melo.map(p=>'<div style="padding:5px 0;border-bottom:1px solid #51432b">Melo: '+esc(p.name||p.product_name||'Produk')+' · '+esc([p.category_name,p.type_name,p.server_name,p.sku_code].filter(Boolean).join(' · '))+' · <strong>'+money(p.price??p.sell_price??p.amount??0)+'</strong></div>').join('');
+   const dLines=x.dwigital.map(p=>'<div style="padding:5px 0;border-bottom:1px solid #51432b">Dwigital: '+esc(p.name||'Produk')+' · '+esc([p.product,p.target_label,'Variant '+(p.variant_id||'—')].filter(Boolean).join(' · '))+' · <strong>'+money(p.price??0)+'</strong></div>').join('');
+   return '<div style="padding:8px 0"><strong>'+esc(x.name)+'</strong><small style="display:block;opacity:.75">Melo: '+x.meloCount+' varian · Dwigital: '+x.dwigitalCount+' varian</small>'+mLines+dLines+'</div>';
+  }).join('')+'</div>':'';
+  if(out)out.innerHTML='<p><strong>'+matches.length+'</strong> pasangan nama unik dapat dibandingkan. <strong>'+ambiguous.length+'</strong> nama berulang dipisahkan agar tidak menghasilkan perbandingan keliru.</p>'+verifiedHtml+ambiguousHtml;
+  setDwigitalStatus('Perbandingan selesai: '+matches.length+' pasangan unik; '+ambiguous.length+' nama berulang perlu pencocokan varian. Tidak ada transaksi.','ok');
  }catch(e){
   if(out)out.textContent='Perbandingan gagal: '+(e.message||String(e));
   setDwigitalStatus('Perbandingan gagal: '+(e.message||String(e)),'error');

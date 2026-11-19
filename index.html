@@ -1412,11 +1412,12 @@ async function loadMeloCategories(mode){
 }
 function filterMeloCatalog(){
  const q=(document.getElementById('meloCatalogSearch')?.value||'').toLowerCase();
- const rows=(window._xerMeloProducts||[]).filter(p=>[p.name,p.product_name,p.sku_code,p.smart_sku_code,p.brand,p.brand_name].join(' ').toLowerCase().includes(q));
- renderMeloProducts(rows,!!window._xerMeloSmart);
+ const rows=(window._xerMeloAllProducts||[]).filter(p=>[p.name,p.product_name,p.sku_code,p.smart_sku_code,p.brand,p.brand_name].join(' ').toLowerCase().includes(q));
+ renderMeloProducts(rows,!!window._xerMeloSmart,false);
 }
-function renderMeloProducts(products,smart){
+function renderMeloProducts(products,smart,saveAll=true){
  const list=document.getElementById('meloProductList');if(!list)return;
+ if(saveAll)window._xerMeloAllProducts=products;
  window._xerMeloProducts=products;window._xerMeloSmart=smart;
  if(!products.length){list.innerHTML='<div class="melo-empty">Produk tidak ditemukan pada katalog ini.</div>';return;}
  list.innerHTML=products.map((p,i)=>{

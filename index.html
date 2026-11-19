@@ -876,7 +876,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Catat pesanan manual. Invoice hanya bisa dikirim setelah pembayaran lunas dan pesanan selesai.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
  <div class="notice">Untuk memberi cashback 3%, pilih member terlebih dahulu melalui panel Credit Points di bawah. Email pembeli harus sama dengan email member tersebut. Pilih member di formulir invoice untuk cashback otomatis 3%. Pesanan tamu tidak memperoleh cashback.</div>
  <div class="formgrid">
-  <select id="orderProduct" class="wide"><option value="">Pilih akun dari katalog…</option></select>
+  <select id="orderProduct" class="wide" onchange="updateOrderCreditMode()"><option value="">Pilih akun dari katalog…</option></select>
   <input id="orderBuyerName" placeholder="Nama pembeli">
   <input id="orderBuyerEmail" type="email" placeholder="Email pembeli untuk invoice">
   <input id="orderBuyerWhatsapp" placeholder="WhatsApp pembeli (opsional)">

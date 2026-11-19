@@ -27,7 +27,7 @@ export async function dwigitalRequest(env, path) {
 
   if (!response.ok || !payload || payload.success !== true) {
     const message = payload?.message || payload?.error;
-    const bodyHint = message || (rawBody ? rawBody.slice(0, 220).replace(/\\s+/g, " ") : "Respons kosong atau bukan JSON.");
+    const bodyHint = message || (rawBody ? rawBody.slice(0, 220).replace(/\s+/g, " ") : "Respons kosong atau bukan JSON.");
     return {
       ok: false,
       status: 502,

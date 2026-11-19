@@ -35,9 +35,18 @@ export async function dwigitalRequest(env, path) {
     };
   }
 
-  const environment = payload?.data?.environment || payload?.meta?.environment;
-  if (environment && environment !== "development") {
-    return { ok: false, status: 502, error: "Mode API bukan Development. Respons dihentikan demi keamanan." };
+  const environment = String(payload?.data?.environment || payload?.meta?.environment || "").toLowerCase();
+  // Dwigital's Development key may identify its safe test environment as "sandbox".
+  if (environment && !["development", "sandbox"].includes(environment)) {
+    return { ok: false, status: 502, error: "Dwigital mengembalikan environment " + environment + ", bukan Development/Sandbox. Respons dihentikan demi keamanan." };
+  }
+
+  // Normalize Dwigital's "sandbox" label to the site's internal "development" label.
+  if (payload.data && typeof payload.data === "object" && payload.data.environment) {
+    payload.data.environment = "development";
+  }
+  if (payload.meta && typeof payload.meta === "object" && payload.meta.environment) {
+    payload.meta.environment = "development";
   }
 
   return { ok: true, payload };

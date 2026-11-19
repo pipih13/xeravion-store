@@ -1403,7 +1403,7 @@ async function cancelXeravionOrder(id){
 }
 async function sendXeravionInvoice(id,auto=false){
  const msg=document.getElementById('orderAdminMessage');if(!auto&&!confirm('Kirim ulang invoice ke email pembeli?'))return;msg.textContent='Mengirim invoice…';
- try{const{data,error}=await supabaseClient.functions.invoke('send-xeravion-invoice',{body:{order_id:id}});if(error)throw error;if(data?.error)throw new Error(data.error);msg.textContent='Invoice '+data.invoice_number+' berhasil dikirim. ID email: '+data.email_id;await loadXeravionOrders()}catch(e){msg.textContent='Gagal mengirim invoice: '+(e.message||e)}
+ try{const{data,error}=await supabaseClient.functions.invoke('send-xeravion-invoice',{body:{order_id:id}});if(error)throw error;if(data?.error)throw new Error(data.error);msg.textContent='Invoice '+data.invoice_number+' berhasil dikirim. ID email: '+data.email_id;await loadXeravionOrders()}catch(e){msg.textContent='Gagal mengirim invoice: '+(e.message||e);await loadXeravionOrders()}
 }
 
 async function searchCreditMembers(){

@@ -1351,7 +1351,7 @@ async function connectXeravionMail(){
 }
 let selectedCreditMember=null;
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','orders','credits','analytics','melo','mail'];
+ const allowed=['overview','form','listings','item-listings','orders','credits','analytics','melo','dwigital','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));

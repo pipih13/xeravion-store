@@ -1041,7 +1041,7 @@ function render(){
   if(activeGame==='Semua')return p.catalog_type!=='item';
   if(activeGame==='Item Gaming')return p.catalog_type==='item'&&matchesItemPlatform(p);
   if(activeGame==='Lainnya')return p.catalog_type!=='item'&&!['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game);
-  return p.game===activeGame;
+  return p.catalog_type!=='item'&&p.game===activeGame;
  };
  let a=items.filter(p=>{
   if(p.stock!=='Tersedia'||!matchesGame(p))return false;

@@ -822,7 +822,21 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .melo-markup-box{margin-top:18px;padding:15px;border:1px solid #51432b;border-radius:12px;background:#15110b}.melo-markup-box label{display:block;margin:10px 0 6px;color:#b4a78f;font-size:11px}.melo-markup-box input{width:100%;max-width:260px}.melo-footnote{margin-top:16px;line-height:1.7}
 @media(max-width:600px){.melo-status-grid{gap:7px}.melo-status-grid .stat{padding:11px 8px}.melo-status-grid .stat span{font-size:9px}.melo-catalog-head{align-items:stretch;flex-direction:column}.melo-catalog-controls{width:100%;min-width:0}.melo-brand-list{grid-template-columns:1fr}.melo-product{align-items:flex-start;flex-direction:column}.melo-product-price{align-items:flex-start;flex-direction:row;flex-wrap:wrap}.melo-actions .btn{flex:1 1 calc(50% - 8px)}}
 </style>
-</head>
+<style id="xeravion-finance-dashboard-style">
+.xer-finance-panel{background:linear-gradient(145deg,#15120d,#0e0c09);border-color:#6b552f}
+.xer-finance-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0}
+.xer-finance-cards article{min-width:0;padding:16px;border:1px solid #59472a;border-radius:14px;background:linear-gradient(145deg,#211a10,#11100d);display:flex;flex-direction:column;gap:7px}
+.xer-finance-cards article span{font-size:10px;color:#d8c18e;letter-spacing:.6px}
+.xer-finance-cards article strong{font-size:clamp(17px,2.5vw,25px);color:#f2d18a;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.xer-finance-cards article small{font-size:10px;color:#a99d89}
+.xer-finance-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 170px 180px;gap:9px;margin:14px 0}
+.xer-finance-toolbar input,.xer-finance-toolbar select{min-width:0;background:#0e0c09;border:1px solid #51432b;border-radius:9px;color:#f5ead4;padding:11px}
+.xer-finance-table input{width:125px;max-width:100%;padding:9px;background:#0d0b08;border:1px solid #806638;border-radius:8px;color:#f5ead4}
+.xer-finance-table .profit-positive{color:#56d69a;font-weight:800}.xer-finance-table .profit-unknown{color:#a99d89}
+.xer-finance-table .finance-status{display:inline-block;padding:5px 8px;border-radius:999px;font-size:9px;background:#17271e;color:#74dfa5;border:1px solid #286b4b}
+.xer-finance-table .finance-status.cancelled{background:#2a1515;color:#ffaaaa;border-color:#743838}
+@media(max-width:700px){.xer-finance-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.xer-finance-cards article{padding:12px}.xer-finance-toolbar{grid-template-columns:1fr 1fr}.xer-finance-toolbar input{grid-column:1/-1}.xer-finance-table{min-width:780px}}
+</style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo-lightning.gif" alt="Logo XERAVION" width="54" height="54" decoding="async"><span class="brand-copy"><b>XERAVION</b><small>PREMIUM GAME ACCOUNT STORE</small></span></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">
@@ -890,6 +904,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing Akun</button>
  <button type="button" class="xer-admin-tab" data-tab="item-listings" onclick="showAdminTab('item-listings')">Item Gaming</button>
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
+ <button type="button" class="xer-admin-tab" data-tab="accounting" onclick="showAdminTab('accounting')">Pembukuan</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
  <button type="button" class="xer-admin-tab" data-tab="melo" onclick="showAdminTab('melo')">Melo H2H</button>
@@ -980,7 +995,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 <div class="xer-admin-tab-panel" id="adminTab-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar listing akun</h3><div class="hint">Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.</div></div><input id="adminSearch" placeholder="Cari nama atau kode…" oninput="renderAdmin()"></div><div class="admin-game-tabs" id="adminGameTabs" role="tablist" aria-label="Filter listing berdasarkan game"></div><div class="admin-game-heading"><span id="adminGameHeading">SEMUA GAME</span><span id="adminGameCount">0 listing</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama akun</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminRows"></tbody></table></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-item-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar Item Gaming</h3><div class="hint">Khusus produk digital dan item game. Terpisah dari listing akun.</div></div><input id="adminItemSearch" placeholder="Cari item, game, atau kode…" oninput="renderItemGamingAdmin()"></div><div class="admin-game-heading"><span>ITEM GAMING</span><span id="adminItemCount">0 item</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama item</th><th>Game</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminItemRows"></tbody></table></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
- <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Catat pesanan manual. Invoice hanya bisa dikirim setelah pembayaran lunas dan pesanan selesai.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
+ <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Kelola pesanan dan invoice. Pembukuan biaya serta laba tersedia di menu Pembukuan.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
  <div class="notice">Untuk memberi cashback 3%, pilih member terlebih dahulu melalui panel Credit Points di bawah. Email pembeli harus sama dengan email member tersebut. Pilih member di formulir invoice untuk cashback otomatis 3%. Pesanan tamu tidak memperoleh cashback.</div>
  <div class="formgrid">
   <select id="orderProduct" class="wide" onchange="updateOrderCreditMode()"><option value="">Pilih akun dari katalog…</option></select>
@@ -1010,6 +1025,20 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <p id="orderAdminMessage" class="hint" aria-live="polite"></p>
  <div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice</th><th>Pembeli</th><th>Detail</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="xeravionOrderRows"><tr><td colspan="6">Tekan Muat ulang untuk melihat pesanan.</td></tr></tbody></table></div>
 </div></div>
+<div class="xer-admin-tab-panel" id="adminTab-accounting">
+ <div class="panel xer-finance-panel">
+  <div class="sectionhead"><div><div class="eyebrow">XERAVION FINANCE</div><h3 style="margin:4px 0">Pembukuan Penjualan</h3><div class="hint">Catatan keuangan tersimpan langsung di database XERAVION. Tidak menggunakan Google Sheets.</div></div><button class="btn" type="button" onclick="loadXeravionAccounting()">Muat ulang</button></div>
+  <div class="xer-finance-cards">
+   <article><span>Total pendapatan</span><strong id="xerFinanceRevenue">Rp 0</strong><small>Pesanan lunas & selesai</small></article>
+   <article><span>Total modal</span><strong id="xerFinanceCost">Rp 0</strong><small>Modal yang sudah diisi</small></article>
+   <article><span>Laba kotor</span><strong id="xerFinanceProfit">Rp 0</strong><small>Pendapatan dikurangi modal</small></article>
+   <article><span>Transaksi selesai</span><strong id="xerFinanceCount">0</strong><small id="xerFinanceMissing">0 modal belum diisi</small></article>
+  </div>
+  <div class="xer-finance-toolbar"><input id="xerFinanceSearch" placeholder="Cari invoice, pembeli, game…" oninput="renderXeravionAccounting()"><select id="xerFinancePeriod" onchange="renderXeravionAccounting()"><option value="all">Semua waktu</option><option value="30">30 hari terakhir</option><option value="7">7 hari terakhir</option></select><select id="xerFinanceStatus" onchange="renderXeravionAccounting()"><option value="all">Semua status</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="processing">Diproses / menunggu</option></select></div>
+  <div class="admin-table-wrap"><table class="adminlist xer-finance-table"><thead><tr><th>Tanggal / Invoice</th><th>Pembeli / Produk</th><th>Pendapatan</th><th>Modal (Rp)</th><th>Laba</th><th>Status</th></tr></thead><tbody id="xerFinanceRows"><tr><td colspan="6">Memuat pembukuan…</td></tr></tbody></table></div>
+  <div id="xerFinanceMessage" class="notice" role="status" aria-live="polite">Isi modal pada kolom Modal untuk menghitung laba. Perubahan disimpan otomatis ke database.</div>
+ </div>
+</div>
 <div class="xer-admin-tab-panel" id="adminTab-credits"><div class="panel" id="creditAdminPanel">
  <div class="sectionhead"><div><h3 style="margin:0">Koreksi & Riwayat Credit Points</h3><div class="hint">Pilih member untuk melihat seluruh riwayat poin masuk, penggunaan, cashback, pengembalian, dan koreksi saldo.</div></div></div>
  <div class="formgrid">
@@ -1466,11 +1495,12 @@ async function connectXeravionMail(){
 }
 let selectedCreditMember=null;
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','orders','credits','analytics','melo','dwigital','mail'];
+ const allowed=['overview','form','listings','item-listings','orders','accounting','credits','analytics','melo','dwigital','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
  if(tab==='orders')loadXeravionOrders();
+ if(tab==='accounting')loadXeravionAccounting();
  if(tab==='listings')renderAdmin();
  if(tab==='item-listings')renderItemGamingAdmin();
  if(tab==='form')populateOrderProducts();
@@ -1967,6 +1997,58 @@ async function createXeravionOrder(){
   await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal membuat pesanan: '+(e.message||e)}
 }
+let xeravionAccountingRows=[];
+const xerFinanceMoney=v=>'Rp '+Number(v||0).toLocaleString('id-ID');
+async function loadXeravionAccounting(){
+ const body=document.getElementById('xerFinanceRows');if(!body)return;
+ if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="6">Sesi admin tidak aktif.</td></tr>';return;}
+ body.innerHTML='<tr><td colspan="6">Memuat pembukuan…</td></tr>';
+ try{
+  const {data:orders,error}=await supabaseClient.from('orders').select('id,invoice_number,buyer_name,buyer_email,product_code,product_name,game,amount_due,payment_status,order_status,created_at,order_accounting(cost_price)').order('created_at',{ascending:false}).limit(500);
+  if(error)throw error;
+  xeravionAccountingRows=(orders||[]).map(o=>({...o,cost_price:o.order_accounting?.[0]?.cost_price??o.order_accounting?.cost_price??null}));
+  renderXeravionAccounting();
+ }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat pembukuan: '+esc(e.message||e)+'</td></tr>';}
+}
+function renderXeravionAccounting(){
+ const body=document.getElementById('xerFinanceRows');if(!body)return;
+ const q=(document.getElementById('xerFinanceSearch')?.value||'').trim().toLowerCase();
+ const period=document.getElementById('xerFinancePeriod')?.value||'all';
+ const status=document.getElementById('xerFinanceStatus')?.value||'all';
+ const since=period==='all'?0:Date.now()-Number(period)*86400000;
+ const filtered=xeravionAccountingRows.filter(o=>(status==='all'||o.order_status===status)&&new Date(o.created_at).getTime()>=since&&[o.invoice_number,o.buyer_name,o.buyer_email,o.product_code,o.product_name,o.game].join(' ').toLowerCase().includes(q));
+ const completed=xeravionAccountingRows.filter(o=>o.payment_status==='paid'&&o.order_status==='completed');
+ const revenue=completed.reduce((n,o)=>n+Number(o.amount_due||0),0);
+ const withCost=completed.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');
+ const cost=withCost.reduce((n,o)=>n+Number(o.cost_price||0),0);
+ const profit=withCost.reduce((n,o)=>n+Number(o.amount_due||0)-Number(o.cost_price||0),0);
+ const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
+ set('xerFinanceRevenue',xerFinanceMoney(revenue));set('xerFinanceCost',xerFinanceMoney(cost));set('xerFinanceProfit',xerFinanceMoney(profit));set('xerFinanceCount',completed.length.toLocaleString('id-ID'));set('xerFinanceMissing',(completed.length-withCost.length)+' modal belum diisi');
+ body.innerHTML=filtered.length?filtered.map(o=>{
+  const d=new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium',timeStyle:'short'});
+  const isCompleted=o.payment_status==='paid'&&o.order_status==='completed';
+  const costInput=isCompleted?'<input type="number" min="0" step="1" inputmode="numeric" aria-label="Modal untuk '+esc(o.invoice_number)+'" value="'+(o.cost_price??'')+'" placeholder="Isi modal" onchange="saveXeravionOrderCost(\''+o.id+'\',this.value,this)">':'<span class="hint">—</span>';
+  const profitCell=isCompleted&&o.cost_price!==null&&o.cost_price!==undefined?'<strong class="profit-positive">'+xerFinanceMoney(Number(o.amount_due)-Number(o.cost_price))+'</strong>':'<span class="profit-unknown">'+(isCompleted?'Belum dihitung':'—')+'</span>';
+  const statusLabel=o.order_status==='completed'?'Selesai':o.order_status==='cancelled'?'Dibatalkan':o.order_status==='processing'?'Diproses':'Menunggu';
+  return '<tr><td><strong>'+esc(d)+'</strong><div class="hint">'+esc(o.invoice_number)+'</div></td><td><strong>'+esc(o.buyer_name)+'</strong><div class="hint">'+esc(o.product_code)+' · '+esc(o.product_name)+' · '+esc(o.game)+'</div></td><td>'+xerFinanceMoney(o.amount_due)+'</td><td>'+costInput+'</td><td>'+profitCell+'</td><td><span class="finance-status '+(o.order_status==='cancelled'?'cancelled':'')+'">'+statusLabel+'</span></td></tr>';
+ }).join(''):'<tr><td colspan="6">Tidak ada transaksi yang cocok.</td></tr>';
+}
+async function saveXeravionOrderCost(orderId,value,input){
+ if(!xeravionAdminVerified){alert('Sesi admin berakhir. Login kembali.');return;}
+ const raw=String(value??'').trim();
+ if(raw!==''&&(!/^\d+$/.test(raw)||!Number.isSafeInteger(Number(raw))||Number(raw)<0)){alert('Masukkan modal berupa angka Rupiah tanpa titik/koma.');return;}
+ if(input)input.disabled=true;
+ const msg=document.getElementById('xerFinanceMessage');
+ try{
+  const {error}=await supabaseClient.from('order_accounting').update({cost_price:raw===''?null:Number(raw)}).eq('order_id',orderId);
+  if(error)throw error;
+  const row=xeravionAccountingRows.find(o=>o.id===orderId);if(row)row.cost_price=raw===''?null:Number(raw);
+  if(msg)msg.textContent=raw===''?'Modal dikosongkan. Laba transaksi kembali belum dihitung.':'Modal berhasil disimpan ke database XERAVION.';
+  renderXeravionAccounting();
+ }catch(e){if(msg)msg.textContent='Gagal menyimpan modal: '+(e.message||e);alert('Modal gagal disimpan: '+(e.message||e));}
+ finally{if(input)input.disabled=false;}
+}
+
 async function loadXeravionOrders(){
  const body=document.getElementById('xeravionOrderRows');if(!body)return;body.innerHTML='<tr><td colspan="6">Memuat pesanan…</td></tr>';
  try{
@@ -1992,28 +2074,10 @@ async function completeXeravionOrder(id){
   msg.textContent='Pesanan lunas & selesai. Cashback: '+Number(result.cashback_points||0).toLocaleString('id-ID')+' XP. Membuat dan mengirim invoice…';
   await loadProducts();await loadXeravionOrders();
   await sendXeravionInvoice(id,true);
-  try{
-   const{data:syncData,error:syncError}=await supabaseClient.functions.invoke('sync-xeravion-accounting',{body:{order_id:id}});
-   if(syncError)throw syncError;
-   if(syncData?.error)throw new Error(syncData.error);
-   msg.textContent=(msg.textContent||'Pesanan lunas & selesai.')+' Pembukuan Google Sheets berhasil disinkronkan.';
-  }catch(syncError){
-   msg.textContent=(msg.textContent||'Pesanan lunas & selesai.')+' Pembukuan belum tersinkron: '+(syncError.message||'Periksa konfigurasi Google Sheets.');
-  }
+  msg.textContent='Pesanan selesai. Data keuangan tersedia di menu Pembukuan.';
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
-async function syncXeravionAccounting(id,askConfirm=true){
- const msg=document.getElementById('orderAdminMessage');
- if(askConfirm&&!confirm('Sinkronkan data pesanan ini ke Google Sheets? Jika invoice sudah tercatat, baris yang sama akan diperbarui tanpa membuat duplikat.'))return;
- msg.textContent=askConfirm?'Menyinkronkan pembukuan ke Google Sheets…':'Memperbarui status pembatalan pada pembukuan…';
- try{
-  const{data,error}=await supabaseClient.functions.invoke('sync-xeravion-accounting',{body:{order_id:id}});
-  if(error)throw error;
-  if(data?.error)throw new Error(data.error);
-  msg.textContent=askConfirm?'Pembukuan '+(data.invoice_number||'pesanan')+' berhasil disinkronkan ke Google Sheets.':'Status pembatalan/refund berhasil diperbarui di Google Sheets.';
- }catch(e){msg.textContent='Sinkronisasi pembukuan gagal: '+(e.message||e)}
-}
-async function cancelXeravionOrder(id){
+async async function cancelXeravionOrder(id){
  if(!confirm('Batalkan pesanan ini? Jika ada Credit Points yang digunakan, poin akan dikembalikan. Jika cashback sudah diberikan, cashback tersebut akan dibalik. Stok akun juga akan dikembalikan bila memungkinkan.'))return;
  const msg=document.getElementById('orderAdminMessage');
  try{
@@ -2021,7 +2085,7 @@ async function cancelXeravionOrder(id){
   if(error)throw error;
   msg.textContent='Pesanan dibatalkan. Cashback dikoreksi: '+Number(data.cashback_reversed||0).toLocaleString('id-ID')+' XP. Poin dikembalikan: '+Number(data.points_refunded||0).toLocaleString('id-ID')+' XP.';
   await loadProducts();await loadXeravionOrders();
-  await syncXeravionAccounting(id,false);
+
  }catch(e){msg.textContent='Gagal membatalkan pesanan: '+(e.message||e)}
 }
 async function sendXeravionInvoice(id,auto=false){

@@ -829,11 +829,11 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .xer-finance-cards article span{font-size:10px;color:#d8c18e;letter-spacing:.6px}
 .xer-finance-cards article strong{font-size:clamp(17px,2.5vw,25px);color:#f2d18a;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 .xer-finance-cards article small{font-size:10px;color:#a99d89}
-.xer-finance-game-section{margin:18px 0 20px;padding:15px;border:1px solid #59472a;border-radius:14px;background:#17130d}
-.xer-finance-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
-.xer-finance-game-card{min-width:0;border:1px solid #58472b;border-radius:12px;padding:13px;background:linear-gradient(145deg,#241c10,#11100d)}
-.xer-finance-game-card h4{margin:0 0 10px;color:#f2d18a;font-size:14px}
-.xer-finance-game-card .game-stat{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #382f20;font-size:11px;color:#c6b99f}
+.xer-finance-game-section{margin:12px 0 4px;padding:10px;border:1px solid #59472a;border-radius:14px;background:#17130d}
+.xer-finance-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+.xer-finance-game-card{min-width:0;border:1px solid #58472b;border-radius:10px;padding:9px;background:linear-gradient(145deg,#241c10,#11100d)}
+.xer-finance-game-card h4{margin:0 0 7px;color:#f2d18a;font-size:12px}
+.xer-finance-game-card .game-stat{display:flex;justify-content:space-between;gap:6px;padding:4px 0;border-bottom:1px solid #382f20;font-size:10px;color:#c6b99f}
 .xer-finance-game-card .game-stat strong{color:#f7ead0;text-align:right;font-variant-numeric:tabular-nums}
 .xer-finance-game-card .game-stat:last-child{border:0}
 @media(max-width:700px){.xer-finance-game-grid{grid-template-columns:1fr}}
@@ -1042,12 +1042,13 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <article><span>Laba kotor</span><strong id="xerFinanceProfit">Rp 0</strong><small>Pendapatan dikurangi modal</small></article>
    <article><span>Transaksi selesai</span><strong id="xerFinanceCount">0</strong><small id="xerFinanceMissing">0 modal belum diisi</small></article>
   </div>
+  <div class="xer-finance-toolbar"><input id="xerFinanceSearch" placeholder="Cari invoice, pembeli, game…" oninput="renderXeravionAccounting()"><select id="xerFinancePeriod" onchange="renderXeravionAccounting()"><option value="all">Semua waktu</option><option value="30">30 hari terakhir</option><option value="7">7 hari terakhir</option></select><select id="xerFinanceStatus" onchange="renderXeravionAccounting()"><option value="all">Semua status</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="processing">Diproses / menunggu</option></select></div>
+  <div class="admin-table-wrap"><table class="adminlist xer-finance-table"><thead><tr><th>Tanggal / Invoice</th><th>Pembeli / Produk</th><th>Pendapatan</th><th>Modal (Rp)</th><th>Laba</th><th>Status</th></tr></thead><tbody id="xerFinanceRows"><tr><td colspan="6">Memuat pembukuan…</td></tr></tbody></table></div>
   <section class="xer-finance-game-section">
    <div class="sectionhead"><div><h3 style="margin:0">Hasil per Game</h3><div class="hint">Ringkasan transaksi selesai, pendapatan, modal, dan laba tiap game.</div></div></div>
    <div id="xerFinanceGameResults" class="xer-finance-game-grid"><div class="hint">Memuat hasil per game…</div></div>
   </section>
-  <div class="xer-finance-toolbar"><input id="xerFinanceSearch" placeholder="Cari invoice, pembeli, game…" oninput="renderXeravionAccounting()"><select id="xerFinancePeriod" onchange="renderXeravionAccounting()"><option value="all">Semua waktu</option><option value="30">30 hari terakhir</option><option value="7">7 hari terakhir</option></select><select id="xerFinanceStatus" onchange="renderXeravionAccounting()"><option value="all">Semua status</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="processing">Diproses / menunggu</option></select></div>
-  <div class="admin-table-wrap"><table class="adminlist xer-finance-table"><thead><tr><th>Tanggal / Invoice</th><th>Pembeli / Produk</th><th>Pendapatan</th><th>Modal (Rp)</th><th>Laba</th><th>Status</th></tr></thead><tbody id="xerFinanceRows"><tr><td colspan="6">Memuat pembukuan…</td></tr></tbody></table></div>
+
   <div id="xerFinanceMessage" class="notice" role="status" aria-live="polite">Isi modal pada kolom Modal untuk menghitung laba. Perubahan disimpan otomatis ke database.</div>
  </div>
 </div>

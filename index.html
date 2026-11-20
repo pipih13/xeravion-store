@@ -850,6 +850,19 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .top .brand-logo{display:block!important;width:310px!important;height:100px!important;max-width:100%;min-width:0;flex:0 1 310px;object-fit:contain!important;object-position:left center;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;filter:none!important}
 @media(max-width:760px){.top .brand{flex:0 1 230px}.top .brand-logo{width:230px!important;height:76px!important;flex-basis:230px}}
 @media(max-width:390px){.top .brand{flex-basis:205px}.top .brand-logo{width:205px!important;height:68px!important;flex-basis:205px}}
+</style><style id="xeravion-logo-size-final">
+/* Final override: larger horizontal PNG logo; overrides legacy 32px mobile rules */
+.top .wrap.nav>a.brand{flex:0 1 320px!important;width:auto!important;min-width:0!important;max-width:44vw!important;gap:0!important}
+.top .wrap.nav>a.brand img.brand-logo{display:block!important;width:310px!important;height:100px!important;min-width:0!important;max-width:100%!important;flex:0 1 310px!important;object-fit:contain!important;object-position:left center!important}
+@media(max-width:760px){
+ .top .wrap.nav{min-height:82px!important}
+ .top .wrap.nav>a.brand{flex:0 1 48vw!important;max-width:48vw!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:100%!important;height:68px!important;min-width:0!important;max-width:100%!important;flex:1 1 auto!important}
+}
+@media(max-width:370px){
+ .top .wrap.nav>a.brand{flex-basis:46vw!important;max-width:46vw!important}
+ .top .wrap.nav>a.brand img.brand-logo{height:58px!important}
+}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=1" alt="Logo XERAVION" width="180" height="60" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

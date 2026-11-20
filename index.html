@@ -2117,7 +2117,7 @@ async function saveXeravionOrderCost(orderId,value,input){
  if(input)input.disabled=true;
  const msg=document.getElementById('xerFinanceMessage');
  try{
-  const {error}=await supabaseClient.from('order_accounting').update({cost_price:raw===''?null:Number(raw)}).eq('order_id',orderId);
+  const {error}=await supabaseClient.from('order_accounting').upsert({order_id:orderId,cost_price:raw===''?null:Number(raw)},{onConflict:'order_id'});
   if(error)throw error;
   const row=xeravionAccountingRows.find(o=>o.id===orderId);if(row)row.cost_price=raw===''?null:Number(raw);
   if(msg)msg.textContent=raw===''?'Modal dikosongkan. Laba transaksi kembali belum dihitung.':'Modal berhasil disimpan ke database XERAVION.';

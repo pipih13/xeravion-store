@@ -930,7 +930,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
     <div><label for="dwigitalCheckZone">Zone ID *</label><input id="dwigitalCheckZone" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan Zone ID"></div>
     <div style="display:flex;align-items:end"><button class="btn gold" type="button" id="dwigitalCheckBtn" onclick="testDwigitalNickname()">Uji nickname (Development)</button></div>
    </div>
-   <div id="dwigitalNicknameResult" class="notice" role="status" aria-live="polite">Belum ada pengecekan. Negara akun akan tetap berstatus belum diketahui.</div>
+   <div id="dwigitalNicknameResult" class="notice" role="status" aria-live="polite">Belum ada pengecekan. Hasil akan mengikuti respons validasi User ID dan Zone ID dari Dwigital.</div>
   </div>
   <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Pilih wilayah untuk memisahkan paket Indonesia, negara SEA, SEA umum, dan Global. Paket tanpa label wilayah yang jelas masuk ke Belum teridentifikasi.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button><select id="dwigitalRegionFilter" aria-label="Filter wilayah paket" onchange="renderDwigitalCatalogByRegion()"><option value="all">Semua wilayah</option><option value="ID">Indonesia</option><option value="MY">Malaysia</option><option value="PH">Filipina</option><option value="SG">Singapura</option><option value="TH">Thailand</option><option value="VN">Vietnam</option><option value="BN">Brunei Darussalam</option><option value="KH">Kamboja</option><option value="LA">Laos</option><option value="MM">Myanmar</option><option value="TL">Timor-Leste</option><option value="SEA">SEA umum</option><option value="OTHER_COUNTRY">Negara di luar SEA</option><option value="GLOBAL">Global</option><option value="UNKNOWN">Belum teridentifikasi</option></select></div></div>
   <div id="dwigitalRegionSummary" class="hint" aria-live="polite" style="margin:8px 0 12px">Wilayah paket akan dikelompokkan berdasarkan label yang tersedia dari supplier.</div>
@@ -1566,13 +1566,10 @@ async function testDwigitalNickname(){
   });
   const payload=await response.json().catch(()=>null);
   if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
-  const regionLabel=payload.region==='ID'?'Indonesia':payload.region||'Belum diketahui';
   if(result){
-   if(payload.region_status==='verified_unsupported_region')result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah terdeteksi: '+regionLabel+'. DITOLAK: hanya akun Indonesia yang didukung.';
-   else if(payload.region_status==='verified_supported')result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah terdeteksi: Indonesia. Catatan: hasil Development tetap simulasi dan transaksi belum dibuka.';
-   else result.textContent='Nickname: '+(payload.nickname||'Tidak dikembalikan')+'. Wilayah akun: BELUM DIKETAHUI. DITAHAN: supplier belum mengirim kode negara yang valid. Jangan lanjutkan transaksi.';
+   result.textContent='Nickname diterima: '+(payload.nickname||'Tidak dikembalikan')+'. User ID dan Zone ID berhasil diproses oleh endpoint nickname Dwigital. Pengecekan ini tidak menyatakan negara akun. Mode Development hanya simulasi; tidak ada pesanan atau pemotongan saldo.';
   }
-  setDwigitalStatus(payload.region_status==='verified_unsupported_region'?'Akun di luar Indonesia ditolak. Tidak ada pesanan dibuat.':payload.region_status==='verified_supported'?'Kode wilayah Indonesia diterima dari respons supplier. Mode Development: tidak ada pesanan dibuat.':'Nickname diterima, tetapi wilayah tidak tersedia. Verifikasi dihentikan demi keamanan. Tidak ada pesanan dibuat.',payload.region_status==='verified_supported'?'ok':'error');
+  setDwigitalStatus('Pengecekan nickname berhasil direspons Dwigital. User ID dan Zone ID diproses; negara akun tidak disimpulkan. Mode Development: tidak ada pesanan dibuat.','ok');
  }catch(e){
   if(result)result.textContent='Pengecekan gagal: '+(e.message||String(e));
   setDwigitalStatus('Pengecekan nickname gagal: '+(e.message||String(e)),'error');

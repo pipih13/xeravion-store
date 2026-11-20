@@ -3,7 +3,7 @@ import { json } from "../../_shared/melo.js";
 const BASE = "https://dwigital.id/api/v1";
 
 export async function onRequestOptions() {
-  return json({ ok: true });
+  return json({ ok: true }, 200, { "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type" });
 }
 
 export async function onRequestPost({ request, env }) {

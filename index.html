@@ -1975,8 +1975,9 @@ async function loadXeravionOrders(){
    const status=(o.payment_status==='paid'?'Lunas':'Belum bayar')+' / '+(o.order_status==='completed'?'Selesai':o.order_status==='cancelled'?'Dibatalkan':o.order_status==='processing'?'Diproses':'Menunggu');
    const emailState=o.invoice_send_status==='sent'?'<span style="color:#56d69a;font-weight:700">Terkirim ✓</span><div class="hint">'+(o.invoice_sent_at?new Date(o.invoice_sent_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'}):'')+'</div>':o.invoice_send_status==='failed'?'<span style="color:#f0a36b">Gagal</span>':'<span class="hint">Belum dikirim</span>';
    const invoiceAction=o.invoice_send_status==='sent'?'<button class="smallbtn" type="button" disabled>Invoice terkirim ✓</button>':'<button class="smallbtn" onclick="sendXeravionInvoice(\''+o.id+'\')">'+(o.invoice_send_status==='failed'?'Coba kirim lagi':'Kirim invoice')+'</button>';
+   const accountingAction='<button class="smallbtn" onclick="syncXeravionAccounting(\\''+o.id+'\\')">Sinkronkan pembukuan</button>';
    const cancelAction='<button class="smallbtn" onclick="cancelXeravionOrder(\''+o.id+'\')">Batalkan & kembalikan poin</button>';
-   const actions=o.order_status==='cancelled'?'<span class="hint">Dibatalkan</span>':o.order_status==='completed'?invoiceAction+cancelAction:'<button class="smallbtn" onclick="completeXeravionOrder(\''+o.id+'\')">Lunas & selesai</button>'+cancelAction;
+   const actions=o.order_status==='cancelled'?'<span class="hint">Dibatalkan</span>':o.order_status==='completed'?invoiceAction+accountingAction+cancelAction:'<button class="smallbtn" onclick="completeXeravionOrder(\''+o.id+'\')">Lunas & selesai</button>'+cancelAction;
    return '<tr><td><strong>'+esc(o.invoice_number)+'</strong><div class="hint">'+new Date(o.created_at).toLocaleDateString('id-ID')+'</div></td><td>'+esc(o.buyer_name)+'<div class="hint">'+esc(o.buyer_email)+'</div></td><td>'+esc(o.product_code)+' · '+esc(o.product_name)+'<div class="hint">'+esc(o.game)+' · '+esc(o.payment_method)+'</div></td><td>'+rupiah(o.amount_due)+'</td><td>'+esc(status)+'<div class="hint">Email: '+esc(o.invoice_send_status)+(Number(o.cashback_points||0)>0?' · Cashback '+Number(o.cashback_points).toLocaleString('id-ID')+' XP':'')+'</div></td><td>'+actions+'</td></tr>';
   }).join(''):'<tr><td colspan="6">Belum ada pesanan.</td></tr>';
  }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat: '+esc(e.message||e)+'</td></tr>'}
@@ -2000,6 +2001,17 @@ async function completeXeravionOrder(id){
    msg.textContent=(msg.textContent||'Pesanan lunas & selesai.')+' Pembukuan belum tersinkron: '+(syncError.message||'Periksa konfigurasi Google Sheets.');
   }
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
+}
+async function syncXeravionAccounting(id){
+ const msg=document.getElementById('orderAdminMessage');
+ if(!confirm('Sinkronkan data pesanan ini ke Google Sheets? Jika invoice sudah tercatat, baris yang sama akan diperbarui tanpa membuat duplikat.'))return;
+ msg.textContent='Menyinkronkan pembukuan ke Google Sheets…';
+ try{
+  const{data,error}=await supabaseClient.functions.invoke('sync-xeravion-accounting',{body:{order_id:id}});
+  if(error)throw error;
+  if(data?.error)throw new Error(data.error);
+  msg.textContent='Pembukuan '+(data.invoice_number||'pesanan')+' berhasil disinkronkan ke Google Sheets.';
+ }catch(e){msg.textContent='Sinkronisasi pembukuan gagal: '+(e.message||e)}
 }
 async function cancelXeravionOrder(id){
  if(!confirm('Batalkan pesanan ini? Jika ada Credit Points yang digunakan, poin akan dikembalikan. Jika cashback sudah diberikan, cashback tersebut akan dibalik. Stok akun juga akan dikembalikan bila memungkinkan.'))return;

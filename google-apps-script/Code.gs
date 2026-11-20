@@ -2,7 +2,7 @@
  * XERAVION → Google Sheets sales ledger
  * 1) Create a Google Sheet and copy its spreadsheet ID.
  * 2) Paste this file into Extensions → Apps Script.
- * 3) Set SPREADSHEET_ID and SHARED_SECRET below.
+ * 3) Set SPREADSHEET_ID below and add the shared secret in Script Properties.
  * 4) Deploy as Web app: Execute as Me; access: Anyone.
  * The endpoint only accepts signed requests from the XERAVION Supabase Edge Function.
  */
@@ -18,8 +18,10 @@ function doPost(e) {
     }
     const order = body.order || {};
     if (!order.invoice_number) throw new Error('Nomor invoice tidak ditemukan.');
-    if (order.payment_status !== 'paid' || order.order_status !== 'completed') {
-      throw new Error('Hanya pesanan lunas dan selesai yang boleh dicatat.');
+    const isCompletedSale = order.payment_status === 'paid' && order.order_status === 'completed';
+    const isReversal = order.order_status === 'cancelled' || order.payment_status === 'refunded';
+    if (!isCompletedSale && !isReversal) {
+      throw new Error('Hanya pesanan selesai atau pembatalan/refund yang boleh disinkronkan.');
     }
 
     const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -46,11 +48,14 @@ function doPost(e) {
         .createTextFinder(invoice).matchEntireCell(true).findNext();
       if (found) targetRow = found.getRow();
     }
+    if (isReversal && !targetRow) {
+      return json_({ success: true, invoice_number: invoice, action: 'skipped_no_prior_sale' });
+    }
 
-    const costKnown = order.cost_price !== null && order.cost_price !== undefined;
+    const costKnown = isCompletedSale && order.cost_price !== null && order.cost_price !== undefined;
     const cost = costKnown ? Number(order.cost_price) : null;
-    const revenue = Number(order.amount_due || 0);
-    const profit = costKnown ? revenue - cost : '';
+    const revenue = isCompletedSale ? Number(order.amount_due || 0) : 0;
+    const profit = isCompletedSale && costKnown ? revenue - cost : '';
     const values = [[
       order.created_at ? new Date(order.created_at) : new Date(),
       invoice,

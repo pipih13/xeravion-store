@@ -982,46 +982,52 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 </style>
 
 
-<style id="xeravion-mobile-header-clean">
-/* One consolidated mobile header rule: readable logo and touch-sized controls. */
-@media (max-width:760px) {
-  .top .wrap.nav {
-    display:flex!important; flex-flow:row nowrap!important;
-    align-items:center!important; justify-content:space-between!important;
-    gap:8px!important; min-height:78px!important; height:auto!important;
-    padding:10px 12px!important;
-  }
-  .top .wrap.nav > a.brand {
-    display:flex!important; flex:0 1 108px!important;
-    width:108px!important; min-width:88px!important; max-width:108px!important;
-    margin:0!important; padding:0!important; justify-content:flex-start!important;
-    align-items:center!important; overflow:visible!important;
-  }
-  .top .wrap.nav > a.brand img.brand-logo {
-    display:block!important; width:108px!important; height:58px!important;
-    min-width:0!important; max-width:108px!important; flex:0 0 108px!important;
-    object-fit:contain!important; object-position:left center!important;
-    border-radius:0!important; transform:none!important;
-  }
-  .top .wrap.nav > .navright {
-    display:flex!important; flex:1 1 auto!important; min-width:0!important;
-    width:auto!important; flex-flow:row nowrap!important; justify-content:flex-end!important;
-    align-items:center!important; gap:5px!important; margin:0!important;
-  }
-  .top .wrap.nav > .navright .language-picker { min-width:0!important; }
-  .top .wrap.nav > .navright .btn {
-    min-width:0!important; min-height:44px!important;
-    padding:10px 8px!important; font-size:10px!important;
-    line-height:1.15!important; border-radius:9px!important;
-    white-space:nowrap!important;
-  }
+
+<style id="xeravion-mobile-header-final">
+/* Clean mobile header: prominent artwork, compact controls. */
+@media (max-width:760px){
+ .top .wrap.nav{
+  display:flex!important;flex-flow:row nowrap!important;align-items:center!important;
+  justify-content:space-between!important;gap:5px!important;
+  min-height:68px!important;height:68px!important;padding:6px 10px!important;
+ }
+ .top .wrap.nav>a.brand{
+  display:flex!important;flex:0 0 104px!important;width:104px!important;
+  min-width:104px!important;max-width:104px!important;margin:0!important;padding:0!important;
+  overflow:visible!important;justify-content:flex-start!important;align-items:center!important;
+ }
+ .top .wrap.nav>a.brand img.brand-logo{
+  display:block!important;width:150px!important;height:58px!important;
+  min-width:150px!important;max-width:none!important;flex:0 0 150px!important;
+  object-fit:contain!important;object-position:left center!important;
+  transform:scale(1.35)!important;transform-origin:left center!important;
+ }
+ .top .wrap.nav>.navright{
+  display:flex!important;flex:1 1 auto!important;width:auto!important;min-width:0!important;
+  flex-flow:row nowrap!important;justify-content:flex-end!important;align-items:center!important;
+  gap:4px!important;margin:0!important;
+ }
+ .top .wrap.nav>.navright .language-picker{
+  flex:0 1 104px!important;width:104px!important;min-width:0!important;
+  height:36px!important;padding:0 5px!important;gap:3px!important;
+ }
+ .top .wrap.nav>.navright .language-picker select{
+  width:100%!important;min-width:0!important;font-size:9px!important;
+  padding:4px 2px!important;
+ }
+ .top .wrap.nav>.navright .btn{
+  flex:0 1 auto!important;min-width:0!important;min-height:36px!important;height:36px!important;
+  padding:6px 6px!important;font-size:8px!important;line-height:1.1!important;
+  border-radius:8px!important;white-space:nowrap!important;
+ }
 }
-@media (max-width:390px) {
-  .top .wrap.nav { gap:5px!important; padding-left:9px!important; padding-right:9px!important; }
-  .top .wrap.nav > a.brand { flex-basis:94px!important; width:94px!important; max-width:94px!important; }
-  .top .wrap.nav > a.brand img.brand-logo { width:94px!important; max-width:94px!important; flex-basis:94px!important; }
-  .top .wrap.nav > .navright { gap:3px!important; }
-  .top .wrap.nav > .navright .btn { padding:9px 6px!important; font-size:9px!important; }
+@media(max-width:390px){
+ .top .wrap.nav{padding-left:7px!important;padding-right:7px!important;gap:3px!important}
+ .top .wrap.nav>a.brand{flex-basis:91px!important;width:91px!important;min-width:91px!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:138px!important;min-width:138px!important;flex-basis:138px!important;transform:scale(1.32)!important}
+ .top .wrap.nav>.navright{gap:3px!important}
+ .top .wrap.nav>.navright .language-picker{flex-basis:92px!important;width:92px!important}
+ .top .wrap.nav>.navright .btn{padding:5px 4px!important;font-size:7px!important}
 }
 </style>
 
@@ -3050,132 +3056,6 @@ body.xeravion-home-page #gameCategoryHub .game-category-card b{
  }
 }
 </style>
-<style id="xeravion-mobile-header-left-align">
-/* At 100% Chrome zoom on phones, align the brand to the left edge. */
-@media(max-width:760px){
- .top .nav{align-items:flex-start!important}
- .top .nav>.brand{flex:1 1 100%!important;width:100%!important;justify-content:flex-start!important;margin:0!important;padding:0!important}
- .top .nav>.brand .brand-logo{margin:0!important}
- .top .nav>.brand .brand-copy{text-align:left!important}
- .top .nav>.navright{width:100%;justify-content:flex-start!important}
-}
-</style>
-<style id="xeravion-touch-header-zoom-fix">
-/* Keep the phone header layout stable when Chrome zoom changes the CSS viewport. */
-@media (pointer:coarse) and (hover:none){
- .top .nav{height:auto!important;min-height:68px!important;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;padding-top:9px!important;padding-bottom:9px!important}
- .top .nav>.brand{order:0!important;flex:0 0 auto!important;width:auto!important;max-width:100%!important;justify-content:flex-start!important;align-items:center!important;margin:0!important;padding:0!important}
- .top .nav>.brand .brand-logo{width:38px!important;height:38px!important;min-width:38px!important;flex:0 0 38px!important;margin:0!important}
- .top .nav>.brand .brand-copy{text-align:left!important;min-width:0!important}
- .top .nav>.brand .brand-copy b{font-size:16px!important;letter-spacing:1.8px!important;white-space:nowrap!important}
- .top .nav>.brand .brand-copy small{font-size:7px!important;letter-spacing:1.2px!important;white-space:nowrap!important}
- .top .nav>.navright{order:1!important;flex:1 0 100%!important;width:100%!important;display:flex!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:6px!important}
- .top .nav>.navright .btn{padding:9px 10px!important;font-size:10px!important;white-space:nowrap!important}
-}
-</style>
-<style id="xeravion-mobile-brand-final-left">
-/* Final override: keep logo and wordmark together on the left on phone screens. */
-@media(max-width:760px){
- .top .wrap.nav{
-  display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;
-  justify-content:flex-start!important;align-items:center!important;
-  column-gap:9px!important;row-gap:8px!important;
- }
- .top .wrap.nav>a.brand{
-  display:flex!important;flex:0 1 auto!important;width:auto!important;
-  max-width:100%!important;align-self:center!important;
-  justify-content:flex-start!important;align-items:center!important;
-  margin:0 auto 0 0!important;padding:0!important;
-  position:static!important;transform:none!important;text-align:left!important;
- }
- .top .wrap.nav>a.brand img.brand-logo{
-  display:block!important;position:static!important;
-  width:38px!important;height:38px!important;flex:0 0 38px!important;
-  margin:0!important;transform:none!important;
- }
- .top .wrap.nav>a.brand .brand-copy{
-  display:block!important;flex:0 1 auto!important;
-  min-width:0!important;margin:0!important;text-align:left!important;
- }
- .top .wrap.nav>a.brand .brand-copy b,
- .top .wrap.nav>a.brand .brand-copy small{
-  display:block!important;text-align:left!important;white-space:nowrap!important;
- }
- .top .wrap.nav>.navright{
-  display:flex!important;flex:1 0 100%!important;width:100%!important;
-  justify-content:flex-start!important;align-items:center!important;
-  margin:0!important;
- }
-}
-</style>
-<style id="xeravion-mobile-header-single-row">
-/* Phone header: brand, Member Points, Dashboard and Login share one horizontal row. */
-@media(max-width:760px){
- .top .wrap.nav{
-  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
-  align-items:center!important;justify-content:space-between!important;
-  gap:6px!important;min-height:62px!important;height:auto!important;
-  padding-top:7px!important;padding-bottom:7px!important;
- }
- .top .wrap.nav>a.brand{
-  flex:0 1 auto!important;width:auto!important;min-width:0!important;
-  max-width:none!important;margin:0!important;gap:6px!important;
-  justify-content:flex-start!important;align-items:center!important;
- }
- .top .wrap.nav>a.brand img.brand-logo{
-  width:32px!important;height:32px!important;min-width:32px!important;
-  flex:0 0 32px!important;
- }
- .top .wrap.nav>a.brand .brand-copy{min-width:0!important}
- .top .wrap.nav>a.brand .brand-copy b{
-  font-size:clamp(11px,3.5vw,15px)!important;
-  letter-spacing:1px!important;line-height:1.1!important;
- }
- .top .wrap.nav>a.brand .brand-copy small{
-  font-size:clamp(5px,1.55vw,7px)!important;
-  letter-spacing:.55px!important;margin-top:2px!important;
- }
- .top .wrap.nav>.navright{
-  flex:0 0 auto!important;width:auto!important;min-width:0!important;
-  display:flex!important;flex-wrap:nowrap!important;
-  align-items:center!important;justify-content:flex-end!important;
-  gap:3px!important;margin:0!important;
- }
- .top .wrap.nav>.navright .btn{
-  flex:0 1 auto!important;min-width:0!important;
-  padding:7px 6px!important;font-size:clamp(7px,1.9vw,9px)!important;
-  line-height:1.15!important;white-space:nowrap!important;
-  border-radius:8px!important;
- }
-}
-@media(max-width:370px){
- .top .wrap.nav{gap:4px!important;padding-left:8px!important;padding-right:8px!important}
- .top .wrap.nav>a.brand{gap:4px!important}
- .top .wrap.nav>a.brand img.brand-logo{width:28px!important;height:28px!important;min-width:28px!important;flex-basis:28px!important}
- .top .wrap.nav>a.brand .brand-copy b{font-size:10px!important;letter-spacing:.65px!important}
- .top .wrap.nav>a.brand .brand-copy small{font-size:5px!important;letter-spacing:.25px!important}
- .top .wrap.nav>.navright{gap:2px!important}
- .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
-}
-
-/* XERAVION admin visitor analytics */
-.xer-traffic-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}
-.xer-traffic-controls select{min-width:170px;padding:10px 12px;border-radius:12px;border:1px solid #64502e;background:#100e0b;color:#f7f1e6}
-.xer-traffic-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
-.xer-traffic-stats .stat{min-height:90px;padding:16px;border:1px solid #59472a;border-radius:16px;background:linear-gradient(145deg,#19150f,#0d0c09)}
-.xer-traffic-stats .stat b{display:block;font-size:clamp(22px,4vw,32px);color:#e8cc91;font-variant-numeric:tabular-nums}
-.xer-traffic-stats .stat span{display:block;margin-top:6px;color:#b4a78f;font-size:12px}
-.xer-traffic-chart-wrap{margin-top:20px;padding:16px;border:1px solid #51432b;border-radius:16px;background:#0e0c0a}
-.xer-traffic-chart-wrap h4{margin:0 0 18px;color:#e8cc91}
-.xer-traffic-chart{min-height:190px;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:12px 4px 4px}
-.xer-traffic-day{flex:1 0 38px;min-width:38px;height:160px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
-.xer-traffic-day b{font-size:10px;color:#f7f1e6;font-variant-numeric:tabular-nums}
-.xer-traffic-day span{font-size:10px;color:#b4a78f;white-space:nowrap}
-.xer-traffic-bar{width:min(28px,70%);min-height:3px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#f5dfaa,#a77a32);box-shadow:0 0 14px #c99a4a35}
-@media(max-width:600px){.xer-traffic-stats{grid-template-columns:1fr 1fr}.xer-traffic-stats .stat:last-child{grid-column:1/-1}.xer-traffic-chart{gap:5px}.xer-traffic-day{flex-basis:34px;min-width:34px}}
-</style>
-
-
 <style id="xeravion-footer-left-aligned">
 .footer-contact{grid-template-columns:minmax(0,380px)!important;justify-content:start!important;justify-items:stretch!important;align-items:start!important;gap:7px!important;padding:4px 0 18px!important}
 .footer-contact-heading{align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;padding:0 0 5px!important;gap:4px!important}

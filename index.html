@@ -1136,6 +1136,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 <script>
 const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',activeItemPlatform='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],deleteId=null,items=[],xeravionAdminVerified=false;
 const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}let buyerMlbbCatalog = [];
+let buyerMlbbEnvironment = 'development';
 let buyerMlbbVerifyVariant = null;
 let buyerMlbbSelectedVariant = null;
 let buyerMlbbNicknameVerified = false;
@@ -1147,17 +1148,19 @@ async function loadBuyerMlbbCatalog(){
   const payload=await response.json().catch(()=>null);
   if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Katalog belum dapat dimuat.');
   buyerMlbbCatalog=Array.isArray(payload.products)?payload.products:[];
+  buyerMlbbEnvironment=payload.environment==='production'?'production':'development';
   buyerMlbbVerifyVariant=payload.nickname_variant_id;
   if(!buyerMlbbCatalog.length){status.textContent='Belum ada paket MLBB pada katalog supplier.';return;}
-  status.textContent='Katalog Development berhasil dimuat ('+buyerMlbbCatalog.length+' paket). Harga hanya simulasi.';
-  grid.innerHTML=buyerMlbbCatalog.map(p=>'<button type="button" class="btn" data-mlbb-variant="'+p.variant_id+'" onclick="selectBuyerMlbbPackage('+p.variant_id+')" style="display:block;text-align:left;padding:12px;min-height:58px"><strong>'+escapeHtml(p.name)+'</strong><small style="display:block;color:var(--muted);margin-top:5px">Rp '+Number(p.price).toLocaleString('id-ID')+' • UJI</small></button>').join('');
+  status.textContent='Katalog '+(buyerMlbbEnvironment==='production'?'Production':'Development')+' berhasil dimuat ('+buyerMlbbCatalog.length+' paket). '+(buyerMlbbEnvironment==='production'?'Pemesanan belum diaktifkan.':'Harga hanya simulasi.');
+  grid.innerHTML=buyerMlbbCatalog.map(p=>'<button type="button" class="btn" data-mlbb-variant="'+p.variant_id+'" onclick="selectBuyerMlbbPackage('+p.variant_id+')" style="display:block;text-align:left;padding:12px;min-height:58px"><strong>'+escapeMlbbText(p.name)+'</strong><small style="display:block;color:var(--muted);margin-top:5px">Rp '+Number(p.price).toLocaleString('id-ID')+' • '+(buyerMlbbEnvironment==='production'?'LIVE':'UJI')+'</small></button>').join('');
  }catch(error){status.textContent=error.message||'Gagal memuat katalog.';}
 }
+function escapeMlbbText(value){return String(value??'').replace(/[&<>\"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[ch]));}
 function selectBuyerMlbbPackage(id){
  buyerMlbbSelectedVariant=buyerMlbbCatalog.find(p=>p.variant_id===id)||null;
  document.querySelectorAll('#buyerMlbbPackages [data-mlbb-variant]').forEach(el=>{el.classList.toggle('gold',Number(el.dataset.mlbbVariant)===id)});
  const status=document.getElementById('buyerMlbbCatalogStatus');
- if(status&&buyerMlbbSelectedVariant)status.textContent='Dipilih: '+buyerMlbbSelectedVariant.name+'. Harga Development hanya simulasi, belum dapat dibeli.';
+ if(status&&buyerMlbbSelectedVariant)status.textContent='Dipilih: '+buyerMlbbSelectedVariant.name+'. '+(buyerMlbbEnvironment==='production'?'Harga katalog Production; pemesanan belum diaktifkan.':'Harga Development hanya simulasi, belum dapat dibeli.');
 }
 async function checkBuyerMlbbNickname(){
  const user=(document.getElementById('buyerMlbbUserId')?.value||'').trim();
@@ -1170,7 +1173,7 @@ async function checkBuyerMlbbNickname(){
  if(!/^[A-Za-z0-9._-]{1,32}$/.test(zone)){if(feedback)feedback.textContent='Zone ID wajib diisi sesuai format Dwigital.';return;}
  if(!verifyProduct){if(feedback)feedback.textContent='Paket untuk cek nickname belum tersedia dari katalog Dwigital.';return;}
  if(button){button.disabled=true;button.textContent='Memeriksa…'}
- if(feedback)feedback.textContent='Menghubungi layanan pengecekan Development Dwigital…';
+ if(feedback)feedback.textContent='Menghubungi layanan pengecekan '+(buyerMlbbEnvironment==='production'?'Production':'Development')+' Dwigital…';
  if(card)card.hidden=true;
  buyerMlbbNicknameVerified=false;
  try{
@@ -1179,9 +1182,9 @@ async function checkBuyerMlbbNickname(){
   if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
   const name=document.getElementById('buyerMlbbNickname'),mode=document.getElementById('buyerMlbbNicknameMode');
   if(name)name.textContent=payload.nickname||'Nickname tidak dikembalikan';
-  if(mode)mode.textContent='Hasil simulasi API Development. Belum merupakan verifikasi Production.';
+  if(mode)mode.textContent=payload.environment==='production'?'Nickname asli diverifikasi melalui Dwigital Production.':'Hasil simulasi API Development. Belum merupakan verifikasi Production.';
   if(card)card.hidden=false;
-  if(feedback)feedback.textContent='Nickname simulasi berhasil diterima. Kamu dapat melihat katalog uji, tetapi pemesanan dan pembayaran belum aktif.';
+  if(feedback)feedback.textContent=payload.environment==='production'?'Nickname berhasil diverifikasi. Pemesanan dan pembayaran masih belum aktif.':'Nickname simulasi berhasil diterima. Kamu dapat melihat katalog uji, tetapi pemesanan dan pembayaran belum aktif.';
   buyerMlbbNicknameVerified=true;
  }catch(error){if(feedback)feedback.textContent=error.message||'Pengecekan gagal. Coba lagi.';}
  finally{if(button){button.disabled=false;button.textContent='Cek Nickname Otomatis'}}

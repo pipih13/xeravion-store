@@ -981,6 +981,50 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 }
 </style>
 
+
+<style id="xeravion-mobile-header-clean">
+/* One consolidated mobile header rule: readable logo and touch-sized controls. */
+@media (max-width:760px) {
+  .top .wrap.nav {
+    display:flex!important; flex-flow:row nowrap!important;
+    align-items:center!important; justify-content:space-between!important;
+    gap:8px!important; min-height:78px!important; height:auto!important;
+    padding:10px 12px!important;
+  }
+  .top .wrap.nav > a.brand {
+    display:flex!important; flex:0 1 108px!important;
+    width:108px!important; min-width:88px!important; max-width:108px!important;
+    margin:0!important; padding:0!important; justify-content:flex-start!important;
+    align-items:center!important; overflow:visible!important;
+  }
+  .top .wrap.nav > a.brand img.brand-logo {
+    display:block!important; width:108px!important; height:58px!important;
+    min-width:0!important; max-width:108px!important; flex:0 0 108px!important;
+    object-fit:contain!important; object-position:left center!important;
+    border-radius:0!important; transform:none!important;
+  }
+  .top .wrap.nav > .navright {
+    display:flex!important; flex:1 1 auto!important; min-width:0!important;
+    width:auto!important; flex-flow:row nowrap!important; justify-content:flex-end!important;
+    align-items:center!important; gap:5px!important; margin:0!important;
+  }
+  .top .wrap.nav > .navright .language-picker { min-width:0!important; }
+  .top .wrap.nav > .navright .btn {
+    min-width:0!important; min-height:44px!important;
+    padding:10px 8px!important; font-size:10px!important;
+    line-height:1.15!important; border-radius:9px!important;
+    white-space:nowrap!important;
+  }
+}
+@media (max-width:390px) {
+  .top .wrap.nav { gap:5px!important; padding-left:9px!important; padding-right:9px!important; }
+  .top .wrap.nav > a.brand { flex-basis:94px!important; width:94px!important; max-width:94px!important; }
+  .top .wrap.nav > a.brand img.brand-logo { width:94px!important; max-width:94px!important; flex-basis:94px!important; }
+  .top .wrap.nav > .navright { gap:3px!important; }
+  .top .wrap.nav > .navright .btn { padding:9px 6px!important; font-size:9px!important; }
+}
+</style>
+
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

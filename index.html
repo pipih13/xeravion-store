@@ -2857,6 +2857,8 @@ Object.assign(DICT,{
 });
 for(const [id,en] of Object.entries(DICT)){if(!REVERSE[en])REVERSE[en]=id;}
 Object.assign(DICT,{
+"Daftar":"Register",
+"Lihat":"Show",
 "Cashback 3%":"3% Cashback",
 "1 poin = Rp10":"1 point = IDR 10",
 "Maksimal diskon 10%":"Maximum 10% Discount",
@@ -2874,7 +2876,7 @@ Object.assign(DICT,{
 "Aktivitas":"Activity"
 });
 for(const [id,en] of Object.entries(DICT)){if(!REVERSE[en])REVERSE[en]=id;}
-const ATTRS={placeholder:{"Alamat email":"Email address","Password (minimal 8 karakter)":"Password (at least 8 characters)","Nama / judul akun *":"Account name / title *","Deskripsi akun lengkap":"Full account description","Harga (Rp) *":"Price (IDR) *","Kode listing *":"Listing code *","Cari nama, kode stok, atau deskripsi…":"Search name, stock code, or description…","Cari nama atau kode…":"Search name or code…","English account name (optional)":"English account name (optional)","English account description (optional)":"English account description (optional)","URL foto tambahan, satu URL per baris (opsional)":"Additional photo URLs, one URL per line (optional)","Atau tempel URL gambar (opsional)":"Or paste an image URL (optional)"}, "aria-label":{"Pilih bahasa":"Select language","Kembali ke halaman utama":"Back to home","Alamat email":"Email address","Tampilkan kata sandi":"Show password"},title:{"Hapus foto ini":"Remove this photo"}};
+const ATTRS={placeholder:{"Nama tampilan":"Display name","Alamat email":"Email address","Password (minimal 8 karakter)":"Password (at least 8 characters)","Nama / judul akun *":"Account name / title *","Deskripsi akun lengkap":"Full account description","Harga (Rp) *":"Price (IDR) *","Kode listing *":"Listing code *","Cari nama, kode stok, atau deskripsi…":"Search name, stock code, or description…","Cari nama atau kode…":"Search name or code…","English account name (optional)":"English account name (optional)","English account description (optional)":"English account description (optional)","URL foto tambahan, satu URL per baris (opsional)":"Additional photo URLs, one URL per line (optional)","Atau tempel URL gambar (opsional)":"Or paste an image URL (optional)"}, "aria-label":{"Pilih bahasa":"Select language","Kembali ke halaman utama":"Back to home","Alamat email":"Email address","Tampilkan kata sandi":"Show password"},title:{"Hapus foto ini":"Remove this photo"}};
 let active='id',observer=null,working=false;
 const valid=v=>v==='id'||v==='en';
 function read(){try{const v=localStorage.getItem(KEY);return valid(v)?v:'id'}catch(_){return'id'}}

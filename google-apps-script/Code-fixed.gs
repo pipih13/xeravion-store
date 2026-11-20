@@ -6,12 +6,14 @@
  * 4) Deploy as Web app: Execute as Me; access: Anyone.
  * The endpoint only accepts signed requests from the XERAVION Supabase Edge Function.
  */
-const SPREADSHEET_ID = '1JcYkugBYfFDBIv6nvChS0I5sYQDXPu5-_jzoGoIwcdQ';
+const SPREADSHEET_ID = PropertiesService.getScriptProperties().getProperty('XERAVION_SPREADSHEET_ID') || '';
 const SHARED_SECRET = PropertiesService.getScriptProperties().getProperty('XERAVION_SYNC_SECRET') || '';
 const SHEET_NAME = 'Penjualan';
 
 function doPost(e) {
   try {
+    if (!SPREADSHEET_ID) throw new Error('Script Property XERAVION_SPREADSHEET_ID belum diatur.');
+    if (!SHARED_SECRET) throw new Error('Script Property XERAVION_SYNC_SECRET belum diatur.');
     const body = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (!constantTimeEquals_(String(body.secret || ''), SHARED_SECRET)) {
       return json_({ success: false, error: 'Unauthorized' });

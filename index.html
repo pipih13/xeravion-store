@@ -2060,6 +2060,7 @@ async function exportXeravionAccountingExcel(){
   Array.from(groups.entries()).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([name,arr],idx)=>{const kc=arr.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');const row=dash.addRow([name,arr.length,sum(arr,o=>o.amount_due),sum(kc,o=>o.cost_price),sum(kc,o=>Number(o.amount_due||0)-Number(o.cost_price||0)),arr.length-kc.length]);row.height=25;row.eachCell((c,col)=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:idx%2?'FFFFFF':'F7F8FA'}};c.border=borderBottom;c.alignment={vertical:'middle',horizontal:col===1?'left':col===2||col===6?'center':'right',wrapText:true};});[3,4,5].forEach(i=>row.getCell(i).numFmt=moneyFmt);});
   [1,2,6].forEach(i=>{dash.getColumn(i).alignment={vertical:'middle',horizontal:i===1?'left':'center'};});
   [3,4,5].forEach(i=>{dash.getColumn(i).alignment={vertical:'middle',horizontal:'right'};});
+  dash.getColumn(2).numFmt='#,##0';[3,4,5].forEach(i=>dash.getColumn(i).numFmt='"Rp" #,##0;[Red]("Rp" #,##0);-');dash.getColumn(6).numFmt='#,##0';
   dash.autoFilter={from:{row:15,column:1},to:{row:15,column:6}};
   dash.getColumn(1).width=25;dash.getColumn(2).width=15;dash.getColumn(3).width=22;dash.getColumn(4).width=22;dash.getColumn(5).width=22;dash.getColumn(6).width=17;
   // Detail sheet
@@ -2068,6 +2069,13 @@ async function exportXeravionAccountingExcel(){
   detail.addRow(['XERAVION  |  DETAIL TRANSAKSI']);detail.addRow(['Rincian transaksi dari database XERAVION']);detail.addRow([]);detail.addRow(headers);styleTitle(detail,'XERAVION  |  DETAIL TRANSAKSI','RINCIAN SELURUH TRANSAKSI DARI DATABASE XERAVION',headers.length);header(detail.getRow(4));
   detail.columns=[{width:21},{width:25},{width:23},{width:29},{width:18},{width:17},{width:30},{width:20},{width:19},{width:19},{width:20},{width:18},{width:20}];
   xeravionAccountingRows.forEach((o,idx)=>{const has=o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='';const done=o.payment_status==='paid'&&o.order_status==='completed';const r=detail.addRow([o.created_at?new Date(o.created_at):'',o.invoice_number||'',o.buyer_name||'',o.buyer_email||'',o.game||'',o.product_code||'',o.product_name||'',o.payment_method||'',o.payment_status||'',o.order_status||'',Number(o.amount_due||0),has?Number(o.cost_price):null,done&&has?Number(o.amount_due||0)-Number(o.cost_price):null]);r.height=30;r.eachCell((c,col)=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:idx%2?'FFFFFF':'F7F8FA'}};c.border={top:{style:'hair',color:{argb:'E5E0D5'}},bottom:{style:'thin',color:{argb:'E5E0D5'}},left:{style:'hair',color:{argb:'E5E0D5'}},right:{style:'hair',color:{argb:'E5E0D5'}}};c.alignment={vertical:'middle',horizontal:col>=11?'right':col===9||col===10?'center':'left',wrapText:col===2||col===3||col===4||col===7};c.font={name:'Aptos',size:10,color:{argb:'292929'}};});r.getCell(1).numFmt='dd mmm yyyy hh:mm';[11,12,13].forEach(i=>r.getCell(i).numFmt=moneyFmt);if(o.payment_status==='paid'){r.getCell(9).fill={type:'pattern',pattern:'solid',fgColor:{argb:green}};r.getCell(9).font={bold:true,color:{argb:'067647'}};}if(o.order_status==='completed'){r.getCell(10).fill={type:'pattern',pattern:'solid',fgColor:{argb:green}};r.getCell(10).font={bold:true,color:{argb:'067647'}};}else if(o.order_status==='cancelled'){r.getCell(10).fill={type:'pattern',pattern:'solid',fgColor:{argb:'FEE4E2'}};r.getCell(10).font={bold:true,color:{argb:'B42318'}};}if(!has)r.getCell(12).font={italic:true,color:{argb:muted}};});
+  // Format sel dan tipe data setiap kolom secara eksplisit agar Excel mengenali isi dengan benar.
+  detail.getColumn(1).numFmt='dd mmmm yyyy hh:mm';
+  [2,3,4,5,6,7,8,9,10].forEach(i=>detail.getColumn(i).numFmt='@');
+  [11,12,13].forEach(i=>detail.getColumn(i).numFmt='"Rp" #,##0;[Red]("Rp" #,##0);-');
+  detail.getColumn(1).alignment={vertical:'middle',horizontal:'center'};
+  [2,3,4,5,6,7,8,9,10].forEach(i=>detail.getColumn(i).alignment={vertical:'middle',horizontal:'left',wrapText:true});
+  [11,12,13].forEach(i=>detail.getColumn(i).alignment={vertical:'middle',horizontal:'right'});
   detail.autoFilter={from:{row:4,column:1},to:{row:4,column:headers.length}};
   detail.views=[{state:'frozen',xSplit:2,ySplit:4,showGridLines:false}];
   detail.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
@@ -2078,6 +2086,13 @@ async function exportXeravionAccountingExcel(){
   gameWs.columns=[{width:25},{width:19},{width:23},{width:23},{width:23},{width:20}];
   gameWs.addRow(['XERAVION  |  HASIL PER GAME']);gameWs.addRow(['Hanya transaksi lunas dan selesai']);gameWs.addRow([]);gameWs.addRow(['Game','Transaksi selesai','Pendapatan (Rp)','Modal terisi (Rp)','Laba kotor (Rp)','Modal belum diisi']);styleTitle(gameWs,'XERAVION  |  HASIL PER GAME','RINGKASAN TRANSAKSI LUNAS DAN SELESAI',6);header(gameWs.getRow(4));
   Array.from(groups.entries()).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([name,arr],idx)=>{const kc=arr.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');const r=gameWs.addRow([name,arr.length,sum(arr,o=>o.amount_due),sum(kc,o=>o.cost_price),sum(kc,o=>Number(o.amount_due||0)-Number(o.cost_price||0)),arr.length-kc.length]);r.height=28;r.eachCell((c,col)=>{c.fill={type:'pattern',pattern:'solid',fgColor:{argb:idx%2?'FFFFFF':'F7F8FA'}};c.border={top:{style:'hair',color:{argb:'E5E0D5'}},bottom:{style:'thin',color:{argb:'E5E0D5'}},left:{style:'hair',color:{argb:'E5E0D5'}},right:{style:'hair',color:{argb:'E5E0D5'}}};c.alignment={vertical:'middle',horizontal:col===1?'left':col===2||col===6?'center':'right',wrapText:true};});[3,4,5].forEach(i=>r.getCell(i).numFmt=moneyFmt);});
+  // Format angka dan alignment khusus pada tabel hasil per game.
+  gameWs.getColumn(1).numFmt='@';gameWs.getColumn(2).numFmt='#,##0';
+  [3,4,5].forEach(i=>gameWs.getColumn(i).numFmt='"Rp" #,##0;[Red]("Rp" #,##0);-');
+  gameWs.getColumn(6).numFmt='#,##0';
+  gameWs.getColumn(1).alignment={vertical:'middle',horizontal:'left'};
+  [2,6].forEach(i=>gameWs.getColumn(i).alignment={vertical:'middle',horizontal:'center'});
+  [3,4,5].forEach(i=>gameWs.getColumn(i).alignment={vertical:'middle',horizontal:'right'});
   gameWs.autoFilter={from:{row:4,column:1},to:{row:4,column:6}};
   gameWs.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
   gameWs.pageSetup.margins={left:0.3,right:0.3,top:0.5,bottom:0.5,header:0.2,footer:0.2};

@@ -849,21 +849,30 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  .top .wrap.nav>a.brand img.brand-logo{height:58px!important}
 }
 </style><style id="xeravion-logo-final-clean">
-/* Final logo rules: preserve the entire horizontal artwork. Never circularly clip the logo. */
+/* Desktop logo remains at its approved size. Mobile header reserves room for all controls. */
 .top .wrap.nav>a.brand{display:flex!important;align-items:center!important;justify-content:flex-start!important;overflow:visible!important;flex:0 1 250px!important;width:250px!important;max-width:250px!important;min-width:0!important;padding:0!important;margin:0!important}
 .top .wrap.nav>a.brand img.brand-logo{display:block!important;width:100%!important;height:auto!important;max-width:100%!important;min-width:0!important;max-height:none!important;aspect-ratio:2048/620!important;object-fit:contain!important;object-position:center center!important;clip-path:none!important;-webkit-clip-path:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}
 @media(max-width:760px){
- .top .wrap.nav{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;gap:4px!important;min-height:68px!important;height:auto!important;padding:7px 8px!important}
- .top .wrap.nav>a.brand{flex:0 1 38vw!important;width:38vw!important;max-width:150px!important;min-width:0!important}
- .top .wrap.nav>a.brand img.brand-logo{width:100%!important;height:auto!important;max-width:100%!important;aspect-ratio:2048/620!important;object-fit:contain!important;clip-path:none!important;-webkit-clip-path:none!important}
- .top .wrap.nav>.navright{flex:0 1 auto!important;min-width:0!important;display:flex!important;flex-wrap:nowrap!important;gap:3px!important;justify-content:flex-end!important}
- .top .wrap.nav>.navright .btn{padding:6px 5px!important;font-size:clamp(7px,1.8vw,9px)!important;white-space:nowrap!important}
+ .top .wrap.nav{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;gap:4px!important;min-height:58px!important;height:auto!important;padding:6px 7px!important;overflow:visible!important}
+ .top .wrap.nav>a.brand{flex:0 0 112px!important;width:112px!important;max-width:112px!important;min-width:0!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:112px!important;height:auto!important;max-width:112px!important;aspect-ratio:2048/620!important;object-fit:contain!important}
+ .top .wrap.nav>.navright{flex:1 1 auto!important;min-width:0!important;display:flex!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:flex-end!important;gap:3px!important}
+ .top .wrap.nav>.navright .language-picker{flex:0 1 94px!important;min-width:0!important;padding:5px 3px!important}
+ .top .wrap.nav>.navright .language-picker select{max-width:68px!important;min-width:0!important;font-size:8px!important}
+ .top .wrap.nav>.navright .btn{flex:0 1 auto!important;min-width:0!important;padding:6px 4px!important;font-size:8px!important;white-space:nowrap!important}
  .top .wrap.nav>.navlinks{display:none!important}
 }
-@media(max-width:370px){.top .wrap.nav>a.brand{flex-basis:36vw!important;width:36vw!important;max-width:132px!important}.top .wrap.nav>.navright{gap:2px!important}.top .wrap.nav>.navright .btn{padding:5px 3px!important;font-size:7px!important}}
+@media(max-width:370px){
+ .top .wrap.nav>a.brand{flex-basis:96px!important;width:96px!important;max-width:96px!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:96px!important;max-width:96px!important}
+ .top .wrap.nav>.navright{gap:2px!important}
+ .top .wrap.nav>.navright .language-picker{flex-basis:82px!important}
+ .top .wrap.nav>.navright .language-picker select{max-width:58px!important;font-size:7px!important}
+ .top .wrap.nav>.navright .btn{padding:5px 3px!important;font-size:7px!important}
+}
 </style></head>
 <body><div class="app">
-<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama" style="display:flex!important;flex:0 0 250px!important;width:250px!important;max-width:250px!important;min-width:250px!important;align-items:center!important;overflow:visible!important"><img class="brand-logo" src="/assets/xeravion-logo.png?v=3" alt="Logo XERAVION" width="250" height="auto" decoding="async" style="display:block!important;width:250px!important;height:auto!important;max-width:none!important;min-width:250px!important;max-height:none!important;flex:0 0 250px!important;object-fit:contain!important;object-position:center center!important;overflow:visible!important"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
+<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">
 <section class="catalog" id="catalog"><div class="hero"><div><div class="eyebrow">CURATED DIGITAL COLLECTION</div><h1>Akun pilihan.<br><span>Pengalaman berbeda.</span></h1><p>Temukan koleksi akun game pilihan di XERAVION. Telusuri katalog, lihat detail, dan hubungi admin untuk mengecek ketersediaan sebelum transaksi.</p><div class="actions"><a class="btn gold" href="#products">Jelajahi katalog ↓</a><a class="btn" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION" target="_blank" rel="noopener">Hubungi admin</a></div></div><div class="art game-slider" id="gameSlider" aria-label="Game yang tersedia di XERAVION"><div class="slides">
 <article class="game-slide active"><img src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Artwork event kolaborasi Mobile Legends Bang Bang x SpongeBob" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>MLBB × SPONGEBOB • UNDERSEA BASH</span><strong>MOBILE LEGENDS</strong><small>Event kolaborasi berlangsung 11 November – 10 Desember</small></div></article>

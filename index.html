@@ -2077,7 +2077,7 @@ async function completeXeravionOrder(id){
   msg.textContent='Pesanan selesai. Data keuangan tersedia di menu Pembukuan.';
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
-async async function cancelXeravionOrder(id){
+async function cancelXeravionOrder(id){
  if(!confirm('Batalkan pesanan ini? Jika ada Credit Points yang digunakan, poin akan dikembalikan. Jika cashback sudah diberikan, cashback tersebut akan dibalik. Stok akun juga akan dikembalikan bila memungkinkan.'))return;
  const msg=document.getElementById('orderAdminMessage');
  try{

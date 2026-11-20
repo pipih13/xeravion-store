@@ -1153,6 +1153,20 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  .game-slider .slider-arrow.next{right:12px!important}
 }
 </style>
+<style id="xeravion-item-gaming-whatsapp-button-size">
+/* Reduce only the WhatsApp action in Item Gaming listing rows. */
+.item-gaming-list .item-product-side .wa-buy{
+ width:94px!important;max-width:94px!important;min-height:25px!important;
+ padding:4px 5px!important;font-size:7px!important;line-height:1.15!important;
+ border-radius:7px!important;white-space:normal!important;text-align:center!important;
+}
+@media(max-width:520px){
+ .item-gaming-list .item-product-side .wa-buy{
+  width:88px!important;max-width:88px!important;min-height:24px!important;
+  padding:4px!important;font-size:6.5px!important;
+ }
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

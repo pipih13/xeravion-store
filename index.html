@@ -1035,7 +1035,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 </div></div>
 <div class="xer-admin-tab-panel" id="adminTab-accounting">
  <div class="panel xer-finance-panel">
-  <div class="sectionhead"><div><div class="eyebrow">XERAVION FINANCE</div><h3 style="margin:4px 0">Pembukuan Penjualan</h3><div class="hint">Catatan keuangan tersimpan langsung di database XERAVION. Tidak menggunakan Google Sheets.</div></div><button class="btn" type="button" onclick="loadXeravionAccounting()">Muat ulang</button></div>
+  <div class="sectionhead"><div><div class="eyebrow">XERAVION FINANCE</div><h3 style="margin:4px 0">Pembukuan Penjualan</h3><div class="hint">Catatan keuangan tersimpan langsung di database XERAVION. Tidak menggunakan Google Sheets.</div></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" onclick="exportXeravionAccountingExcel()">Unduh Excel</button><button class="btn" type="button" onclick="loadXeravionAccounting()">Muat ulang</button></div></div>
   <div class="xer-finance-cards">
    <article><span>Total pendapatan</span><strong id="xerFinanceRevenue">Rp 0</strong><small>Pesanan lunas & selesai</small></article>
    <article><span>Total modal</span><strong id="xerFinanceCost">Rp 0</strong><small>Modal yang sudah diisi</small></article>
@@ -2012,6 +2012,49 @@ async function createXeravionOrder(){
 }
 let xeravionAccountingRows=[];
 const xerFinanceMoney=v=>'Rp '+Number(v||0).toLocaleString('id-ID');
+function exportXeravionAccountingExcel(){
+ if(!Array.isArray(xeravionAccountingRows)||!xeravionAccountingRows.length){alert('Belum ada data pembukuan untuk diunduh.');return;}
+ const escXml=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+ const cell=(v,type)=>'<Cell><Data ss:Type="'+(type||'String')+'">'+escXml(v)+'</Data></Cell>';
+ const row=vals=>'<Row>'+vals.map(v=>Array.isArray(v)?cell(v[0],v[1]):cell(v)).join('')+'</Row>';
+ const completed=xeravionAccountingRows.filter(o=>o.payment_status==='paid'&&o.order_status==='completed');
+ const sum=(arr,fn)=>arr.reduce((n,o)=>n+Number(fn(o)||0),0);
+ const known=completed.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');
+ const revenue=sum(completed,o=>o.amount_due),cost=sum(known,o=>o.cost_price),profit=sum(known,o=>Number(o.amount_due||0)-Number(o.cost_price||0));
+ const groups=new Map();
+ completed.forEach(o=>{const k=String(o.game||'Game lainnya').trim()||'Game lainnya';if(!groups.has(k))groups.set(k,[]);groups.get(k).push(o);});
+ const summaryRows=[
+  row(['XERAVION - PEMBUKUAN PENJUALAN']),
+  row(['Dibuat pada',new Date().toLocaleString('id-ID')]),
+  row(['Total pendapatan', [revenue,'Number']]),
+  row(['Total modal terisi',[cost,'Number']]),
+  row(['Total laba kotor dari modal terisi',[profit,'Number']]),
+  row(['Transaksi lunas & selesai',[completed.length,'Number']]),
+  row(['Modal belum diisi',[completed.length-known.length,'Number']])
+ ];
+ const gameRows=[row(['Game','Transaksi selesai','Pendapatan (Rp)','Modal terisi (Rp)','Laba kotor (Rp)','Modal belum diisi'])];
+ Array.from(groups.entries()).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([game,arr])=>{
+  const withCost=arr.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');
+  gameRows.push(row([game,[arr.length,'Number'],[sum(arr,o=>o.amount_due),'Number'],[sum(withCost,o=>o.cost_price),'Number'],[sum(withCost,o=>Number(o.amount_due||0)-Number(o.cost_price||0)),'Number'],[arr.length-withCost.length,'Number']]));
+ });
+ const detailRows=[row(['Tanggal','Invoice','Nama Pembeli','Email Pembeli','Game','Kode Produk','Nama Produk','Metode Pembayaran','Status Pembayaran','Status Pesanan','Pendapatan (Rp)','Modal (Rp)','Laba Kotor (Rp)'])];
+ xeravionAccountingRows.forEach(o=>{
+  const hasCost=o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='';
+  const isDone=o.payment_status==='paid'&&o.order_status==='completed';
+  const dt=o.created_at?new Date(o.created_at).toLocaleString('sv-SE',{timeZone:'Asia/Jakarta'}):'';
+  detailRows.push(row([dt,o.invoice_number,o.buyer_name,o.buyer_email,o.game,o.product_code,o.product_name,o.payment_method,o.payment_status,o.order_status,[Number(o.amount_due||0),'Number'],hasCost?[Number(o.cost_price),'Number']:'',isDone&&hasCost?[Number(o.amount_due||0)-Number(o.cost_price),'Number']:'']));
+ });
+ const workbook='<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>'+
+ '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'+
+ '<Styles><Style ss:ID="Default" ss:Name="Normal"><Alignment ss:Vertical="Center"/><Font ss:FontName="Aptos" ss:Size="10"/></Style><Style ss:ID="Title"><Font ss:Bold="1" ss:Size="16" ss:Color="#D6B45C"/><Interior ss:Color="#171717" ss:Pattern="Solid"/></Style><Style ss:ID="Header"><Font ss:Bold="1" ss:Color="#D6B45C"/><Interior ss:Color="#171717" ss:Pattern="Solid"/><Alignment ss:Horizontal="Center" ss:Vertical="Center" ss:WrapText="1"/></Style></Styles>'+
+ '<Worksheet ss:Name="Ringkasan"><Table>'+summaryRows.join('')+'</Table></Worksheet>'+
+ '<Worksheet ss:Name="Hasil per Game"><Table>'+gameRows.join('')+'</Table></Worksheet>'+
+ '<Worksheet ss:Name="Transaksi"><Table>'+detailRows.join('')+'</Table></Worksheet></Workbook>';
+ const blob=new Blob(['\ufeff',workbook],{type:'application/vnd.ms-excel;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='XERAVION_Pembukuan_'+new Date().toISOString().slice(0,10)+'.xls';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
 async function loadXeravionAccounting(){
  const body=document.getElementById('xerFinanceRows');if(!body)return;
  if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="6">Sesi admin tidak aktif.</td></tr>';return;}

@@ -2050,10 +2050,21 @@ function exportXeravionAccountingExcel(){
  '<Worksheet ss:Name="Ringkasan"><Table>'+summaryRows.join('')+'</Table></Worksheet>'+
  '<Worksheet ss:Name="Hasil per Game"><Table>'+gameRows.join('')+'</Table></Worksheet>'+
  '<Worksheet ss:Name="Transaksi"><Table>'+detailRows.join('')+'</Table></Worksheet></Workbook>';
- const blob=new Blob(['\ufeff',workbook],{type:'application/vnd.ms-excel;charset=utf-8'});
- const url=URL.createObjectURL(blob),a=document.createElement('a');
- a.href=url;a.download='XERAVION_Pembukuan_'+new Date().toISOString().slice(0,10)+'.xls';
- document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ try{
+  const blob=new Blob(['\\ufeff',workbook],{type:'application/vnd.ms-excel;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const filename='XERAVION_Pembukuan_'+new Date().toISOString().slice(0,10)+'.xls';
+  const msg=document.getElementById('xerFinanceMessage');
+  if(msg)msg.innerHTML='File pembukuan siap. Jika unduhan tidak dimulai otomatis, tekan tautan berikut: <a id="xerFinanceDownloadLink" download="'+filename+'" style="color:#e7c879;font-weight:700;text-decoration:underline">Unduh file Excel</a>';
+  const a=document.getElementById('xerFinanceDownloadLink')||document.createElement('a');
+  a.href=url;a.download=filename;
+  if(!a.isConnected)document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);},60000);
+ }catch(e){
+  console.error('XERAVION Excel export failed:',e);
+  alert('Gagal membuat file Excel: '+(e.message||String(e)));
+ }
 }
 async function loadXeravionAccounting(){
  const body=document.getElementById('xerFinanceRows');if(!body)return;

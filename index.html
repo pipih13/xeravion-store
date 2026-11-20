@@ -2012,7 +2012,7 @@ async function createXeravionOrder(){
 }
 let xeravionAccountingRows=[];
 const xerFinanceMoney=v=>'Rp '+Number(v||0).toLocaleString('id-ID');
-async async function exportXeravionAccountingExcel(){
+async function exportXeravionAccountingExcel(){
  if(!Array.isArray(xeravionAccountingRows)||!xeravionAccountingRows.length){alert('Belum ada data pembukuan untuk diunduh.');return;}
  const btn=Array.from(document.querySelectorAll('button')).find(b=>b.getAttribute('onclick')==='exportXeravionAccountingExcel()');
  const oldLabel=btn?.textContent;

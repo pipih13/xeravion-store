@@ -38,7 +38,7 @@ After the secrets are saved and the website deploy has finished, use the admin d
 ## Notes
 
 - Modal/cost is stored in admin-only Supabase tables and is not exposed in the public catalog.
-- New orders snapshot the modal recorded on the product at the time the order is created.
+- New orders snapshot the modal recorded on the product at the time the order is created. Leave the modal field blank if it is unknown; the profit cell will stay blank instead of assuming zero modal.
 - Existing orders from before this integration may have no modal snapshot; their historical profit is intentionally left unknown rather than guessed.
 - Profit shown is gross profit (amount actually paid minus modal), before other operating expenses.
 - If a sheet sync fails, the order remains completed and the admin message reports the sync error. After correcting the secrets or deployment, use **Sinkronkan pembukuan** beside the order in the admin order list to retry. The sheet uses invoice upsert, so it updates the same row instead of duplicating it. If a completed order is later cancelled/refunded, its existing row is updated and its revenue/profit cells are cleared; a cancelled order that was never recorded is skipped.

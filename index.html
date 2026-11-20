@@ -2081,7 +2081,7 @@ let gameSlideIndex=0,gameSlideTimer=null;function showGameSlide(index){const sli
  slider.addEventListener('pointerup',finish,{passive:true});
  slider.addEventListener('pointercancel',finish,{passive:true});
 }
-document.addEventListener('DOMContentLoaded',()=>{loadBuyerMlbbCatalog();initXeravionAdminRoute();if(isXeravionAdminRoute())restoreXeravionAdminSession();['click','keydown','pointerdown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetXeravionAdminIdle,{passive:true}));const slider=document.getElementById('gameSlider');if(slider&&!isXeravionAdminRoute()){enableGameSliderSwipe(slider);slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
+document.addEventListener('DOMContentLoaded',()=>{initXeravionAdminRoute();if(isXeravionAdminRoute())restoreXeravionAdminSession();['click','keydown','pointerdown','touchstart','scroll'].forEach(ev=>document.addEventListener(ev,resetXeravionAdminIdle,{passive:true}));const slider=document.getElementById('gameSlider');if(slider&&!isXeravionAdminRoute()){enableGameSliderSwipe(slider);slider.addEventListener('mouseenter',()=>{if(gameSlideTimer)clearInterval(gameSlideTimer)});slider.addEventListener('mouseleave',restartGameSlideTimer);restartGameSlideTimer()}});
 
 let memberMode='login',memberBusy=false,memberCooldownUntil=0,memberCooldownTimer=null;
 function startMemberCooldown(seconds){

@@ -1167,6 +1167,18 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  }
 }
 </style>
+<style id="xeravion-shirt-title-scale">
+/* Refine merchandise headline size without changing other carousel slides. */
+#gameSlider .shirt-slide .slide-copy>strong{
+ font-size:clamp(20px,2.4vw,27px)!important;
+ line-height:1.12!important;letter-spacing:.7px!important;
+}
+@media(max-width:760px){
+ #gameSlider .shirt-slide .slide-copy>strong{
+  font-size:14px!important;line-height:1.15!important;letter-spacing:.45px!important;
+ }
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

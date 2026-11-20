@@ -864,32 +864,40 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  .top .wrap.nav>a.brand img.brand-logo{height:58px!important}
 }
 </style><style id="xeravion-mobile-logo-header-layout">
-/* Mobile: dedicate its own full-width row to the horizontal logo. */
+/* Match the supplied reference: wide logo on the left, controls on the same row. */
 @media(max-width:760px){
  .top .wrap.nav{
-  display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;
-  align-items:center!important;justify-content:flex-start!important;
-  gap:6px!important;min-height:0!important;height:auto!important;
-  padding:10px 12px!important;
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:center!important;justify-content:space-between!important;
+  gap:5px!important;min-height:64px!important;height:auto!important;
+  padding:7px 10px!important;
  }
  .top .wrap.nav>a.brand{
-  order:0!important;display:flex!important;flex:0 0 100%!important;
-  width:100%!important;max-width:100%!important;min-width:0!important;
+  order:0!important;display:flex!important;flex:0 1 34vw!important;
+  width:34vw!important;max-width:230px!important;min-width:112px!important;
   justify-content:flex-start!important;align-items:center!important;
   margin:0!important;padding:0!important;gap:0!important;
  }
  .top .wrap.nav>a.brand img.brand-logo{
-  display:block!important;width:min(92vw,420px)!important;
-  height:auto!important;aspect-ratio:2048/620!important;
-  min-width:0!important;max-width:100%!important;max-height:none!important;
-  flex:0 1 auto!important;object-fit:contain!important;object-position:left center!important;
+  display:block!important;width:100%!important;height:auto!important;
+  aspect-ratio:2048/620!important;min-width:0!important;max-width:100%!important;
+  max-height:none!important;flex:1 1 auto!important;
+  object-fit:contain!important;object-position:left center!important;
  }
  .top .wrap.nav>.navright{
-  order:1!important;flex:1 0 100%!important;width:100%!important;
-  min-width:0!important;display:flex!important;flex-wrap:wrap!important;
-  justify-content:flex-start!important;gap:6px!important;margin:0!important;
+  order:1!important;flex:0 1 auto!important;width:auto!important;min-width:0!important;
+  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
+  justify-content:flex-end!important;gap:4px!important;margin:0!important;
  }
- .top .wrap.nav>.navlinks{order:2!important;flex:1 0 100%!important;width:100%!important}
+ .top .wrap.nav>.navright .btn{padding:7px 6px!important;font-size:clamp(7px,1.9vw,10px)!important;white-space:nowrap!important}
+ .top .wrap.nav>.navright .language-picker{flex:0 1 auto!important;min-width:0!important}
+ .top .wrap.nav>.navlinks{display:none!important}
+}
+@media(max-width:370px){
+ .top .wrap.nav{gap:3px!important;padding-left:7px!important;padding-right:7px!important}
+ .top .wrap.nav>a.brand{flex-basis:31vw!important;width:31vw!important;min-width:100px!important}
+ .top .wrap.nav>.navright{gap:2px!important}
+ .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
 }
 </style></head>
 <body><div class="app">

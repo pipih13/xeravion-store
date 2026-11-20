@@ -7,7 +7,7 @@
  * The endpoint only accepts signed requests from the XERAVION Supabase Edge Function.
  */
 const SPREADSHEET_ID = 'GANTI_DENGAN_ID_GOOGLE_SHEET';
-const SHARED_SECRET = 'GANTI_DENGAN_SECRET_ACAK_MINIMAL_32_KARAKTER';
+const SHARED_SECRET = PropertiesService.getScriptProperties().getProperty('XERAVION_SYNC_SECRET') || '';
 const SHEET_NAME = 'Penjualan';
 
 function doPost(e) {

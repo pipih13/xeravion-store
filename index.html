@@ -769,26 +769,11 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
  #productDetailModal .detail-title{margin-top:2px!important}
 }
 </style>
-<style id="xeravion-logo-fit-fix">
-/* Compact, centered header logo; no CSS rotation or motion */
-.top .brand-logo{
-  width:32px!important;height:32px!important;
-  min-width:32px!important;flex:0 0 32px!important;
-  object-fit:contain!important;transform:none!important;
-  animation:none!important;
-}
-</style>
 
 
 
-<style id="xeravion-logo-background-trim">
-/* Sembunyikan sudut hitam pada kanvas logo persegi tanpa mengganti atau mematikan animasi GIF. */
-.top .brand-logo{
-  clip-path:circle(49% at 50% 50%)!important;
-  -webkit-clip-path:circle(49% at 50% 50%)!important;
-  object-fit:contain!important;
-}
-</style>
+
+
 <style id="xeravion-item-gaming-marketplace">
 body.xeravion-game-page:has(.item-gaming-page-head) #catalog{max-width:1240px;margin:0 auto;padding-top:18px}
 .item-gaming-page-head{display:block!important;margin:8px 0 26px!important}
@@ -863,42 +848,19 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  .top .wrap.nav>a.brand{flex-basis:46vw!important;max-width:46vw!important}
  .top .wrap.nav>a.brand img.brand-logo{height:58px!important}
 }
-</style><style id="xeravion-mobile-logo-header-layout">
-/* Match the supplied reference: wide logo on the left, controls on the same row. */
+</style><style id="xeravion-logo-final-clean">
+/* Final logo rules: preserve the entire horizontal artwork. Never circularly clip the logo. */
+.top .wrap.nav>a.brand{display:flex!important;align-items:center!important;justify-content:flex-start!important;overflow:visible!important;flex:0 1 250px!important;width:250px!important;max-width:250px!important;min-width:0!important;padding:0!important;margin:0!important}
+.top .wrap.nav>a.brand img.brand-logo{display:block!important;width:100%!important;height:auto!important;max-width:100%!important;min-width:0!important;max-height:none!important;aspect-ratio:2048/620!important;object-fit:contain!important;object-position:center center!important;clip-path:none!important;-webkit-clip-path:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;filter:none!important}
 @media(max-width:760px){
- .top .wrap.nav{
-  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
-  align-items:center!important;justify-content:space-between!important;
-  gap:5px!important;min-height:64px!important;height:auto!important;
-  padding:7px 10px!important;
- }
- .top .wrap.nav>a.brand{
-  order:0!important;display:flex!important;flex:0 1 34vw!important;
-  width:34vw!important;max-width:230px!important;min-width:112px!important;
-  justify-content:flex-start!important;align-items:center!important;
-  margin:0!important;padding:0!important;gap:0!important;
- }
- .top .wrap.nav>a.brand img.brand-logo{
-  display:block!important;width:100%!important;height:auto!important;
-  aspect-ratio:2048/620!important;min-width:0!important;max-width:100%!important;
-  max-height:none!important;flex:1 1 auto!important;
-  object-fit:contain!important;object-position:left center!important;
- }
- .top .wrap.nav>.navright{
-  order:1!important;flex:0 1 auto!important;width:auto!important;min-width:0!important;
-  display:flex!important;flex-wrap:nowrap!important;align-items:center!important;
-  justify-content:flex-end!important;gap:4px!important;margin:0!important;
- }
- .top .wrap.nav>.navright .btn{padding:7px 6px!important;font-size:clamp(7px,1.9vw,10px)!important;white-space:nowrap!important}
- .top .wrap.nav>.navright .language-picker{flex:0 1 auto!important;min-width:0!important}
+ .top .wrap.nav{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between!important;gap:4px!important;min-height:68px!important;height:auto!important;padding:7px 8px!important}
+ .top .wrap.nav>a.brand{flex:0 1 45vw!important;width:45vw!important;max-width:180px!important;min-width:0!important}
+ .top .wrap.nav>a.brand img.brand-logo{width:100%!important;height:auto!important;max-width:100%!important;aspect-ratio:2048/620!important;object-fit:contain!important;clip-path:none!important;-webkit-clip-path:none!important}
+ .top .wrap.nav>.navright{flex:0 1 auto!important;min-width:0!important;display:flex!important;flex-wrap:nowrap!important;gap:3px!important;justify-content:flex-end!important}
+ .top .wrap.nav>.navright .btn{padding:6px 5px!important;font-size:clamp(7px,1.8vw,9px)!important;white-space:nowrap!important}
  .top .wrap.nav>.navlinks{display:none!important}
 }
-@media(max-width:370px){
- .top .wrap.nav{gap:3px!important;padding-left:7px!important;padding-right:7px!important}
- .top .wrap.nav>a.brand{flex-basis:31vw!important;width:31vw!important;min-width:100px!important}
- .top .wrap.nav>.navright{gap:2px!important}
- .top .wrap.nav>.navright .btn{padding:6px 4px!important;font-size:7px!important}
-}
+@media(max-width:370px){.top .wrap.nav>a.brand{flex-basis:42vw!important;width:42vw!important;max-width:155px!important}.top .wrap.nav>.navright{gap:2px!important}.top .wrap.nav>.navright .btn{padding:5px 3px!important;font-size:7px!important}}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama" style="display:flex!important;flex:0 0 250px!important;width:250px!important;max-width:250px!important;min-width:250px!important;align-items:center!important;overflow:visible!important"><img class="brand-logo" src="/assets/xeravion-logo.png?v=3" alt="Logo XERAVION" width="250" height="auto" decoding="async" style="display:block!important;width:250px!important;height:auto!important;max-width:none!important;min-width:250px!important;max-height:none!important;flex:0 0 250px!important;object-fit:contain!important;object-position:center center!important;overflow:visible!important"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

@@ -2865,7 +2865,7 @@ function convert(value,lang){const lead=(value.match(/^\\s*/)||[''])[0],tail=(va
 function translateNode(node,lang){
  if(!node||!node.isConnected)return;
  const walker=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);
- while(walker.nextNode()){const n=walker.currentNode,p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|OPTION|CODE|PRE|SVG)$/.test(p.tagName)||p.closest(".language-picker,[data-no-translate],[contenteditable=true]"))continue;const next=convert(n.nodeValue,lang);if(next!==n.nodeValue)n.nodeValue=next;}
+ while(walker.nextNode()){const n=walker.currentNode,p=n.parentElement;if(!p||/^(SCRIPT|STYLE|TEXTAREA|INPUT|SELECT|CODE|PRE|SVG)$/.test(p.tagName)||p.closest(".language-picker,[data-no-translate],[contenteditable=true]"))continue;const next=convert(n.nodeValue,lang);if(next!==n.nodeValue)n.nodeValue=next;}
  const els=[...(node.nodeType===1?[node]:[]),...(node.querySelectorAll?node.querySelectorAll("[placeholder],[title],[aria-label],[alt]"):[])];
  els.forEach(el=>{for(const attr of ["placeholder","title","aria-label","alt"]){if(!el.hasAttribute(attr))continue;const map=ATTRS[attr]||{},v=el.getAttribute(attr),next=lang==="en"?(map[v]||v):(Object.keys(map).find(k=>map[k]===v)||v);if(next!==v)el.setAttribute(attr,next);}});
 }

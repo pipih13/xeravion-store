@@ -1991,6 +1991,14 @@ async function completeXeravionOrder(id){
   msg.textContent='Pesanan lunas & selesai. Cashback: '+Number(result.cashback_points||0).toLocaleString('id-ID')+' XP. Membuat dan mengirim invoice…';
   await loadProducts();await loadXeravionOrders();
   await sendXeravionInvoice(id,true);
+  try{
+   const{data:syncData,error:syncError}=await supabaseClient.functions.invoke('sync-xeravion-accounting',{body:{order_id:id}});
+   if(syncError)throw syncError;
+   if(syncData?.error)throw new Error(syncData.error);
+   msg.textContent=(msg.textContent||'Pesanan lunas & selesai.')+' Pembukuan Google Sheets berhasil disinkronkan.';
+  }catch(syncError){
+   msg.textContent=(msg.textContent||'Pesanan lunas & selesai.')+' Pembukuan belum tersinkron: '+(syncError.message||'Periksa konfigurasi Google Sheets.');
+  }
  }catch(e){msg.textContent='Gagal menyelesaikan pesanan: '+(e.message||e)}
 }
 async function cancelXeravionOrder(id){

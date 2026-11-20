@@ -846,8 +846,8 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <input id="buyerMlbbZoneId" inputmode="numeric" autocomplete="off" maxlength="32" placeholder="Contoh: 1234" style="display:block;width:100%;margin-top:7px;background:#0b0a08;border:1px solid var(--line);border-radius:10px;padding:13px;color:#f5ead4">
   </label>
  </div>
- <button class="btn gold" type="button" disabled style="margin-top:14px;width:100%;opacity:.65;cursor:not-allowed">Cek Nickname • Segera Hadir</button>
- <div class="notice" role="status" style="margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px;color:#d8c9a8;font-size:12px;line-height:1.6">Fitur pengecekan nickname untuk buyer sedang disiapkan. Saat aktif, nickname akan ditampilkan di sini sebelum pilihan nominal dibuka. Pengujian admin saat ini masih menggunakan API Development Dwigital.</div>
+ <button class="btn gold" type="button" onclick="sendMlbbTopupInquiry()" style="margin-top:14px;width:100%">Lanjutkan via WhatsApp ↗</button>
+ <div id="buyerMlbbTopupFeedback" class="notice" role="status" style="margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px;color:#d8c9a8;font-size:12px;line-height:1.6">Isi User ID dan Zone ID, lalu tekan Lanjutkan via WhatsApp. Admin akan membantu memeriksa akun dan ketersediaan nominal secara manual. Pengecekan nickname otomatis dan pembayaran online belum aktif.</div>
 </section>
 <style>@media(max-width:620px){#mlbbTopup>div[style*="grid-template-columns"]{grid-template-columns:1fr!important}}</style>
 <div id="gameCategoryHub" class="game-category-hub">
@@ -1125,7 +1125,18 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 </script>
 <script>
 const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',activeItemPlatform='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],deleteId=null,items=[],xeravionAdminVerified=false;
-const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
+const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}function sendMlbbTopupInquiry(){
+ const userId=(document.getElementById('buyerMlbbUserId')?.value||'').trim();
+ const zoneId=(document.getElementById('buyerMlbbZoneId')?.value||'').trim();
+ const feedback=document.getElementById('buyerMlbbTopupFeedback');
+ if(!/^[0-9]{4,20}$/.test(userId)){if(feedback)feedback.textContent='User ID harus berupa angka 4–20 digit. Periksa kembali ID akun Mobile Legends.';return;}
+ if(!/^[0-9]{1,10}$/.test(zoneId)){if(feedback)feedback.textContent='Zone ID / Server ID harus berupa angka 1–10 digit. Periksa kembali ID akun Mobile Legends.';return;}
+ const message='Halo admin XERAVION, saya ingin top up Mobile Legends.\nUser ID: '+userId+'\nZone ID: '+zoneId+'\nMohon bantu cek nickname akun dan nominal yang tersedia. Saya memahami pengecekan dan transaksi saat ini dilakukan manual.';
+ const url='https://wa.me/6287714947270?text='+encodeURIComponent(message);
+ window.open(url,'_blank','noopener');
+ if(feedback)feedback.textContent='Permintaan disiapkan. Lanjutkan percakapan di WhatsApp untuk pemeriksaan manual oleh admin.';
+}
+async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
 function waLink(p){let msg=`Halo admin XERAVION, saya tertarik dengan akun ${p.code} - ${p.name} (${p.game}) dengan harga ${rupiah(p.price)}. Apakah akun ini masih tersedia?`;return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`}
 async function shareListing(id){
  const p=items.find(x=>Number(x.id)===Number(id));if(!p)return;

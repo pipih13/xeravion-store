@@ -829,6 +829,14 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .xer-finance-cards article span{font-size:10px;color:#d8c18e;letter-spacing:.6px}
 .xer-finance-cards article strong{font-size:clamp(17px,2.5vw,25px);color:#f2d18a;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
 .xer-finance-cards article small{font-size:10px;color:#a99d89}
+.xer-finance-game-section{margin:18px 0 20px;padding:15px;border:1px solid #59472a;border-radius:14px;background:#17130d}
+.xer-finance-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.xer-finance-game-card{min-width:0;border:1px solid #58472b;border-radius:12px;padding:13px;background:linear-gradient(145deg,#241c10,#11100d)}
+.xer-finance-game-card h4{margin:0 0 10px;color:#f2d18a;font-size:14px}
+.xer-finance-game-card .game-stat{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #382f20;font-size:11px;color:#c6b99f}
+.xer-finance-game-card .game-stat strong{color:#f7ead0;text-align:right;font-variant-numeric:tabular-nums}
+.xer-finance-game-card .game-stat:last-child{border:0}
+@media(max-width:700px){.xer-finance-game-grid{grid-template-columns:1fr}}
 .xer-finance-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 170px 180px;gap:9px;margin:14px 0}
 .xer-finance-toolbar input,.xer-finance-toolbar select{min-width:0;background:#0e0c09;border:1px solid #51432b;border-radius:9px;color:#f5ead4;padding:11px}
 .xer-finance-table input{width:125px;max-width:100%;padding:9px;background:#0d0b08;border:1px solid #806638;border-radius:8px;color:#f5ead4}
@@ -1034,6 +1042,10 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <article><span>Laba kotor</span><strong id="xerFinanceProfit">Rp 0</strong><small>Pendapatan dikurangi modal</small></article>
    <article><span>Transaksi selesai</span><strong id="xerFinanceCount">0</strong><small id="xerFinanceMissing">0 modal belum diisi</small></article>
   </div>
+  <section class="xer-finance-game-section">
+   <div class="sectionhead"><div><h3 style="margin:0">Hasil per Game</h3><div class="hint">Ringkasan transaksi selesai, pendapatan, modal, dan laba tiap game.</div></div></div>
+   <div id="xerFinanceGameResults" class="xer-finance-game-grid"><div class="hint">Memuat hasil per game…</div></div>
+  </section>
   <div class="xer-finance-toolbar"><input id="xerFinanceSearch" placeholder="Cari invoice, pembeli, game…" oninput="renderXeravionAccounting()"><select id="xerFinancePeriod" onchange="renderXeravionAccounting()"><option value="all">Semua waktu</option><option value="30">30 hari terakhir</option><option value="7">7 hari terakhir</option></select><select id="xerFinanceStatus" onchange="renderXeravionAccounting()"><option value="all">Semua status</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option><option value="processing">Diproses / menunggu</option></select></div>
   <div class="admin-table-wrap"><table class="adminlist xer-finance-table"><thead><tr><th>Tanggal / Invoice</th><th>Pembeli / Produk</th><th>Pendapatan</th><th>Modal (Rp)</th><th>Laba</th><th>Status</th></tr></thead><tbody id="xerFinanceRows"><tr><td colspan="6">Memuat pembukuan…</td></tr></tbody></table></div>
   <div id="xerFinanceMessage" class="notice" role="status" aria-live="polite">Isi modal pada kolom Modal untuk menghitung laba. Perubahan disimpan otomatis ke database.</div>
@@ -2024,6 +2036,27 @@ function renderXeravionAccounting(){
  const profit=withCost.reduce((n,o)=>n+Number(o.amount_due||0)-Number(o.cost_price||0),0);
  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v};
  set('xerFinanceRevenue',xerFinanceMoney(revenue));set('xerFinanceCost',xerFinanceMoney(cost));set('xerFinanceProfit',xerFinanceMoney(profit));set('xerFinanceCount',completed.length.toLocaleString('id-ID'));set('xerFinanceMissing',(completed.length-withCost.length)+' modal belum diisi');
+ const gameRoot=document.getElementById('xerFinanceGameResults');
+ if(gameRoot){
+  const groups=new Map();
+  completed.forEach(o=>{
+   const key=String(o.game||'Game lainnya').trim()||'Game lainnya';
+   if(!groups.has(key))groups.set(key,{count:0,revenue:0,cost:0,profit:0,knownCost:0,missing:0});
+   const g=groups.get(key);g.count++;g.revenue+=Number(o.amount_due||0);
+   if(o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!==''){
+    const c=Number(o.cost_price||0);g.cost+=c;g.profit+=Number(o.amount_due||0)-c;g.knownCost++;
+   }else g.missing++;
+  });
+  const money=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
+  gameRoot.innerHTML=groups.size?Array.from(groups.entries()).sort((a,b)=>b[1].profit-a[1].profit).map(([name,g])=>
+   '<article class="xer-finance-game-card"><h4>'+esc(name)+'</h4>'+
+   '<div class="game-stat"><span>Transaksi selesai</span><strong>'+g.count.toLocaleString('id-ID')+'</strong></div>'+
+   '<div class="game-stat"><span>Pendapatan</span><strong>'+money(g.revenue)+'</strong></div>'+
+   '<div class="game-stat"><span>Modal terisi</span><strong>'+money(g.cost)+'</strong></div>'+
+   '<div class="game-stat"><span>Keuntungan</span><strong>'+money(g.profit)+'</strong></div>'+
+   '<div class="game-stat"><span>Modal belum diisi</span><strong>'+g.missing+'</strong></div></article>'
+  ).join(''):'<div class="hint">Belum ada transaksi lunas dan selesai.</div>';
+ }
  body.innerHTML=filtered.length?filtered.map(o=>{
   const d=new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium',timeStyle:'short'});
   const isCompleted=o.payment_status==='paid'&&o.order_status==='completed';

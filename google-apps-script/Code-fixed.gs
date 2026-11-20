@@ -1,4 +1,12 @@
-const SPREADSHEET_ID = 'GANTI_DENGAN_ID_GOOGLE_SHEET';
+/**
+ * XERAVION → Google Sheets sales ledger
+ * 1) Create a Google Sheet and copy its spreadsheet ID.
+ * 2) Paste this file into Extensions → Apps Script.
+ * 3) Set SPREADSHEET_ID below and add the shared secret in Script Properties.
+ * 4) Deploy as Web app: Execute as Me; access: Anyone.
+ * The endpoint only accepts signed requests from the XERAVION Supabase Edge Function.
+ */
+const SPREADSHEET_ID = '1JcYkugBYfFDBIv6nvChS0I5sYQDXPu5-_jzoGoIwcdQ';
 const SHARED_SECRET = PropertiesService.getScriptProperties().getProperty('XERAVION_SYNC_SECRET') || '';
 const SHEET_NAME = 'Penjualan';
 
@@ -84,7 +92,7 @@ function constantTimeEquals_(a, b) {
 
 function safeCell_(value) {
   const text = String(value == null ? '' : value);
-  return /^[=+@\\-]/.test(text) ? "'" + text : text;
+  return /^[=+@\-]/.test(text) ? "'" + text : text;
 }
 
 function json_(value) {

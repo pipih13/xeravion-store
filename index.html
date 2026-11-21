@@ -3057,6 +3057,41 @@ body.xeravion-home-page main>section#admin.active,
 body.xeravion-game-page main>section#admin.active{display:block!important}
 </style>
 
+
+<style id="xeravion-detail-sticky-whatsapp">
+/* Keep the buyer contact action visible while the long account description scrolls. */
+body.xeravion-listing-page #productDetailModal .detail-modal{
+  padding-bottom:calc(88px + env(safe-area-inset-bottom))!important;
+  scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom));
+}
+body.xeravion-listing-page #productDetailModal .detail-body{
+  padding-bottom:calc(105px + env(safe-area-inset-bottom))!important;
+}
+body.xeravion-listing-page #productDetailModal .detail-actions{
+  position:fixed!important;
+  left:0!important;right:0!important;bottom:0!important;
+  z-index:1002!important;
+  display:grid!important;grid-template-columns:1fr!important;gap:8px!important;
+  margin:0!important;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom))!important;
+  background:linear-gradient(180deg,rgba(7,10,17,0),rgba(7,10,17,.96) 22%,#070a11 100%)!important;
+  border-top:1px solid rgba(232,204,145,.24)!important;
+  box-sizing:border-box!important;
+}
+body.xeravion-listing-page #productDetailModal .detail-actions .buy{
+  position:relative!important;bottom:auto!important;
+  width:100%!important;min-height:48px!important;margin:0!important;
+  box-shadow:0 6px 24px #0008!important;
+}
+@media(max-width:760px){
+ body.xeravion-listing-page #productDetailModal .detail-body{
+   padding-bottom:calc(120px + env(safe-area-inset-bottom))!important;
+ }
+ body.xeravion-listing-page #productDetailModal .detail-actions{
+   padding-left:14px!important;padding-right:14px!important;
+ }
+}
+</style>
 <style id="xeravion-detail-mobile-fix">
 /* Detail listing: compact mobile layout and always-visible back navigation */
 #productDetailModal .detail-back-top{

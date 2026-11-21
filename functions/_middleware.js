@@ -15,6 +15,14 @@ export async function onRequest(context) {
   if (!env.ANALYTICS_DB || request.method !== "GET" || response.status !== 200) return response;
 
   const url = new URL(request.url);
+
+  // Do not count visits to the private admin portal as storefront traffic.
+  // XERAVION admin is served from the root URL with the ?admin-portal query flag.
+  const isAdminPortal =
+    url.searchParams.has("admin-portal") ||
+    url.pathname === "/admin" ||
+    url.pathname.startsWith("/admin/");
+  if (isAdminPortal) return response;
   if (url.pathname.startsWith("/api/") || /\.[a-z0-9]{1,8}$/i.test(url.pathname)) return response;
   if (!(request.headers.get("Accept") || "").includes("text/html")) return response;
   if (!(response.headers.get("content-type") || "").toLowerCase().includes("text/html")) return response;

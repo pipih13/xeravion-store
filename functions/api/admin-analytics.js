@@ -135,11 +135,10 @@ export async function onRequestGet({ request, env }) {
     }));
     const countries = (zone.countries || []).map(row => ({
       country: row.dimensions?.clientCountryName || "Unknown",
-      requests: Number(row.sum?.requests || 0),
+      requests: Number(row.count || 0),
       pageViews: 0,
-      visits: Number(row.sum?.visits || 0),
-      requests: Number(row.count || 0)
-    })).sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
+      visits: Number(row.sum?.visits || 0)
+    })).sort((a, b) => b.visits - a.visits);
     return json({
       periodDays: days,
       startDate,
@@ -153,6 +152,11 @@ export async function onRequestGet({ request, env }) {
       countries
     });
   } catch (error) {
-    return json({ error: "Terjadi kesalahan saat memuat analytics.", detail: error?.message || String(error) }, 500);
+    console.error("XERAVION admin analytics failure:", error);
+    return json({
+      error: "Terjadi kesalahan saat memuat analytics.",
+      detail: error?.message || String(error),
+      diagnostic: "PAGES_FUNCTION_RUNTIME"
+    }, 500);
   }
 }

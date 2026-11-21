@@ -155,7 +155,7 @@ export async function onRequestGet({ request, env }) {
             orderBy: [count_DESC]
           ) {
             count
-            dimensions { userAgent }
+            dimensions { clientRequestHTTPUserAgent }
           }
         }
       }
@@ -174,7 +174,7 @@ export async function onRequestGet({ request, env }) {
         const groups = botPayload.data?.viewer?.zones?.[0]?.userAgents || [];
         const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|discordbot|twitterbot|linkedinbot|pinterest|ahrefs|semrush|mj12|dotbot|petalbot|bytespider|gptbot|chatgpt-user|claudebot|anthropic-ai|google-extended|applebot|yandex|baiduspider|duckduckbot|uptimerobot|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl\/|wget\/|python-requests|httpclient|go-http-client|java\/|okhttp|libwww-perl/i;
         const totals = groups.reduce((acc, row) => {
-          const ua = String(row.dimensions?.userAgent || "").trim();
+          const ua = String(row.dimensions?.clientRequestHTTPUserAgent || "").trim();
           const requests = Number(row.count || 0);
           if (!ua) acc.unclassified += requests;
           else if (botPattern.test(ua)) acc.bots += requests;

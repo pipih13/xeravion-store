@@ -3127,6 +3127,20 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{
  }
 }
 </style>
+
+<style id="xeravion-detail-card-clearance">
+/* Leave a visible gap between the account-description card border and the fixed WhatsApp bar. */
+@media(max-width:760px){
+ body.xeravion-listing-page #productDetailModal .detail-section{
+   padding-bottom:110px!important;
+   margin-bottom:18px!important;
+   box-sizing:border-box!important;
+ }
+ body.xeravion-listing-page #productDetailModal .detail-modal{
+   scroll-padding-bottom:calc(120px + env(safe-area-inset-bottom))!important;
+ }
+}
+</style>
 <style id="xeravion-detail-mobile-fix">
 /* Detail listing: compact mobile layout and always-visible back navigation */
 #productDetailModal .detail-back-top{

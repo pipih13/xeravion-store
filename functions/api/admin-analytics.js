@@ -19,16 +19,19 @@ function json(data, status = 200) {
 }
 
 export async function onRequestGet({ request, env }) {
+  console.log("[xeravion-analytics] request received", new URL(request.url).searchParams.get("days") || "7");
   const authorization = request.headers.get("Authorization") || "";
   const token = authorization.startsWith("Bearer ") ? authorization.slice(7) : "";
   if (!token) return json({ error: "Sesi admin tidak ditemukan. Silakan login ulang." }, 401);
 
   try {
+    console.log("[xeravion-analytics] validating Supabase session");
     const userResponse = await fetch(SUPABASE_URL + "/auth/v1/user", {
       headers: { apikey: SUPABASE_ANON_KEY, Authorization: "Bearer " + token }
     });
     if (!userResponse.ok) return json({ error: "Sesi login tidak valid atau sudah berakhir." }, 401);
 
+    console.log("[xeravion-analytics] checking admin permission");
     const adminResponse = await fetch(SUPABASE_URL + "/rest/v1/rpc/is_admin", {
       method: "POST",
       headers: {
@@ -99,6 +102,7 @@ export async function onRequestGet({ request, env }) {
       timeStart: start.toISOString(),
       timeEnd: nextDay.toISOString()
     };
+    console.log("[xeravion-analytics] calling Cloudflare GraphQL", { days, startDate, endDate });
     const cfResponse = await fetch("https://api.cloudflare.com/client/v4/graphql", {
       method: "POST",
       headers: {
@@ -107,6 +111,7 @@ export async function onRequestGet({ request, env }) {
       },
       body: JSON.stringify({ query, variables })
     });
+    console.log("[xeravion-analytics] Cloudflare response", cfResponse.status, cfResponse.headers.get("content-type"));
     const responseText = await cfResponse.text();
     let payload;
     try {
@@ -125,6 +130,7 @@ export async function onRequestGet({ request, env }) {
       }, 502);
     }
 
+    console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: !!payload.errors?.length });
     const zone = payload.data?.viewer?.zones?.[0];
     if (!zone) return json({ error: "Zone XERAVION tidak ditemukan. Periksa CF_ZONE_ID." }, 502);
     const daily = (zone.daily || []).map(row => ({

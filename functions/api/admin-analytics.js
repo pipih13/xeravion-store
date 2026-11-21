@@ -123,14 +123,24 @@ export async function onRequestGet({ request, env }) {
         upstreamStatus: cfResponse.status
       }, 502);
     }
-    if (!cfResponse.ok || payload.errors?.length) {
+    if (payload.errors?.length) {
+      const graphQLErrors = payload.errors.map(item => item.message || "Unknown GraphQL error");
+      console.error("[xeravion-analytics] Cloudflare GraphQL errors", graphQLErrors);
+      return json({
+        error: "Cloudflare Analytics menolak kueri GraphQL.",
+        detail: graphQLErrors.join(" | "),
+        upstreamStatus: cfResponse.status
+      }, 502);
+    }
+    if (!cfResponse.ok) {
+      console.error("[xeravion-analytics] Cloudflare HTTP error", cfResponse.status);
       return json({
         error: "Cloudflare Analytics gagal mengambil data.",
-        detail: payload.errors?.[0]?.message || "HTTP " + cfResponse.status + ". Periksa token dan Zone ID."
+        detail: "HTTP " + cfResponse.status + ". Periksa token dan Zone ID."
       }, 502);
     }
 
-    console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: !!payload.errors?.length });
+    console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: false });
     const zone = payload.data?.viewer?.zones?.[0];
     if (!zone) return json({ error: "Zone XERAVION tidak ditemukan. Periksa CF_ZONE_ID." }, 502);
     const daily = (zone.daily || []).map(row => ({

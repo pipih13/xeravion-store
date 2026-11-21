@@ -1348,7 +1348,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <select id="orderPaymentMethod"><option value="QRIS">QRIS</option><option value="BCA">BCA</option><option value="DANA">DANA</option><option value="GoPay">GoPay</option><option value="ShopeePay">ShopeePay</option><option value="SeaBank">SeaBank</option></select>
   <div class="wide notice" style="margin:0">
    <strong>Jenis Pembeli</strong>
-   <div class="hint" style="margin:5px 0 9px">Pilih apakah pembeli merupakan member terdaftar atau non-member. Keduanya dapat menerima invoice melalui email.</div>
+   <div class="hint" style="margin:5px 0 9px">Pilih apakah pembeli merupakan member terdaftar atau non-member. Member dapat memperoleh cashback 3% dari pembayaran tunai. Keduanya dapat menerima invoice melalui email.</div>
    <select id="orderBuyerType" class="wide" style="margin-bottom:10px" onchange="changeOrderBuyerType()">
     <option value="guest">Non-member · Invoice melalui email</option>
     <option value="member">Member XERAVION · Cashback Credit Points</option>
@@ -1361,7 +1361,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    </div>
    <div id="orderGuestInfo" class="hint" style="margin-top:8px">Non-member dipilih. Masukkan email pembeli di atas untuk menerima invoice. Tidak memerlukan akun atau verifikasi member.</div>
   </div>
-  <select id="orderCreditMode" class="wide" onchange="updateOrderCreditMode()"><option value="none">Bayar tanpa menggunakan Credit Points · Cashback 3%</option><option value="use">Gunakan Credit Points · Tanpa cashback</option></select>
+  <select id="orderCreditMode" class="wide" onchange="updateOrderCreditMode()"><option value="none">Bayar tanpa menggunakan poin · Cashback 3%</option><option value="use">Gunakan Credit Points · Cashback 3% dari pembayaran tunai</option></select>
   <div id="orderPointsWrap" class="wide" style="display:none"><input id="orderPointsToUse" type="number" min="1" step="1" value="1" placeholder="Jumlah Credit Points yang digunakan"><div id="orderPointsHint" class="hint">1 XP = Rp10. Maksimal penggunaan 10% dari harga akun.</div></div>
   <button class="btn gold" onclick="createXeravionOrder()">Buat pesanan</button>
  </div>
@@ -1449,7 +1449,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   </div>
   <div id="memberAccount" class="hidden">
     <div class="member-balance"><span>SALDO CREDIT POINTS</span><strong id="memberBalance">0 XP</strong><small id="memberDisplayName">Member XERAVION</small></div>
-    <div class="member-rewards"><h4>Cara kerja Credit Points</h4><div class="reward-list"><div class="reward-row"><div><strong>Welcome Bonus +100 poin</strong><small>Bonus pendaftaran pertama senilai Rp1.000, otomatis masuk setelah email berhasil diverifikasi. Hanya satu kali per akun.</small></div></div><div class="reward-row"><div><strong>Cashback 3%</strong><small>Poin masuk setelah pembayaran dan transaksi dikonfirmasi selesai oleh admin.</small></div></div><div class="reward-row"><div><strong>1 poin = Rp10</strong><small>Setiap poin dapat mengurangi harga pembelian akun sebesar Rp10.</small></div></div><div class="reward-row"><div><strong>Maksimal diskon 10%</strong><small>Poin hanya dapat dipakai untuk pembelian akun XERAVION, maksimal 10% dari harga akun.</small></div></div><div class="reward-row"><div><strong>Masa berlaku 12 bulan</strong><small>Poin yang paling dekat kedaluwarsa akan digunakan lebih dahulu. Tidak dapat diuangkan atau ditransfer.</small></div></div></div></div>
+    <div class="member-rewards"><h4>Cara kerja Credit Points</h4><div class="reward-list"><div class="reward-row"><div><strong>Welcome Bonus +100 poin</strong><small>Bonus pendaftaran pertama senilai Rp1.000, otomatis masuk setelah email berhasil diverifikasi. Hanya satu kali per akun.</small></div></div><div class="reward-row"><div><strong>Cashback 3%</strong><small>Cashback 3% dari jumlah pembayaran tunai setelah diskon poin, masuk setelah transaksi selesai dikonfirmasi admin.</small></div></div><div class="reward-row"><div><strong>1 poin = Rp10</strong><small>Setiap poin dapat mengurangi harga pembelian akun sebesar Rp10.</small></div></div><div class="reward-row"><div><strong>Maksimal diskon 10%</strong><small>Poin hanya dapat dipakai untuk pembelian akun XERAVION, maksimal 10% dari harga akun.</small></div></div><div class="reward-row"><div><strong>Masa berlaku 12 bulan</strong><small>Poin yang paling dekat kedaluwarsa akan digunakan lebih dahulu. Tidak dapat diuangkan atau ditransfer.</small></div></div></div></div>
     <div class="member-history"><h4>Riwayat poin</h4><div id="memberHistoryList"><p class="hint">Memuat riwayat…</p></div></div>
     <div class="member-history"><h4>Riwayat pesanan</h4><div id="memberOrderHistory"><p class="hint">Memuat pesanan…</p></div></div>
     <div class="modalactions"><button class="btn" onclick="memberSignOut()">Keluar</button><button class="btn gold" onclick="refreshMemberPanel()">Perbarui</button></div>

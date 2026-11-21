@@ -143,19 +143,19 @@ export async function onRequestGet({ request, env }) {
     console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: false });
     const zone = payload.data?.viewer?.zones?.[0];
     if (!zone) return json({ error: "Zone XERAVION tidak ditemukan. Periksa CF_ZONE_ID." }, 502);
-    // Bot Score is optional and may be unavailable on some Cloudflare plans.
-    // Keep this request isolated so bot analytics can never break core traffic stats.
-    let botTraffic = { available: false, reason: "Cloudflare belum menyediakan Bot Score untuk zone ini." };
-    const botQuery = `query XERAVIONBotTraffic($zoneTag: string, $timeStart: Time, $timeEnd: Time) {
+    // Estimate bot traffic from grouped User-Agent values.
+    // This works without Bot Management, but is heuristic and can be spoofed.
+    let botTraffic = { available: false, reason: "Data User-Agent belum tersedia dari Cloudflare." };
+    const botQuery = `query XERAVIONUserAgentTraffic($zoneTag: string, $timeStart: Time, $timeEnd: Time) {
       viewer {
         zones(filter: { zoneTag: $zoneTag }) {
-          botGroups: httpRequestsAdaptiveGroups(
-            limit: 100
+          userAgents: httpRequestsAdaptiveGroups(
+            limit: 5000
             filter: { datetime_geq: $timeStart, datetime_lt: $timeEnd, requestSource: "eyeball" }
             orderBy: [count_DESC]
           ) {
             count
-            dimensions { botScore }
+            dimensions { userAgent }
           }
         }
       }
@@ -171,27 +171,26 @@ export async function onRequestGet({ request, env }) {
       });
       const botPayload = await botResponse.json();
       if (botResponse.ok && !botPayload.errors?.length) {
-        const groups = botPayload.data?.viewer?.zones?.[0]?.botGroups || [];
+        const groups = botPayload.data?.viewer?.zones?.[0]?.userAgents || [];
+        const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|discordbot|twitterbot|linkedinbot|pinterest|ahrefs|semrush|mj12|dotbot|petalbot|bytespider|gptbot|chatgpt-user|claudebot|anthropic-ai|google-extended|applebot|yandex|baiduspider|duckduckbot|uptimerobot|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl\/|wget\/|python-requests|httpclient|go-http-client|java\/|okhttp|libwww-perl/i;
         const totals = groups.reduce((acc, row) => {
-          const score = Number(row.dimensions?.botScore);
+          const ua = String(row.dimensions?.userAgent || "").trim();
           const requests = Number(row.count || 0);
-          if (Number.isFinite(score) && score >= 1 && score < 30) acc.bots += requests;
-          else if (Number.isFinite(score) && score >= 30 && score <= 99) acc.humans += requests;
-          else acc.unclassified += requests;
+          if (!ua) acc.unclassified += requests;
+          else if (botPattern.test(ua)) acc.bots += requests;
+          else acc.humans += requests;
           return acc;
         }, { humans: 0, bots: 0, unclassified: 0 });
-        botTraffic = { available: groups.length > 0, ...totals };
-        if (!groups.length) botTraffic.reason = "Tidak ada data Bot Score. Fitur ini mungkin tidak tersedia pada paket atau konfigurasi Cloudflare zone.";
+        botTraffic = { available: groups.length > 0, ...totals, method: "user_agent_estimate" };
+        if (!groups.length) botTraffic.reason = "Cloudflare belum mengembalikan data User-Agent untuk periode ini.";
       } else {
         const detail = (botPayload.errors || []).map(item => item.message || "GraphQL error").join(" | ");
-        console.warn("[xeravion-analytics] Bot Score unavailable", detail || botResponse.status);
-        botTraffic.reason = detail
-          ? "Cloudflare menolak kueri Bot Score: " + detail
-          : "Bot Score tidak tersedia pada paket atau konfigurasi Cloudflare.";
+        console.warn("[xeravion-analytics] User-Agent analytics unavailable", detail || botResponse.status);
+        botTraffic.reason = detail ? "Data User-Agent tidak tersedia: " + detail : "Data User-Agent tidak tersedia dari Cloudflare.";
       }
     } catch (botError) {
-      console.warn("[xeravion-analytics] Bot Score query failed", botError?.message || String(botError));
-      botTraffic.reason = "Gagal mengambil Bot Score: " + (botError?.message || String(botError));
+      console.warn("[xeravion-analytics] User-Agent query failed", botError?.message || String(botError));
+      botTraffic.reason = "Gagal mengambil data User-Agent: " + (botError?.message || String(botError));
     }
 
     const daily = (zone.daily || []).map(row => ({

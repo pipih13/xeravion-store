@@ -143,6 +143,57 @@ export async function onRequestGet({ request, env }) {
     console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: false });
     const zone = payload.data?.viewer?.zones?.[0];
     if (!zone) return json({ error: "Zone XERAVION tidak ditemukan. Periksa CF_ZONE_ID." }, 502);
+    // Bot Score is optional and may be unavailable on some Cloudflare plans.
+    // Keep this request isolated so bot analytics can never break core traffic stats.
+    let botTraffic = { available: false, reason: "Cloudflare belum menyediakan Bot Score untuk zone ini." };
+    const botQuery = `query XERAVIONBotTraffic($zoneTag: string, $timeStart: Time, $timeEnd: Time) {
+      viewer {
+        zones(filter: { zoneTag: $zoneTag }) {
+          botGroups: httpRequestsAdaptiveGroups(
+            limit: 100
+            filter: { datetime_geq: $timeStart, datetime_lt: $timeEnd, requestSource: "eyeball" }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { botScore }
+          }
+        }
+      }
+    }`;
+    try {
+      const botResponse = await fetch("https://api.cloudflare.com/client/v4/graphql", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + env.CF_ANALYTICS_API_TOKEN,
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({ query: botQuery, variables })
+      });
+      const botPayload = await botResponse.json();
+      if (botResponse.ok && !botPayload.errors?.length) {
+        const groups = botPayload.data?.viewer?.zones?.[0]?.botGroups || [];
+        const totals = groups.reduce((acc, row) => {
+          const score = Number(row.dimensions?.botScore);
+          const requests = Number(row.count || 0);
+          if (Number.isFinite(score) && score >= 1 && score < 30) acc.bots += requests;
+          else if (Number.isFinite(score) && score >= 30 && score <= 99) acc.humans += requests;
+          else acc.unclassified += requests;
+          return acc;
+        }, { humans: 0, bots: 0, unclassified: 0 });
+        botTraffic = { available: groups.length > 0, ...totals };
+        if (!groups.length) botTraffic.reason = "Tidak ada data Bot Score. Fitur ini mungkin tidak tersedia pada paket atau konfigurasi Cloudflare zone.";
+      } else {
+        const detail = (botPayload.errors || []).map(item => item.message || "GraphQL error").join(" | ");
+        console.warn("[xeravion-analytics] Bot Score unavailable", detail || botResponse.status);
+        botTraffic.reason = detail
+          ? "Cloudflare menolak kueri Bot Score: " + detail
+          : "Bot Score tidak tersedia pada paket atau konfigurasi Cloudflare.";
+      }
+    } catch (botError) {
+      console.warn("[xeravion-analytics] Bot Score query failed", botError?.message || String(botError));
+      botTraffic.reason = "Gagal mengambil Bot Score: " + (botError?.message || String(botError));
+    }
+
     const daily = (zone.daily || []).map(row => ({
       date: row.dimensions?.date,
       requests: Number(row.sum?.requests || 0),
@@ -165,7 +216,8 @@ export async function onRequestGet({ request, env }) {
         uniqueVisitors: Number(zone.total?.[0]?.uniq?.uniques || 0)
       },
       daily,
-      countries
+      countries,
+      botTraffic
     });
   } catch (error) {
     console.error("XERAVION admin analytics failure:", error);

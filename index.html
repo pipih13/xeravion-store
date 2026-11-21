@@ -2443,7 +2443,12 @@ async function loadXeravionAnalytics(){
   const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
   if(sessionError||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
   const response=await fetch('/api/admin-analytics?days='+days,{headers:{Authorization:'Bearer '+session.access_token},cache:'no-store'});
-  const data=await response.json();
+  const responseText=await response.text();
+  let data;
+  try{data=JSON.parse(responseText)}catch(parseError){
+   const contentType=response.headers.get('content-type')||'tidak diketahui';
+   throw new Error('Endpoint analytics tidak mengirim JSON (HTTP '+response.status+', '+contentType+'). Server mengembalikan halaman HTML. Pastikan Cloudflare Pages Functions untuk /api/admin-analytics sudah ikut ter-deploy. Jika website memakai Cloudflare Worker biasa, route Pages Functions ini tidak otomatis aktif.');
+  }
   if(!response.ok){throw new Error(data.error||'Gagal mengambil data Cloudflare.')}
   const totals=data.totals||{};
   document.getElementById('xerTrafficPageViews').textContent=formatTrafficNumber(totals.pageViews);
@@ -2474,7 +2479,9 @@ async function loadXeravionAnalytics(){
   status.textContent='Data Cloudflare berhasil dimuat · '+data.startDate+' sampai '+data.endDate+'. Pengunjung unik per negara merupakan akumulasi metrik harian dan bukan deduplikasi lintas hari.';
  }catch(error){
   status.textContent=error.message||'Tidak dapat memuat statistik.';
-  chart.innerHTML='<div class="hint">Statistik belum tersedia. Periksa konfigurasi Cloudflare Pages.</div>';
+  chart.innerHTML='<div class="hint">'+esc(error.message||'Statistik belum tersedia.')+'</div>';
+  const countryBox=document.getElementById('xerTrafficCountries');
+  if(countryBox)countryBox.innerHTML='<div class="hint">'+esc(error.message||'Data negara belum tersedia.')+'</div>';
  }
 }
 async function populateOrderProducts(){

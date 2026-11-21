@@ -2459,16 +2459,16 @@ async function loadXeravionAnalytics(){
   const countryTotals=new Map();
   countryRows.forEach(row=>{
    const key=String(row.country||'Unknown');
-   const prev=countryTotals.get(key)||{country:key,requests:0,pageViews:0,uniqueVisitors:0};
-   prev.requests+=Number(row.requests||0);prev.pageViews+=Number(row.pageViews||0);prev.uniqueVisitors+=Number(row.uniqueVisitors||0);
+   const prev=countryTotals.get(key)||{country:key,requests:0,pageViews:0,visits:0};
+   prev.requests+=Number(row.requests||0);prev.pageViews+=Number(row.pageViews||0);prev.visits+=Number(row.visits||0);
    countryTotals.set(key,prev);
   });
-  const countries=[...countryTotals.values()].sort((a,b)=>b.uniqueVisitors-a.uniqueVisitors);
-  const countryMax=Math.max(1,...countries.map(x=>x.uniqueVisitors));
+  const countries=[...countryTotals.values()].sort((a,b)=>b.visits-a.visits);
+  const countryMax=Math.max(1,...countries.map(x=>x.visits));
   const countryBox=document.getElementById('xerTrafficCountries');
   if(countryBox)countryBox.innerHTML=countries.length?countries.map((x,index)=>{
-   const width=Math.max(x.uniqueVisitors?2:0,x.uniqueVisitors/countryMax*100);
-   return '<div class="xer-country-row"><div class="xer-country-rank">'+(index+1)+'</div><div class="xer-country-main"><div class="xer-country-name">'+esc(x.country)+'</div><div class="xer-country-track"><i style="width:'+width+'%"></i></div></div><div class="xer-country-count"><strong>'+formatTrafficNumber(x.uniqueVisitors)+'</strong><small>unik harian*</small></div></div>';
+   const width=Math.max(x.visits?2:0,x.visits/countryMax*100);
+   return '<div class="xer-country-row"><div class="xer-country-rank">'+(index+1)+'</div><div class="xer-country-main"><div class="xer-country-name">'+esc(x.country)+'</div><div class="xer-country-track"><i style="width:'+width+'%"></i></div></div><div class="xer-country-count"><strong>'+formatTrafficNumber(x.visits)+'</strong><small>kunjungan</small></div></div>';
   }).join(''):'<div class="hint">Belum ada data negara pada periode ini.</div>';
   const max=Math.max(1,...rows.map(x=>Number(x.pageViews||0)));
   chart.innerHTML=rows.length?rows.map(row=>{

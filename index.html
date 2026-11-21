@@ -1342,7 +1342,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    </div>
    <div id="xerTrafficCountries" class="xer-country-list"><div class="hint">Memuat data negara…</div></div>
    <button id="xerTrafficCountryToggle" class="xer-country-toggle" type="button" hidden>Tampilkan semua negara</button>
-   <p class="xer-country-footnote">Kunjungan bukan jumlah orang unik. Pemisahan bot dan manusia belum tersedia pada metrik yang sedang digunakan.</p>
+   <p class="xer-country-footnote">Kunjungan bukan jumlah orang unik. Klasifikasi bot/manusia merupakan estimasi dari User-Agent, bukan deteksi identitas pengunjung.</p>
   </div>
   <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
   <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
@@ -2520,7 +2520,7 @@ async function loadXeravionAnalytics(){
    if(botHumans)botHumans.textContent=formatTrafficNumber(bot.humans);
    if(botBots)botBots.textContent=formatTrafficNumber(bot.bots);
    if(botUnknown)botUnknown.textContent=formatTrafficNumber(bot.unclassified);
-   if(botNote)botNote.textContent='Berdasarkan Bot Score Cloudflare: skor 30–99 dihitung sebagai manusia, skor 1–29 atau bot terverifikasi dihitung sebagai bot. Trafik tanpa skor masuk kategori belum terklasifikasi. Ini perkiraan, bukan identifikasi sempurna.';
+   if(botNote)botNote.textContent='Estimasi berdasarkan User-Agent yang dikenal sebagai crawler, bot, atau alat otomatis. Bot dapat menyamar sebagai browser, sehingga sebagian trafik mungkin salah klasifikasi.';
   }else{
    [botHumans,botBots,botUnknown].forEach(el=>{if(el)el.textContent='—'});
    if(botNote)botNote.textContent=bot.reason||'Cloudflare belum menyediakan data untuk pemisahan bot dan manusia. Statistik utama tetap tersedia.';

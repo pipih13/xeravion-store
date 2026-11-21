@@ -88,7 +88,7 @@ export async function onRequestGet({ request, env }) {
           ) {
             dimensions { clientCountryName }
             count
-            sum { requests visits }
+            sum { visits }
           }
         }
       }

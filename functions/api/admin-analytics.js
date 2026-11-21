@@ -81,7 +81,7 @@ export async function onRequestGet({ request, env }) {
           countries: httpRequestsAdaptiveGroups(
             limit: 1000
             filter: { datetime_geq: $timeStart, datetime_lt: $timeEnd, requestSource: "eyeball" }
-            orderBy: [sum_requests_DESC]
+            orderBy: [count_DESC]
           ) {
             dimensions { clientCountryName }
             count
@@ -137,7 +137,8 @@ export async function onRequestGet({ request, env }) {
       country: row.dimensions?.clientCountryName || "Unknown",
       requests: Number(row.sum?.requests || 0),
       pageViews: 0,
-      uniqueVisitors: Number(row.sum?.visits || row.count || 0)
+      visits: Number(row.sum?.visits || 0),
+      requests: Number(row.count || 0)
     })).sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
     return json({
       periodDays: days,

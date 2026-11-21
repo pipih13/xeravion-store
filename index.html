@@ -1212,17 +1212,22 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 <style id="xeravion-country-analytics-style">
 #adminTab-analytics .xer-country-panel{margin-top:24px;padding:18px;border:1px solid #51432b;border-radius:15px;background:linear-gradient(145deg,#17140f,#100f0c)}
 #adminTab-analytics .xer-country-panel h4{margin:0 0 7px;font-size:17px;color:#f4ead7}
-#adminTab-analytics .xer-country-list{margin-top:14px}
-#adminTab-analytics .xer-country-row{display:grid;grid-template-columns:25px minmax(0,1fr) minmax(82px,auto);align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #342b1d}
+#adminTab-analytics .xer-country-tools{display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap}
+#adminTab-analytics .xer-country-tools input{flex:1 1 150px;min-width:0;min-height:38px;padding:9px 11px;border:1px solid #51432b;border-radius:9px;background:#100f0c;color:#f0e5d0;font-size:12px}
+#adminTab-analytics .xer-country-summary{font-size:10px;color:#b7aa94}
+#adminTab-analytics .xer-country-list{margin-top:8px}
+#adminTab-analytics .xer-country-row{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(90px,auto);align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid #342b1d}
 #adminTab-analytics .xer-country-rank{color:#a99d89;font-size:10px;text-align:center}
 #adminTab-analytics .xer-country-main{min-width:0}
-#adminTab-analytics .xer-country-name{font-size:12px;color:#f0e5d0;margin-bottom:7px;overflow-wrap:anywhere}
-#adminTab-analytics .xer-country-track{height:7px;border-radius:10px;background:#2b261e;overflow:hidden}
+#adminTab-analytics .xer-country-name{font-size:12px;color:#f0e5d0;margin-bottom:6px;overflow-wrap:anywhere}
+#adminTab-analytics .xer-country-track{height:6px;border-radius:10px;background:#2b261e;overflow:hidden}
 #adminTab-analytics .xer-country-track i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#f0d69b,#a8792b)}
 #adminTab-analytics .xer-country-count{text-align:right}
 #adminTab-analytics .xer-country-count strong{display:block;color:#e8cc91;font-size:12px}
-#adminTab-analytics .xer-country-count small{display:block;color:#938875;font-size:9px;margin-top:3px}
-@media(max-width:520px){#adminTab-analytics .xer-country-panel{padding:14px}#adminTab-analytics .xer-country-row{grid-template-columns:20px minmax(0,1fr) 75px;gap:7px}}
+#adminTab-analytics .xer-country-count small{display:block;color:#938875;font-size:9px;margin-top:2px}
+#adminTab-analytics .xer-country-toggle{display:block;width:100%;margin-top:10px;padding:9px;border:1px solid #65502d;border-radius:9px;background:#1b1710;color:#e8cc91;font-size:12px;font-weight:600}
+#adminTab-analytics .xer-country-footnote{margin:10px 0 0;font-size:10px;line-height:1.5;color:#938875}
+@media(max-width:520px){#adminTab-analytics .xer-country-panel{padding:14px}#adminTab-analytics .xer-country-row{grid-template-columns:18px minmax(0,1fr) 78px;gap:7px}}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1314,7 +1319,13 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <div class="xer-country-panel">
    <h4>Pengunjung berdasarkan negara</h4>
    <p class="hint">Negara diperkirakan oleh Cloudflare berdasarkan lokasi jaringan pengunjung. Data berupa agregat, bukan identitas pribadi.</p>
+   <div class="xer-country-tools">
+    <input id="xerTrafficCountryFilter" type="search" placeholder="Cari negara…" aria-label="Cari negara" autocomplete="off">
+    <span id="xerTrafficCountrySummary" class="xer-country-summary"></span>
+   </div>
    <div id="xerTrafficCountries" class="xer-country-list"><div class="hint">Memuat data negara…</div></div>
+   <button id="xerTrafficCountryToggle" class="xer-country-toggle" type="button" hidden>Tampilkan semua negara</button>
+   <p class="xer-country-footnote">Kunjungan bukan jumlah orang unik. Pemisahan bot dan manusia belum tersedia pada metrik yang sedang digunakan.</p>
   </div>
   <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
   <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
@@ -2431,6 +2442,39 @@ async function compareDwigitalMelo(){
 function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price,variantId:p.variant_id};updateDwigitalMarkupPreview();if(isDwigitalNicknameEligible(p)){const variant=document.getElementById('dwigitalCheckVariant');if(variant){variant.value=String(p.variant_id);onDwigitalNicknameVariantChange();}}const test=document.getElementById('dwigitalNicknameTest');if(test)test.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function updateDwigitalMarkupPreview(){const out=document.getElementById('dwigitalMarkupPreview');if(!out)return;if(!dwigitalSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}const margin=Math.max(0,Number(document.getElementById('dwigitalMarkup')?.value||0));out.textContent=dwigitalSelectedProduct.name+' · Modal '+formatDwigitalMoney(dwigitalSelectedProduct.price)+' + Margin '+formatDwigitalMoney(margin)+' = Harga simulasi '+formatDwigitalMoney(dwigitalSelectedProduct.price+margin)+'.';}
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
+let xerTrafficCountryData=[];
+let xerTrafficCountryExpanded=false;
+function xerTrafficCountryName(code){
+ const value=String(code||'').trim().toUpperCase();
+ if(!/^[A-Z]{2}$/.test(value))return value||'Tidak diketahui';
+ try{return new Intl.DisplayNames(['id'],{type:'region'}).of(value)||value}catch(_){return value}
+}
+function renderXerTrafficCountries(rows){
+ xerTrafficCountryData=Array.isArray(rows)?rows:[];
+ const box=document.getElementById('xerTrafficCountries');
+ const filter=document.getElementById('xerTrafficCountryFilter');
+ const toggle=document.getElementById('xerTrafficCountryToggle');
+ const summary=document.getElementById('xerTrafficCountrySummary');
+ if(!box)return;
+ const term=String(filter?.value||'').trim().toLocaleLowerCase('id');
+ const totalVisits=xerTrafficCountryData.reduce((sum,row)=>sum+Number(row.visits||0),0);
+ const filtered=xerTrafficCountryData.filter(row=>xerTrafficCountryName(row.country).toLocaleLowerCase('id').includes(term)||String(row.country||'').toLowerCase().includes(term));
+ const visible=term||xerTrafficCountryExpanded?filtered:filtered.slice(0,5);
+ const max=Math.max(1,...xerTrafficCountryData.map(row=>Number(row.visits||0)));
+ box.innerHTML=visible.length?visible.map((row,index)=>{
+  const visits=Number(row.visits||0),pct=totalVisits?visits/totalVisits*100:0;
+  const width=Math.max(visits?2:0,visits/max*100);
+  return '<div class="xer-country-row"><div class="xer-country-rank">'+(index+1)+'</div><div class="xer-country-main"><div class="xer-country-name">'+esc(xerTrafficCountryName(row.country))+'</div><div class="xer-country-track"><i style="width:'+width+'%"></i></div></div><div class="xer-country-count"><strong>'+formatTrafficNumber(visits)+'</strong><small>'+pct.toLocaleString('id-ID',{maximumFractionDigits:1})+'% kunjungan</small></div></div>';
+ }).join(''):'<div class="hint">Negara tidak ditemukan.</div>';
+ if(summary)summary.textContent=xerTrafficCountryData.length?formatTrafficNumber(totalVisits)+' total kunjungan · '+filtered.length+' negara':'Belum ada data';
+ if(toggle){
+  toggle.hidden=!!term||filtered.length<=5;
+  toggle.textContent=xerTrafficCountryExpanded?'Tampilkan 5 teratas':'Tampilkan semua ('+filtered.length+')';
+ }
+}
+
+document.addEventListener('input',event=>{if(event.target?.id==='xerTrafficCountryFilter')renderXerTrafficCountries(xerTrafficCountryData)});
+document.addEventListener('click',event=>{if(event.target?.id==='xerTrafficCountryToggle'){xerTrafficCountryExpanded=!xerTrafficCountryExpanded;renderXerTrafficCountries(xerTrafficCountryData)}});
 async function loadXeravionAnalytics(){
  const status=document.getElementById('xerTrafficStatus'),chart=document.getElementById('xerTrafficChart');
  if(!status||!chart)return;
@@ -2464,12 +2508,7 @@ async function loadXeravionAnalytics(){
    countryTotals.set(key,prev);
   });
   const countries=[...countryTotals.values()].sort((a,b)=>b.visits-a.visits);
-  const countryMax=Math.max(1,...countries.map(x=>x.visits));
-  const countryBox=document.getElementById('xerTrafficCountries');
-  if(countryBox)countryBox.innerHTML=countries.length?countries.map((x,index)=>{
-   const width=Math.max(x.visits?2:0,x.visits/countryMax*100);
-   return '<div class="xer-country-row"><div class="xer-country-rank">'+(index+1)+'</div><div class="xer-country-main"><div class="xer-country-name">'+esc(x.country)+'</div><div class="xer-country-track"><i style="width:'+width+'%"></i></div></div><div class="xer-country-count"><strong>'+formatTrafficNumber(x.visits)+'</strong><small>kunjungan</small></div></div>';
-  }).join(''):'<div class="hint">Belum ada data negara pada periode ini.</div>';
+  renderXerTrafficCountries(countries);
   const max=Math.max(1,...rows.map(x=>Number(x.pageViews||0)));
   chart.innerHTML=rows.length?rows.map(row=>{
    const label=new Date(row.date+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
@@ -2482,6 +2521,8 @@ async function loadXeravionAnalytics(){
   chart.innerHTML='<div class="hint">'+esc(error.message||'Statistik belum tersedia.')+'</div>';
   const countryBox=document.getElementById('xerTrafficCountries');
   if(countryBox)countryBox.innerHTML='<div class="hint">'+esc(error.message||'Data negara belum tersedia.')+'</div>';
+  const countryToggle=document.getElementById('xerTrafficCountryToggle');if(countryToggle)countryToggle.hidden=true;
+  const countrySummary=document.getElementById('xerTrafficCountrySummary');if(countrySummary)countrySummary.textContent='';
  }
 }
 async function populateOrderProducts(){

@@ -143,54 +143,42 @@ export async function onRequestGet({ request, env }) {
     console.log("[xeravion-analytics] Cloudflare GraphQL payload received", { hasData: !!payload.data, hasErrors: false });
     const zone = payload.data?.viewer?.zones?.[0];
     if (!zone) return json({ error: "Zone XERAVION tidak ditemukan. Periksa CF_ZONE_ID." }, 502);
-    // Estimate bot traffic from grouped User-Agent values.
-    // This works without Bot Management, but is heuristic and can be spoofed.
-    let botTraffic = { available: false, reason: "Data User-Agent belum tersedia dari Cloudflare." };
-    const botQuery = `query XERAVIONUserAgentTraffic($zoneTag: string, $timeStart: Time, $timeEnd: Time) {
-      viewer {
-        zones(filter: { zoneTag: $zoneTag }) {
-          userAgents: httpRequestsAdaptiveGroups(
-            limit: 5000
-            filter: { datetime_geq: $timeStart, datetime_lt: $timeEnd, requestSource: "eyeball" }
-            orderBy: [count_DESC]
-          ) {
-            count
-            dimensions { clientRequestHTTPUserAgent }
-          }
+    // Bot/human estimates come from first-party Pages middleware events stored in D1.
+    // This is based on User-Agent heuristics and only counts HTML page navigations.
+    let botTraffic = {
+      available: false,
+      humans: 0,
+      bots: 0,
+      unclassified: 0,
+      reason: "D1 analytics belum dikonfigurasi atau belum menerima kunjungan."
+    };
+    if (env.ANALYTICS_DB) {
+      try {
+        const rows = await env.ANALYTICS_DB.prepare(
+          `SELECT traffic_class, COALESCE(SUM(page_views), 0) AS page_views
+           FROM traffic_daily
+           WHERE day >= ? AND day <= ?
+           GROUP BY traffic_class`
+        ).bind(startDate, endDate).all();
+        const counts = { humans: 0, bots: 0, unclassified: 0 };
+        for (const row of (rows.results || [])) {
+          if (row.traffic_class === "human") counts.humans += Number(row.page_views || 0);
+          else if (row.traffic_class === "bot") counts.bots += Number(row.page_views || 0);
+          else counts.unclassified += Number(row.page_views || 0);
         }
+        const totalClassified = counts.humans + counts.bots + counts.unclassified;
+        botTraffic = {
+          available: true,
+          ...counts,
+          method: "first_party_user_agent_estimate",
+          reason: totalClassified
+            ? "Estimasi berdasarkan User-Agent pada kunjungan halaman HTML sejak fitur diaktifkan. Bot dapat menyamar sebagai browser."
+            : "Belum ada kunjungan halaman yang tercatat sejak analitik D1 diaktifkan."
+        };
+      } catch (d1Error) {
+        console.error("[xeravion-analytics] D1 traffic query failed", d1Error?.message || String(d1Error));
+        botTraffic.reason = "Tabel D1 belum siap. Jalankan SQL setup yang disediakan di repository.";
       }
-    }`;
-    try {
-      const botResponse = await fetch("https://api.cloudflare.com/client/v4/graphql", {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + env.CF_ANALYTICS_API_TOKEN,
-          "content-type": "application/json"
-        },
-        body: JSON.stringify({ query: botQuery, variables })
-      });
-      const botPayload = await botResponse.json();
-      if (botResponse.ok && !botPayload.errors?.length) {
-        const groups = botPayload.data?.viewer?.zones?.[0]?.userAgents || [];
-        const botPattern = /bot|crawler|spider|slurp|bingpreview|facebookexternalhit|whatsapp|telegrambot|discordbot|twitterbot|linkedinbot|pinterest|ahrefs|semrush|mj12|dotbot|petalbot|bytespider|gptbot|chatgpt-user|claudebot|anthropic-ai|google-extended|applebot|yandex|baiduspider|duckduckbot|uptimerobot|headlesschrome|phantomjs|selenium|puppeteer|playwright|curl\/|wget\/|python-requests|httpclient|go-http-client|java\/|okhttp|libwww-perl/i;
-        const totals = groups.reduce((acc, row) => {
-          const ua = String(row.dimensions?.clientRequestHTTPUserAgent || "").trim();
-          const requests = Number(row.count || 0);
-          if (!ua) acc.unclassified += requests;
-          else if (botPattern.test(ua)) acc.bots += requests;
-          else acc.humans += requests;
-          return acc;
-        }, { humans: 0, bots: 0, unclassified: 0 });
-        botTraffic = { available: groups.length > 0, ...totals, method: "user_agent_estimate" };
-        if (!groups.length) botTraffic.reason = "Cloudflare belum mengembalikan data User-Agent untuk periode ini.";
-      } else {
-        const detail = (botPayload.errors || []).map(item => item.message || "GraphQL error").join(" | ");
-        console.warn("[xeravion-analytics] User-Agent analytics unavailable", detail || botResponse.status);
-        botTraffic.reason = detail ? "Data User-Agent tidak tersedia: " + detail : "Data User-Agent tidak tersedia dari Cloudflare.";
-      }
-    } catch (botError) {
-      console.warn("[xeravion-analytics] User-Agent query failed", botError?.message || String(botError));
-      botTraffic.reason = "Gagal mengambil data User-Agent: " + (botError?.message || String(botError));
     }
 
     const daily = (zone.daily || []).map(row => ({

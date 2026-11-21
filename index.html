@@ -1179,6 +1179,35 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  }
 }
 </style>
+
+<style id="xeravion-credit-monitor-style">
+#adminTab-credit-monitor .xer-credit-monitor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:16px 0}
+#adminTab-credit-monitor .xer-credit-monitor-grid .stat{min-width:0;margin:0;padding:17px;border:1px solid #51432b;border-radius:13px;background:linear-gradient(145deg,#1b1a24,#12100d)}
+#adminTab-credit-monitor .xer-credit-monitor-grid .stat b{display:block;color:#f0d69b;font-size:clamp(21px,3vw,29px);overflow-wrap:anywhere}
+#adminTab-credit-monitor .xer-credit-monitor-grid .stat span,#adminTab-credit-monitor .xer-credit-monitor-grid .stat small{display:block;color:#c9bfad;font-size:11px;line-height:1.5;margin-top:6px}
+#adminTab-credit-monitor .xer-credit-monitor-grid .stat small{color:#938875;font-size:10px}
+#adminTab-credit-monitor .xer-credit-liability{padding:18px;border:1px solid #806638;border-radius:14px;background:linear-gradient(120deg,#29200f,#15121a);margin:12px 0}
+#adminTab-credit-monitor .xer-credit-liability span,#adminTab-credit-monitor .xer-credit-liability strong,#adminTab-credit-monitor .xer-credit-liability small{display:block}
+#adminTab-credit-monitor .xer-credit-liability span{color:#c9bfad;font-size:11px}
+#adminTab-credit-monitor .xer-credit-liability strong{font-size:clamp(24px,4vw,34px);color:#f0d69b;margin:7px 0}
+#adminTab-credit-monitor .xer-credit-liability small{font-size:10px;line-height:1.6;color:#a99d89}
+#adminTab-credit-monitor .xer-credit-monthly{margin-top:22px}
+#adminTab-credit-monitor .xer-credit-monthly h4{font-size:14px}
+#adminTab-credit-monitor .xer-credit-month-legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;color:#bdb3a2;font-size:10px}
+#adminTab-credit-monitor .xer-credit-month-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+#adminTab-credit-monitor .xer-credit-month-legend .issued{background:#e0bd70}
+#adminTab-credit-monitor .xer-credit-month-legend .redeemed{background:#6e9bcf}
+#adminTab-credit-monitor .xer-credit-month-row{display:grid;grid-template-columns:66px minmax(80px,1fr) minmax(125px,auto);align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #342b1d}
+#adminTab-credit-monitor .xer-credit-month-label{font-size:10px;color:#c9bfad}
+#adminTab-credit-monitor .xer-credit-bars{display:grid;gap:4px}
+#adminTab-credit-monitor .xer-credit-bar{height:8px;min-width:0;border-radius:5px}
+#adminTab-credit-monitor .xer-credit-bar.issued{background:linear-gradient(90deg,#f0d69b,#a8792b)}
+#adminTab-credit-monitor .xer-credit-bar.redeemed{background:linear-gradient(90deg,#8bb9e9,#426b9a)}
+#adminTab-credit-monitor .xer-credit-month-values{display:flex;justify-content:flex-end;gap:8px;font-size:9px;white-space:nowrap}
+#adminTab-credit-monitor .xer-credit-month-values span:first-child{color:#e8cc91}
+#adminTab-credit-monitor .xer-credit-month-values span:last-child{color:#9dc4ec}
+@media(max-width:520px){#adminTab-credit-monitor .xer-credit-monitor-grid{grid-template-columns:1fr}#adminTab-credit-monitor .xer-credit-month-row{grid-template-columns:48px minmax(45px,1fr);gap:7px}#adminTab-credit-monitor .xer-credit-month-values{grid-column:2;justify-content:flex-start}}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1249,6 +1278,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
  <button type="button" class="xer-admin-tab" data-tab="accounting" onclick="showAdminTab('accounting')">Pembukuan</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
+ <button type="button" class="xer-admin-tab" data-tab="credit-monitor" onclick="showAdminTab('credit-monitor')">Monitoring Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
  <button type="button" class="xer-admin-tab" data-tab="melo" onclick="showAdminTab('melo')">Melo H2H</button>
  <button type="button" class="xer-admin-tab" data-tab="dwigital" onclick="showAdminTab('dwigital')">Dwigital</button>
@@ -1402,6 +1432,22 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
  <div class="notice" style="margin-top:16px"><strong>Pembatalan pesanan</strong><div class="hint">Untuk mengembalikan Credit Points yang dipakai dan membalik cashback transaksi, buka tab Invoice lalu gunakan tombol Batalkan pada pesanan terkait. Sistem mencatat pengembalian dan pembatalan di riwayat member.</div></div>
  <p id="creditAdminMessage" class="hint" aria-live="polite"></p>
 </div></div>
+
+<div class="xer-admin-tab-panel" id="adminTab-credit-monitor">
+ <div class="panel xer-credit-monitor">
+  <div class="sectionhead"><div><h3 style="margin:0">Credit Points Monitoring</h3><div class="hint">Ringkasan distribusi, penggunaan, saldo aktif, dan estimasi kewajiban reward. Data hanya terlihat oleh admin.</div></div><button class="btn" id="creditMonitorRefresh" type="button" onclick="loadCreditProgramOverview()">↻ Perbarui</button></div>
+  <div class="notice">Monitoring ini bersifat informatif, bukan batas distribusi. Poin yang sah tetap dapat diberikan; sistem tidak akan menghentikan cashback atau bonus hanya karena angka total meningkat.</div>
+  <div class="xer-credit-monitor-grid">
+   <article class="stat"><b id="creditMonIssued">—</b><span>Total poin pernah diterbitkan</span><small>Akumulasi seluruh poin masuk</small></article>
+   <article class="stat"><b id="creditMonActive">—</b><span>Poin aktif tersedia</span><small>Saldo poin yang belum kedaluwarsa</small></article>
+   <article class="stat"><b id="creditMonRedeemed">—</b><span>Total poin ditukarkan</span><small>Akumulasi penggunaan poin</small></article>
+   <article class="stat"><b id="creditMonExpired">—</b><span>Poin kedaluwarsa tersisa</span><small>Porsi lot kedaluwarsa yang tidak terpakai</small></article>
+  </div>
+  <div class="xer-credit-liability"><span>Estimasi nilai kewajiban poin aktif</span><strong id="creditMonLiability">—</strong><small>Perhitungan: poin aktif × Rp10. Bukan saldo kas atau utang tunai yang harus dibayarkan.</small></div>
+  <div class="xer-credit-monthly"><h4>Distribusi & penukaran · 6 bulan terakhir</h4><div id="creditMonMonthly" class="hint">Memuat ringkasan bulanan…</div></div>
+  <p id="creditMonStatus" class="hint" role="status" aria-live="polite">Data belum dimuat.</p>
+ </div>
+</div>
 </section>
 <section class="how" id="how"><div class="eyebrow">SIMPLE & CLEAR ORDER FLOW</div><h2 style="margin:7px 0 17px">Cara order</h2><div class="stats order-steps" style="margin:0"><div class="stat"><b>01</b><span>Pilih game dan akun yang diminati</span></div><div class="stat"><b>02</b><span>Buka detail, periksa foto dan deskripsi</span></div><div class="stat"><b>03</b><span>Hubungi admin untuk cek stok dan konfirmasi</span></div><div class="stat"><b>04</b><span>Sepakati pembayaran dan proses serah terima</span></div></div><div class="trust-grid"><article class="trust-card"><span class="trust-icon">⌕</span><h3>Informasi transparan</h3><p>Baca deskripsi, harga, foto, kode listing, dan status stok sebelum menghubungi admin.</p></article><article class="trust-card"><span class="trust-icon">▣</span><h3>Komunikasi langsung</h3><p>Setiap pertanyaan dan konfirmasi transaksi dilakukan melalui WhatsApp resmi XERAVION.</p></article><article class="trust-card"><span class="trust-icon">◇</span><h3>Periksa sebelum deal</h3><p>Pastikan detail akun, metode pembayaran, dan proses pengalihan akses disepakati sebelum membayar.</p></article></div><p class="trade-note">Catatan: XERAVION adalah etalase dan penghubung pembeli dengan admin. Periksa ketentuan penerbit game terkait jual beli atau pengalihan akun. Jangan pernah membagikan OTP atau data pemulihan melalui halaman publik.</p></section>
 
@@ -1941,8 +1987,41 @@ async function connectXeravionMail(){
  }catch(e){console.error('XERAVION Mail connection:',e)}
 }
 let selectedCreditMember=null;
+
+function formatCreditMonitorNumber(value){return Number(value||0).toLocaleString('id-ID')}
+function formatCreditMonitorMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID')}
+async function loadCreditProgramOverview(){
+ const status=document.getElementById('creditMonStatus'),button=document.getElementById('creditMonitorRefresh');
+ if(!status)return;
+ if(!xeravionAdminVerified){status.textContent='Sesi admin tidak aktif. Silakan login kembali.';return;}
+ if(button){button.disabled=true;button.textContent='Memuat…'}
+ status.textContent='Mengambil ringkasan Credit Points…';
+ try{
+  const{data,error}=await supabaseClient.rpc('credit_admin_program_overview');
+  if(error)throw error;
+  if(!data)throw new Error('Server tidak mengembalikan data monitoring.');
+  document.getElementById('creditMonIssued').textContent=formatCreditMonitorNumber(data.issued_points);
+  document.getElementById('creditMonActive').textContent=formatCreditMonitorNumber(data.active_points);
+  document.getElementById('creditMonRedeemed').textContent=formatCreditMonitorNumber(data.redeemed_points);
+  document.getElementById('creditMonExpired').textContent=formatCreditMonitorNumber(data.expired_points);
+  document.getElementById('creditMonLiability').textContent=formatCreditMonitorMoney(data.liability_idr);
+  const monthly=Array.isArray(data.monthly)?data.monthly:[];
+  const max=Math.max(1,...monthly.flatMap(x=>[Number(x.issued||0),Number(x.redeemed||0)]));
+  const monthNames=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  document.getElementById('creditMonMonthly').innerHTML=monthly.length?'<div class="xer-credit-month-legend"><span><i class="issued"></i> Diterbitkan</span><span><i class="redeemed"></i> Ditukarkan</span></div><div class="xer-credit-month-list">'+monthly.map(x=>{
+   const parts=String(x.month||'').split('-'),label=monthNames[Number(parts[1])-1]+' '+parts[0];
+   const a=Number(x.issued||0),b=Number(x.redeemed||0);
+   return '<div class="xer-credit-month-row"><div class="xer-credit-month-label">'+esc(label)+'</div><div class="xer-credit-bars"><div class="xer-credit-bar issued" style="width:'+Math.max(a?2:0,a/max*100)+'%"></div><div class="xer-credit-bar redeemed" style="width:'+Math.max(b?2:0,b/max*100)+'%"></div></div><div class="xer-credit-month-values"><span>+'+formatCreditMonitorNumber(a)+'</span><span>−'+formatCreditMonitorNumber(b)+'</span></div></div>';
+  }).join('')+'</div>':'Belum ada aktivitas poin.';
+  status.textContent='Data diperbarui: '+new Date(data.generated_at||Date.now()).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'})+'.';
+ }catch(e){
+  status.textContent='Monitoring gagal dimuat: '+(e.message||String(e));
+  console.error('Credit points monitoring:',e);
+ }finally{if(button){button.disabled=false;button.textContent='↻ Perbarui'}}
+}
+
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','orders','accounting','credits','analytics','melo','dwigital','mail'];
+ const allowed=['overview','form','listings','item-listings','orders','accounting','credits','credit-monitor','analytics','melo','dwigital','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
@@ -1951,6 +2030,7 @@ function showAdminTab(tab){
  if(tab==='listings')renderAdmin();
  if(tab==='item-listings')renderItemGamingAdmin();
  if(tab==='form')populateOrderProducts();
+ if(tab==='credit-monitor')loadCreditProgramOverview();
  if(tab==='analytics')loadXeravionAnalytics();
  if(tab==='melo')testMeloConnection();
  if(tab==='dwigital')testDwigitalConnection();

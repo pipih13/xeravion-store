@@ -3301,3 +3301,17 @@ async function verifyPublicInvoiceCode(){
  }catch(e){msg.textContent='Verifikasi gagal: '+(e.message||e)}
 }
 </script>
+<style id="xeravion-compact-catalog-description">
+/* Kartu katalog hanya menampilkan ringkasan; deskripsi lengkap tetap ada di modal detail akun. */
+.product .desc{
+ display:-webkit-box!important;
+ -webkit-box-orient:vertical!important;
+ -webkit-line-clamp:2!important;
+ overflow:hidden!important;
+ min-height:0!important;
+ max-height:3.2em!important;
+ line-height:1.6!important;
+}
+/* Spesifikasi terstruktur hanya ditampilkan setelah buyer membuka detail akun. */
+.product .product-specs{display:none!important}
+</style>

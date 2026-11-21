@@ -221,6 +221,32 @@ body.xeravion-listing-page #productDetailModal .detail-actions .buy{order:1!impo
 .admin .sectionhead input{max-width:230px}
 @media(max-width:600px){.admin-game-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.admin-game-tab{justify-content:space-between;padding:10px}.admin-game-tab:first-child{grid-column:1/-1}.admin .sectionhead{align-items:stretch;flex-direction:column}.admin .sectionhead input{max-width:none}}
 </style>
+<style id="xeravion-admin-price-compact">
+/* Keep prices readable but compact inside account and gaming-item admin tables. */
+#adminTab-listings .adminlist .price,
+#adminTab-item-listings .adminlist .price{
+ display:inline-block;
+ font-size:14px!important;
+ line-height:1.25!important;
+ font-weight:800!important;
+ white-space:nowrap;
+}
+#adminTab-listings .adminlist .price-old,
+#adminTab-item-listings .adminlist .price-old{
+ display:block;
+ font-size:10px!important;
+ line-height:1.25!important;
+}
+#adminTab-listings .adminlist .discount-tag,
+#adminTab-item-listings .adminlist .discount-tag{
+ font-size:9px!important;
+ padding:2px 5px!important;
+}
+@media(max-width:760px){
+ #adminTab-listings .adminlist .price,
+ #adminTab-item-listings .adminlist .price{font-size:13px!important}
+}
+</style>
 <style id="xeravion-spacing-polish">
 /* XERAVION spacing and alignment polish — compact, balanced desktop and mobile */
 :root{--layout-gap:clamp(14px,2vw,22px)}

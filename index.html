@@ -1086,6 +1086,14 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 #adminTab-analytics .xer-traffic-stats>.stat span{
   display:block!important;color:#bdb3a2!important;font-size:12px!important;line-height:1.4!important;
 }
+#adminTab-analytics .xer-bot-panel{margin:0 0 24px;padding:15px;border:1px solid #51432b;border-radius:14px;background:linear-gradient(145deg,#17140f,#100f0c)}
+#adminTab-analytics .xer-bot-panel h4{margin:0 0 12px;color:#f4ead7;font-size:15px}
+#adminTab-analytics .xer-bot-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#adminTab-analytics .xer-bot-card{min-width:0;padding:12px 9px;border:1px solid #3c3529;border-radius:11px;background:#17151a}
+#adminTab-analytics .xer-bot-card b{display:block;color:#e8cc91;font-size:clamp(17px,4vw,23px);line-height:1.2;overflow-wrap:anywhere}
+#adminTab-analytics .xer-bot-card span{display:block;margin-top:5px;color:#bdb3a2;font-size:10px;line-height:1.3}
+#adminTab-analytics #xerTrafficBotNote{margin:10px 0 0;font-size:10px;line-height:1.5}
+@media(max-width:360px){#adminTab-analytics .xer-bot-cards{gap:5px}#adminTab-analytics .xer-bot-card{padding:10px 6px}#adminTab-analytics .xer-bot-card span{font-size:9px}}
 #adminTab-analytics .xer-traffic-chart-wrap{margin-top:24px!important}
 #adminTab-analytics .xer-traffic-chart-wrap h4{
   margin:0 0 18px!important;font-size:18px!important;color:#f4ead7!important;
@@ -1313,6 +1321,15 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <div class="stat"><b id="xerTrafficPageViews">—</b><span>Page views</span></div>
    <div class="stat"><b id="xerTrafficRequests">—</b><span>Total requests</span></div>
    <div class="stat"><b id="xerTrafficUnique">—</b><span>Pengunjung unik</span></div>
+  </div>
+  <div class="xer-bot-panel" id="xerTrafficBotPanel">
+   <h4>Perkiraan trafik manusia & bot</h4>
+   <div class="xer-bot-cards">
+    <div class="xer-bot-card"><b id="xerTrafficHumans">—</b><span>Manusia</span></div>
+    <div class="xer-bot-card"><b id="xerTrafficBots">—</b><span>Bot terdeteksi</span></div>
+    <div class="xer-bot-card"><b id="xerTrafficUnclassified">—</b><span>Belum terklasifikasi</span></div>
+   </div>
+   <p id="xerTrafficBotNote" class="hint">Memeriksa ketersediaan data Bot Score Cloudflare…</p>
   </div>
   <div class="xer-traffic-chart-wrap"><h4>Kunjungan per hari</h4><div id="xerTrafficChart" class="xer-traffic-chart"><div class="hint">Tekan Muat ulang untuk mengambil statistik.</div></div></div>
 
@@ -2494,6 +2511,20 @@ async function loadXeravionAnalytics(){
    throw new Error('Endpoint analytics tidak mengirim JSON (HTTP '+response.status+', '+contentType+'). Server mengembalikan halaman HTML. Pastikan Cloudflare Pages Functions untuk /api/admin-analytics sudah ikut ter-deploy. Jika website memakai Cloudflare Worker biasa, route Pages Functions ini tidak otomatis aktif.');
   }
   if(!response.ok){throw new Error(data.error||'Gagal mengambil data Cloudflare.')}
+  const bot=data.botTraffic||{};
+  const botNote=document.getElementById('xerTrafficBotNote');
+  const botHumans=document.getElementById('xerTrafficHumans');
+  const botBots=document.getElementById('xerTrafficBots');
+  const botUnknown=document.getElementById('xerTrafficUnclassified');
+  if(bot.available){
+   if(botHumans)botHumans.textContent=formatTrafficNumber(bot.humans);
+   if(botBots)botBots.textContent=formatTrafficNumber(bot.bots);
+   if(botUnknown)botUnknown.textContent=formatTrafficNumber(bot.unclassified);
+   if(botNote)botNote.textContent='Berdasarkan Bot Score Cloudflare: skor 30–99 dihitung sebagai manusia, skor 1–29 atau bot terverifikasi dihitung sebagai bot. Trafik tanpa skor masuk kategori belum terklasifikasi. Ini perkiraan, bukan identifikasi sempurna.';
+  }else{
+   [botHumans,botBots,botUnknown].forEach(el=>{if(el)el.textContent='—'});
+   if(botNote)botNote.textContent=bot.reason||'Cloudflare belum menyediakan data untuk pemisahan bot dan manusia. Statistik utama tetap tersedia.';
+  }
   const totals=data.totals||{};
   document.getElementById('xerTrafficPageViews').textContent=formatTrafficNumber(totals.pageViews);
   document.getElementById('xerTrafficRequests').textContent=formatTrafficNumber(totals.requests);
@@ -2519,6 +2550,8 @@ async function loadXeravionAnalytics(){
  }catch(error){
   status.textContent=error.message||'Tidak dapat memuat statistik.';
   chart.innerHTML='<div class="hint">'+esc(error.message||'Statistik belum tersedia.')+'</div>';
+  ['xerTrafficHumans','xerTrafficBots','xerTrafficUnclassified'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—'});
+  const botNote=document.getElementById('xerTrafficBotNote');if(botNote)botNote.textContent='Data pemisahan bot dan manusia gagal dimuat.';
   const countryBox=document.getElementById('xerTrafficCountries');
   if(countryBox)countryBox.innerHTML='<div class="hint">'+esc(error.message||'Data negara belum tersedia.')+'</div>';
   const countryToggle=document.getElementById('xerTrafficCountryToggle');if(countryToggle)countryToggle.hidden=true;

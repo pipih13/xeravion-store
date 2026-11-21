@@ -1208,7 +1208,22 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 #adminTab-credit-monitor .xer-credit-month-values span:last-child{color:#9dc4ec}
 @media(max-width:520px){#adminTab-credit-monitor .xer-credit-monitor-grid{grid-template-columns:1fr}#adminTab-credit-monitor .xer-credit-month-row{grid-template-columns:48px minmax(45px,1fr);gap:7px}#adminTab-credit-monitor .xer-credit-month-values{grid-column:2;justify-content:flex-start}}
 </style>
-</head>
+
+<style id="xeravion-country-analytics-style">
+#adminTab-analytics .xer-country-panel{margin-top:24px;padding:18px;border:1px solid #51432b;border-radius:15px;background:linear-gradient(145deg,#17140f,#100f0c)}
+#adminTab-analytics .xer-country-panel h4{margin:0 0 7px;font-size:17px;color:#f4ead7}
+#adminTab-analytics .xer-country-list{margin-top:14px}
+#adminTab-analytics .xer-country-row{display:grid;grid-template-columns:25px minmax(0,1fr) minmax(82px,auto);align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #342b1d}
+#adminTab-analytics .xer-country-rank{color:#a99d89;font-size:10px;text-align:center}
+#adminTab-analytics .xer-country-main{min-width:0}
+#adminTab-analytics .xer-country-name{font-size:12px;color:#f0e5d0;margin-bottom:7px;overflow-wrap:anywhere}
+#adminTab-analytics .xer-country-track{height:7px;border-radius:10px;background:#2b261e;overflow:hidden}
+#adminTab-analytics .xer-country-track i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#f0d69b,#a8792b)}
+#adminTab-analytics .xer-country-count{text-align:right}
+#adminTab-analytics .xer-country-count strong{display:block;color:#e8cc91;font-size:12px}
+#adminTab-analytics .xer-country-count small{display:block;color:#938875;font-size:9px;margin-top:3px}
+@media(max-width:520px){#adminTab-analytics .xer-country-panel{padding:14px}#adminTab-analytics .xer-country-row{grid-template-columns:20px minmax(0,1fr) 75px;gap:7px}}
+</style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">
@@ -1295,6 +1310,12 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
    <div class="stat"><b id="xerTrafficUnique">—</b><span>Pengunjung unik</span></div>
   </div>
   <div class="xer-traffic-chart-wrap"><h4>Kunjungan per hari</h4><div id="xerTrafficChart" class="xer-traffic-chart"><div class="hint">Tekan Muat ulang untuk mengambil statistik.</div></div></div>
+
+  <div class="xer-country-panel">
+   <h4>Pengunjung berdasarkan negara</h4>
+   <p class="hint">Negara diperkirakan oleh Cloudflare berdasarkan lokasi jaringan pengunjung. Data berupa agregat, bukan identitas pribadi.</p>
+   <div id="xerTrafficCountries" class="xer-country-list"><div class="hint">Memuat data negara…</div></div>
+  </div>
   <div id="xerTrafficStatus" class="notice" role="status" aria-live="polite">Statistik diambil dari Cloudflare Analytics. Pengunjung unik merupakan akumulasi angka unik harian, bukan deduplikasi lintas hari.</div>
   <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
  </div>
@@ -2429,13 +2450,28 @@ async function loadXeravionAnalytics(){
   document.getElementById('xerTrafficRequests').textContent=formatTrafficNumber(totals.requests);
   document.getElementById('xerTrafficUnique').textContent=formatTrafficNumber(totals.uniqueVisitors);
   const rows=Array.isArray(data.daily)?data.daily:[];
+  const countryRows=Array.isArray(data.countries)?data.countries:[];
+  const countryTotals=new Map();
+  countryRows.forEach(row=>{
+   const key=String(row.country||'Unknown');
+   const prev=countryTotals.get(key)||{country:key,requests:0,pageViews:0,uniqueVisitors:0};
+   prev.requests+=Number(row.requests||0);prev.pageViews+=Number(row.pageViews||0);prev.uniqueVisitors+=Number(row.uniqueVisitors||0);
+   countryTotals.set(key,prev);
+  });
+  const countries=[...countryTotals.values()].sort((a,b)=>b.uniqueVisitors-a.uniqueVisitors);
+  const countryMax=Math.max(1,...countries.map(x=>x.uniqueVisitors));
+  const countryBox=document.getElementById('xerTrafficCountries');
+  if(countryBox)countryBox.innerHTML=countries.length?countries.map((x,index)=>{
+   const width=Math.max(x.uniqueVisitors?2:0,x.uniqueVisitors/countryMax*100);
+   return '<div class="xer-country-row"><div class="xer-country-rank">'+(index+1)+'</div><div class="xer-country-main"><div class="xer-country-name">'+esc(x.country)+'</div><div class="xer-country-track"><i style="width:'+width+'%"></i></div></div><div class="xer-country-count"><strong>'+formatTrafficNumber(x.uniqueVisitors)+'</strong><small>unik harian*</small></div></div>';
+  }).join(''):'<div class="hint">Belum ada data negara pada periode ini.</div>';
   const max=Math.max(1,...rows.map(x=>Number(x.pageViews||0)));
   chart.innerHTML=rows.length?rows.map(row=>{
    const label=new Date(row.date+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short'});
    const value=Number(row.pageViews||0),height=Math.max(3,Math.round(value/max*100));
    return '<div class="xer-traffic-day" title="'+label+': '+formatTrafficNumber(value)+' page views"><div class="xer-traffic-bar" style="height:'+height+'%"></div><b>'+formatTrafficNumber(value)+'</b><span>'+label+'</span></div>';
   }).join(''):'<div class="hint">Belum ada data untuk periode ini.</div>';
-  status.textContent='Data Cloudflare berhasil dimuat · '+data.startDate+' sampai '+data.endDate+'. Pengunjung unik adalah akumulasi metrik harian.';
+  status.textContent='Data Cloudflare berhasil dimuat · '+data.startDate+' sampai '+data.endDate+'. Pengunjung unik per negara merupakan akumulasi metrik harian dan bukan deduplikasi lintas hari.';
  }catch(error){
   status.textContent=error.message||'Tidak dapat memuat statistik.';
   chart.innerHTML='<div class="hint">Statistik belum tersedia. Periksa konfigurasi Cloudflare Pages.</div>';

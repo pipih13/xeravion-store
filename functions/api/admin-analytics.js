@@ -78,6 +78,15 @@ export async function onRequestGet({ request, env }) {
             sum { requests pageViews }
             uniq { uniques }
           }
+          countries: httpRequests1dGroups(
+            limit: 100
+            filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
+            orderBy: [sum_requests_DESC]
+          ) {
+            dimensions { clientCountryName }
+            sum { requests pageViews }
+            uniq { uniques }
+          }
         }
       }
     }`;
@@ -103,6 +112,12 @@ export async function onRequestGet({ request, env }) {
       pageViews: Number(row.sum?.pageViews || 0),
       uniqueVisitors: Number(row.uniq?.uniques || 0)
     }));
+    const countries = (zone.countries || []).map(row => ({
+      country: row.dimensions?.clientCountryName || "Unknown",
+      requests: Number(row.sum?.requests || 0),
+      pageViews: Number(row.sum?.pageViews || 0),
+      uniqueVisitors: Number(row.uniq?.uniques || 0)
+    })).sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
     return json({
       periodDays: days,
       startDate,
@@ -112,7 +127,8 @@ export async function onRequestGet({ request, env }) {
         pageViews: Number(zone.total?.[0]?.sum?.pageViews || 0),
         uniqueVisitors: Number(zone.total?.[0]?.uniq?.uniques || 0)
       },
-      daily
+      daily,
+      countries
     });
   } catch (error) {
     return json({ error: "Terjadi kesalahan saat memuat analytics.", detail: error?.message || String(error) }, 500);

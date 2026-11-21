@@ -59,49 +59,70 @@ export async function onRequestGet({ request, env }) {
     const startDate = iso(start);
     const endDate = iso(end);
 
-    const query = `query XERAVIONTraffic {
+    const query = `query XERAVIONTraffic($zoneTag: string, $dateStart: Date, $dateEnd: Date, $timeStart: Time, $timeEnd: Time) {
       viewer {
-        zones(filter: { zoneTag: "${env.CF_ZONE_ID}" }) {
+        zones(filter: { zoneTag: $zoneTag }) {
           total: httpRequests1dGroups(
             limit: 1
-            filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
+            filter: { date_geq: $dateStart, date_leq: $dateEnd }
           ) {
             sum { requests pageViews }
             uniq { uniques }
           }
           daily: httpRequests1dGroups(
             limit: 40
-            filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
+            filter: { date_geq: $dateStart, date_leq: $dateEnd }
             orderBy: [date_ASC]
           ) {
             dimensions { date }
             sum { requests pageViews }
             uniq { uniques }
           }
-          countries: httpRequests1dGroups(
-            limit: 100
-            filter: { date_geq: "${startDate}", date_leq: "${endDate}" }
+          countries: httpRequestsAdaptiveGroups(
+            limit: 1000
+            filter: { datetime_geq: $timeStart, datetime_lt: $timeEnd, requestSource: "eyeball" }
             orderBy: [sum_requests_DESC]
           ) {
             dimensions { clientCountryName }
-            sum { requests pageViews }
-            uniq { uniques }
+            count
+            sum { requests visits }
           }
         }
       }
     }`;
-
+    const nextDay = new Date(end);
+    nextDay.setUTCDate(nextDay.getUTCDate() + 1);
+    const variables = {
+      zoneTag: env.CF_ZONE_ID,
+      dateStart: startDate,
+      dateEnd: endDate,
+      timeStart: start.toISOString(),
+      timeEnd: nextDay.toISOString()
+    };
     const cfResponse = await fetch("https://api.cloudflare.com/client/v4/graphql", {
       method: "POST",
       headers: {
         Authorization: "Bearer " + env.CF_ANALYTICS_API_TOKEN,
         "content-type": "application/json"
       },
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query, variables })
     });
-    const payload = await cfResponse.json();
+    const responseText = await cfResponse.text();
+    let payload;
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      return json({
+        error: "Cloudflare Analytics mengembalikan respons non-JSON.",
+        detail: "HTTP " + cfResponse.status + ". Periksa Cloudflare GraphQL API dan izin token Zone Analytics:Read.",
+        upstreamStatus: cfResponse.status
+      }, 502);
+    }
     if (!cfResponse.ok || payload.errors?.length) {
-      return json({ error: "Cloudflare Analytics gagal mengambil data.", detail: payload.errors?.[0]?.message || "Periksa token dan Zone ID." }, 502);
+      return json({
+        error: "Cloudflare Analytics gagal mengambil data.",
+        detail: payload.errors?.[0]?.message || "HTTP " + cfResponse.status + ". Periksa token dan Zone ID."
+      }, 502);
     }
 
     const zone = payload.data?.viewer?.zones?.[0];
@@ -115,8 +136,8 @@ export async function onRequestGet({ request, env }) {
     const countries = (zone.countries || []).map(row => ({
       country: row.dimensions?.clientCountryName || "Unknown",
       requests: Number(row.sum?.requests || 0),
-      pageViews: Number(row.sum?.pageViews || 0),
-      uniqueVisitors: Number(row.uniq?.uniques || 0)
+      pageViews: 0,
+      uniqueVisitors: Number(row.sum?.visits || row.count || 0)
     })).sort((a, b) => b.uniqueVisitors - a.uniqueVisitors);
     return json({
       periodDays: days,

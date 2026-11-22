@@ -2062,7 +2062,6 @@ const topupStatusLabel=s=>({awaiting_payment:'Menunggu pembayaran',processing:'S
 async function createPublicTopupOrder(){
  const out=document.getElementById('topupOrderFeedback');
  if(topupCheckoutBusy)return;
- const {data:{session:buyerSession},error:buyerSessionError}=await supabaseClient.auth.getSession();if(buyerSessionError)throw buyerSessionError;if(!buyerSession){if(out)out.innerHTML='<div class="topup-created-card"><strong>Daftar atau masuk terlebih dahulu.</strong><p>Pesanan akan otomatis tersimpan di Kotak Masuk Pesanan akunmu.</p><button class="btn gold" type="button" onclick="document.getElementById(\'memberAuth\')?.scrollIntoView({behavior:\'smooth\',block:\'center\'})">Daftar / Masuk</button></div>';return;}
  const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
  if(!p||!topupPlayerId.trim()){if(out)out.textContent='Pilih produk dan isi ID game terlebih dahulu.';return}
  if(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()){if(out)out.textContent='Zone ID / Server ID wajib diisi.';return}

@@ -1481,6 +1481,8 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
 .topup-bell-wrap{position:fixed;right:22px;bottom:28px;z-index:1200}
 .topup-bell-fab{width:58px;height:58px;border:1px solid #b99752;border-radius:50%;background:linear-gradient(145deg,#d5ad61,#8e6429);color:#17120a;box-shadow:0 8px 28px #0009;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
 .topup-bell-fab svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.topup-bell-fab.has-new-order{animation:topupBellPulse .75s ease-in-out 2}
+@keyframes topupBellPulse{0%,100%{transform:scale(1)}35%{transform:scale(1.12);box-shadow:0 0 0 8px #d83b3530,0 8px 28px #0009}70%{transform:scale(.98)}}
 .topup-bell-count{position:absolute;top:-4px;right:-4px;min-width:21px;height:21px;padding:0 5px;border-radius:99px;background:#d83b35;color:#fff;border:2px solid #111;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center}
 .topup-bell-popover{display:none;position:fixed;right:22px;bottom:100px;z-index:1199;width:min(780px,calc(100vw - 32px));max-height:min(72vh,650px);overflow:auto;padding:14px;border:1px solid #8c6b39;border-radius:16px;background:#11100df5;box-shadow:0 18px 60px #000b;backdrop-filter:blur(16px)}
 .topup-bell-popover.open{display:block}
@@ -1949,10 +1951,48 @@ async function setTopupOrderStatus(id,status){
   await loadAdminTopupOrders();
  }catch(e){alert('Gagal memperbarui status Top Up: '+(e.message||e));await loadAdminTopupOrders()}
 }
+let topupAlertAudioContext=null;
+let topupAlertAudioReady=false;
+function enableTopupAlertSound(){
+ try{
+  const AudioCtx=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtx)return;
+  if(!topupAlertAudioContext)topupAlertAudioContext=new AudioCtx();
+  if(topupAlertAudioContext.state==='suspended')topupAlertAudioContext.resume();
+  topupAlertAudioReady=topupAlertAudioContext.state==='running';
+ }catch(e){console.warn('Top Up alert sound unavailable:',e)}
+}
+function playTopupOrderAlert(){
+ if(!topupAlertAudioReady||!topupAlertAudioContext||topupAlertAudioContext.state!=='running')return;
+ try{
+  const ctx=topupAlertAudioContext;
+  [880,1175].forEach((frequency,index)=>{
+   const oscillator=ctx.createOscillator(),gain=ctx.createGain(),start=ctx.currentTime+index*.16;
+   oscillator.type='sine';oscillator.frequency.value=frequency;
+   gain.gain.setValueAtTime(.0001,start);
+   gain.gain.exponentialRampToValueAtTime(.16,start+.025);
+   gain.gain.exponentialRampToValueAtTime(.0001,start+.13);
+   oscillator.connect(gain);gain.connect(ctx.destination);
+   oscillator.start(start);oscillator.stop(start+.14);
+  });
+ }catch(e){console.warn('Top Up alert sound failed:',e)}
+}
+document.addEventListener('pointerdown',()=>{
+ if(document.getElementById('admin')?.classList.contains('active'))enableTopupAlertSound();
+},{passive:true});
 function subscribeAdminTopupOrders(){
  if(topupAdminChannel)return;
  topupAdminChannel=supabaseClient.channel('xeravion-admin-topup-orders')
-  .on('postgres_changes',{event:'*',schema:'public',table:'topup_orders'},()=>loadAdminTopupOrders())
+  .on('postgres_changes',{event:'INSERT',schema:'public',table:'topup_orders'},payload=>{
+   playTopupOrderAlert();
+   loadAdminTopupOrders();
+   const pop=document.getElementById('topupBellPopover');
+   if(pop&&!pop.classList.contains('open')){
+    const btn=document.getElementById('topupBellButton');
+    if(btn){btn.classList.add('has-new-order');setTimeout(()=>btn.classList.remove('has-new-order'),1800)}
+   }
+  })
+  .on('postgres_changes',{event:'UPDATE',schema:'public',table:'topup_orders'},()=>loadAdminTopupOrders())
   .subscribe();
 }
 

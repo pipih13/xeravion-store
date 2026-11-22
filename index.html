@@ -2063,7 +2063,9 @@ async function createPublicTopupOrder(){
  const out=document.getElementById('topupOrderFeedback');
  if(topupCheckoutBusy)return;
  const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
+ const buyerEmail=(document.getElementById('topupBuyerEmail')?.value||'').trim().toLowerCase();
  if(!p||!topupPlayerId.trim()){if(out)out.textContent='Pilih produk dan isi ID game terlebih dahulu.';return}
+ if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(buyerEmail)){if(out)out.textContent='Masukkan email aktif yang benar untuk menerima invoice.';document.getElementById('topupBuyerEmail')?.focus();return}
  if(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()){if(out)out.textContent='Zone ID / Server ID wajib diisi.';return}
  const btn=document.querySelector('.topup-checkout');
  if(btn?.disabled)return;
@@ -2074,7 +2076,7 @@ async function createPublicTopupOrder(){
    p_product_id:p.id,p_player_id:topupPlayerId.trim(),
    p_zone_id:topupZoneId.trim()||null,
    p_server_region:p.game==='Genshin Impact'?topupServerRegion:null,
-   p_buyer_name:'Pembeli',p_buyer_contact:null
+   p_buyer_name:'Pembeli',p_buyer_contact:buyerEmail
   });
   if(error)throw error;
   const saved=JSON.parse(localStorage.getItem(TOPUP_ACCESS_KEY)||'{}');
@@ -2217,7 +2219,7 @@ function renderTopupProducts(list){
  const products=list.filter(p=>p.game===activeTopupGame);
  if(!products.length)return '<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
  const selected=items.find(p=>Number(p.id)===Number(selectedTopupProductId)&&p.game===activeTopupGame);
- return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>Pilih nominal</h3><span>'+products.length+' pilihan</span></div><div class="topup-price-grid">'+products.map(renderTopupProductCard).join('')+'</div>'+(selected?'<div class="topup-order-summary"><span>Dipilih: <strong>'+esc(selected.name)+'</strong></span><strong>'+storefrontPriceDisplay(selected)+'</strong></div>':'')+'<button type="button" class="topup-checkout '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'ready':'disabled')+'" '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'':'disabled')+' onclick="createPublicTopupOrder()">Buat Pesanan Top Up</button><p class="topup-checkout-note">Pesanan langsung masuk ke panel admin XERAVION. Pembayaran dan proses top up akan diperbarui oleh admin.</p><div id="topupOrderFeedback" class="topup-order-feedback" aria-live="polite"></div><div class="topup-track-box is-hidden" id="topupTrackBox" aria-hidden="true"><strong>Cek status pesanan</strong><div class="topup-track-fields"><input id="topupTrackInvoice" placeholder="Nomor invoice Top Up"><input id="topupTrackToken" placeholder="Kode akses pesanan"></div><button type="button" class="btn" onclick="checkPublicTopupOrder()">Cek Status</button><div id="topupTrackResult" class="hint" aria-live="polite"></div></div></section>';
+ return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>Pilih nominal</h3><span>'+products.length+' pilihan</span></div><div class="topup-price-grid">'+products.map(renderTopupProductCard).join('')+'</div>'+(selected?'<div class="topup-order-summary"><span>Dipilih: <strong>'+esc(selected.name)+'</strong></span><strong>'+storefrontPriceDisplay(selected)+'</strong></div>':'')+'<label class="topup-checkout-email-label" for="topupBuyerEmail">Email untuk menerima invoice & kode verifikasi</label><input id="topupBuyerEmail" class="field" type="email" inputmode="email" autocomplete="email" placeholder="nama@email.com" required><p class="topup-checkout-note">Invoice Top Up dapat dicek tanpa daftar/login melalui menu Cek Invoice menggunakan email ini.</p><button type="button" class="topup-checkout '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'ready':'disabled')+'" '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'':'disabled')+' onclick="createPublicTopupOrder()">Buat Pesanan Top Up</button><p class="topup-checkout-note">Pesanan langsung masuk ke panel admin XERAVION. Pembayaran dan proses top up akan diperbarui oleh admin.</p><div id="topupOrderFeedback" class="topup-order-feedback" aria-live="polite"></div><div class="topup-track-box is-hidden" id="topupTrackBox" aria-hidden="true"><strong>Cek status pesanan</strong><div class="topup-track-fields"><input id="topupTrackInvoice" placeholder="Nomor invoice Top Up"><input id="topupTrackToken" placeholder="Kode akses pesanan"></div><button type="button" class="btn" onclick="checkPublicTopupOrder()">Cek Status</button><div id="topupTrackResult" class="hint" aria-live="polite"></div></div></section>';
 }
 function renderSelectedImagePreviews(){
  const box=document.getElementById('imagePreviewList');if(!box)return;box.innerHTML='';

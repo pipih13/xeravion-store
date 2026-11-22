@@ -1842,12 +1842,12 @@ function setTopupGame(game){activeTopupGame=game;selectedTopupProductId=null;top
 function handleTopupPlayerIdInput(value){topupPlayerId=String(value||'');const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');const link=document.querySelector('.topup-checkout');if(!link)return;const ready=!!(p&&topupPlayerId.trim());link.classList.toggle('ready',ready);link.classList.toggle('disabled',!ready);if(ready){link.href=topupOrderLink();link.target='_blank';link.rel='noopener'}else{link.removeAttribute('href');link.removeAttribute('target');link.setAttribute('aria-disabled','true');link.onclick=()=>false}}
 function topupGameLogo(game){
  const logos={
-  'Mobile Legends':'https://is4-ssl.mzstatic.com/image/thumb/Purple126/v4/0e/ae/e4/0eaee45b-a414-e99b-2eed-b7868478f522/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg',
+  'Mobile Legends':'https://play-lh.googleusercontent.com/D8r13ijO9c-0_1N-CP4d63mR1w6YhDuR2mBQUl27ELJAx0sKdaKtM5vCUnSLODKBVzUx7rZ9cW4Ir9jYiufsSQ=w512-h512',
   'Free Fire':'https://play-lh.googleusercontent.com/hnnIRd5AAf7T2gWzwki00aA9aWMX9JUbr8N42WjGqSVEq36Ey5_T0GCvyekeBkn_rSknR3vXvF4zTkZh4j-KRw=s512',
-  'PUBG Mobile':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4f/8d/38/4f8d3800-68b5-1c53-b0f7-7d46bda6a394/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg',
+  'PUBG Mobile':'https://play-lh.googleusercontent.com/zCSGnBtZk0Lmp1BAbyaZfLktDzHmC6oke67qzz3G1lBegAF2asyt5KzXOJ2PVdHDYkU=w512-h512',
   'Magic Chess: Go Go':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e3/db/fb/e3dbfb2e-a8f9-94d9-2610-be1d3975e665/AppIcon-1x_U007emarketing-0-7-0-85-220-0.png/512x512bb.jpg',
   'Valorant':'https://www.citypng.com/public/uploads/preview/hd-valorant-red-symbol-icon-sign-logo-png-701751694787885tb2zfyarln.png?v=2026040111',
-  'Genshin Impact':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d3/f5/2a/d3f52a60-8dd5-e433-226a-5468f9bcfd0f/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg'
+  'Genshin Impact':'https://play-lh.googleusercontent.com/YQqyKaXX-63krqsfIzUEJWUWLINxcb5tbS6QVySdxbS7eZV7YB2dUjUvX27xA0TIGtfxQ5v-tQjwlT5tTB-O=w512-h512'
  };
  return logos[game]||'';
 }

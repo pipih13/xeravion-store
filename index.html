@@ -3848,8 +3848,14 @@ async function verifyPublicInvoiceCode(){
   const o=data.invoice;if(!o)throw new Error('Data invoice tidak ditemukan.');
   const money=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
   const row=(label,value)=>'<div class="invoice-result-row"><span>'+label+'</span><strong>'+value+'</strong></div>';
-  const status=(o.payment_status==='paid'?'LUNAS':'BELUM LUNAS')+' · '+(o.order_status==='completed'?'SELESAI':o.order_status==='cancelled'?'DIBATALKAN':'DIPROSES');
-  document.getElementById('publicInvoiceResult').innerHTML='<div class="invoice-result-card"><h4>Invoice '+esc(o.invoice_number)+'</h4>'+row('Nama pembeli',esc(o.buyer_name))+row('Tanggal',new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'}))+row('Game',esc(o.game))+row('Kode akun',esc(o.product_code))+row('Nama akun',esc(o.product_name))+row('Harga akun',money(o.item_price))+row('Poin digunakan',Number(o.points_used||0).toLocaleString('id-ID')+' XP')+row('Diskon poin','-'+money(o.points_discount))+row('Cashback',Number(o.cashback_points||0).toLocaleString('id-ID')+' XP')+row('Metode pembayaran',esc(o.payment_method))+row('Status',status)+'<div class="invoice-result-row invoice-result-total"><span>Total dibayar</span><strong>'+money(o.amount_due)+'</strong></div></div>';
+  const paymentLabel=({paid:'LUNAS',confirmed:'TERKONFIRMASI',pending:'MENUNGGU PEMBAYARAN',unpaid:'BELUM LUNAS'})[o.payment_status]||String(o.payment_status||'BELUM LUNAS').toUpperCase();
+  const orderLabel=({awaiting_payment:'MENUNGGU PEMBAYARAN',processing:'SEDANG DIKERJAKAN',completed:'SELESAI',cancelled:'DIBATALKAN',failed:'GAGAL'})[o.order_status]||String(o.order_status||'DIPROSES').toUpperCase();
+  const status=paymentLabel+' · '+orderLabel;
+  const isTopup=o.invoice_type==='topup';
+  const details=isTopup
+   ?row('Jenis transaksi','Top Up Game')+row('Produk',esc(o.product_name))+row('Kode produk',esc(o.product_code))+row('Player ID',esc(o.player_id))+ (o.zone_id?row('Zone / Server ID',esc(o.zone_id)):'')+(o.server_region?row('Region server',esc(o.server_region)):'')+row('Total tagihan',money(o.amount_due))
+   :row('Jenis transaksi','Akun / Item Game')+row('Kode akun',esc(o.product_code))+row('Nama akun',esc(o.product_name))+row('Harga akun',money(o.item_price))+row('Poin digunakan',Number(o.points_used||0).toLocaleString('id-ID')+' XP')+row('Diskon poin','-'+money(o.points_discount))+row('Cashback',Number(o.cashback_points||0).toLocaleString('id-ID')+' XP');
+  document.getElementById('publicInvoiceResult').innerHTML='<div class="invoice-result-card"><h4>Invoice '+esc(o.invoice_number)+'</h4>'+row('Nama pembeli',esc(o.buyer_name||'Pembeli'))+row('Tanggal',new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta'}))+row('Game',esc(o.game))+details+row('Metode pembayaran',esc(o.payment_method||'QRIS / Transfer manual'))+row('Status pembayaran & pesanan',status)+(o.admin_note?row('Catatan admin',esc(o.admin_note)):'')+'<div class="invoice-result-row invoice-result-total"><span>Total tagihan</span><strong>'+money(o.amount_due)+'</strong></div></div>';
   document.getElementById('publicInvoiceVerify').classList.add('hidden');
   document.getElementById('publicInvoiceResult').classList.remove('hidden');
   msg.textContent='Verifikasi berhasil. Simpan atau screenshot halaman invoice ini sebagai bukti transaksi.';

@@ -1913,9 +1913,17 @@ const TOPUP_ACCESS_KEY='xeravion_topup_access_v1';
 const XERAVION_QRIS_ROWS='000000000000000,000000000000000,000000000000000,000000000000000,01fd584a06117f0,0105eb94c147410,0174593272fb5d0,0175d8ad32725d0,01749297fd285d0,010418c47a1c410,01fd555555557f0,00014a947b1d000,016e6b67e9054b0,01c017d32c04ca0,013c6e965cc41e0,007b8b599bee260,01df4a46cd82580,0129c56ec452e20,01353bb08a604c0,01536ff52897810,000604937e26960,011b49384f2c760,00345e485790670,0091d4b2915c320,01bd6d67dfc9900,012917bcf5d6010,001fbdcfec41f20,01313fac774b180,0135dfcd5a7f500,00113d1c5ca5130,01ffbb1fd241f40,008a5a552185210,009c9072d536dc0,016bd3ab266c600,005dc32cfdd37d0,0053bf952b65d00,0025c195da09060,00336ddd8680d10,013f1ee1c12df30,00fafdf1b5caa70,011c549928b7ab0,00f07e565c05460,008fdc7c3501ca0,00e1071da712d90,01c49a77c26ff00,000160d458011e0,01fd9dc57307500,0105b9345cbd180,01746e2fcb05f90,0175343e17237d0,0175278bd74e1e0,010406d39e9ab20,01fd1cba93d4990,000000000000000,000000000000000,000000000000000,000000000000000'.split(',');
 function renderXerQrisCode(){
  const host=document.getElementById('xerQrisCode');if(!host)return;
- if(host.dataset.ready==='1')return;
- host.innerHTML='<img src="/assets/xeravion-qris-code.png" alt="QRIS resmi XERAVION - GAME" width="635" height="635" decoding="async" fetchpriority="high" style="display:block;width:100%;height:100%;object-fit:contain;background:#fff;border-radius:6px" onerror="this.onerror=null;this.alt=\'QRIS gagal dimuat. Silakan hubungi admin melalui WhatsApp.\';this.style.display=\'none\';this.parentElement.insertAdjacentHTML(\'beforeend\',\'<p style=&quot;color:#222;font-size:12px&quot;>QRIS tidak dapat dimuat. Silakan hubungi admin.</p>\')">';
- host.dataset.ready='1';
+ host.innerHTML='';
+ const img=document.createElement('img');
+ img.src='/assets/xeravion-qris-code.png';
+ img.alt='QRIS resmi XERAVION - GAME';
+ img.width=635;img.height=635;
+ img.decoding='async';img.fetchPriority='high';
+ img.style.cssText='display:block;width:100%;height:100%;min-height:1px;object-fit:contain;background:#fff;border-radius:6px';
+ img.onerror=()=>{
+  host.innerHTML='<div style="padding:18px;color:#222;font-size:12px;line-height:1.5">Gambar QRIS tidak berhasil dimuat. Muat ulang halaman atau hubungi admin melalui WhatsApp.</div>';
+ };
+ host.appendChild(img);
 }
 let activeXerQrisOrder=null;
 function openProductQrisPayment(productId){
@@ -1926,26 +1934,42 @@ function openProductQrisPayment(productId){
 }
 function openXerQrisPayment(order){
  activeXerQrisOrder=order||{};
+ const modal=document.getElementById('xerQrisPaymentModal');
+ if(!modal){console.error('XERAVION QRIS: payment modal element not found');return;}
+ // Move the modal to body so parent stacking contexts/overflow cannot hide it.
+ if(modal.parentElement!==document.body)document.body.appendChild(modal);
  renderXerQrisCode();
- const modal=document.getElementById('xerQrisPaymentModal');if(!modal)return;
- document.getElementById('xerQrisAmount').textContent=rupiah(order.amount_due||0);
- document.getElementById('xerQrisInvoice').textContent=order.invoice_number||order.product_code||'-';
- const invoiceLabel=document.querySelector('.xer-qris-meta span');
- if(invoiceLabel)invoiceLabel.textContent=order.type==='listing'?'Kode listing':'Invoice';
- const paidButton=document.querySelector('.xer-qris-confirm');
- if(paidButton)paidButton.textContent=order.type==='listing'?'Sudah membayar? Konfirmasi via WhatsApp':'Saya sudah membayar';
+ const amount=document.getElementById('xerQrisAmount');
+ const invoice=document.getElementById('xerQrisInvoice');
+ if(amount)amount.textContent=rupiah(activeXerQrisOrder.amount_due||0);
+ if(invoice)invoice.textContent=activeXerQrisOrder.invoice_number||activeXerQrisOrder.product_code||'-';
+ const invoiceLabel=modal.querySelector('.xer-qris-meta span');
+ if(invoiceLabel)invoiceLabel.textContent=activeXerQrisOrder.type==='listing'?'Kode listing':'Invoice';
+ const paidButton=modal.querySelector('.xer-qris-confirm');
+ if(paidButton)paidButton.textContent=activeXerQrisOrder.type==='listing'?'Sudah membayar? Konfirmasi via WhatsApp':'Saya sudah membayar';
  const waLink=document.getElementById('xerQrisWhatsappLink');
  if(waLink){
-  const message=order.type==='listing'
-   ?'Halo admin XERAVION, saya tertarik membeli '+(order.product_name||'produk')+' ('+(order.product_code||'-')+') dari '+(order.game||'')+' seharga '+rupiah(order.amount_due||0)+'. Saya ingin menanyakan metode pembayaran selain QRIS (all payment). Apakah produk masih tersedia dan metode apa yang dapat digunakan?'
-   :'Halo admin XERAVION, saya ingin menanyakan metode pembayaran selain QRIS (all payment). Invoice: '+(order.invoice_number||'-')+'. Total: '+rupiah(order.amount_due||0)+'. Mohon informasikan metode pembayaran yang tersedia. Saya belum melakukan pembayaran.';
+  const message=activeXerQrisOrder.type==='listing'
+   ?'Halo admin XERAVION, saya tertarik membeli '+(activeXerQrisOrder.product_name||'produk')+' ('+(activeXerQrisOrder.product_code||'-')+') dari '+(activeXerQrisOrder.game||'')+' seharga '+rupiah(activeXerQrisOrder.amount_due||0)+'. Saya ingin menanyakan metode pembayaran selain QRIS (all payment). Apakah produk masih tersedia dan metode apa yang dapat digunakan?'
+   :'Halo admin XERAVION, saya ingin menanyakan metode pembayaran selain QRIS (all payment). Invoice: '+(activeXerQrisOrder.invoice_number||'-')+'. Total: '+rupiah(activeXerQrisOrder.amount_due||0)+'. Mohon informasikan metode pembayaran yang tersedia. Saya belum melakukan pembayaran.';
   waLink.href='https://wa.me/'+WA+'?text='+encodeURIComponent(message);
  }
- modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+ modal.classList.add('open');
+ modal.setAttribute('aria-hidden','false');
+ modal.style.setProperty('display','flex','important');
+ modal.style.setProperty('position','fixed','important');
+ modal.style.setProperty('inset','0','important');
+ modal.style.setProperty('z-index','2147483000','important');
+ document.body.style.overflow='hidden';
+ document.documentElement.style.overflow='hidden';
 }
 function closeXerQrisPayment(){
  const modal=document.getElementById('xerQrisPaymentModal');if(!modal)return;
- modal.classList.remove('open');modal.setAttribute('aria-hidden','true');document.body.style.overflow='';
+ modal.classList.remove('open');
+ modal.setAttribute('aria-hidden','true');
+ modal.style.setProperty('display','none','important');
+ document.body.style.overflow='';
+ document.documentElement.style.overflow='';
 }
 function confirmXerQrisBuyerPaid(){
  if(activeXerQrisOrder?.type==='listing'){

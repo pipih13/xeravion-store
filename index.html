@@ -816,22 +816,6 @@ body.xeravion-game-page:has(.item-gaming-page-head) #catalog{max-width:1240px;ma
 body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display:none}
 @media(max-width:700px){.item-gaming-title-row{align-items:flex-start;flex-direction:column}.item-gaming-banner{border-radius:12px}.item-platform-filter{flex-wrap:nowrap;overflow-x:auto;padding:2px 0 8px}.item-platform-filter button{white-space:nowrap}.item-gaming-types{align-items:flex-start}.item-gaming-types>span{width:100%}.item-gaming-types button{font-size:10px;padding:7px 9px}}
 </style>
-<style id="xeravion-melo-admin-style">
-.xer-dwigital-panel .melo-catalog-head{align-items:end}.xer-dwigital-panel .melo-catalog-controls{flex-wrap:wrap}.xer-dwigital-panel .melo-catalog-controls input{flex:1;min-width:130px}.dwigital-product{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid #3e3322;border-radius:9px;background:#15110b}.dwigital-product>div:first-child{min-width:0;display:grid;gap:5px}.dwigital-product strong{font-size:12px;overflow-wrap:anywhere}.dwigital-product small{font-size:10px;color:#a99d89}.dwigital-product-price{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap;color:#e8cc91;font-size:12px;font-weight:800}@media(max-width:600px){.dwigital-product{align-items:flex-start;flex-direction:column}.dwigital-product-price{align-items:flex-start;flex-direction:row;flex-wrap:wrap}}
-.melo-badge{display:inline-flex;align-items:center;border:1px solid #80663a;border-radius:999px;padding:7px 11px;color:#e5c783;font-size:10px;font-weight:850;white-space:nowrap}
-.melo-badge.ok{border-color:#286b4b;color:#76e0aa;background:#10251b}.melo-badge.error{border-color:#8a3b3b;color:#ffaaaa;background:#2a1111}
-.melo-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
-.melo-status-grid .stat{min-width:0}.melo-status-grid .stat b{font-size:clamp(13px,2vw,19px);overflow-wrap:anywhere}
-.melo-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.melo-actions .btn{min-height:40px}
-.melo-catalog-head,.melo-product-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px}
-.melo-catalog-head h4,.melo-product-heading h4,.melo-markup-box h4{margin:0 0 5px;color:#f1d89e}
-.melo-catalog-controls{display:flex;gap:8px;min-width:min(100%,360px)}.melo-catalog-controls select,.melo-catalog-controls input,.melo-markup-box input{background:#0e0c09;border:1px solid #51432b;border-radius:9px;color:#f5ead4;padding:10px;min-width:0}.melo-catalog-controls select{width:110px}.melo-catalog-controls input{flex:1;width:150px}
-.melo-brand-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
-.melo-brand{text-align:left;display:flex;flex-direction:column;gap:5px;padding:12px;border:1px solid #51432b;border-radius:10px;background:#100e0b;color:#f5ead4;min-width:0}.melo-brand span,.melo-product small{font-size:10px;color:#a99d89}.melo-product-area{margin-top:18px;padding:14px;border:1px solid #51432b;border-radius:13px;background:#0d0b09}
-.melo-product-list{display:grid;gap:7px;margin-top:12px}.melo-product{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid #3e3322;border-radius:9px;background:#15110b}.melo-product>div:first-child{min-width:0;display:grid;gap:5px}.melo-product strong{font-size:12px;overflow-wrap:anywhere}.melo-product-price{display:flex;align-items:flex-end;flex-direction:column;gap:6px;white-space:nowrap;color:#e8cc91;font-size:12px;font-weight:800}
-.melo-empty{padding:18px;border:1px dashed #51432b;border-radius:10px;color:#b4a78f;font-size:12px;line-height:1.6}
-.melo-markup-box{margin-top:18px;padding:15px;border:1px solid #51432b;border-radius:12px;background:#15110b}.melo-markup-box label{display:block;margin:10px 0 6px;color:#b4a78f;font-size:11px}.melo-markup-box input{width:100%;max-width:260px}.melo-footnote{margin-top:16px;line-height:1.7}
-@media(max-width:600px){.melo-status-grid{gap:7px}.melo-status-grid .stat{padding:11px 8px}.melo-status-grid .stat span{font-size:9px}.melo-catalog-head{align-items:stretch;flex-direction:column}.melo-catalog-controls{width:100%;min-width:0}.melo-brand-list{grid-template-columns:1fr}.melo-product{align-items:flex-start;flex-direction:column}.melo-product-price{align-items:flex-start;flex-direction:row;flex-wrap:wrap}.melo-actions .btn{flex:1 1 calc(50% - 8px)}}
 </style>
 <style id="xeravion-finance-dashboard-style">
 .xer-finance-panel{background:linear-gradient(145deg,#15120d,#0e0c09);border-color:#6b552f}
@@ -1264,7 +1248,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 @media(max-width:520px){#adminTab-analytics .xer-country-panel{padding:14px}#adminTab-analytics .xer-country-row{grid-template-columns:18px minmax(0,1fr) 78px;gap:7px}}
 </style></head>
 <body><div class="app">
-<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up <span class="nav-coming">SEGERA</span></a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
+<header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">
 <section class="catalog" id="catalog"><div class="hero"><div><div class="eyebrow">CURATED DIGITAL COLLECTION</div><h1>Akun pilihan.<br><span>Pengalaman berbeda.</span></h1><p>Temukan koleksi akun game pilihan di XERAVION. Telusuri katalog, lihat detail, dan hubungi admin untuk mengecek ketersediaan sebelum transaksi.</p><div class="actions"><a class="btn gold" href="#products">Jelajahi katalog ↓</a><a class="btn" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION" target="_blank" rel="noopener">Hubungi admin</a></div></div><div class="art game-slider" id="gameSlider" aria-label="Game yang tersedia di XERAVION"><div class="slides">
 <article class="game-slide active"><img src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Artwork event kolaborasi Mobile Legends Bang Bang x SpongeBob" fetchpriority="high"><div class="slide-shade"></div><div class="slide-copy"><span>MLBB × SPONGEBOB • UNDERSEA BASH</span><strong>MOBILE LEGENDS</strong><small>Event kolaborasi berlangsung 11 November – 10 Desember</small></div></article>
@@ -1273,69 +1257,42 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 <article class="game-slide"><img src="https://www.vga4a.com/wp-content/uploads/GwOflg6WkAMnuyT.jpg" alt="Artwork eFootball 2026" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>BLACK FRIDAY • KONAMI</span><strong>eFOOTBALL</strong><small>Jelajahi koleksi akun eFootball di XERAVION</small></div></article>
 <article class="game-slide"><img src="https://d2u0ktu8omkpf6.cloudfront.net/b80c240db665c9125a09fe9cd8f20f9d1832a940e66b8c59.jpg" alt="Artwork Clash of Clans" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>CLASH OF TITANS • SUPERCELL</span><strong>CLASH OF CLANS</strong><small>Temukan akun Clash of Clans pilihan di XERAVION</small></div></article>
 <article class="game-slide shirt-slide"><img src="/assets/xeravion-official-shirt-banner.jpg" alt="Official T-shirt XERAVION dengan logo emas berlatar gaming" loading="lazy"><div class="slide-shade"></div><div class="slide-copy"><span>OFFICIAL MERCHANDISE • XERAVION</span><strong>OFFICIAL T-SHIRT XERAVION</strong><small>Kenakan identitas XERAVION. Tersedia melalui pemesanan admin.</small><a class="btn gold" href="https://wa.me/6287714947270?text=Halo%20admin%20XERAVION%2C%20saya%20ingin%20memesan%20official%20T-shirt%20XERAVION." target="_blank" rel="noopener">ORDER T-SHIRT VIA WHATSAPP ↗</a></div></article><article class="game-slide starlight-slide"><img src="/assets/xeravion-starlight-november.png" alt="Artwork resmi Starlight November Kalea dan promosi kartu Basic dan Premium XERAVION" loading="lazy"><div class="starlight-copy"><span>STARLIGHT KALEA SUDAH TIBA!</span><strong>Segera order Starlight Card kamu</strong><small>Basic Rp. 45.000 • Premium Rp. 65.000</small><small>Berteman di dalam game selama 7 hari agar kartu bisa dikirim.</small><a href="https://wa.me/6287714947270?text=Halo%20Admin%20XERAVION%2C%20saya%20ingin%20order%20Starlight%20Card%20Kalea." target="_blank" rel="noopener">HUBUNGI ADMIN ↗</a></div></article></div><button class="slider-arrow prev" type="button" aria-label="Slide sebelumnya" onclick="moveGameSlide(-1)">‹</button><button class="slider-arrow next" type="button" aria-label="Slide berikutnya" onclick="moveGameSlide(1)">›</button><div class="slider-bottom"><label>PLAY • COLLECT • CONNECT</label><div class="slider-dots"><button class="slider-dot active" type="button" aria-label="Mobile Legends" onclick="showGameSlide(0)"></button><button class="slider-dot" type="button" aria-label="PUBG Mobile" onclick="showGameSlide(1)"></button><button class="slider-dot" type="button" aria-label="Free Fire" onclick="showGameSlide(2)"></button><button class="slider-dot" type="button" aria-label="eFootball" onclick="showGameSlide(3)"></button><button class="slider-dot" type="button" aria-label="Clash of Clans" onclick="showGameSlide(4)"></button><button class="slider-dot" type="button" aria-label="Kaos resmi XERAVION" onclick="showGameSlide(5)"></button><button class="slider-dot" type="button" aria-label="Starlight Member Card" onclick="showGameSlide(6)"></button></div></div></div></div>
-<div class="stats"><div class="stat"><b id="countStat">0</b><span>Listing akun</span></div><div class="stat"><b>3+</b><span>Kategori game</span></div><div class="stat"><b>Top Up Game</b><span>Segera Hadir</span></div></div>
-<section id="mlbbTopup" class="panel" hidden style="display:none!important;margin:28px 0;padding:22px;border:1px solid #8b6a32;border-radius:18px;background:linear-gradient(135deg,#19140c,#100e0b)">
- <div class="eyebrow">XERAVION TOP UP • MOBILE LEGENDS</div>
- <h2 style="margin:9px 0;color:var(--gold)">Top Up Mobile Legends</h2>
- <p style="color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 18px">Masukkan User ID dan Zone ID untuk menyiapkan pengecekan nickname sebelum memilih nominal. Pastikan kedua ID sesuai dengan profil akun Mobile Legends kamu.</p>
- <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-  <label style="font-size:12px;color:#d8c9a8">User ID *
-   <input id="buyerMlbbUserId" inputmode="numeric" autocomplete="off" maxlength="64" placeholder="Contoh: 12345678" style="display:block;width:100%;margin-top:7px;background:#0b0a08;border:1px solid var(--line);border-radius:10px;padding:13px;color:#f5ead4">
-  </label>
-  <label style="font-size:12px;color:#d8c9a8">Zone ID / Server ID *
-   <input id="buyerMlbbZoneId" inputmode="numeric" autocomplete="off" maxlength="32" placeholder="Contoh: 1234" style="display:block;width:100%;margin-top:7px;background:#0b0a08;border:1px solid var(--line);border-radius:10px;padding:13px;color:#f5ead4">
-  </label>
- </div>
- <button class="btn gold" type="button" onclick="checkBuyerMlbbNickname()" id="buyerMlbbCheckButton" style="margin-top:14px;width:100%">Cek Nickname Otomatis</button>
- <div id="buyerMlbbTopupFeedback" class="notice" role="status" aria-live="polite" style="margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:12px;color:#d8c9a8;font-size:12px;line-height:1.6">Masukkan User ID dan Zone ID, lalu cek nickname. Koneksi yang tersedia saat ini masih Development/simulasi.</div>
- <div id="buyerMlbbNicknameCard" hidden style="margin-top:12px;padding:14px;border:1px solid #8b6a32;border-radius:12px;background:#0d0b08">
-  <small style="color:var(--muted)">NICKNAME HASIL PENGECEKAN</small><strong id="buyerMlbbNickname" style="display:block;color:var(--gold);font-size:19px;margin-top:5px"></strong>
-  <small id="buyerMlbbNicknameMode" style="display:block;color:var(--muted);margin-top:5px"></small>
- </div>
- <div style="margin-top:18px">
-  <h3 style="color:var(--gold);margin:0 0 8px">Pilih nominal diamond</h3>
-  <p id="buyerMlbbCatalogStatus" style="font-size:12px;color:var(--muted)">Memuat katalog paket Development…</p>
-  <div id="buyerMlbbPackages" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px"></div>
- </div>
- <div class="notice" style="margin-top:14px;border:1px solid #73572b;border-radius:10px;padding:12px;color:#e4d3ad;font-size:12px;line-height:1.6">Mode Development: nama dan harga paket hanya data uji. Tombol pemesanan dan pembayaran belum dibuka agar tidak terjadi transaksi sungguhan sebelum API Production dan payment gateway disetujui.</div>
-</section>
-<style>@media(max-width:620px){#mlbbTopup>div[style*="grid-template-columns"]{grid-template-columns:1fr!important}}</style>
-<div id="gameCategoryHub" class="game-category-hub">
- <div class="sectionhead"><div><div class="eyebrow">PILIH DUNIA GAME</div><h2>Jelajahi kategori</h2></div><p>Pilih game untuk melihat akun yang tersedia</p></div>
- <div class="game-category-grid">
-  <a class="game-category-card ml" href="?game=ml"><img class="game-category-image" src="https://static-sg.winudf.com/wupload/xy/aprojectadmin/tV1IpOLq.webp" alt="Mobile Legends" loading="lazy"><span class="game-category-shade"></span><strong>Mobile Legends</strong><small id="stockMl">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
-  <a class="game-category-card pubg" href="?game=pubg"><img class="game-category-image" src="https://play-lh.googleusercontent.com/J7yc5dVCW8CnEPsroJy-gnNjMEYMYu4UKj843o8njDItR30Gb_7xcrKgR5tFcK5zTqL69Kz79VWFaxfbg5AAvw=w1600" alt="PUBG Mobile" loading="lazy"><span class="game-category-shade"></span><strong>PUBG Mobile</strong><small id="stockPubg">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
-  <a class="game-category-card ff" href="?game=ff"><img class="game-category-image" src="https://cdn1.katadata.co.id/media/images/thumb/2026/11/10/Free_Fire_Storm_Arena-2026_11_10-14_01_55_8dd6fe596193688685ef9faded2f522b_960x640_thumb.png" alt="Free Fire" loading="lazy"><span class="game-category-shade"></span><strong>Free Fire</strong><small id="stockFf">Menghitung stok ready…</small><b>LIHAT AKUN ↗</b></a>
-  <a class="game-category-card efootball" href="?game=efootball"><img class="game-category-image" src="https://www.vga4a.com/wp-content/uploads/GwOflg6WkAMnuyT.jpg" alt="Artwork eFootball 2026" loading="lazy"><span class="game-category-shade"></span><strong>eFootball</strong><small id="stockEf">BLACK FRIDAY · KONAMI</small><b>LIHAT AKUN ↗</b></a>
-  <a class="game-category-card coc" href="?game=coc"><img class="game-category-image" src="https://d2u0ktu8omkpf6.cloudfront.net/b80c240db665c9125a09fe9cd8f20f9d1832a940e66b8c59.jpg" alt="Artwork Clash of Clans" loading="lazy"><span class="game-category-shade"></span><strong>Clash of Clans</strong><small id="stockCoc">CLASH OF TITANS · SUPERCELL</small><b>LIHAT AKUN ↗</b></a>
-  <a class="game-category-card item-gaming" href="?game=item-gaming"><img class="game-category-image" src="/assets/xeravion-item-gaming-banner.png" alt="XERAVION Item Gaming" loading="lazy"><span class="game-category-shade"></span><strong>Item Gaming</strong><small>Item digital dari berbagai game</small><b>LIHAT ITEM ↗</b></a>
- </div>
-</div>
+<div class="stats"><div class="stat"><b id="countStat">0</b><span>Listing akun</span></div><div class="stat"><b>3+</b><span>Kategori game</span></div><div class="stat"><b>Top Up Game</b><span>Layanan XERAVION</span></div></div>
 <section class="topup-coming" id="topup" aria-labelledby="topupTitle">
  <div class="topup-copy">
   <div class="eyebrow">LAYANAN XERAVION</div>
-  <div class="topup-heading"><h2 id="topupTitle">Game Top Up</h2><span class="topup-badge">SEGERA HADIR</span></div>
-  <p>XERAVION menyiapkan layanan top-up multi-game. Tahap awal dimulai dari MLBB Indonesia setelah verifikasi akun dan wilayah siap. Game lain menyusul bertahap.</p>
-  <div class="topup-games" aria-label="Game yang direncanakan untuk top-up"><span>Mobile Legends</span><span>PUBG Mobile</span><span>Free Fire</span><span>Genshin Impact</span><span>Honor of Kings</span><span>eFootball</span></div>
-  <small>GAME LAIN MENYUSUL · PESANAN BELUM DIBUKA</small>
+  <div class="topup-heading"><h2 id="topupTitle">Top Up Game</h2></div>
+  <p>Pilih game favoritmu untuk melihat pilihan produk dan nominal top-up yang tersedia di XERAVION.</p>
+  <div class="topup-games" aria-label="Katalog game top-up">
+   <span>Mobile Legends</span><span>Magic Chess: Go Go</span><span>Free Fire</span><span>PUBG Mobile</span><span>Valorant</span><span>Genshin Impact</span>
+  </div>
  </div>
- <div class="topup-mark" aria-hidden="true"><span>⚡</span></div>
+ <div class="topup-mark" aria-hidden="true"><span>🎮</span></div>
 </section>
-<div class="sectionhead"><div><div class="eyebrow">STORE COLLECTION</div><h2>Etalase akun</h2></div><p id="resultCount">0 akun</p></div><div class="tools"><div class="search"><input id="search" type="search" placeholder="Cari nama, kode stok, atau deskripsi…" oninput="render()"></div><select id="sort" onchange="render()"><option value="code" selected>Kode listing (A-Z)</option><option value="new">Terbaru</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></div>
-<div class="chips"><button class="chip active" onclick="setGame('Semua',this)">Semua game</button><button class="chip" onclick="setGame('Mobile Legends',this)">Mobile Legends</button><button class="chip" onclick="setGame('PUBG Mobile',this)">PUBG Mobile</button><button class="chip" onclick="setGame('Free Fire',this)">Free Fire</button><button class="chip" onclick="setGame('eFootball',this)">eFootball</button><button class="chip" onclick="setGame('Clash of Clans',this)">Clash of Clans</button><button class="chip" onclick="setGame('Lainnya',this)">Lainnya</button></div><div class="grid" id="products"></div><p class="hint" style="margin:18px 0 40px">Informasi akun ditampilkan sesuai data yang dimasukkan admin. Pastikan proses jual beli dan pengalihan akun mematuhi ketentuan penerbit game. Jangan pernah membagikan password, OTP, atau data pemulihan melalui halaman publik.</p></section>
+<div class="sectionhead"><div><div class="eyebrow">STORE COLLECTION</div> id="topup" aria-labelledby="topupTitle">
+ <div class="topup-copy">
+  <div class="eyebrow">LAYANAN XERAVION</div>
+  <div class="topup-heading"><h2 id="topupTitle">Top Up Game</h2></div>
+  <p>Pilih game favoritmu untuk melihat pilihan produk dan nominal top-up yang tersedia di XERAVION.</p>
+  <div class="topup-games" aria-label="Katalog game top-up">
+   <span>Mobile Legends</span><span>Magic Chess: Go Go</span><span>Free Fire</span><span>PUBG Mobile</span><span>Valorant</span><span>Genshin Impact</span>
+  </div>
+ </div>
+ <div class="topup-mark" aria-hidden="true"><span>🎮</span></div>
+<h2>Etalase akun</h2></div><p id="resultCount">0 akun</p></div><div class="tools"><div class="search"><input id="search" type="search" placeholder="Cari nama, kode stok, atau deskripsi…" oninput="render()"></div><select id="sort" onchange="render()"><option value="code" selected>Kode listing (A-Z)</option><option value="new">Terbaru</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></div>
+<div class="chips"><button class="chip active" onclick="setGame('Semua',this)">Semua game</button><button class="chip" onclick="setGame('Mobile Legends',this)">Mobile Legends</button><button class="chip" onclick="setGame('PUBG Mobile',this)">PUBG Mobile</button><button class="chip" onclick="setGame('Free Fire',this)">Free Fire</button><button class="chip" onclick="setGame('eFootball',this)">eFootball</button><button class="chip" onclick="setGame('Clash of Clans',this)">Clash of Clans</button><button class="chip" onclick="setGame('Lainnya',this)">Lainnya</button><button class="chip" onclick="setGame('Item Gaming',this)">Item Gaming</button><button class="chip" onclick="setGame('Top Up',this)">Top Up</button></div><div class="grid" id="products"></div><p class="hint" style="margin:18px 0 40px">Informasi akun ditampilkan sesuai data yang dimasukkan admin. Pastikan proses jual beli dan pengalihan akun mematuhi ketentuan penerbit game. Jangan pernah membagikan password, OTP, atau data pemulihan melalui halaman publik.</p></section>
 <section class="admin" id="admin"><div class="adminbar"><div><div class="eyebrow">XERAVION ADMIN CONTROL CENTER</div><h2>Admin Control Center</h2><div class="hint">Satu pusat kendali untuk toko, member, transaksi, dan email.</div></div><div class="navright"><button class="btn" onclick="signOutAdmin()">Keluar admin</button><button class="btn" id="xeravionAdminRefreshBtn" type="button" onclick="refreshXeravionAdminData()">↻ Muat Ulang Data</button></div></div>
 <nav class="xer-admin-tabs" role="tablist" aria-label="Navigasi dashboard admin">
  <button type="button" class="xer-admin-tab active" data-tab="overview" onclick="showAdminTab('overview')">Ringkasan</button>
  <button type="button" class="xer-admin-tab" data-tab="form" onclick="showAdminTab('form')">Tambah etalase</button>
  <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing Akun</button>
  <button type="button" class="xer-admin-tab" data-tab="item-listings" onclick="showAdminTab('item-listings')">Item Gaming</button>
+ <button type="button" class="xer-admin-tab" data-tab="topup-listings" onclick="showAdminTab('topup-listings')">Top Up</button>
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
  <button type="button" class="xer-admin-tab" data-tab="accounting" onclick="showAdminTab('accounting')">Pembukuan</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="credit-monitor" onclick="showAdminTab('credit-monitor')">Monitoring Poin</button>
  <button type="button" class="xer-admin-tab" data-tab="analytics" onclick="showAdminTab('analytics')">Visitor Analytics</button>
- <button type="button" class="xer-admin-tab" data-tab="melo" onclick="showAdminTab('melo')">Melo H2H</button>
- <button type="button" class="xer-admin-tab" data-tab="dwigital" onclick="showAdminTab('dwigital')">Dwigital</button>
  <button type="button" class="xer-admin-tab" data-tab="mail" onclick="showAdminTab('mail')">XERAVION Mail</button>
 </nav>
 <div class="xer-admin-tab-panel active" id="adminTab-overview"><div class="adminstats"><div class="stat"><b id="totalAdmin">0</b><span>Total akun</span></div><div class="stat"><b id="availableAdmin">0</b><span>Akun tersedia</span></div><div class="stat"><b id="soldAdmin">0</b><span>Akun terjual / habis</span></div></div><div class="panel xer-admin-welcome"><h3>Selamat datang di XERAVION</h3><p class="hint">Pilih menu di atas untuk mengelola toko. Semua bagian sekarang tampil terpisah agar dashboard lebih ringkas.</p><div class="xer-admin-shortcuts"><button class="btn gold" onclick="showAdminTab('form')">＋ Tambah akun</button><button class="btn" onclick="showAdminTab('listings')">Kelola listing</button><button class="btn" onclick="showAdminTab('orders')">Buka invoice</button><button class="btn" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button></div></div></div>
@@ -1374,75 +1331,15 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
   <div class="hint" style="margin-top:12px">*Data agregat. Dashboard tidak menampilkan nama atau identitas pribadi pengunjung.</div>
  </div>
 </div>
-<div class="xer-admin-tab-panel" id="adminTab-melo">
- <div class="panel xer-melo-panel">
-  <div class="sectionhead"><div><div class="eyebrow">RESELLER API · SANDBOX</div><h3 style="margin:4px 0">Melo H2H Integration</h3><div class="hint">Hubungkan XERAVION ke katalog dan saldo Melo. Kredensial disimpan hanya di Cloudflare Pages.</div></div><span id="meloConnectionBadge" class="melo-badge">Belum diuji</span></div>
-  <div class="melo-status-grid">
-   <div class="stat"><b id="meloProfileName">—</b><span>Profil / akun</span></div>
-   <div class="stat"><b id="meloProfileTier">—</b><span>Tier akun</span></div>
-   <div class="stat"><b id="meloBalance">—</b><span>Saldo Melo (MC / IDR)</span></div>
-  </div>
-  <div class="melo-actions">
-   <button class="btn gold" type="button" id="meloTestBtn" onclick="testMeloConnection()">Uji koneksi API</button>
-   <button class="btn" type="button" onclick="loadMeloBalance()">Perbarui saldo</button>
-   <button class="btn" type="button" onclick="loadMeloCategories('regular')">Muat katalog reguler</button>
-   <button class="btn" type="button" onclick="loadMeloCategories('smart')">Muat katalog Smart</button>
-  </div>
-  <div id="meloStatus" class="notice" role="status" aria-live="polite">Mode aman: Sandbox. Belum ada pesanan yang dapat dibuat dari halaman ini.</div>
-  <div class="melo-catalog-head"><div><h4>Katalog supplier</h4><p class="hint">Pilih katalog reguler atau Smart. Harga supplier mengikuti tier akun Melo dan disimpan sementara agar tidak terlalu sering meminta katalog.</p></div><div class="melo-catalog-controls"><select id="meloCatalogMode" aria-label="Jenis katalog" onchange="loadMeloCategories(this.value)"><option value="regular">Reguler</option><option value="smart">Smart</option></select><input id="meloCatalogSearch" placeholder="Cari nama produk atau SKU…" oninput="filterMeloCatalog()"></div></div>
-  <div id="meloBrandList" class="melo-brand-list"><div class="melo-empty">Tekan “Muat brand reguler” atau “Muat brand Smart” untuk mengambil katalog.</div></div>
-  <div id="meloProductArea" class="melo-product-area hidden">
-   <div class="melo-product-heading"><h4 id="meloProductTitle">Daftar produk</h4><button class="btn" type="button" onclick="closeMeloProducts()">Tutup</button></div>
-   <div id="meloProductList" class="melo-product-list"></div>
-   <div id="meloPagination" class="melo-pagination" aria-live="polite"></div>
-  </div>
-  <div class="melo-markup-box">
-   <h4>Simulasi harga jual XERAVION</h4><p class="hint">Kalkulasi saja, belum mengubah harga toko atau membuat pesanan.</p>
-   <label for="meloMarkup">Margin tambahan (Rp)</label><input id="meloMarkup" type="number" min="0" step="1" value="300" inputmode="numeric" oninput="updateMeloMarkupPreview()"><p class="hint">Margin awal XERAVION: Rp300 per produk. Admin dapat mengubahnya untuk simulasi; harga toko dan transaksi tidak berubah.</p>
-   <div id="meloMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div>
-  </div>
-  <p class="hint melo-footnote">Tahap ini hanya menguji koneksi, membaca profil/saldo, dan menampilkan katalog. Belum ada tombol pembelian, transaksi live, perubahan stok, atau sinkronisasi otomatis. Semua transaksi harus tetap melalui persetujuan admin setelah pengujian Sandbox.</p>
- </div>
-</div>
-<div class="xer-admin-tab-panel" id="adminTab-dwigital">
- <div class="panel xer-dwigital-panel">
-  <div class="sectionhead"><div><div class="eyebrow">RESELLER API · DEVELOPMENT</div><h3 style="margin:4px 0">Dwigital Supplier</h3><div class="hint">Supplier kedua untuk membandingkan katalog dan harga modal. Hanya API Development; tidak ada pembelian atau pemotongan saldo.</div></div><span id="dwigitalConnectionBadge" class="melo-badge">Belum diuji</span></div>
-  <div class="melo-status-grid"><div class="stat"><b id="dwigitalEnvironment">—</b><span>Mode API</span></div><div class="stat"><b id="dwigitalTier">—</b><span>Level akun</span></div><div class="stat"><b id="dwigitalBalance">—</b><span>Saldo uji</span></div></div>
-  <div class="melo-actions"><button class="btn gold" type="button" id="dwigitalTestBtn" onclick="testDwigitalConnection()">Uji koneksi</button><button class="btn" type="button" onclick="loadDwigitalCatalog()">Muat katalog MLBB</button></div>
-  <div id="dwigitalStatus" class="notice" role="status" aria-live="polite">Mode aman: Development. Pesanan sungguhan tidak akan dibuat dari panel ini.</div>
-  <div class="melo-markup-box" id="dwigitalNicknameTest">
-   <h4>Uji pengecekan User ID / Zone ID MLBB</h4>
-   <p class="hint">Khusus admin dan API Development. Pilih paket dari katalog lalu masukkan ID akun untuk menguji respons nickname. Pengujian ini tidak memesan produk, tidak memotong saldo, dan tidak menentukan negara akun.</p>
-   <div class="formgrid">
-    <div><label for="dwigitalCheckVariant">Pilih paket MLBB yang mendukung cek nickname *</label><select id="dwigitalCheckVariant" onchange="onDwigitalNicknameVariantChange()"><option value="">Muat katalog terlebih dahulu</option></select></div>
-    <div><label for="dwigitalCheckUser">User ID *</label><input id="dwigitalCheckUser" type="text" maxlength="64" autocomplete="off" placeholder="Masukkan User ID"></div>
-    <div><label for="dwigitalCheckZone">Zone ID *</label><input id="dwigitalCheckZone" type="text" maxlength="32" autocomplete="off" placeholder="Masukkan Zone ID"></div>
-    <div style="display:flex;align-items:end"><button class="btn gold" type="button" id="dwigitalCheckBtn" onclick="testDwigitalNickname()">Uji nickname (Development)</button></div>
-   </div>
-   <div id="dwigitalNicknameResult" class="notice" role="status" aria-live="polite">Belum ada pengecekan. Hasil akan mengikuti respons validasi User ID dan Zone ID dari Dwigital.</div>
-  </div>
-  <div class="melo-catalog-head"><div><h4>Katalog supplier Dwigital</h4><p class="hint">Harga yang tampil adalah harga modal sesuai tier akun. Pilih wilayah untuk memisahkan paket Indonesia, negara SEA, SEA umum, dan Global. Paket tanpa label wilayah yang jelas masuk ke Belum teridentifikasi.</p></div><div class="melo-catalog-controls"><input id="dwigitalCatalogSearch" placeholder="Cari game / produk…" value="mobile legends"><button class="btn" type="button" onclick="loadDwigitalCatalog(1)">Cari</button><select id="dwigitalRegionFilter" aria-label="Filter wilayah paket" onchange="renderDwigitalCatalogByRegion()"><option value="all">Semua wilayah</option><option value="ID">Indonesia</option><option value="MY">Malaysia</option><option value="PH">Filipina</option><option value="SG">Singapura</option><option value="TH">Thailand</option><option value="VN">Vietnam</option><option value="BN">Brunei Darussalam</option><option value="KH">Kamboja</option><option value="LA">Laos</option><option value="MM">Myanmar</option><option value="TL">Timor-Leste</option><option value="SEA">SEA umum</option><option value="OTHER_COUNTRY">Negara di luar SEA</option><option value="GLOBAL">Global</option><option value="UNKNOWN">Belum teridentifikasi</option></select></div></div>
-  <div id="dwigitalRegionSummary" class="hint" aria-live="polite" style="margin:8px 0 12px">Wilayah paket akan dikelompokkan berdasarkan label yang tersedia dari supplier.</div>
-  <div id="dwigitalProductList" class="melo-product-list"><div class="melo-empty">Tekan “Muat katalog MLBB” untuk mengambil produk.</div></div><div id="dwigitalPagination" class="melo-pagination" aria-live="polite"></div>
-  <div class="melo-markup-box" id="dwigitalCompareBox">
-   <h4>Perbandingan harga Dwigital vs Melo</h4>
-   <p class="hint">Ambil katalog reguler dari kedua supplier. Hanya membandingkan harga modal; tidak membuat pesanan atau mengubah harga toko.</p>
-   <button class="btn" type="button" id="dwigitalCompareBtn" onclick="compareDwigitalMelo()">Bandingkan harga dengan Melo</button>
-   <div id="dwigitalCompareResult" class="hint" style="margin-top:12px">Tekan tombol untuk mengambil katalog kedua supplier dan melihat produk yang namanya cocok.</div>
-  </div>
-  <div class="melo-markup-box"><h4>Simulasi harga jual XERAVION</h4><p class="hint">Hanya simulasi. Tidak mengubah harga toko, stok, atau membuat pesanan.</p><label for="dwigitalMarkup">Margin tambahan (Rp)</label><input id="dwigitalMarkup" type="number" min="0" step="1" value="300" inputmode="numeric" oninput="updateDwigitalMarkupPreview()"><div id="dwigitalMarkupPreview" class="hint">Pilih produk untuk melihat simulasi harga jual.</div></div>
-  <p class="hint melo-footnote">Tahap Development hanya untuk uji koneksi, membaca saldo uji, katalog, harga, dan simulasi. Tidak ada endpoint order, deposit, webhook, atau transaksi yang diaktifkan di XERAVION.</p>
- </div>
-</div>
 <div class="xer-admin-tab-panel" id="adminTab-mail">
  <div class="panel" style="padding:0;overflow:hidden">
   <iframe id="xeravionMailFrame" title="XERAVION Mail Admin" src="about:blank" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" style="display:block;width:100%;height:min(78vh,900px);min-height:620px;border:0;background:#080807"></iframe>
  </div>
 </div>
-<div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><input id="newNameEn" placeholder="English account name (optional)"><select id="newCatalogType" aria-label="Jenis etalase" onchange="updateCatalogGameOptions();toggleCatalogMediaFields();refreshListingCode()"><option value="account">Etalase Akun</option><option value="item">Item Gaming</option></select><select id="newGame" aria-label="Pilih game" onchange="refreshListingCode()"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>eFootball</option><option>Clash of Clans</option></select><input id="newPrice" type="number" min="1" placeholder="Harga normal (Rp) *"><input id="newCostPrice" type="number" min="0" placeholder="Harga modal (Rp) — khusus admin"><input id="newCode" placeholder="Kode listing otomatis" readonly aria-label="Kode listing otomatis"><div class="hint wide">Kode listing dibuat otomatis berdasarkan etalase dan game. Kode lama tidak berubah saat listing diedit.</div><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newDescEn" placeholder="English account description (optional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div class="wide" id="mediaUploadFields"><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div></div><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><input id="newNameEn" placeholder="English account name (optional)"><select id="newCatalogType" aria-label="Jenis etalase" onchange="updateCatalogGameOptions();toggleCatalogMediaFields();refreshListingCode()"><option value="account">Etalase Akun</option><option value="item">Item Gaming</option><option value="topup">Top Up</option></select><select id="newGame" aria-label="Pilih game" onchange="refreshListingCode()"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>eFootball</option><option>Clash of Clans</option></select><input id="newPrice" type="number" min="1" placeholder="Harga normal (Rp) *"><input id="newCostPrice" type="number" min="0" placeholder="Harga modal (Rp) — khusus admin"><input id="newCode" placeholder="Kode listing otomatis" readonly aria-label="Kode listing otomatis"><div class="hint wide">Kode listing dibuat otomatis berdasarkan etalase dan game. Kode lama tidak berubah saat listing diedit.</div><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newDescEn" placeholder="English account description (optional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div class="wide" id="mediaUploadFields"><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div></div><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar listing akun</h3><div class="hint">Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.</div></div><input id="adminSearch" placeholder="Cari nama atau kode…" oninput="renderAdmin()"></div><div class="admin-game-tabs" id="adminGameTabs" role="tablist" aria-label="Filter listing berdasarkan game"></div><div class="admin-game-heading"><span id="adminGameHeading">SEMUA GAME</span><span id="adminGameCount">0 listing</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama akun</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminRows"></tbody></table></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-item-listings"><div class="panel"><div class="adminstats"><div class="stat"><b id="totalItemAdmin">0</b><span>Total item gaming</span></div><div class="stat"><b id="availableItemAdmin">0</b><span>Item tersedia</span></div><div class="stat"><b id="soldItemAdmin">0</b><span>Item terjual / habis</span></div></div><div class="sectionhead"><div><h3 style="margin:0">Daftar Item Gaming</h3><div class="hint">Khusus produk digital dan item game. Terpisah dari listing akun.</div></div><input id="adminItemSearch" placeholder="Cari item, game, atau kode…" oninput="renderItemGamingAdmin()"></div><div class="admin-game-heading"><span>ITEM GAMING</span><span id="adminItemCount">0 item</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama item</th><th>Game</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminItemRows"></tbody></table></div></div></div>
-<div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
+<div class="xer-admin-tab-panel" id="adminTab-topup-listings"><div class="panel"><div class="adminstats"><div class="stat"><b id="totalTopupAdmin">0</b><span>Total produk Top Up</span></div><div class="stat"><b id="availableTopupAdmin">0</b><span>Produk tersedia</span></div><div class="stat"><b id="soldTopupAdmin">0</b><span>Produk habis</span></div></div><div class="sectionhead"><div><h3 style="margin:0">Daftar Top Up</h3><div class="hint">Katalog Top Up terpisah dari akun dan Item Gaming. Harga modal hanya dapat dilihat admin.</div></div><button class="btn gold" type="button" onclick="openTopupForm()">＋ Tambah Top Up</button><input id="adminTopupSearch" placeholder="Cari produk, game, atau kode…" oninput="renderTopupAdmin()"></div><div class="admin-game-heading"><span>TOP UP</span><span id="adminTopupCount">0 produk</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama produk</th><th>Game</th><th>Harga jual</th><th>Harga modal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminTopupRows"></tbody></table></div><div class="divider"></div><div class="sectionhead"><div><h3 style="margin:0">Referensi Harga Modal ShopeePay</h3><div class="hint">Daftar modal pemasok yang hanya dapat dibaca admin. Belum menjadi harga jual katalog.</div></div><button class="btn" type="button" onclick="loadTopupCostCatalog()">Muat ulang harga modal</button></div><div class="hint" style="margin-bottom:10px">Isi keuntungan per produk dalam rupiah. Harga jual dihitung otomatis dari harga modal + keuntungan. Tekan Simpan & Terbitkan untuk memasukkan produk ke katalog publik.</div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Game</th><th>Kategori</th><th>Produk</th><th>Modal</th><th>Keuntungan (Rp)</th><th>Harga jual</th><th>Status katalog</th><th>Aksi</th></tr></thead><tbody id="topupCostCatalogRows"><tr><td colspan="8">Memuat data…</td></tr></tbody></table></div></div></div><div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
  <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Kelola pesanan dan invoice. Pembukuan biaya serta laba tersedia di menu Pembukuan.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
  <div class="notice">Untuk memberi cashback 3%, pilih member terlebih dahulu melalui panel Credit Points di bawah. Email pembeli harus sama dengan email member tersebut. Pilih member di formulir invoice untuk cashback otomatis 3%. Pesanan tamu tidak memperoleh cashback.</div>
  <div class="formgrid">
@@ -1633,72 +1530,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 </script>
 <script>
 const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',activeItemPlatform='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],existingImageUrls=[],originalEditingName='',originalEditingNameEn='',originalEditingDesc='',originalEditingDescEn='',deleteId=null,items=[],xeravionAdminVerified=false;
-const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}let buyerMlbbCatalog = [];
-let buyerMlbbEnvironment = 'development';
-let buyerMlbbVerifyVariant = null;
-let buyerMlbbSelectedVariant = null;
-let buyerMlbbNicknameVerified = false;
-async function loadBuyerMlbbCatalog(){
- const status=document.getElementById('buyerMlbbCatalogStatus'),grid=document.getElementById('buyerMlbbPackages');
- if(!status||!grid)return;
- try{
-  const response=await fetch('/api/topup/mlbb-catalog',{headers:{Accept:'application/json'},cache:'no-store'});
-  const payload=await response.json().catch(()=>null);
-  if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Katalog belum dapat dimuat.');
-  buyerMlbbCatalog=Array.isArray(payload.products)?payload.products:[];
-  buyerMlbbEnvironment=payload.environment==='production'?'production':'development';
-  buyerMlbbVerifyVariant=payload.nickname_variant_id;
-  if(!buyerMlbbCatalog.length){status.textContent='Belum ada paket MLBB pada katalog supplier.';return;}
-  status.textContent='Katalog '+(buyerMlbbEnvironment==='production'?'Production':'Development')+' berhasil dimuat ('+buyerMlbbCatalog.length+' paket). '+(buyerMlbbEnvironment==='production'?'Pemesanan belum diaktifkan.':'Harga hanya simulasi.');
-  grid.innerHTML=buyerMlbbCatalog.map(p=>'<button type="button" class="btn" data-mlbb-variant="'+p.variant_id+'" onclick="selectBuyerMlbbPackage('+p.variant_id+')" style="display:block;text-align:left;padding:12px;min-height:58px"><strong>'+escapeMlbbText(p.name)+'</strong><small style="display:block;color:var(--muted);margin-top:5px">Rp '+Number(p.price).toLocaleString('id-ID')+' • '+(buyerMlbbEnvironment==='production'?'LIVE':'UJI')+'</small></button>').join('');
- }catch(error){status.textContent=error.message||'Gagal memuat katalog.';}
-}
-function escapeMlbbText(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
-function selectBuyerMlbbPackage(id){
- buyerMlbbSelectedVariant=buyerMlbbCatalog.find(p=>p.variant_id===id)||null;
- document.querySelectorAll('#buyerMlbbPackages [data-mlbb-variant]').forEach(el=>{el.classList.toggle('gold',Number(el.dataset.mlbbVariant)===id)});
- const status=document.getElementById('buyerMlbbCatalogStatus');
- if(status&&buyerMlbbSelectedVariant)status.textContent='Dipilih: '+buyerMlbbSelectedVariant.name+'. '+(buyerMlbbEnvironment==='production'?'Harga katalog Production; pemesanan belum diaktifkan.':'Harga Development hanya simulasi, belum dapat dibeli.');
-}
-async function checkBuyerMlbbNickname(){
- const user=(document.getElementById('buyerMlbbUserId')?.value||'').trim();
- const zone=(document.getElementById('buyerMlbbZoneId')?.value||'').trim();
- const feedback=document.getElementById('buyerMlbbTopupFeedback');
- const button=document.getElementById('buyerMlbbCheckButton');
- const card=document.getElementById('buyerMlbbNicknameCard');
- const verifyProduct=buyerMlbbCatalog.find(p=>p.variant_id===buyerMlbbVerifyVariant);
- if(!/^[A-Za-z0-9#._-]{2,64}$/.test(user)){if(feedback)feedback.textContent='User ID tidak valid. Periksa kembali.';return;}
- if(!/^[A-Za-z0-9._-]{1,32}$/.test(zone)){if(feedback)feedback.textContent='Zone ID wajib diisi sesuai format Dwigital.';return;}
- if(!verifyProduct){if(feedback)feedback.textContent='Paket untuk cek nickname belum tersedia dari katalog Dwigital.';return;}
- if(button){button.disabled=true;button.textContent='Memeriksa…'}
- if(feedback)feedback.textContent='Menghubungi layanan pengecekan '+(buyerMlbbEnvironment==='production'?'Production':'Development')+' Dwigital…';
- if(card)card.hidden=true;
- buyerMlbbNicknameVerified=false;
- try{
-  const response=await fetch('/api/topup/mlbb-nickname',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({variant_id:buyerMlbbVerifyVariant,target:user,target_zone:zone}),cache:'no-store'});
-  const payload=await response.json().catch(()=>null);
-  if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
-  const name=document.getElementById('buyerMlbbNickname'),mode=document.getElementById('buyerMlbbNicknameMode');
-  if(name)name.textContent=payload.nickname||'Nickname tidak dikembalikan';
-  if(mode)mode.textContent=payload.environment==='production'?'Nickname asli diverifikasi melalui Dwigital Production.':'Hasil simulasi API Development. Belum merupakan verifikasi Production.';
-  if(card)card.hidden=false;
-  if(feedback)feedback.textContent=payload.environment==='production'?'Nickname berhasil diverifikasi. Pemesanan dan pembayaran masih belum aktif.':'Nickname simulasi berhasil diterima. Kamu dapat melihat katalog uji, tetapi pemesanan dan pembayaran belum aktif.';
-  buyerMlbbNicknameVerified=true;
- }catch(error){if(feedback)feedback.textContent=error.message||'Pengecekan gagal. Coba lagi.';}
- finally{if(button){button.disabled=false;button.textContent='Cek Nickname Otomatis'}}
-}
-function sendMlbbTopupInquiry(){
- const userId=(document.getElementById('buyerMlbbUserId')?.value||'').trim();
- const zoneId=(document.getElementById('buyerMlbbZoneId')?.value||'').trim();
- const feedback=document.getElementById('buyerMlbbTopupFeedback');
- if(!/^[0-9]{4,20}$/.test(userId)){if(feedback)feedback.textContent='User ID harus berupa angka 4–20 digit. Periksa kembali ID akun Mobile Legends.';return;}
- if(!/^[0-9]{1,10}$/.test(zoneId)){if(feedback)feedback.textContent='Zone ID / Server ID harus berupa angka 1–10 digit. Periksa kembali ID akun Mobile Legends.';return;}
- const message='Halo admin XERAVION, saya ingin top up Mobile Legends.\nUser ID: '+userId+'\nZone ID: '+zoneId+'\nMohon bantu cek nickname akun dan nominal yang tersedia. Saya memahami pengecekan dan transaksi saat ini dilakukan manual.';
- const url='https://wa.me/6287714947270?text='+encodeURIComponent(message);
- window.open(url,'_blank','noopener');
- if(feedback)feedback.textContent='Permintaan disiapkan. Lanjutkan percakapan di WhatsApp untuk pemeriksaan manual oleh admin.';
-}
-async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);window.xeravionProductCosts=window.xeravionProductCosts||{};try{const{data:isAdmin}=await supabaseClient.rpc('is_admin');if(isAdmin){const{data:costRows,error:costError}=await supabaseClient.from('product_costs').select('product_id,cost_price');if(costError)throw costError;window.xeravionProductCosts=Object.fromEntries((costRows||[]).map(x=>[String(x.product_id),x.cost_price==null?null:Number(x.cost_price)]));}}catch(costLoadError){console.warn('XERAVION accounting cost data is admin-only:',costLoadError.message)}applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
+const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);window.xeravionProductCosts=window.xeravionProductCosts||{};try{const{data:isAdmin}=await supabaseClient.rpc('is_admin');if(isAdmin){const{data:costRows,error:costError}=await supabaseClient.from('product_costs').select('product_id,cost_price');if(costError)throw costError;window.xeravionProductCosts=Object.fromEntries((costRows||[]).map(x=>[String(x.product_id),x.cost_price==null?null:Number(x.cost_price)]));}}catch(costLoadError){console.warn('XERAVION accounting cost data is admin-only:',costLoadError.message)}applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
 function waLink(p){let msg=`Halo admin XERAVION, saya tertarik dengan akun ${p.code} - ${p.name} (${p.game}) dengan harga ${rupiah(p.price)}. Apakah akun ini masih tersedia?`;return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`}
 async function shareListing(id){
  const p=items.find(x=>Number(x.id)===Number(id));if(!p)return;
@@ -1743,10 +1575,11 @@ function render(){
   return p.game===activeItemPlatform;
  };
  const matchesGame=p=>{
-  if(activeGame==='Semua')return p.catalog_type!=='item';
+  if(activeGame==='Semua')return p.catalog_type==='account';
   if(activeGame==='Item Gaming')return p.catalog_type==='item'&&matchesItemPlatform(p);
-  if(activeGame==='Lainnya')return p.catalog_type!=='item'&&!['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game);
-  return p.catalog_type!=='item'&&p.game===activeGame;
+  if(activeGame==='Top Up')return p.catalog_type==='topup';
+  if(activeGame==='Lainnya')return p.catalog_type==='account'&&!['Mobile Legends','PUBG Mobile','Free Fire'].includes(p.game);
+  return p.catalog_type==='account'&&p.game===activeGame;
  };
  let a=items.filter(p=>{
   if(p.stock!=='Tersedia'||!matchesGame(p))return false;
@@ -1757,10 +1590,10 @@ function render(){
  if(sort==='low')a.sort((x,y)=>x.price-y.price);
  if(sort==='high')a.sort((x,y)=>y.price-x.price);
  const resultCount=document.getElementById('resultCount');
- if(resultCount)resultCount.textContent=window.getXeravionLanguage&&getXeravionLanguage()==='en'?a.length+(activeGame==='Item Gaming'?' products available':' accounts available'):a.length+(activeGame==='Item Gaming'?' produk tersedia':' akun tersedia');
+ if(resultCount)resultCount.textContent=window.getXeravionLanguage&&getXeravionLanguage()==='en'?a.length+(activeGame==='Item Gaming'||activeGame==='Top Up'?' products available':' accounts available'):a.length+(activeGame==='Item Gaming'||activeGame==='Top Up'?' produk tersedia':' akun tersedia');
  const countStat=document.getElementById('countStat');
  if(countStat)countStat.textContent=items.filter(p=>p.stock==='Tersedia').length;
- const sectionTitle=document.querySelector('.catalog>.sectionhead h2'); if(sectionTitle)sectionTitle.textContent=activeGame==='Item Gaming'?'Etalase Item Gaming':'Etalase akun'; const products=document.getElementById('products');
+ const sectionTitle=document.querySelector('.catalog>.sectionhead h2'); if(sectionTitle)sectionTitle.textContent=activeGame==='Item Gaming'?'Etalase Item Gaming':activeGame==='Top Up'?'Katalog Top Up':'Etalase akun'; const products=document.getElementById('products');
  if(products){products.classList.toggle('item-gaming-list',activeGame==='Item Gaming');products.innerHTML=a.length?a.map(p=>activeGame==='Item Gaming'?'<article class="item-product-row"><div class="item-product-main"><span class="item-product-game">'+esc(p.game)+'</span><h3>'+esc(window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.name_en||p.name):p.name)+'</h3><span class="item-product-code">'+esc(p.code)+'</span></div><div class="item-product-side"><strong>'+storefrontPriceDisplay(p)+'</strong><span class="item-stock">'+esc(p.stock.toUpperCase())+'</span><button class="buy detail-buy" type="button" onclick="openProductDetail('+Number(p.id)+')">LIHAT DETAIL ↗</button>'+(xeravionAdminVerified?'<button class="buy admin-share-buy" type="button" onclick="shareListing('+Number(p.id)+')">↗ BAGIKAN LISTING</button>':'')+(p.stock==='Tersedia'?'<a class="buy wa-buy" href="'+esc(waLink(p))+'" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>':'<button class="buy wa-buy" type="button" disabled>'+esc(p.stock.toUpperCase())+'</button>')+'</div></article>':`<article class="product"><div class="thumb ${gameClass(p.game)}">${safeImageUrl(p.image)?`<img src="${esc(safeImageUrl(p.image))}" alt="Foto ${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer">`:`<span class="gameicon">${p.icon||iconFor(p.game)}</span>`}<span class="stock">${p.stock.toUpperCase()}</span></div><div class="prod"><div class="game game-brand">${gameLogo(p.game)}</div><h3>${esc(window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.name_en||p.name):p.name)}</h3><div class="desc">${esc((window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.description_en||p.desc):p.desc)||(window.getXeravionLanguage&&getXeravionLanguage()==='en'?'Ask the admin for more product details.':'Detail produk dapat ditanyakan kepada admin.'))}</div>${p.specs&&Object.keys(p.specs).length?`<div class="product-specs">${Object.entries(p.specs).map(([k,v])=>`<span><b>${esc(k)}:</b> ${esc(v)}</span>`).join('')}</div>`:''}<div class="priceRow">${storefrontPriceDisplay(p)}<span class="code">${esc(p.code)}</span></div><button class="buy detail-buy" type="button" onclick="openProductDetail(${Number(p.id)})">LIHAT DETAIL AKUN ↗</button>${xeravionAdminVerified?`<button class="buy admin-share-buy" type="button" onclick="shareListing(${Number(p.id)})">↗ BAGIKAN LISTING</button>`:''}${p.stock==='Tersedia'?`<a class="buy wa-buy" href="${esc(waLink(p))}" target="_blank" rel="noopener noreferrer">TANYA VIA WHATSAPP ↗</a>`:`<button class="buy wa-buy" type="button" disabled>${esc(p.stock.toUpperCase())}</button>`}</div></article>`).join(''):'<div class="empty">Belum ada produk yang cocok. Coba kata kunci atau kategori lain.</div>'}
  renderAdmin();
 }
@@ -1842,11 +1675,11 @@ async function createXeravionWatermark(file){
   return new File([blob],'xeravion-'+Date.now()+'.webp',{type:'image/webp',lastModified:Date.now()});
  }finally{URL.revokeObjectURL(objectUrl)}
 }
-function updateCatalogGameOptions(selected){const select=document.getElementById('newGame');if(!select)return;const isItem=document.getElementById('newCatalogType')?.value==='item';const accountGames=['Mobile Legends','PUBG Mobile','Free Fire','eFootball','Clash of Clans'];const itemGames=['Mobile Legends','PUBG Mobile','Free Fire','Roblox','Steam','Call of Duty Mobile','Genshin Impact','Honor of Kings','Clash of Clans','eFootball','Lainnya'];const choices=isItem?itemGames:accountGames;const current=selected||select.value;select.innerHTML=choices.map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join('');select.value=choices.includes(current)?current:choices[0];}
+function updateCatalogGameOptions(selected){const select=document.getElementById('newGame');if(!select)return;const isItem=document.getElementById('newCatalogType')?.value==='item';const accountGames=['Mobile Legends','PUBG Mobile','Free Fire','eFootball','Clash of Clans'];const itemGames=['Mobile Legends','PUBG Mobile','Free Fire','Roblox','Steam','Call of Duty Mobile','Genshin Impact','Honor of Kings','Clash of Clans','eFootball','Lainnya'];const topupGames=['Mobile Legends','Magic Chess: Go Go','Free Fire','PUBG Mobile','Valorant','Genshin Impact'];const choices=isItem?itemGames:(document.getElementById('newCatalogType')?.value==='topup'?topupGames:accountGames);const current=selected||select.value;select.innerHTML=choices.map(g=>'<option value="'+esc(g)+'">'+esc(g)+'</option>').join('');select.value=choices.includes(current)?current:choices[0];}
 function listingCodePrefix(catalogType,game){
  const accountPrefixes={'Mobile Legends':'ML','PUBG Mobile':'PUBG','Free Fire':'FF','eFootball':'EFB','Clash of Clans':'COC'};
  const itemPrefixes={'Mobile Legends':'IG-ML','PUBG Mobile':'IG-PUBG','Free Fire':'IG-FF','Roblox':'IG-ROBLOX','Steam':'IG-STEAM','Call of Duty Mobile':'IG-CODM','Genshin Impact':'IG-GENSHIN','Honor of Kings':'IG-HOK','Clash of Clans':'IG-COC','eFootball':'IG-EFB','Lainnya':'IG-OTHER'};
- return 'XRV-'+((catalogType==='item'?itemPrefixes:accountPrefixes)[game]||(catalogType==='item'?'IG-OTHER':'ML'));
+ const topupPrefixes={'Mobile Legends':'TU-ML','Magic Chess: Go Go':'TU-MCGG','Free Fire':'TU-FF','PUBG Mobile':'TU-PUBG','Valorant':'TU-VAL','Genshin Impact':'TU-GENSHIN'};const map=catalogType==='topup'?topupPrefixes:(catalogType==='item'?itemPrefixes:accountPrefixes);return 'XRV-'+(map[game]||(catalogType==='topup'?'TU-OTHER':catalogType==='item'?'IG-OTHER':'ML'));
 }
 function nextListingCode(prefix){
  const max=items.reduce((n,p)=>{const c=String(p.code||'').toUpperCase();if(!c.startsWith(prefix+'-'))return n;const v=Number(c.slice(prefix.length+1));return Number.isInteger(v)?Math.max(n,v):n},0);
@@ -1856,7 +1689,7 @@ function refreshListingCode(){
  if(editingId)return;
  const field=document.getElementById('newCode');if(field)field.value=nextListingCode(listingCodePrefix(document.getElementById('newCatalogType')?.value,document.getElementById('newGame')?.value));
 }
-function toggleCatalogMediaFields(){const item=document.getElementById('newCatalogType')?.value==='item',fields=document.getElementById('mediaUploadFields');if(fields)fields.style.display=item?'none':'';if(item){selectedImageFile=null;selectedImageFiles=[];existingImageUrls=[];pendingImage='';const input=document.getElementById('newImage');if(input)input.value='';const preview=document.getElementById('imagePreview');if(preview){if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);delete preview.dataset.objectUrl;preview.removeAttribute('src');preview.style.display='none'}const list=document.getElementById('imagePreviewList');if(list)list.innerHTML='';}}
+function toggleCatalogMediaFields(){const type=document.getElementById('newCatalogType')?.value,item=type==='item'||type==='topup',fields=document.getElementById('mediaUploadFields');if(fields)fields.style.display=item?'none':'';if(item){selectedImageFile=null;selectedImageFiles=[];existingImageUrls=[];pendingImage='';const input=document.getElementById('newImage');if(input)input.value='';const preview=document.getElementById('imagePreview');if(preview){if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);delete preview.dataset.objectUrl;preview.removeAttribute('src');preview.style.display='none'}const list=document.getElementById('imagePreviewList');if(list)list.innerHTML='';}}
 
 /* Storefront-only IDR to USD display conversion. Admin prices and database values remain IDR. */
 let xeravionUsdPerIdr=null,xeravionUsdRateDate='',xeravionUsdRateLoading=null;
@@ -1934,7 +1767,7 @@ async function translateIndonesianToEnglish(textValue){
 async function saveProduct(){
  const wasEditing=Boolean(editingId),name=document.getElementById('newName').value.trim(),game=document.getElementById('newGame').value,catalog_type=document.getElementById('newCatalogType').value,originalPrice=Number(document.getElementById('newPrice').value),old=items.find(x=>String(x.id)===String(editingId)),discountPercent=wasEditing?Number(old?.discountPercent||0):0,price=Math.round(originalPrice*(1-discountPercent/100)),desc=document.getElementById('newDesc').value.trim(),stock=document.getElementById('newStock').value;
  if(!name||!originalPrice||originalPrice<1){alert('Nama dan harga wajib diisi.');return}
- const isItem=catalog_type==='item';let image='',uploadedUrls=[];
+ const isItem=catalog_type==='item',isTopup=catalog_type==='topup';let image='',uploadedUrls=[];
  const saveButton=document.getElementById('saveBtn'),originalLabel=saveButton.textContent;saveButton.disabled=true;
  try{
   let nameEn=document.getElementById('newNameEn').value.trim(),descEn=document.getElementById('newDescEn').value.trim();
@@ -1961,7 +1794,7 @@ async function saveProduct(){
    }
    document.getElementById('newCode').value=code;
   }
-  for(let i=0;!isItem&&i<selectedImageFiles.length;i++){
+  for(let i=0;isTopup===false&&!isItem&&i<selectedImageFiles.length;i++){
    const file=selectedImageFiles[i];saveButton.textContent='Membuat watermark '+(i+1)+'/'+selectedImageFiles.length+'…';
    const watermarked=await createXeravionWatermark(file);
    if(!watermarked||watermarked.type!=='image/webp'||watermarked.size<1000)throw new Error('Hasil watermark foto '+file.name+' tidak valid.');
@@ -1977,8 +1810,8 @@ async function saveProduct(){
    uploadedUrls.push(publicUrl+(publicUrl.includes('?')?'&':'?')+'v='+Date.now());
   }
   if(uploadedUrls.length)image=uploadedUrls[0];
-  const finalImageUrls=isItem?[]:(uploadedUrls.length?existingImageUrls.concat(uploadedUrls):existingImageUrls.slice());
-  if(!isItem&&!finalImageUrls.length)throw new Error('Listing akun wajib memiliki minimal satu foto. Unggah foto atau batalkan penghapusan foto terakhir.');
+  const finalImageUrls=(isItem||isTopup)?[]:(uploadedUrls.length?existingImageUrls.concat(uploadedUrls):existingImageUrls.slice());
+  if(!isItem&&!isTopup&&!finalImageUrls.length)throw new Error('Listing akun wajib memiliki minimal satu foto. Unggah foto atau batalkan penghapusan foto terakhir.');
   image=finalImageUrls[0]||'';
   const gallery=isItem?[]:finalImageUrls.slice(1);
   const costPriceRaw=document.getElementById('newCostPrice').value.trim();const costPrice=costPriceRaw===''?null:Math.max(0,Math.floor(Number(costPriceRaw)));const payload={code,name,name_en:nameEn,game,catalog_type,price,original_price:originalPrice,discount_percent:discountPercent,description:desc,description_en:descEn,image_url:image,status:stock,gallery_images:gallery};
@@ -1989,7 +1822,7 @@ async function saveProduct(){
   if(!savedProductId)throw new Error('Listing tersimpan tetapi ID produk tidak dapat dipastikan.');
   const {error:costError}=await supabaseClient.from('product_costs').upsert({product_id:savedProductId,cost_price:costPrice,updated_at:new Date().toISOString()},{onConflict:'product_id'});
   if(costError)throw new Error('Listing tersimpan, tetapi harga modal gagal disimpan: '+costError.message);
-  await loadProducts();resetForm();alert(isItem?'Produk Item Gaming berhasil disimpan tanpa foto.':wasEditing?'Listing berhasil diperbarui. Foto sudah diverifikasi dan diberi watermark.':'Listing berhasil ditambahkan. Foto sudah diverifikasi dan diberi watermark.');
+  await loadProducts();resetForm();alert(isTopup?'Produk Top Up berhasil disimpan.':isItem?'Produk Item Gaming berhasil disimpan tanpa foto.':wasEditing?'Listing berhasil diperbarui. Foto sudah diverifikasi dan diberi watermark.':'Listing berhasil ditambahkan. Foto sudah diverifikasi dan diberi watermark.');
  }catch(error){console.error('XERAVION saveProduct:',error);alert(error?.message||'Proses unggah gagal. Data listing tidak diubah jika verifikasi foto gagal.')}
  finally{saveButton.disabled=false;saveButton.textContent=editingId?'Simpan perubahan':originalLabel}
 }
@@ -1997,7 +1830,7 @@ function editItem(id){let p=items.find(x=>String(x.id)===String(id));if(!p)retur
 function resetForm(){editingId=null;pendingImage='';selectedImageFile=null;selectedImageFiles=[];existingImageUrls=[];originalEditingName='';originalEditingNameEn='';originalEditingDesc='';originalEditingDescEn='';['newName','newNameEn','newPrice','newCostPrice','newCode','newDesc','newDescEn','newImage'].forEach(id=>document.getElementById(id).value='');document.getElementById('newCatalogType').value='account';updateCatalogGameOptions('Mobile Legends');toggleCatalogMediaFields();refreshListingCode();document.getElementById('newStock').value='Tersedia';document.getElementById('imagePreviewList').innerHTML='';let im=document.getElementById('imagePreview');if(im.dataset.objectUrl){URL.revokeObjectURL(im.dataset.objectUrl);delete im.dataset.objectUrl}im.removeAttribute('src');im.style.display='none';toggleCatalogMediaFields();document.getElementById('formTitle').textContent='＋ Tambah listing ke etalase';document.getElementById('saveBtn').textContent='Simpan listing'}
 function askDelete(id){deleteId=id;document.getElementById('confirmModal').classList.add('show');document.getElementById('confirmDelete').onclick=async()=>{const{error}=await supabaseClient.from('products').delete().eq('id',deleteId);if(error){alert('Gagal menghapus: '+error.message);return}closeModal();await loadProducts()}}function closeModal(){document.getElementById('confirmModal').classList.remove('show');deleteId=null}
 function setAdminGame(game){adminGameFilter=game;renderAdmin()}
-function renderAdmin(){let q=(document.getElementById('adminSearch')?.value||'').toLowerCase(),games=['Mobile Legends','PUBG Mobile','Free Fire','eFootball','Clash of Clans'],knownGames=games,accountItems=items.filter(p=>p.catalog_type!=='item'),allGames=accountItems.filter(p=>!knownGames.includes(p.game)).map(p=>p.game),tabs=['Semua',...games,...([...new Set(allGames)].length?['Lainnya']:[])],countFor=g=>g==='Semua'?accountItems.length:g==='Lainnya'?accountItems.filter(p=>!knownGames.includes(p.game)).length:accountItems.filter(p=>p.game===g).length;document.getElementById('totalAdmin').textContent=accountItems.length;document.getElementById('availableAdmin').textContent=accountItems.filter(x=>x.stock==='Tersedia').length;document.getElementById('soldAdmin').textContent=accountItems.filter(x=>x.stock!=='Tersedia').length;const tabsEl=document.getElementById('adminGameTabs');if(tabsEl){tabsEl.innerHTML=tabs.map(g=>'<button type="button" role="tab" aria-selected="'+(adminGameFilter===g)+'" class="admin-game-tab '+(adminGameFilter===g?'active':'')+'" onclick="setAdminGame(\''+esc(g)+'\')">'+esc(g)+' <span>'+countFor(g)+'</span></button>').join('');if(!tabs.includes(adminGameFilter))adminGameFilter='Mobile Legends';}let list=items.filter(p=>p.catalog_type!=='item'&&(adminGameFilter==='Semua'||(adminGameFilter==='Lainnya'?!knownGames.includes(p.game):p.game===adminGameFilter))&&[p.code,p.name,p.game].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.code||'').localeCompare(String(b.code||''),undefined,{numeric:true,sensitivity:'base'}));const heading=document.getElementById('adminGameHeading'),counter=document.getElementById('adminGameCount');if(heading)heading.textContent=adminGameFilter.toUpperCase();if(counter)counter.textContent=list.length+' listing';document.getElementById('adminRows').innerHTML=list.length?list.map(p=>`<tr><td>${esc(p.code)}</td><td><strong>${esc(p.name)}</strong><div class="hint">${esc(p.game)}</div></td><td>${priceDisplay(p)}</td><td><span class="status">${esc(p.stock)}</span></td><td><button class="smallbtn" onclick="editItem('${esc(p.id)}')">Edit</button><button class="smallbtn" onclick="changeStock('${esc(p.id)}')">Status</button><button class="smallbtn" onclick="applyProductDiscount('${esc(p.id)}')">Diskon</button><button class="smallbtn" onclick="askDelete('${esc(p.id)}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5"><div class="admin-game-empty">Belum ada listing '+esc(adminGameFilter)+'.<br>Tambahkan akun melalui formulir di atas dan pilih game yang sesuai.</div></td></tr>'}
+function renderAdmin(){let q=(document.getElementById('adminSearch')?.value||'').toLowerCase(),games=['Mobile Legends','PUBG Mobile','Free Fire','eFootball','Clash of Clans'],knownGames=games,accountItems=items.filter(p=>(p.catalog_type||'account')==='account'),allGames=accountItems.filter(p=>!knownGames.includes(p.game)).map(p=>p.game),tabs=['Semua',...games,...([...new Set(allGames)].length?['Lainnya']:[])],countFor=g=>g==='Semua'?accountItems.length:g==='Lainnya'?accountItems.filter(p=>!knownGames.includes(p.game)).length:accountItems.filter(p=>p.game===g).length;document.getElementById('totalAdmin').textContent=accountItems.length;document.getElementById('availableAdmin').textContent=accountItems.filter(x=>x.stock==='Tersedia').length;document.getElementById('soldAdmin').textContent=accountItems.filter(x=>x.stock!=='Tersedia').length;const tabsEl=document.getElementById('adminGameTabs');if(tabsEl){tabsEl.innerHTML=tabs.map(g=>'<button type="button" role="tab" aria-selected="'+(adminGameFilter===g)+'" class="admin-game-tab '+(adminGameFilter===g?'active':'')+'" onclick="setAdminGame(\''+esc(g)+'\')">'+esc(g)+' <span>'+countFor(g)+'</span></button>').join('');if(!tabs.includes(adminGameFilter))adminGameFilter='Mobile Legends';}let list=items.filter(p=>p.catalog_type!=='item'&&(adminGameFilter==='Semua'||(adminGameFilter==='Lainnya'?!knownGames.includes(p.game):p.game===adminGameFilter))&&[p.code,p.name,p.game].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.code||'').localeCompare(String(b.code||''),undefined,{numeric:true,sensitivity:'base'}));const heading=document.getElementById('adminGameHeading'),counter=document.getElementById('adminGameCount');if(heading)heading.textContent=adminGameFilter.toUpperCase();if(counter)counter.textContent=list.length+' listing';document.getElementById('adminRows').innerHTML=list.length?list.map(p=>`<tr><td>${esc(p.code)}</td><td><strong>${esc(p.name)}</strong><div class="hint">${esc(p.game)}</div></td><td>${priceDisplay(p)}</td><td><span class="status">${esc(p.stock)}</span></td><td><button class="smallbtn" onclick="editItem('${esc(p.id)}')">Edit</button><button class="smallbtn" onclick="changeStock('${esc(p.id)}')">Status</button><button class="smallbtn" onclick="applyProductDiscount('${esc(p.id)}')">Diskon</button><button class="smallbtn" onclick="askDelete('${esc(p.id)}')">Hapus</button></td></tr>`).join(''):'<tr><td colspan="5"><div class="admin-game-empty">Belum ada listing '+esc(adminGameFilter)+'.<br>Tambahkan akun melalui formulir di atas dan pilih game yang sesuai.</div></td></tr>'}
 function renderItemGamingAdmin(){
  const q=(document.getElementById('adminItemSearch')?.value||'').trim().toLowerCase();
  const list=items.filter(p=>p.catalog_type==='item'&&[p.code,p.name,p.game,p.desc].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.code||'').localeCompare(String(b.code||''),undefined,{numeric:true,sensitivity:'base'}));
@@ -2008,8 +1841,70 @@ function renderItemGamingAdmin(){
  if(sold)sold.textContent=list.filter(p=>p.stock!=='Tersedia').length;
  if(count)count.textContent=list.length+' item';
  if(rows)rows.innerHTML=list.length?list.map(p=>'<tr><td>'+esc(p.code)+'</td><td><strong>'+esc(p.name)+'</strong></td><td>'+esc(p.game)+'</td><td>'+priceDisplay(p)+'</td><td><span class="status">'+esc(p.stock)+'</span></td><td><button class="smallbtn" onclick="editItem(\''+esc(p.id)+'\')">Edit</button><button class="smallbtn" onclick="changeStock(\''+esc(p.id)+'\')">Status</button><button class="smallbtn" onclick="askDelete(\''+esc(p.id)+'\')">Hapus</button></td></tr>').join(''):'<tr><td colspan="6"><div class="admin-game-empty">Belum ada produk Item Gaming. Tambahkan melalui formulir dan pilih jenis etalase Item Gaming.</div></td></tr>';
+ loadTopupCostCatalog();
 }
-async function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){document.getElementById('loginModal').classList.add('show');return}const{data:allowed,error}=await supabaseClient.rpc('is_admin');if(error||!allowed){xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();alert('Akun ini tidak terdaftar sebagai admin XERAVION.');return}xeravionAdminVerified=true;render();showAdminPanel()}catch(e){console.error('XERAVION openAdmin error:',e);alert('Dashboard gagal dibuka: '+(e?.message||String(e)))}}async function loginAdmin(){let email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,msg=document.getElementById('loginError');msg.textContent='';if(!navigator.onLine){msg.textContent='Perangkat sedang offline. Periksa koneksi internet lalu coba lagi.';return}if(!email||!password){msg.textContent='Email dan password wajib diisi.';return}try{msg.textContent='Menghubungi server login...';const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('XERAVION Supabase login response:',error);msg.textContent='Login ditolak Supabase ('+(error.status||'tanpa status')+'): '+error.message;return}const{data:allowed,error:checkError}=await supabaseClient.rpc('is_admin');if(checkError||!allowed){console.error('XERAVION admin check:',checkError);xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();msg.textContent=checkError?'Login berhasil, tetapi pemeriksaan admin gagal: '+checkError.message:'Akun ini bukan admin XERAVION.';return}xeravionAdminVerified=true;localStorage.setItem(XERAVION_ADMIN_ACTIVITY_KEY,String(Date.now()));render();closeLogin();document.getElementById('adminPassword').value='';showAdminPanel();if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);xeravionAdminIdleTimer=setTimeout(()=>logoutXeravionAdminIdle(),XERAVION_ADMIN_IDLE_MS)}catch(e){console.error('XERAVION login network error:',e);msg.textContent='Koneksi login gagal: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'. Periksa koneksi atau pemblokiran browser.'}}const XERAVION_ADMIN_ROUTE='?admin-portal=xr-admin-7f3c9a';
+async function openTopupForm(){
+ resetForm();
+ document.getElementById('newCatalogType').value='topup';
+ updateCatalogGameOptions('Mobile Legends');
+ toggleCatalogMediaFields();
+ refreshListingCode();
+ document.getElementById('formTitle').textContent='＋ Tambah produk Top Up';
+ document.getElementById('saveBtn').textContent='Simpan produk Top Up';
+ showAdminTab('form');
+}
+async function loadTopupCostCatalog(){
+ const tbody=document.getElementById('topupCostCatalogRows');if(!tbody)return;
+ tbody.innerHTML='<tr><td colspan="8">Memuat data…</td></tr>';
+ try{
+  const{data,error}=await supabaseClient.from('topup_cost_catalog').select('id,game,category,product_name,cost_price,margin_amount,selling_price,published_product_id,source_name').order('game').order('category').order('cost_price');
+  if(error)throw error;
+  tbody.innerHTML=(data||[]).length?(data||[]).map(x=>{
+   const margin=x.margin_amount==null?'':String(x.margin_amount),sale=x.selling_price==null?'':rupiah(x.selling_price);
+   const published=x.published_product_id?'<span class="status">Terbit</span>':'<span class="hint">Belum terbit</span>';
+   return '<tr><td>'+esc(x.game)+'</td><td>'+esc(x.category)+'</td><td><strong>'+esc(x.product_name)+'</strong></td><td>'+rupiah(x.cost_price)+'</td><td><input inputmode="numeric" type="number" min="0" step="500" id="topupMargin-'+x.id+'" value="'+margin+'" placeholder="Keuntungan" style="min-width:112px" oninput="previewTopupSale('+x.id+','+Number(x.cost_price)+')"></td><td id="topupSale-'+x.id+'">'+(sale||'<span class="hint">Atur margin</span>')+'</td><td>'+published+'</td><td><button class="smallbtn" type="button" onclick="saveTopupMarginAndPublish('+x.id+')">Simpan & Terbitkan</button></td></tr>';
+  }).join(''):'<tr><td colspan="8">Belum ada data harga modal.</td></tr>';
+ }catch(e){console.error('Top-up cost catalog load failed:',e);tbody.innerHTML='<tr><td colspan="8">Gagal memuat harga modal. Pastikan admin sudah login.</td></tr>';}
+}
+function previewTopupSale(id,cost){
+ const input=document.getElementById('topupMargin-'+id),out=document.getElementById('topupSale-'+id);if(!input||!out)return;
+ const raw=input.value.trim();if(raw===''||!Number.isFinite(Number(raw))||Number(raw)<0){out.textContent='Atur margin';return;}
+ out.textContent=rupiah(Number(cost)+Math.floor(Number(raw)));
+}
+async function saveTopupMarginAndPublish(id){
+ const input=document.getElementById('topupMargin-'+id),raw=input?.value.trim();
+ if(raw===''||raw==null||!Number.isFinite(Number(raw))||Number(raw)<0||!Number.isSafeInteger(Number(raw))){alert('Masukkan keuntungan dalam rupiah berupa angka bulat 0 atau lebih.');return;}
+ const margin=Math.floor(Number(raw));
+ try{
+  const{data:row,error:readError}=await supabaseClient.from('topup_cost_catalog').select('*').eq('id',id).single();if(readError)throw readError;
+  const selling=Math.max(1,Number(row.cost_price)+margin);
+  const name=row.product_name,game=row.game;
+  let productId=row.published_product_id,code='';
+  if(productId){
+   const{data:existing,error:existingError}=await supabaseClient.from('products').select('id,code').eq('id',productId).single();if(existingError)throw existingError;code=existing.code;
+   const{error:updateError}=await supabaseClient.from('products').update({name,name_en:name,game,catalog_type:'topup',price:selling,original_price:selling,discount_percent:0,description:row.category+' · Top Up '+game,description_en:row.category+' · '+game+' top-up',image_url:'',gallery_images:[],status:'Tersedia'}).eq('id',productId);
+   if(updateError)throw updateError;
+  }else{
+   const prefix=listingCodePrefix('topup',game);code=nextListingCode(prefix);
+   const{data:created,error:createError}=await supabaseClient.from('products').insert({code,name,name_en:name,game,catalog_type:'topup',price:selling,original_price:selling,discount_percent:0,description:row.category+' · Top Up '+game,description_en:row.category+' · '+game+' top-up',image_url:'',gallery_images:[],status:'Tersedia'}).select('id').single();
+   if(createError)throw createError;productId=created.id;
+  }
+  const{error:bookCostError}=await supabaseClient.from('product_costs').upsert({product_id:productId,cost_price:Number(row.cost_price),updated_at:new Date().toISOString()},{onConflict:'product_id'});if(bookCostError)throw bookCostError;
+  const{error:costUpdateError}=await supabaseClient.from('topup_cost_catalog').update({margin_amount:margin,selling_price:selling,published_product_id:productId,updated_at:new Date().toISOString()}).eq('id',id);
+  if(costUpdateError)throw costUpdateError;
+  await loadProducts();await loadTopupCostCatalog();renderTopupAdmin();
+  alert('Berhasil! '+name+' diterbitkan dengan harga jual '+rupiah(selling)+'.');
+ }catch(e){console.error('Top-up publish failed:',e);alert('Gagal menyimpan/terbitkan produk: '+(e.message||e));}
+}
+function renderTopupAdmin(){
+ const q=(document.getElementById('adminTopupSearch')?.value||'').trim().toLowerCase();
+ const list=items.filter(p=>p.catalog_type==='topup'&&[p.code,p.name,p.game,p.desc].join(' ').toLowerCase().includes(q)).sort((a,b)=>String(a.code||'').localeCompare(String(b.code||''),undefined,{numeric:true,sensitivity:'base'}));
+ const count=document.getElementById('adminTopupCount'),rows=document.getElementById('adminTopupRows');
+ const total=document.getElementById('totalTopupAdmin'),available=document.getElementById('availableTopupAdmin'),sold=document.getElementById('soldTopupAdmin');
+ if(total)total.textContent=list.length;if(available)available.textContent=list.filter(p=>p.stock==='Tersedia').length;if(sold)sold.textContent=list.filter(p=>p.stock!=='Tersedia').length;if(count)count.textContent=list.length+' produk';
+ if(rows)rows.innerHTML=list.length?list.map(p=>'<tr><td>'+esc(p.code)+'</td><td><strong>'+esc(p.name)+'</strong></td><td>'+esc(p.game)+'</td><td>'+priceDisplay(p)+'</td><td>'+((window.xeravionProductCosts||{})[String(p.id)]==null?'<span class="hint">Belum diisi</span>':rupiah(window.xeravionProductCosts[String(p.id)]))+'</td><td><span class="status">'+esc(p.stock)+'</span></td><td><button class="smallbtn" onclick="editItem(\''+esc(p.id)+'\')">Edit</button><button class="smallbtn" onclick="changeStock(\''+esc(p.id)+'\')">Status</button><button class="smallbtn" onclick="askDelete(\''+esc(p.id)+'\')">Hapus</button></td></tr>').join(''):'<tr><td colspan="7"><div class="admin-game-empty">Belum ada produk Top Up. Tambahkan melalui formulir dan pilih jenis etalase Top Up.</div></td></tr>';
+}
+function openAdmin(){try{const{data:{session}}=await supabaseClient.auth.getSession();if(!session){document.getElementById('loginModal').classList.add('show');return}const{data:allowed,error}=await supabaseClient.rpc('is_admin');if(error||!allowed){xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();alert('Akun ini tidak terdaftar sebagai admin XERAVION.');return}xeravionAdminVerified=true;render();showAdminPanel()}catch(e){console.error('XERAVION openAdmin error:',e);alert('Dashboard gagal dibuka: '+(e?.message||String(e)))}}async function loginAdmin(){let email=document.getElementById('adminEmail').value.trim(),password=document.getElementById('adminPassword').value,msg=document.getElementById('loginError');msg.textContent='';if(!navigator.onLine){msg.textContent='Perangkat sedang offline. Periksa koneksi internet lalu coba lagi.';return}if(!email||!password){msg.textContent='Email dan password wajib diisi.';return}try{msg.textContent='Menghubungi server login...';const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('XERAVION Supabase login response:',error);msg.textContent='Login ditolak Supabase ('+(error.status||'tanpa status')+'): '+error.message;return}const{data:allowed,error:checkError}=await supabaseClient.rpc('is_admin');if(checkError||!allowed){console.error('XERAVION admin check:',checkError);xeravionAdminVerified=false;render();await supabaseClient.auth.signOut();msg.textContent=checkError?'Login berhasil, tetapi pemeriksaan admin gagal: '+checkError.message:'Akun ini bukan admin XERAVION.';return}xeravionAdminVerified=true;localStorage.setItem(XERAVION_ADMIN_ACTIVITY_KEY,String(Date.now()));render();closeLogin();document.getElementById('adminPassword').value='';showAdminPanel();if(xeravionAdminIdleTimer)clearTimeout(xeravionAdminIdleTimer);xeravionAdminIdleTimer=setTimeout(()=>logoutXeravionAdminIdle(),XERAVION_ADMIN_IDLE_MS)}catch(e){console.error('XERAVION login network error:',e);msg.textContent='Koneksi login gagal: '+(e?.name||'Error')+' — '+(e?.message||String(e))+'. Periksa koneksi atau pemblokiran browser.'}}const XERAVION_ADMIN_ROUTE='?admin-portal=xr-admin-7f3c9a';
 function isXeravionAdminRoute(){return new URLSearchParams(location.search).get('admin-portal')==='xr-admin-7f3c9a'}
 const XERAVION_ADMIN_IDLE_MS=600000;
 const XERAVION_ADMIN_ACTIVITY_KEY='xeravion-admin-last-activity-v1';
@@ -2100,7 +1995,7 @@ async function loadCreditProgramOverview(){
 }
 
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','orders','accounting','credits','credit-monitor','analytics','melo','dwigital','mail'];
+ const allowed=['overview','form','listings','item-listings','topup-listings','orders','accounting','credits','credit-monitor','analytics','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
@@ -2108,386 +2003,13 @@ function showAdminTab(tab){
  if(tab==='accounting')loadXeravionAccounting();
  if(tab==='listings')renderAdmin();
  if(tab==='item-listings')renderItemGamingAdmin();
+ if(tab==='topup-listings')renderTopupAdmin();
  if(tab==='form')populateOrderProducts();
  if(tab==='credit-monitor')loadCreditProgramOverview();
  if(tab==='analytics')loadXeravionAnalytics();
- if(tab==='melo')testMeloConnection();
- if(tab==='dwigital')testDwigitalConnection();
  if(tab==='mail')connectXeravionMail();
 }
 
-let meloCachedBrands=[];
-let meloSelectedProduct=null;
-function meloAuthHeaders(token){return {Authorization:'Bearer '+token,Accept:'application/json'};}
-async function meloRequest(path){
- const{data:{session},error}=await supabaseClient.auth.getSession();
- if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
- const response=await fetch('/api/melo/'+path,{headers:meloAuthHeaders(session.access_token),cache:'no-store'});
- let data;try{data=await response.json()}catch{throw new Error('Respons server Melo tidak valid.')}
- if(!response.ok)throw new Error(data.error||('Melo API HTTP '+response.status));
- return data;
-}
-function setMeloStatus(message,type='info'){
- const el=document.getElementById('meloStatus');if(el)el.textContent=message;
- const badge=document.getElementById('meloConnectionBadge');if(badge){badge.textContent=type==='ok'?'Terhubung':type==='error'?'Perlu diperiksa':'Belum diuji';badge.className='melo-badge '+(type==='ok'?'ok':type==='error'?'error':'');}
-}
-function formatMeloMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID');}
-function extractMeloData(payload){return payload?.data??payload?.result??payload;}
-async function testMeloConnection(){
- if(!xeravionAdminVerified){setMeloStatus('Silakan login sebagai admin XERAVION.','error');return;}
- const btn=document.getElementById('meloTestBtn');if(btn){btn.disabled=true;btn.textContent='Menguji…'}
- setMeloStatus('Memeriksa kredensial dan menghubungi endpoint profil Melo…');
- try{
-  const payload=await meloRequest('profile');const d=payload?.data||{};
-  const n=document.getElementById('meloProfileName'),t=document.getElementById('meloProfileTier');
-  if(n)n.textContent=d.name||'Akun Melo aktif';
-  if(t)t.textContent=d.tier||'—';
-  const bal=document.getElementById('meloBalance');
-  if(bal)bal.textContent=d.h2h_balance===null||d.h2h_balance===undefined?'—':formatMeloMoney(d.h2h_balance);
-  setMeloStatus('Koneksi API Melo berhasil. Profil berhasil dibaca. Mode akun: '+(d.is_sandbox_mode===true?'Sandbox':d.is_sandbox_mode===false?'Production':'tidak dilaporkan')+'. Tidak ada transaksi dibuat.','ok');
- }catch(e){setMeloStatus('Uji koneksi gagal: '+(e.message||String(e)), 'error');}
- finally{if(btn){btn.disabled=false;btn.textContent='Uji koneksi API'}}
-}
-async function loadMeloBalance(silent=false){
- try{
-  const payload=await meloRequest('profile');const amount=payload?.data?.h2h_balance;
-  const el=document.getElementById('meloBalance');
-  if(el)el.textContent=amount===undefined||amount===null?'Data saldo tidak tersedia':formatMeloMoney(amount);
-  if(!silent)setMeloStatus('Saldo Melo berhasil diperbarui.','ok');
- }catch(e){if(!silent)setMeloStatus('Gagal memuat saldo: '+(e.message||String(e)),'error');}
-}
-async function loadMeloCategories(mode){
- if(!xeravionAdminVerified){setMeloStatus('Silakan login sebagai admin.','error');return;}
- const smart=mode==='smart';
- const path='catalog?type='+(smart?'smart':'regular');
- const list=document.getElementById('meloBrandList');
- if(list)list.innerHTML='<div class="melo-empty">Mengambil katalog supplier…</div>';
- const select=document.getElementById('meloCatalogMode');if(select)select.value=smart?'smart':'regular';
- const area=document.getElementById('meloProductArea');if(area)area.classList.remove('hidden');
- const title=document.getElementById('meloProductTitle');if(title)title.textContent='Produk Melo · '+(smart?'Smart':'Reguler');
- try{
-  const payload=await meloRequest(path);
-  const products=Array.isArray(payload?.data)?payload.data:[];
-  renderMeloProducts(products,smart);
-  const stamp=payload.fetched_at?new Date(payload.fetched_at).toLocaleString('id-ID'):'baru saja';
-  setMeloStatus('Berhasil memuat '+products.length+' produk katalog '+(smart?'Smart':'reguler')+'. Sumber: '+(payload.source==='cache'?'cache':'Melo')+' · '+stamp+'.','ok');
- }catch(e){
-  const productList=document.getElementById('meloProductList');
-  if(productList)productList.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';
-  setMeloStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');
- }
-}
-const MELO_PRODUCTS_PER_PAGE=20;
-let meloCurrentPage=1;
-let meloSearchTimer=null;
-function filterMeloCatalog(){
- clearTimeout(meloSearchTimer);
- meloSearchTimer=setTimeout(()=>{
-  const q=(document.getElementById('meloCatalogSearch')?.value||'').trim().toLowerCase();
-  const all=window._xerMeloAllProducts||[];
-  const rows=q?all.filter(p=>[p.name,p.product_name,p.sku_code,p.smart_sku_code,p.brand,p.brand_name].join(' ').toLowerCase().includes(q)):all;
-  window._xerMeloFilteredProducts=rows;
-  meloCurrentPage=1;
-  renderMeloPage();
- },150);
-}
-function renderMeloProducts(products,smart,saveAll=true){
- if(saveAll)window._xerMeloAllProducts=products;
- window._xerMeloSmart=smart;
- window._xerMeloFilteredProducts=products;
- meloCurrentPage=1;
- renderMeloPage();
-}
-function renderMeloPage(){
- const list=document.getElementById('meloProductList');if(!list)return;
- const products=window._xerMeloFilteredProducts||[];
- window._xerMeloProducts=products;
- const total=products.length;
- const pages=Math.max(1,Math.ceil(total/MELO_PRODUCTS_PER_PAGE));
- meloCurrentPage=Math.min(Math.max(1,meloCurrentPage),pages);
- const start=(meloCurrentPage-1)*MELO_PRODUCTS_PER_PAGE;
- const visible=products.slice(start,start+MELO_PRODUCTS_PER_PAGE);
- if(!total){list.innerHTML='<div class="melo-empty">Produk tidak ditemukan pada katalog ini.</div>';}
- else list.innerHTML=visible.map((p,offset)=>{
-  const sku=window._xerMeloSmart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
-  const price=Number(p.price??p.sell_price??p.amount??0);
-  const active=String(p.status||'active').toLowerCase()==='active'&&p.out_of_stock!==true;
-  return '<article class="melo-product"><div><strong>'+esc(p.name||p.product_name||sku||'Produk')+'</strong><small>'+esc(p.brand_name||p.brand||'')+' · SKU: '+esc(sku||'—')+' · '+(active?'Aktif':'Tidak tersedia')+'</small></div><div class="melo-product-price">'+formatMeloMoney(price)+'<button type="button" class="smallbtn" '+(!active?'disabled':'')+' onclick="selectMeloProduct('+(start+offset)+')">Hitung harga</button></div></article>';
- }).join('');
- const nav=document.getElementById('meloPagination');
- if(nav){
-  nav.innerHTML=total?'<span class="hint">Menampilkan '+(start+1)+'–'+Math.min(start+MELO_PRODUCTS_PER_PAGE,total)+' dari '+total.toLocaleString('id-ID')+' produk</span><div class="melo-page-buttons"><button type="button" class="btn" '+(meloCurrentPage===1?'disabled':'')+' onclick="changeMeloPage(-1)">Sebelumnya</button><span class="hint">Halaman '+meloCurrentPage+' / '+pages+'</span><button type="button" class="btn" '+(meloCurrentPage===pages?'disabled':'')+' onclick="changeMeloPage(1)">Berikutnya</button></div>':'';
- }
-}
-function changeMeloPage(delta){
- const products=window._xerMeloFilteredProducts||[];
- const pages=Math.max(1,Math.ceil(products.length/MELO_PRODUCTS_PER_PAGE));
- meloCurrentPage=Math.min(pages,Math.max(1,meloCurrentPage+delta));
- renderMeloPage();
- document.getElementById('meloProductArea')?.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function selectMeloProduct(index){
- const p=(window._xerMeloProducts||[])[Number(index)];
- const out=document.getElementById('meloMarkupPreview');
- if(!p){if(out)out.textContent='Produk tidak ditemukan. Muat ulang katalog lalu coba lagi.';return;}
- const smart=!!window._xerMeloSmart;const sku=smart?(p.smart_sku_code||p.sku_code):(p.sku_code||p.code);
- const rawPrice=Number(p.price??p.sell_price??p.amount??0);
- if(!Number.isFinite(rawPrice)||rawPrice<=0){if(out)out.textContent='Harga modal produk tidak valid; belum dapat dihitung.';return;}
- meloSelectedProduct={name:p.name||p.product_name||sku,sku,price:rawPrice};
- updateMeloMarkupPreview();
- const buttons=document.querySelectorAll('.melo-calc-btn');
- buttons.forEach(btn=>{const chosen=Number(btn.dataset.meloIndex)===Number(index);btn.textContent=chosen?'Dipilih ✓':'Hitung harga';btn.classList.toggle('selected',chosen);});
- if(out)out.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-window.selectMeloProduct=selectMeloProduct;
-(function bindMeloCalcButtons(){
- const list=document.getElementById('meloProductList');
- if(!list||list.dataset.calcBound==='1')return;
- list.dataset.calcBound='1';
- list.addEventListener('click',event=>{
-  const btn=event.target.closest('.melo-calc-btn');
-  if(!btn||btn.disabled)return;
-  event.preventDefault();
-  selectMeloProduct(btn.dataset.meloIndex);
- });
-})();
-function updateMeloMarkupPreview(){
- const out=document.getElementById('meloMarkupPreview');if(!out)return;
- if(!meloSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}
- const margin=Math.max(0,Number(document.getElementById('meloMarkup')?.value||0));
- out.textContent=meloSelectedProduct.name+' · Modal '+formatMeloMoney(meloSelectedProduct.price)+' + Margin '+formatMeloMoney(margin)+' = Harga simulasi '+formatMeloMoney(meloSelectedProduct.price+margin)+'.';
-}
-function closeMeloProducts(){document.getElementById('meloProductArea')?.classList.add('hidden');}
-
-let dwigitalSelectedProduct=null;
-let dwigitalCurrentPage=1;
-let dwigitalLastPage=1;
-function setDwigitalStatus(message,type='info'){
- const el=document.getElementById('dwigitalStatus');if(el)el.textContent=message;
- const badge=document.getElementById('dwigitalConnectionBadge');if(badge){badge.textContent=type==='ok'?'Development aktif':type==='error'?'Perlu diperiksa':'Belum diuji';badge.className='melo-badge '+(type==='ok'?'ok':type==='error'?'error':'');}
-}
-async function dwigitalRequest(path){
- const{data:{session},error}=await supabaseClient.auth.getSession();
- if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
- const response=await fetch('/api/dwigital/'+path,{headers:{Authorization:'Bearer '+session.access_token,Accept:'application/json'},cache:'no-store'});
- let data;try{data=await response.json()}catch{throw new Error('Respons server Dwigital tidak valid.')}
- if(!response.ok)throw new Error(data.error||('Dwigital API HTTP '+response.status));
- if(data.environment&&data.environment!=='development')throw new Error('API tidak berada pada mode Development.');
- return data;
-}
-function formatDwigitalMoney(value){return 'Rp '+Number(value||0).toLocaleString('id-ID');}
-async function testDwigitalNickname(){
- if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
- const variantId=Number(document.getElementById('dwigitalCheckVariant')?.value);
- const target=(document.getElementById('dwigitalCheckUser')?.value||'').trim();
- const targetZone=(document.getElementById('dwigitalCheckZone')?.value||'').trim();
- const result=document.getElementById('dwigitalNicknameResult'),btn=document.getElementById('dwigitalCheckBtn');
- if(!Number.isSafeInteger(variantId)||variantId<=0){if(result)result.textContent='Pilih produk dari katalog terlebih dahulu agar Variant ID sesuai.';return;}
- if(!target||!targetZone){if(result)result.textContent='User ID dan Zone ID wajib diisi untuk MLBB.';return;}
- if(btn){btn.disabled=true;btn.textContent='Memeriksa…'}
- if(result)result.textContent='Mengirim permintaan ke Dwigital Development…';
- try{
-  const{data:{session},error}=await supabaseClient.auth.getSession();
-  if(error||!session?.access_token)throw new Error('Sesi admin tidak ditemukan. Silakan login kembali.');
-  const response=await fetch('/api/dwigital/nickname',{
-   method:'POST',
-   headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',Accept:'application/json'},
-   body:JSON.stringify({variant_id:variantId,target,target_zone:targetZone}),
-   cache:'no-store'
-  });
-  const payload=await response.json().catch(()=>null);
-  if(!response.ok||payload?.success!==true)throw new Error(payload?.error||'Pengecekan nickname gagal.');
-  if(result){
-   result.textContent='Nickname diterima: '+(payload.nickname||'Tidak dikembalikan')+'. User ID dan Zone ID berhasil diproses oleh endpoint nickname Dwigital. Pengecekan ini tidak menyatakan negara akun. Mode Development hanya simulasi; tidak ada pesanan atau pemotongan saldo.';
-  }
-  setDwigitalStatus('Pengecekan nickname berhasil direspons Dwigital. User ID dan Zone ID diproses; negara akun tidak disimpulkan. Mode Development: tidak ada pesanan dibuat.','ok');
- }catch(e){
-  if(result)result.textContent='Pengecekan gagal: '+(e.message||String(e));
-  setDwigitalStatus('Pengecekan nickname gagal: '+(e.message||String(e)),'error');
- }finally{if(btn){btn.disabled=false;btn.textContent='Uji nickname (Development)'}}
-}
-
-async function testDwigitalConnection(){
- if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
- const btn=document.getElementById('dwigitalTestBtn');if(btn){btn.disabled=true;btn.textContent='Menguji…'}
- setDwigitalStatus('Memeriksa API key Development Dwigital…');
- try{const payload=await dwigitalRequest('profile');const d=payload.data||{};const env=document.getElementById('dwigitalEnvironment'),tier=document.getElementById('dwigitalTier'),bal=document.getElementById('dwigitalBalance');if(env)env.textContent=payload.environment||'development';if(tier)tier.textContent=d.tier||'—';if(bal)bal.textContent=d.balance==null?'—':formatDwigitalMoney(d.balance);setDwigitalStatus('Koneksi Dwigital berhasil. Mode Development terverifikasi. Saldo uji tidak dipotong oleh pengujian ini.','ok');}
- catch(e){setDwigitalStatus('Uji koneksi gagal: '+(e.message||String(e)),'error');}
- finally{if(btn){btn.disabled=false;btn.textContent='Uji koneksi'}}
-}
-async function loadDwigitalCatalog(page=1){
- if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin.','error');return;}
- const q=(document.getElementById('dwigitalCatalogSearch')?.value||'mobile legends').trim()||'mobile legends';
- const list=document.getElementById('dwigitalProductList');if(list)list.innerHTML='<div class="melo-empty">Mengambil katalog Dwigital…</div>';setDwigitalStatus('Mengambil katalog '+q+' dari Dwigital Development…');
- try{
-  const payload=await dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page='+Math.max(1,page)+'&per_page=1000');
-  if(payload.environment!=='development')throw new Error('Respons katalog bukan Development.');
-  const rows=Array.isArray(payload.data)?payload.data:[];dwigitalCurrentPage=Number(payload.page||page);dwigitalLastPage=Number(payload.last_page||1);window._xerDwigitalProducts=rows;
-  populateDwigitalNicknameVariants();
-  renderDwigitalCatalogByRegion();
-  const nav=document.getElementById('dwigitalPagination');if(nav)nav.innerHTML=rows.length?'<span class="hint">Halaman '+dwigitalCurrentPage+' / '+dwigitalLastPage+' · '+Number(payload.total||rows.length).toLocaleString('id-ID')+' paket</span><div class="melo-page-buttons"><button type="button" class="btn" '+(dwigitalCurrentPage<=1?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage-1)+')">Sebelumnya</button><button type="button" class="btn" '+(dwigitalCurrentPage>=dwigitalLastPage?'disabled':'')+' onclick="loadDwigitalCatalog('+(dwigitalCurrentPage+1)+')">Berikutnya</button></div>':'';
-  setDwigitalStatus('Berhasil memuat '+rows.length+' paket dari Dwigital Development. Harga yang tampil adalah harga modal akun. Tidak ada transaksi dibuat.','ok');
- }catch(e){if(list)list.innerHTML='<div class="melo-empty">'+esc(e.message||String(e))+'</div>';setDwigitalStatus('Katalog gagal dimuat: '+(e.message||String(e)),'error');}
-}
-function chooseDwigitalNicknameVariant(index){
- const p=(window._xerDwigitalProducts||[])[Number(index)];
- if(!p||!isDwigitalNicknameEligible(p)){const out=document.getElementById('dwigitalNicknameResult');if(out)out.textContent='Paket ini tidak mendukung cek nickname + Zone ID.';return;}
- const select=document.getElementById('dwigitalCheckVariant');
- if(select){select.value=String(p.variant_id);onDwigitalNicknameVariantChange();}
- const panel=document.getElementById('dwigitalNicknameTest');
- if(panel)panel.scrollIntoView({behavior:'smooth',block:'center'});
-}
-function isDwigitalNicknameEligible(p){
- const name=String(p.product||p.name||'').toLowerCase();
- return p.type==='game'&&name.includes('mobile legends')&&p.nickname_check===true&&p.zone_required===true;
-}
-function populateDwigitalNicknameVariants(){
- const select=document.getElementById('dwigitalCheckVariant');if(!select)return;
- const rows=window._xerDwigitalProducts||[];
- const eligible=rows.filter(isDwigitalNicknameEligible);
- // Dwigital documents that one variant_id from a game is enough to check
- // all player IDs for that same game; it need not be repeated per denomination.
- const previous=select.value;
- const chosen=eligible.find(p=>String(p.variant_id)===previous)||eligible[0]||null;
- select.innerHTML=chosen
-  ? '<option value="'+esc(chosen.variant_id)+'">'+esc(chosen.name||chosen.product||'Mobile Legends')+' · ID '+esc(chosen.variant_id)+' (paket verifikasi)</option>'
-  : '<option value="">Belum ada paket verifikasi MLBB</option>';
- if(chosen)select.value=String(chosen.variant_id);
- const btn=document.getElementById('dwigitalCheckBtn');
- if(btn)btn.disabled=!chosen;
- const out=document.getElementById('dwigitalNicknameResult');
- if(out&&!chosen)out.textContent='Dwigital belum menyediakan paket MLBB yang mendukung cek nickname + Zone ID pada katalog ini.';
- else if(out)out.textContent='Paket verifikasi MLBB sudah dipilih otomatis. Satu variant ID ini digunakan untuk cek ID MLBB; tidak perlu setiap nominal punya tombol cek sendiri. Catatan: hasil nickname tidak menyatakan negara akun.';
-}
-function onDwigitalNicknameVariantChange(){
- const select=document.getElementById('dwigitalCheckVariant');
- const btn=document.getElementById('dwigitalCheckBtn');
- const out=document.getElementById('dwigitalNicknameResult');
- const chosen=(window._xerDwigitalProducts||[]).find(p=>String(p.variant_id)===String(select?.value));
- if(btn)btn.disabled=!chosen||!isDwigitalNicknameEligible(chosen);
- if(out)out.textContent=chosen?'Paket verifikasi MLBB siap digunakan. Satu variant ID dapat dipakai untuk cek ID game yang sama; hasil nickname tidak mengungkap negara akun.':'Belum ada paket verifikasi MLBB.';
-}
-function classifyDwigitalRegion(p){
- const labels=[p.region,p.country,p.server,p.note,p.name,p.product,p.zone_label,p.target_label,...(Array.isArray(p.fields)?p.fields.flatMap(f=>[f.label,f.hint]):[])].filter(Boolean).join(' ').toLowerCase();
- // Explicit country/region wording in the product label wins over generic supplier metadata.
- const explicitCountries=[
-  ['ID','Indonesia',/\bindonesia\b|\bindonesian\b|server\s*id\b|region\s*id\b/i],
-  ['MY','Malaysia',/\bmalaysia\b|\bmalaysian\b|server\s*my\b|region\s*my\b/i],
-  ['PH','Filipina',/\bphilippines?\b|\bpilipinas\b|server\s*ph\b|region\s*ph\b/i],
-  ['SG','Singapura',/\bsingapore\b|\bsingaporean\b|server\s*sg\b|region\s*sg\b/i],
-  ['TH','Thailand',/\bthailand\b|\bthai server\b|server\s*th\b|region\s*th\b/i],
-  ['VN','Vietnam',/\bvietnam\b|\bvietnamese\b|server\s*vn\b|region\s*vn\b/i],
-  ['BN','Brunei Darussalam',/\bbrunei( darussalam)?\b|server\s*bn\b|region\s*bn\b/i],
-  ['KH','Kamboja',/\bcambodia\b|\bkhmer\b|\bkampuchea\b|server\s*kh\b|region\s*kh\b/i],
-  ['LA','Laos',/\blaos\b|\blao server\b|\blao pdr\b|server\s*la\b|region\s*la\b/i],
-  ['MM','Myanmar',/\bmyanmar\b|\bburma\b|server\s*mm\b|region\s*mm\b/i],
-  ['TL','Timor-Leste',/\btimor[- ]leste\b|\beast timor\b|server\s*tl\b|region\s*tl\b/i]
- ];
- const seaKeys=new Set(['ID','MY','PH','SG','TH','VN','BN','KH','LA','MM','TL']);
- for(const [key,label,re] of explicitCountries)if(re.test(labels))return {key,label};
- if(/\bglobal\b|\bworldwide\b|\binternational\b|\ball region\b|\ball server\b/i.test(labels))return {key:'GLOBAL',label:'Global'};
- if(/\bsea\b|south\s*east\s*asia|southeast\s*asia/i.test(labels))return {key:'SEA',label:'SEA umum'};
- // Named non-SEA regions/countries, including Brazil, must not be mistaken for Indonesia.
- const outside=[
-  ['Brazil',/\bbrazil\b|\bbrasil\b/i],
-  ['Jepang',/\bjapan\b|\bjapanese\b/i],
-  ['Korea',/\bkorea\b|\bkorean\b/i],
-  ['Taiwan',/\btaiwan\b/i],
-  ['Hong Kong',/\bhong kong\b/i],
-  ['Makau',/\bmacau\b/i],
-  ['Amerika Serikat',/\busa\b|\bunited states\b|\bnorth america\b/i],
-  ['Eropa',/\beurope\b|\beu server\b/i],
-  ['Turki',/\bturkey\b/i],
-  ['Timur Tengah',/\bmiddle east\b|\bmena\b/i],
-  ['India',/\bindia\b/i],
-  ['Amerika Latin',/\blatin america\b/i]
- ];
- for(const [label,re] of outside)if(re.test(labels))return {key:'OTHER_COUNTRY',label};
- // Use structured country code only when product labels do not name a conflicting country.
- const rawCode=String(p.country_code||'').trim().toUpperCase();
- const codeLabels={ID:'Indonesia',MY:'Malaysia',PH:'Filipina',SG:'Singapura',TH:'Thailand',VN:'Vietnam',BN:'Brunei Darussalam',KH:'Kamboja',LA:'Laos',MM:'Myanmar',TL:'Timor-Leste'};
- if(codeLabels[rawCode])return {key:rawCode,label:codeLabels[rawCode]};
- return {key:'UNKNOWN',label:'Belum teridentifikasi'};
-}
-function renderDwigitalCatalogByRegion(){
- const list=document.getElementById('dwigitalProductList');if(!list)return;
- const rows=window._xerDwigitalProducts||[];
- const counts={ID:0,MY:0,PH:0,SG:0,TH:0,VN:0,BN:0,KH:0,LA:0,MM:0,TL:0,SEA:0,OTHER_COUNTRY:0,GLOBAL:0,UNKNOWN:0};
- rows.forEach(p=>{const r=classifyDwigitalRegion(p);p._xerRegion=r;counts[r.key]++;});
- const filter=document.getElementById('dwigitalRegionFilter')?.value||'all';
- const visible=filter==='all'?rows:rows.filter(p=>p._xerRegion.key===filter);
- const summary=document.getElementById('dwigitalRegionSummary');
- if(summary)summary.textContent='Total '+rows.length+' paket pada hasil katalog ini. Indonesia '+counts.ID+' · Malaysia '+counts.MY+' · Filipina '+counts.PH+' · Singapura '+counts.SG+' · Thailand '+counts.TH+' · Vietnam '+counts.VN+' · Brunei '+counts.BN+' · Kamboja '+counts.KH+' · Laos '+counts.LA+' · Myanmar '+counts.MM+' · Timor-Leste '+counts.TL+' · SEA umum '+counts.SEA+' · Negara di luar SEA '+counts.OTHER_COUNTRY+' · Global '+counts.GLOBAL+' · Belum teridentifikasi '+counts.UNKNOWN+'.';
- if(!visible.length){list.innerHTML='<div class="melo-empty">Tidak ada paket pada kelompok wilayah ini dalam hasil katalog yang dimuat.</div>';return;}
- list.innerHTML=visible.map(p=>{const i=rows.indexOf(p),price=Number(p.price||0),available=p.stock===0?'Stok habis':'Tersedia / sesuai provider',nickname=isDwigitalNicknameEligible(p),nicknameTag=nickname?'<span class="melo-badge" style="display:inline-block;margin-top:6px;color:#4ade80">Cek nickname + Zone ID tersedia</span>':'<span class="melo-badge" style="display:inline-block;margin-top:6px;color:#a1a1aa">Cek nickname tidak didukung</span>',nicknameAction=nickname?'<button type="button" class="smallbtn" onclick="chooseDwigitalNicknameVariant('+i+')">Pilih untuk uji nickname</button>':'';return '<article class="dwigital-product"><div><strong>'+esc(p.name||p.product||('Produk '+p.variant_id))+'</strong><small>'+esc(p.product||'Game')+' · Wilayah: '+esc(p._xerRegion.label)+' · ID paket: '+esc(p.variant_id)+' · '+esc(p.delivery||'automatic')+' · '+available+'</small>'+nicknameTag+'</div><div class="dwigital-product-price">'+formatDwigitalMoney(price)+'<button type="button" class="smallbtn" onclick="selectDwigitalProduct('+i+')">Hitung harga</button>'+nicknameAction+'</div></article>';}).join('');
-}
-function normalizeSupplierProductName(value){
- return Array.from(String(value||'').toLowerCase().normalize('NFD')).filter(ch=>ch.charCodeAt(0)<128).join('').replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(Boolean).join(' ');
-}
-async function compareDwigitalMelo(){
- if(!xeravionAdminVerified){setDwigitalStatus('Silakan login sebagai admin XERAVION.','error');return;}
- const btn=document.getElementById('dwigitalCompareBtn'),out=document.getElementById('dwigitalCompareResult');
- if(btn){btn.disabled=true;btn.textContent='Mengambil katalog…'}
- if(out)out.textContent='Mengambil katalog reguler Dwigital dan Melo. Mohon tunggu…';
- try{
-  const q=(document.getElementById('dwigitalCatalogSearch')?.value||'mobile legends').trim()||'mobile legends';
-  const [dwigital,melo]=await Promise.all([
-   dwigitalRequest('catalog?q='+encodeURIComponent(q)+'&page=1&per_page=100'),
-   meloRequest('catalog?type=regular')
-  ]);
-  if(dwigital.environment!=='development')throw new Error('Katalog Dwigital bukan mode Development.');
-  const dRows=Array.isArray(dwigital.data)?dwigital.data:[];
-  const mRows=Array.isArray(melo.data)?melo.data:[];
-  const group=(rows,getName)=>{
-   const map=new Map();
-   rows.forEach(p=>{
-    const name=getName(p),key=normalizeSupplierProductName(name);
-    if(!key)return;
-    if(!map.has(key))map.set(key,[]);
-    map.get(key).push(p);
-   });
-   return map;
-  };
-  const dGroups=group(dRows,p=>p.name||'');
-  const mGroups=group(mRows,p=>p.name||p.product_name||'');
-  const matches=[],ambiguous=[];
-  for(const [key,mpList] of mGroups){
-   const dpList=dGroups.get(key)||[];
-   if(!dpList.length)continue;
-   if(mpList.length!==1||dpList.length!==1){
-    ambiguous.push({name:mpList[0].name||mpList[0].product_name||dpList[0]?.name||'Produk',meloCount:mpList.length,dwigitalCount:dpList.length,melo:mpList,dwigital:dpList});
-    continue;
-   }
-   const m=mpList[0],d=dpList[0];
-   const mp=Number(m.price??m.sell_price??m.amount??0),dp=Number(d.price??0);
-   if(mp>0&&dp>0)matches.push({
-    name:m.name||m.product_name||d.name,
-    meloSku:m.sku_code||'—',dwigitalVariant:d.variant_id||'—',
-    meloDetail:[m.category_name,m.type_name,m.server_name].filter(Boolean).join(' · '),
-    dwigitalDetail:[d.product,d.target_label].filter(Boolean).join(' · '),
-    mp,dp,cheaper:dp<mp?'Dwigital':mp<dp?'Melo':'Sama'
-   });
-  }
-  matches.sort((a,b)=>a.name.localeCompare(b.name,'id'));
-  ambiguous.sort((a,b)=>a.name.localeCompare(b.name,'id'));
-  const money=v=>'Rp '+Number(v).toLocaleString('id-ID');
-  const th='padding:8px;text-align:left;border-bottom:1px solid #665638';
-  const td='padding:8px;border-top:1px solid #51432b;vertical-align:top';
-  const verifiedHtml=matches.length?'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="'+th+'">Produk (nama unik di kedua katalog)</th><th style="'+th+'">Dwigital</th><th style="'+th+'">Melo</th><th style="'+th+'">Lebih murah</th></tr></thead><tbody>'+matches.map(x=>'<tr><td style="'+td+'">'+esc(x.name)+'<small style="display:block;opacity:.7">Melo SKU: '+esc(x.meloSku)+' · Dwigital variant: '+esc(x.dwigitalVariant)+'</small></td><td style="'+td+'">'+money(x.dp)+'</td><td style="'+td+'">'+money(x.mp)+'</td><td style="'+td+'">'+x.cheaper+'</td></tr>').join('')+'</tbody></table></div>':'<div class="melo-empty">Belum ada produk yang namanya unik dan sama persis pada kedua katalog. Belum ada pemenang harga yang dapat dipastikan.</div>';
-  const ambiguousHtml=ambiguous.length?'<h5 style="margin:16px 0 6px">Perlu pencocokan varian manual ('+ambiguous.length+' nama berulang)</h5><p class="hint">Nama ini muncul lebih dari sekali pada salah satu supplier. Tidak kami bandingkan agar harga paket yang berbeda tidak tertukar.</p><div class="melo-empty">'+ambiguous.map(x=>{
-   const mLines=x.melo.map(p=>'<div style="padding:5px 0;border-bottom:1px solid #51432b">Melo: '+esc(p.name||p.product_name||'Produk')+' · '+esc([p.category_name,p.type_name,p.server_name,p.sku_code].filter(Boolean).join(' · '))+' · <strong>'+money(p.price??p.sell_price??p.amount??0)+'</strong></div>').join('');
-   const dLines=x.dwigital.map(p=>'<div style="padding:5px 0;border-bottom:1px solid #51432b">Dwigital: '+esc(p.name||'Produk')+' · '+esc([p.product,p.target_label,'Variant '+(p.variant_id||'—')].filter(Boolean).join(' · '))+' · <strong>'+money(p.price??0)+'</strong></div>').join('');
-   return '<div style="padding:8px 0"><strong>'+esc(x.name)+'</strong><small style="display:block;opacity:.75">Melo: '+x.meloCount+' varian · Dwigital: '+x.dwigitalCount+' varian</small>'+mLines+dLines+'</div>';
-  }).join('')+'</div>':'';
-  if(out)out.innerHTML='<p><strong>'+matches.length+'</strong> pasangan nama unik dapat dibandingkan. <strong>'+ambiguous.length+'</strong> nama berulang dipisahkan agar tidak menghasilkan perbandingan keliru.</p>'+verifiedHtml+ambiguousHtml;
-  setDwigitalStatus('Perbandingan selesai: '+matches.length+' pasangan unik; '+ambiguous.length+' nama berulang perlu pencocokan varian. Tidak ada transaksi.','ok');
- }catch(e){
-  if(out)out.textContent='Perbandingan gagal: '+(e.message||String(e));
-  setDwigitalStatus('Perbandingan gagal: '+(e.message||String(e)),'error');
- }finally{if(btn){btn.disabled=false;btn.textContent='Bandingkan harga dengan Melo'}}
-}
-function selectDwigitalProduct(index){const p=(window._xerDwigitalProducts||[])[Number(index)];if(!p)return;const price=Number(p.price||0);if(!Number.isFinite(price)||price<=0){document.getElementById('dwigitalMarkupPreview').textContent='Harga modal tidak valid.';return;}dwigitalSelectedProduct={name:p.name||p.product||'Produk',price,variantId:p.variant_id};updateDwigitalMarkupPreview();if(isDwigitalNicknameEligible(p)){const variant=document.getElementById('dwigitalCheckVariant');if(variant){variant.value=String(p.variant_id);onDwigitalNicknameVariantChange();}}const test=document.getElementById('dwigitalNicknameTest');if(test)test.scrollIntoView({behavior:'smooth',block:'nearest'});}
-function updateDwigitalMarkupPreview(){const out=document.getElementById('dwigitalMarkupPreview');if(!out)return;if(!dwigitalSelectedProduct){out.textContent='Pilih produk dan tekan “Hitung harga” untuk melihat simulasi harga jual.';return;}const margin=Math.max(0,Number(document.getElementById('dwigitalMarkup')?.value||0));out.textContent=dwigitalSelectedProduct.name+' · Modal '+formatDwigitalMoney(dwigitalSelectedProduct.price)+' + Margin '+formatDwigitalMoney(margin)+' = Harga simulasi '+formatDwigitalMoney(dwigitalSelectedProduct.price+margin)+'.';}
 function formatTrafficNumber(value){return Number(value||0).toLocaleString('id-ID')}
 let xerTrafficCountryData=[];
 let xerTrafficCountryExpanded=false;

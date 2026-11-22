@@ -1301,6 +1301,33 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .topup-product-items{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .topup-product-card{min-height:156px;padding:14px}
 @media(max-width:560px){.topup-game-picker{gap:9px}.topup-game-tile{flex-basis:94px;min-width:94px;min-height:132px;padding:10px 7px}.topup-game-icon{width:60px;height:60px;flex-basis:60px}.topup-product-items{gap:9px}.topup-product-card{min-height:150px;padding:11px}}
+</style><style id="xeravion-topup-game-first-layout">
+.topup-shop-section{margin:20px 0 18px;padding:0;border:0;border-radius:0;background:transparent}
+.topup-shop-label{display:none}
+.topup-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px 12px;padding:8px 0 18px}
+.topup-game-choice{min-width:0;border:0;background:transparent;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;cursor:pointer;font-size:13px;text-align:center}
+.topup-game-choice img,.topup-game-choice-fallback{width:100%;aspect-ratio:1/1;max-height:160px;object-fit:cover;border-radius:15px;background:#20243a}
+.topup-game-choice-fallback{display:grid;place-items:center;font-size:25px;font-weight:900;color:#e9cc88}
+.topup-game-choice span:last-child{line-height:1.25;min-height:32px}
+.topup-selected-game{padding:5px 0 16px}
+.topup-back-games{border:0;background:transparent;color:#e8cb88;font-weight:700;padding:8px 0 16px}
+.topup-selected-game-title{display:flex;align-items:center;gap:12px;margin:2px 0 22px;font-size:17px}
+.topup-selected-game-title img,.topup-selected-fallback{width:54px;height:54px;object-fit:cover;border-radius:10px;background:#fff;padding:2px}
+.topup-selected-fallback{display:grid;place-items:center;color:#222;font-weight:900}
+.topup-player-label{display:block;margin:0 0 9px;color:var(--muted);font-size:13px}
+.topup-player-input{width:100%;height:58px;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.06);color:var(--text);font-size:16px;outline:none}
+.topup-player-input:focus{border-color:#d6b66c}
+.topup-choose-hint{padding:18px 0;color:var(--muted);text-align:center;font-size:13px}
+.topup-price-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.topup-price-option{min-height:105px;padding:16px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.035);color:var(--text);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;text-align:left;font-size:15px;cursor:pointer}
+.topup-price-option strong{font-size:16px;color:#e7a18c}
+.topup-price-option.selected{border:1.5px solid #d8795d;background:rgba(216,121,93,.09);color:#e9a18c}
+.topup-order-summary{display:flex;justify-content:space-between;gap:10px;padding:15px 2px;margin-top:14px;border-top:1px solid var(--line)}
+.topup-checkout{display:block;text-align:center;padding:16px;border-radius:11px;font-weight:800;text-decoration:none;margin-top:14px}
+.topup-checkout.ready{background:linear-gradient(110deg,#f0d995,#b88737);color:#17120a}
+.topup-checkout.disabled{background:rgba(255,255,255,.1);color:var(--muted);pointer-events:none}
+.topup-checkout-note{font-size:11px;color:var(--muted);text-align:center;margin-top:9px}
+@media(max-width:560px){.topup-game-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 9px}.topup-game-choice img,.topup-game-choice-fallback{border-radius:13px}.topup-price-grid{gap:10px}.topup-price-option{min-height:100px;padding:13px 12px;font-size:14px}.topup-price-option strong{font-size:15px}}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1576,7 +1603,7 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 })();
 </script>
 <script>
-const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',activeItemPlatform='Semua',activeTopupGame='Semua',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],existingImageUrls=[],originalEditingName='',originalEditingNameEn='',originalEditingDesc='',originalEditingDescEn='',deleteId=null,items=[],xeravionAdminVerified=false;
+const WA='6287714947270';const IMAGE_BUCKET='xeravion-images';const supabaseClient=window.supabase.createClient('https://holebdvalywkpjvgqffn.supabase.co','sb_publishable_um4DOwh3uTZLSfIs2ddmyA_-RRPKbYm');let activeGame='Semua',activeItemPlatform='Semua',activeTopupGame='Semua',selectedTopupProductId=null,topupPlayerId='',adminGameFilter='Mobile Legends',editingId=null,pendingImage='',selectedImageFile=null,selectedImageFiles=[],existingImageUrls=[],originalEditingName='',originalEditingNameEn='',originalEditingDesc='',originalEditingDescEn='',deleteId=null,items=[],xeravionAdminVerified=false;
 const rupiah=n=>'Rp. '+Number(n).toLocaleString('id-ID');function iconFor(g){return g==='Mobile Legends'?'⚔️':g==='PUBG Mobile'?'🎯':g==='Free Fire'?'🔥':g==='eFootball'?'⚽':g==='Clash of Clans'?'🏰':g==='Item Gaming'?'🎁':'🎮'}function gameClass(g){return g==='PUBG Mobile'?'pubg':g==='Free Fire'?'ff':g==='eFootball'?'efootball':g==='Clash of Clans'?'coc':g==='Item Gaming'?'item-gaming':''}function fromRow(r){return{id:r.id,code:r.code,name:r.name,name_en:r.name_en||'',game:r.game,catalog_type:r.catalog_type||'account',price:Number(r.price),originalPrice:Number(r.original_price??r.price),discountPercent:Number(r.discount_percent||0),desc:r.description||'',description_en:r.description_en||'',stock:r.status,image:r.image_url||'',specs:r.specs||{},gallery:r.gallery_images||[],icon:iconFor(r.game)}}async function loadProducts(){const{data,error}=await supabaseClient.from('products').select('*').order('created_at',{ascending:false});if(error){console.error(error);alert('Gagal memuat katalog: '+error.message);return}items=(data||[]).map(fromRow);window.xeravionProductCosts=window.xeravionProductCosts||{};try{const{data:isAdmin}=await supabaseClient.rpc('is_admin');if(isAdmin){const{data:costRows,error:costError}=await supabaseClient.from('product_costs').select('product_id,cost_price');if(costError)throw costError;window.xeravionProductCosts=Object.fromEntries((costRows||[]).map(x=>[String(x.product_id),x.cost_price==null?null:Number(x.cost_price)]));}}catch(costLoadError){console.warn('XERAVION accounting cost data is admin-only:',costLoadError.message)}applyStoreRoute();populateOrderProducts();const sharedId=new URLSearchParams(location.search).get('listing');if(sharedId&&items.some(p=>String(p.id)===sharedId)){setTimeout(()=>openProductDetail(Number(sharedId),true),250)}}
 function waLink(p){let jenis=p.catalog_type==='topup'?'produk Top Up':p.catalog_type==='item'?'produk Item Gaming':'akun';let msg=`Halo admin XERAVION, saya tertarik dengan ${jenis} ${p.code} - ${p.name} (${p.game}) dengan harga ${rupiah(p.price)}. Apakah produk ini masih tersedia?`;return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`}
 async function shareListing(id){
@@ -1683,17 +1710,32 @@ function topupGameLogo(game){
 }
 function renderTopupGamePicker(){
  const box=document.getElementById('topupGamePicker');if(!box)return;
- const games=[{name:'Semua Game',value:'Semua',short:'ALL',logo:''},{name:'Mobile Legends',value:'Mobile Legends',short:'ML',logo:topupGameLogo('Mobile Legends')},{name:'Free Fire',value:'Free Fire',short:'FF',logo:topupGameLogo('Free Fire')},{name:'PUBG Mobile',value:'PUBG Mobile',short:'PUBG',logo:topupGameLogo('PUBG Mobile')},{name:'Magic Chess',value:'Magic Chess: Go Go',short:'MCGG',logo:topupGameLogo('Magic Chess: Go Go')},{name:'Valorant',value:'Valorant',short:'VAL',logo:topupGameLogo('Valorant')},{name:'Genshin Impact',value:'Genshin Impact',short:'GI',logo:topupGameLogo('Genshin Impact')}];
- box.innerHTML=games.map(g=>{const count=items.filter(p=>p.catalog_type==='topup'&&p.game===g.value&&p.stock==='Tersedia').length;const total=items.filter(p=>p.catalog_type==='topup'&&p.stock==='Tersedia').length;return '<button type="button" class="topup-game-tile '+(activeTopupGame===g.value?'active':'')+'" aria-pressed="'+(activeTopupGame===g.value)+'" onclick="setTopupGame(\''+esc(g.value)+'\')"><span class="topup-game-icon">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+' logo" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'"><span class="topup-game-fallback" style="display:none">'+g.short+'</span>':'<span class="topup-game-all">ALL</span>')+'</span><strong>'+g.name+'</strong><small>'+(g.value==='Semua'?total+' produk':count?count+' nominal':'Segera hadir')+'</small></button>'}).join('');
+ const games=[{name:'Wuthering Waves',value:'Wuthering Waves',short:'WW',logo:''},{name:'Genshin Impact',value:'Genshin Impact',short:'GI',logo:topupGameLogo('Genshin Impact')},{name:'Mobile Legends',value:'Mobile Legends',short:'ML',logo:topupGameLogo('Mobile Legends')},{name:'Free Fire',value:'Free Fire',short:'FF',logo:topupGameLogo('Free Fire')},{name:'PUBG Mobile',value:'PUBG Mobile',short:'PUBG',logo:topupGameLogo('PUBG Mobile')},{name:'Magic Chess',value:'Magic Chess: Go Go',short:'MCGG',logo:topupGameLogo('Magic Chess: Go Go')},{name:'Valorant',value:'Valorant',short:'VAL',logo:topupGameLogo('Valorant')}];
+ if(activeTopupGame!=='Semua'){
+  const g=games.find(x=>x.value===activeTopupGame)||games[0];
+  box.innerHTML='<div class="topup-selected-game"><button type="button" class="topup-back-games" onclick="setTopupGame(\'Semua\')">← Semua Top Up Games</button><div class="topup-selected-game-title">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+'" onerror="this.style.display=\'none\'">':'<span class="topup-selected-fallback">'+g.short+'</span>')+'<strong>'+esc(g.name)+'</strong></div><label class="topup-player-label" for="topupPlayerId">User ID / Player ID</label><input id="topupPlayerId" class="topup-player-input" type="text" inputmode="text" autocomplete="off" placeholder="Masukkan User ID" value="'+esc(topupPlayerId)+'" oninput="topupPlayerId=this.value"></div>';
+  return;
+ }
+ box.innerHTML='<div class="topup-game-grid">'+games.filter(g=>items.some(p=>p.catalog_type===\'topup\'&&p.game===g.value&&p.stock===\'Tersedia\')).map(g=>{const count=items.filter(p=>p.catalog_type===\'topup\'&&p.game===g.value&&p.stock===\'Tersedia\').length;return '<button type="button" class="topup-game-choice" onclick="setTopupGame(\''+esc(g.value)+'\')">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+' logo" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="topup-game-choice-fallback">'+g.short+'</span>')+'<span>'+esc(g.name)+'</span></button>'}).join('')+'</div>';
 }
 function renderTopupProductCard(p){
  const title=window.getXeravionLanguage&&getXeravionLanguage()==='en'?(p.name_en||p.name):p.name;
- return '<article class="topup-product-card"><div class="topup-product-info"><span class="topup-product-game">'+esc(p.game)+'</span><h3>'+esc(title)+'</h3><span class="topup-product-code">'+esc(p.code)+'</span><strong>'+storefrontPriceDisplay(p)+'</strong><button class="topup-select-button" type="button" onclick="openProductDetail('+Number(p.id)+')">Pilih nominal ↗</button></div></article>';
+ const selected=Number(selectedTopupProductId)===Number(p.id);
+ return '<button type="button" class="topup-price-option '+(selected?'selected':'')+'" aria-pressed="'+selected+'" onclick="selectTopupProduct('+Number(p.id)+')"><span>'+esc(title)+'</span><strong>'+storefrontPriceDisplay(p)+'</strong></button>';
+}
+function selectTopupProduct(id){selectedTopupProductId=Number(id);render()}
+function topupOrderLink(){
+ const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
+ if(!p||!topupPlayerId.trim())return '#';
+ const msg='Halo admin XERAVION, saya ingin memesan Top Up '+p.game+'. Produk: '+p.name+' ('+p.code+'). Harga: '+rupiah(p.price)+'. User ID: '+topupPlayerId.trim()+'. Mohon konfirmasi pesanan dan metode pembayaran.';
+ return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
 }
 function renderTopupProducts(list){
- const order=['Mobile Legends','Free Fire','PUBG Mobile','Magic Chess: Go Go','Valorant','Genshin Impact'];
- const games=activeTopupGame==='Semua'?order.filter(g=>list.some(p=>p.game===g)):[activeTopupGame];
- return games.map(game=>{const products=list.filter(p=>p.game===game);if(!products.length)return '';return '<section class="topup-game-product-group"><div class="topup-group-heading"><div class="topup-group-title"><img src="'+topupGameLogo(game)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><h3>'+esc(game)+'</h3></div><span>'+products.length+' nominal</span></div><div class="topup-product-items">'+products.map(renderTopupProductCard).join('')+'</div></section>'}).join('')||'<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
+ if(activeTopupGame==='Semua')return '<div class="topup-choose-hint">Pilih game di atas untuk melihat daftar produk dan harga</div>';
+ const products=list.filter(p=>p.game===activeTopupGame);
+ if(!products.length)return '<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
+ const selected=items.find(p=>Number(p.id)===Number(selectedTopupProductId)&&p.game===activeTopupGame);
+ return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>Pilih nominal</h3><span>'+products.length+' pilihan</span></div><div class="topup-price-grid">'+products.map(renderTopupProductCard).join('')+'</div>'+(selected?'<div class="topup-order-summary"><span>Dipilih: <strong>'+esc(selected.name)+'</strong></span><strong>'+storefrontPriceDisplay(selected)+'</strong></div>':'')+'<a class="topup-checkout '+(selected&&topupPlayerId.trim()?'ready':'disabled')+'" '+(selected&&topupPlayerId.trim()?'href="'+esc(topupOrderLink())+'" target="_blank" rel="noopener"':'aria-disabled="true" onclick="return false"')+'>Lanjutkan via WhatsApp</a><p class="topup-checkout-note">Pesanan akan dikonfirmasi admin. Pembayaran dan pengiriman otomatis belum tersedia.</p></section>';
 }
 function renderSelectedImagePreviews(){
  const box=document.getElementById('imagePreviewList');if(!box)return;box.innerHTML='';

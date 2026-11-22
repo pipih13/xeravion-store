@@ -1976,6 +1976,10 @@ function closeXerQrisPayment(){
  document.body.style.overflow='';
  document.documentElement.style.overflow='';
 }
+function revealBuyerOrderTracker(){
+ const box=document.getElementById('topupTrackBox');
+ if(box){box.classList.remove('is-hidden');box.setAttribute('aria-hidden','false');box.scrollIntoView({behavior:'smooth',block:'center'});}
+}
 function showBuyerOrderToast(title,message){
  let toast=document.getElementById('xerBuyerOrderToast');
  if(!toast){toast=document.createElement('div');toast.id='xerBuyerOrderToast';toast.className='xer-buyer-order-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');document.body.appendChild(toast);}
@@ -1999,10 +2003,8 @@ function confirmXerQrisBuyerPaid(){
  if(inv)inv.value=order.invoice_number||'';
  if(tok)tok.value=credentials.token||'';
  closeXerQrisPayment();
- const box=document.getElementById('topupTrackBox');
- if(box){box.classList.remove('is-hidden');box.setAttribute('aria-hidden','false');box.scrollIntoView({behavior:'smooth',block:'center'});}
  const out=document.getElementById('topupOrderFeedback');
- if(out)out.innerHTML='<div class="topup-created-card"><strong>Konfirmasi pembayaran diterima.</strong><p>Terima kasih. Admin akan memeriksa pembayaran Anda. Cek status pesanan tersedia di bawah.</p></div>';
+ if(out)out.innerHTML='<div class="topup-created-card"><strong>Konfirmasi pembayaran diterima.</strong><p>Terima kasih. Admin akan memeriksa pembayaran Anda.</p><button type="button" class="btn" style="width:100%;margin-top:10px" onclick="revealBuyerOrderTracker()">Cek Order Saya</button></div>';
  showBuyerOrderToast('Konfirmasi pembayaran dikirim','Admin XERAVION akan memeriksa pembayaran Anda.');
 }
 

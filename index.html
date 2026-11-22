@@ -1469,6 +1469,16 @@ body.xeravion-topup-page .topup-game-choice img[alt="Free Fire logo"],
 body.xeravion-topup-page .topup-selected-game-title img[alt="Free Fire"]{object-fit:cover!important;object-position:center!important;background:#161616!important;padding:0!important}
 body.xeravion-topup-page .topup-game-choice img[alt="Valorant logo"],
 body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-fit:contain!important;object-position:center!important;background:#ff4655!important;padding:20px!important}
+</style><style id="xeravion-topup-order-notifications">
+.topup-track-box{margin-top:18px;padding:14px;border:1px solid #65502d;border-radius:12px;background:#100f0c;display:grid;gap:9px}
+.topup-track-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.topup-track-fields input{min-width:0;padding:11px;border:1px solid #51432b;border-radius:9px;background:#0b0a08;color:#f5ead4}
+.topup-order-feedback:empty,.topup-track-result:empty{display:none}
+.topup-created-card,.topup-status-result{margin-top:10px;padding:13px;border:1px solid #5b784f;border-radius:10px;background:#122016;color:#d8ead8;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.topup-created-card p{margin:8px 0 0;color:#b9cbb9}
+.topup-order-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#b23c32;color:#fff;font-size:10px;font-weight:900;vertical-align:middle}
+#adminTab-topup-orders .adminlist{min-width:850px}
+@media(max-width:520px){.topup-track-fields{grid-template-columns:1fr}}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1501,7 +1511,7 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
  <button type="button" class="xer-admin-tab" data-tab="form" onclick="showAdminTab('form')">Tambah etalase</button>
  <button type="button" class="xer-admin-tab" data-tab="listings" onclick="showAdminTab('listings')">Listing Akun</button>
  <button type="button" class="xer-admin-tab" data-tab="item-listings" onclick="showAdminTab('item-listings')">Item Gaming</button>
- <button type="button" class="xer-admin-tab" data-tab="topup-listings" onclick="showAdminTab('topup-listings')">Top Up</button>
+ <button type="button" class="xer-admin-tab" data-tab="topup-listings" onclick="showAdminTab('topup-listings')">Top Up</button><button type="button" class="xer-admin-tab" data-tab="topup-orders" onclick="showAdminTab('topup-orders')">Pesanan Top Up <span id="topupOrderBadge" class="topup-order-badge" style="display:none"></span></button>
  <button type="button" class="xer-admin-tab" data-tab="orders" onclick="showAdminTab('orders')">Invoice</button>
  <button type="button" class="xer-admin-tab" data-tab="accounting" onclick="showAdminTab('accounting')">Pembukuan</button>
  <button type="button" class="xer-admin-tab" data-tab="credits" onclick="showAdminTab('credits')">Koreksi & Riwayat Poin</button>
@@ -1553,7 +1563,8 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
 <div class="xer-admin-tab-panel" id="adminTab-form"><div class="panel"><h3 id="formTitle">＋ Tambah akun ke etalase</h3><div class="formgrid"><input id="newName" placeholder="Nama / judul akun *"><input id="newNameEn" placeholder="English account name (optional)"><select id="newCatalogType" aria-label="Jenis etalase" onchange="updateCatalogGameOptions();toggleCatalogMediaFields();refreshListingCode()"><option value="account">Etalase Akun</option><option value="item">Item Gaming</option><option value="topup">Top Up</option></select><select id="newGame" aria-label="Pilih game" onchange="refreshListingCode()"><option>Mobile Legends</option><option>PUBG Mobile</option><option>Free Fire</option><option>eFootball</option><option>Clash of Clans</option></select><input id="newPrice" type="number" min="1" placeholder="Harga normal (Rp) *"><input id="newCostPrice" type="number" min="0" placeholder="Harga modal (Rp) — khusus admin"><input id="newCode" placeholder="Kode listing otomatis" readonly aria-label="Kode listing otomatis"><div class="hint wide">Kode listing dibuat otomatis berdasarkan etalase dan game. Kode lama tidak berubah saat listing diedit.</div><textarea class="wide" id="newDesc" placeholder="Deskripsi akun lengkap"></textarea><textarea class="wide" id="newDescEn" placeholder="English account description (optional)"></textarea><select id="newStock"><option value="Tersedia">Tersedia</option><option value="Pending">Pending</option><option value="Terjual">Terjual</option></select><div class="wide" id="mediaUploadFields"><div><input id="newImage" type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" onchange="previewFile(event)"><img id="imagePreview" class="previewimg" alt="Pratinjau foto akun"><div id="imagePreviewList" class="upload-preview-grid"></div><div class="hint">Pilih 1–8 foto sekaligus, maksimal 5 MB per foto. Foto pertama menjadi foto utama. Semua foto otomatis diberi watermark XERAVION sebelum diunggah.</div></div></div><button class="btn gold" id="saveBtn" onclick="saveProduct()">Simpan listing</button><button class="btn" onclick="resetForm()">Kosongkan form</button></div><div class="notice">Database katalog terhubung ke Supabase. Foto bisa diunggah langsung dari HP ke penyimpanan XERAVION (maksimal 5 MB). Foto katalog dapat dilihat publik; hanya admin yang dapat mengelola unggahan.</div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-listings"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Daftar listing akun</h3><div class="hint">Listing dipisahkan berdasarkan game. Pilih kategori untuk mengelola akun ML, PUBG, atau Free Fire secara terpisah.</div></div><input id="adminSearch" placeholder="Cari nama atau kode…" oninput="renderAdmin()"></div><div class="admin-game-tabs" id="adminGameTabs" role="tablist" aria-label="Filter listing berdasarkan game"></div><div class="admin-game-heading"><span id="adminGameHeading">SEMUA GAME</span><span id="adminGameCount">0 listing</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama akun</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminRows"></tbody></table></div></div></div>
 <div class="xer-admin-tab-panel" id="adminTab-item-listings"><div class="panel"><div class="adminstats"><div class="stat"><b id="totalItemAdmin">0</b><span>Total item gaming</span></div><div class="stat"><b id="availableItemAdmin">0</b><span>Item tersedia</span></div><div class="stat"><b id="soldItemAdmin">0</b><span>Item terjual / habis</span></div></div><div class="sectionhead"><div><h3 style="margin:0">Daftar Item Gaming</h3><div class="hint">Khusus produk digital dan item game. Terpisah dari listing akun.</div></div><input id="adminItemSearch" placeholder="Cari item, game, atau kode…" oninput="renderItemGamingAdmin()"></div><div class="admin-game-heading"><span>ITEM GAMING</span><span id="adminItemCount">0 item</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama item</th><th>Game</th><th>Harga</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminItemRows"></tbody></table></div></div></div>
-<div class="xer-admin-tab-panel" id="adminTab-topup-listings"><div class="panel"><div class="adminstats"><div class="stat"><b id="totalTopupAdmin">0</b><span>Total produk Top Up</span></div><div class="stat"><b id="availableTopupAdmin">0</b><span>Produk tersedia</span></div><div class="stat"><b id="soldTopupAdmin">0</b><span>Produk habis</span></div></div><div class="sectionhead"><div><h3 style="margin:0">Daftar Top Up</h3><div class="hint">Katalog Top Up terpisah dari akun dan Item Gaming. Harga modal hanya dapat dilihat admin.</div></div><button class="btn gold" type="button" onclick="openTopupForm()">＋ Tambah Top Up</button><input id="adminTopupSearch" placeholder="Cari produk, game, atau kode…" oninput="renderTopupAdmin()"></div><div class="admin-game-heading"><span>TOP UP</span><span id="adminTopupCount">0 produk</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama produk</th><th>Game</th><th>Harga jual</th><th>Harga modal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminTopupRows"></tbody></table></div><div class="divider"></div><div class="sectionhead"><div><h3 style="margin:0">Referensi Harga Modal ShopeePay</h3><div class="hint">Daftar modal pemasok yang hanya dapat dibaca admin. Belum menjadi harga jual katalog.</div></div><button class="btn" type="button" onclick="loadTopupCostCatalog()">Muat ulang harga modal</button></div><div class="hint" style="margin-bottom:10px">Isi keuntungan per produk dalam rupiah. Harga jual dihitung otomatis dari harga modal + keuntungan. Tekan Simpan & Terbitkan untuk memasukkan produk ke katalog publik.</div><div class="topup-bulk-margin"><label for="topupBulkMargin"><strong>Keuntungan otomatis untuk semua game</strong></label><div class="topup-bulk-controls"><input id="topupBulkMargin" type="number" inputmode="numeric" min="0" step="500" placeholder="Contoh: 2000"><button class="btn gold" type="button" onclick="applyTopupMarginToAllGames()">Terapkan ke Semua Game</button></div><div class="hint">Satu kali pengaturan akan mengisi keuntungan dan menghitung harga jual seluruh produk dari semua game. Produk yang sudah terbit ikut diperbarui; produk yang belum terbit tetap menunggu tombol Simpan per produk.</div><p id="topupBulkMarginStatus" class="hint" role="status" aria-live="polite"></p></div><div id="topupGameFilters" class="topup-game-filters" role="tablist" aria-label="Pilih game Top Up"></div><div id="topupCostCatalogRows" class="topup-game-groups"><div class="hint">Memuat data harga modal…</div></div></div></div><div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
+<div class="xer-admin-tab-panel" id="adminTab-topup-listings"><div class="panel"><div class="adminstats"><div class="stat"><b id="totalTopupAdmin">0</b><span>Total produk Top Up</span></div><div class="stat"><b id="availableTopupAdmin">0</b><span>Produk tersedia</span></div><div class="stat"><b id="soldTopupAdmin">0</b><span>Produk habis</span></div></div><div class="sectionhead"><div><h3 style="margin:0">Daftar Top Up</h3><div class="hint">Katalog Top Up terpisah dari akun dan Item Gaming. Harga modal hanya dapat dilihat admin.</div></div><button class="btn gold" type="button" onclick="openTopupForm()">＋ Tambah Top Up</button><input id="adminTopupSearch" placeholder="Cari produk, game, atau kode…" oninput="renderTopupAdmin()"></div><div class="admin-game-heading"><span>TOP UP</span><span id="adminTopupCount">0 produk</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kode</th><th>Nama produk</th><th>Game</th><th>Harga jual</th><th>Harga modal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="adminTopupRows"></tbody></table></div><div class="divider"></div><div class="sectionhead"><div><h3 style="margin:0">Referensi Harga Modal ShopeePay</h3><div class="hint">Daftar modal pemasok yang hanya dapat dibaca admin. Belum menjadi harga jual katalog.</div></div><button class="btn" type="button" onclick="loadTopupCostCatalog()">Muat ulang harga modal</button></div><div class="hint" style="margin-bottom:10px">Isi keuntungan per produk dalam rupiah. Harga jual dihitung otomatis dari harga modal + keuntungan. Tekan Simpan & Terbitkan untuk memasukkan produk ke katalog publik.</div><div class="topup-bulk-margin"><label for="topupBulkMargin"><strong>Keuntungan otomatis untuk semua game</strong></label><div class="topup-bulk-controls"><input id="topupBulkMargin" type="number" inputmode="numeric" min="0" step="500" placeholder="Contoh: 2000"><button class="btn gold" type="button" onclick="applyTopupMarginToAllGames()">Terapkan ke Semua Game</button></div><div class="hint">Satu kali pengaturan akan mengisi keuntungan dan menghitung harga jual seluruh produk dari semua game. Produk yang sudah terbit ikut diperbarui; produk yang belum terbit tetap menunggu tombol Simpan per produk.</div><p id="topupBulkMarginStatus" class="hint" role="status" aria-live="polite"></p></div><div id="topupGameFilters" class="topup-game-filters" role="tablist" aria-label="Pilih game Top Up"></div><div id="topupCostCatalogRows" class="topup-game-groups"><div class="hint">Memuat data harga modal…</div></div></div></div><div class="xer-admin-tab-panel" id="adminTab-topup-orders"><div class="panel"><div class="sectionhead"><div><h3 style="margin:0">Notifikasi Pesanan Top Up</h3><div class="hint">Pesanan baru akan muncul otomatis di panel ini. Pilih status setelah pembayaran dan proses top up diverifikasi.</div></div><button class="btn" type="button" onclick="loadAdminTopupOrders()">Muat ulang</button></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice / Waktu</th><th>Pembeli</th><th>Game / Produk</th><th>ID Tujuan</th><th>Total</th><th>Status</th><th>Catatan</th></tr></thead><tbody id="adminTopupOrderRows"><tr><td colspan="7">Memuat pesanan…</td></tr></tbody></table></div></div></div>
+<div class="xer-admin-tab-panel" id="adminTab-orders"><div class="panel" id="xeravionOrdersPanel">
  <div class="sectionhead"><div><h3 style="margin:0">Pesanan & Invoice XERAVION</h3><div class="hint">Kelola pesanan dan invoice. Pembukuan biaya serta laba tersedia di menu Pembukuan.</div></div><button class="btn" onclick="loadXeravionOrders()">Muat ulang</button></div>
  <div class="notice">Untuk memberi cashback 3%, pilih member terlebih dahulu melalui panel Credit Points di bawah. Email pembeli harus sama dengan email member tersebut. Pilih member di formulir invoice untuk cashback otomatis 3%. Pesanan tamu tidak memperoleh cashback.</div>
  <div class="formgrid">
@@ -1583,6 +1594,9 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
  </div>
  <p id="orderAdminMessage" class="hint" aria-live="polite"></p>
  <div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice</th><th>Pembeli</th><th>Detail</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="xeravionOrderRows"><tr><td colspan="6">Tekan Muat ulang untuk melihat pesanan.</td></tr></tbody></table></div>
+ <div class="divider"></div>
+ <div class="sectionhead"><div><h3 style="margin:0">Pesanan Top Up Game <span id="topupOrderBadge" class="topup-order-badge" style="display:none"></span></h3><div class="hint">Setiap checkout pembeli masuk ke sini. Ubah status agar pembeli dapat melihat progres pesanannya.</div></div><button class="btn" type="button" onclick="loadAdminTopupOrders()">Muat ulang Top Up</button></div>
+ <div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice / Waktu</th><th>Pembeli</th><th>Game / Produk</th><th>ID Tujuan</th><th>Total</th><th>Status</th><th>Catatan</th></tr></thead><tbody id="adminTopupOrderRows"><tr><td colspan="7">Tekan Muat ulang untuk melihat pesanan Top Up.</td></tr></tbody></table></div>
 </div></div>
 <div class="xer-admin-tab-panel" id="adminTab-accounting">
  <div class="panel xer-finance-panel">
@@ -1856,6 +1870,74 @@ function restoreTopupBuyerData(game){
  topupServerRegion=typeof saved.serverRegion==='string'&&saved.serverRegion?saved.serverRegion:'Asia';
 }
 function setTopupGame(game){activeTopupGame=game;selectedTopupProductId=null;restoreTopupBuyerData(game);render();if(game!=='Semua'){const target=document.querySelector('.catalog>.sectionhead');if(target)setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),80)}}
+
+const TOPUP_ACCESS_KEY='xeravion_topup_access_v1';
+let topupAdminChannel=null;
+const topupStatusLabel=s=>({awaiting_payment:'Menunggu pembayaran',processing:'Sedang dikerjakan',completed:'Selesai',cancelled:'Dibatalkan',failed:'Gagal'}[s]||s||'Menunggu');
+async function createPublicTopupOrder(){
+ const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
+ const out=document.getElementById('topupOrderFeedback');
+ if(!p||!topupPlayerId.trim()){if(out)out.textContent='Pilih produk dan isi ID game terlebih dahulu.';return}
+ if(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()){if(out)out.textContent='Zone ID / Server ID wajib diisi.';return}
+ const btn=document.querySelector('.topup-checkout');if(btn){btn.disabled=true;btn.textContent='Menyimpan pesanan…'}
+ try{
+  const {data,error}=await supabaseClient.rpc('create_public_topup_order',{
+   p_product_id:p.id,p_player_id:topupPlayerId.trim(),
+   p_zone_id:topupZoneId.trim()||null,
+   p_server_region:p.game==='Genshin Impact'?topupServerRegion:null,
+   p_buyer_name:'Pembeli',p_buyer_contact:null
+  });
+  if(error)throw error;
+  const saved=JSON.parse(localStorage.getItem(TOPUP_ACCESS_KEY)||'{}');
+  saved[data.invoice_number]={token:data.buyer_access_token,createdAt:data.created_at};
+  localStorage.setItem(TOPUP_ACCESS_KEY,JSON.stringify(saved));
+  const inv=document.getElementById('topupTrackInvoice'),tok=document.getElementById('topupTrackToken');
+  if(inv)inv.value=data.invoice_number;if(tok)tok.value=data.buyer_access_token;
+  if(out)out.innerHTML='<div class="topup-created-card"><strong>Pesanan berhasil dibuat dan sudah masuk ke panel admin.</strong><div>Invoice: <b>'+esc(data.invoice_number)+'</b></div><div>Kode akses status: <b>'+esc(data.buyer_access_token)+'</b></div><div>Total: <b>'+rupiah(data.amount_due)+'</b></div><p>Simpan nomor invoice dan kode akses ini untuk mengecek status pesanan.</p></div>';
+  await checkPublicTopupOrder();
+  if(document.getElementById('adminTab-topup-orders')?.classList.contains('active'))loadAdminTopupOrders();
+ }catch(e){if(out)out.textContent='Pesanan gagal dibuat: '+(e.message||e)}
+ finally{if(btn){btn.disabled=false;btn.textContent='Buat Pesanan Top Up';updateTopupCheckoutState()}}
+}
+async function checkPublicTopupOrder(){
+ const invoice=(document.getElementById('topupTrackInvoice')?.value||'').trim().toUpperCase();
+ const token=(document.getElementById('topupTrackToken')?.value||'').trim();
+ const out=document.getElementById('topupTrackResult');if(!out)return;
+ if(!invoice||!token){out.textContent='Masukkan nomor invoice dan kode akses pesanan.';return}
+ out.textContent='Memeriksa status…';
+ try{
+  const {data,error}=await supabaseClient.rpc('get_public_topup_order_status',{p_invoice_number:invoice,p_access_token:token});
+  if(error)throw error;
+  out.innerHTML='<div class="topup-status-result"><strong>'+esc(topupStatusLabel(data.order_status))+'</strong><div>Invoice: '+esc(data.invoice_number)+'</div><div>Produk: '+esc(data.game)+' · '+esc(data.product_name)+'</div><div>Pembayaran: '+esc(data.payment_status==='confirmed'?'Dikonfirmasi':data.payment_status==='pending'?'Menunggu':'Diperbarui')+'</div><div>Total: '+rupiah(data.amount_due)+'</div>'+(data.admin_note?'<div>Catatan admin: '+esc(data.admin_note)+'</div>':'')+'<small>Diperbarui: '+new Date(data.updated_at).toLocaleString('id-ID')+'</small></div>';
+ }catch(e){out.textContent='Tidak dapat memuat status: '+(e.message||e)}
+}
+async function loadAdminTopupOrders(){
+ const body=document.getElementById('adminTopupOrderRows');if(!body)return;
+ if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="7">Sesi admin tidak aktif.</td></tr>';return}
+ body.innerHTML='<tr><td colspan="7">Memuat pesanan Top Up…</td></tr>';
+ try{
+  const {data,error}=await supabaseClient.from('topup_orders').select('*').order('created_at',{ascending:false}).limit(100);
+  if(error)throw error;
+  const pending=(data||[]).filter(o=>!['completed','cancelled','failed'].includes(o.order_status)).length;
+  const badge=document.getElementById('topupOrderBadge');if(badge){badge.textContent=pending?String(pending):'';badge.style.display=pending?'inline-flex':'none'}
+  body.innerHTML=data?.length?data.map(o=>'<tr><td><strong>'+esc(o.invoice_number)+'</strong><div class="hint">'+new Date(o.created_at).toLocaleString('id-ID')+'</div></td><td>'+esc(o.buyer_name)+'<div class="hint">'+esc(o.buyer_contact||'Tanpa kontak')+'</div></td><td>'+esc(o.game)+'<div class="hint">'+esc(o.product_code)+' · '+esc(o.product_name)+'</div></td><td>'+esc(o.player_id)+(o.zone_id?'<div class="hint">Zone: '+esc(o.zone_id)+'</div>':'')+(o.server_region?'<div class="hint">Server: '+esc(o.server_region)+'</div>':'')+'</td><td>'+rupiah(o.amount_due)+'</td><td><select aria-label="Status pesanan '+esc(o.invoice_number)+'" onchange="setTopupOrderStatus(\''+o.id+'\',this.value)"><option value="awaiting_payment" '+(o.order_status==='awaiting_payment'?'selected':'')+'>Menunggu pembayaran</option><option value="processing" '+(o.order_status==='processing'?'selected':'')+'>Sedang dikerjakan</option><option value="completed" '+(o.order_status==='completed'?'selected':'')+'>Selesai</option><option value="cancelled" '+(o.order_status==='cancelled'?'selected':'')+'>Dibatalkan</option><option value="failed" '+(o.order_status==='failed'?'selected':'')+'>Gagal</option></select></td><td>'+esc(o.admin_note||'—')+'</td></tr>').join(''):'<tr><td colspan="7">Belum ada pesanan Top Up.</td></tr>';
+ }catch(e){body.innerHTML='<tr><td colspan="7">Gagal memuat pesanan Top Up: '+esc(e.message||e)+'</td></tr>'}
+}
+async function setTopupOrderStatus(id,status){
+ const note=prompt('Catatan untuk pembeli (opsional):','');
+ try{
+  const {error}=await supabaseClient.rpc('admin_update_topup_order',{p_order_id:id,p_order_status:status,p_admin_note:note||null});
+  if(error)throw error;
+  await loadAdminTopupOrders();
+ }catch(e){alert('Gagal memperbarui status Top Up: '+(e.message||e));await loadAdminTopupOrders()}
+}
+function subscribeAdminTopupOrders(){
+ if(topupAdminChannel)return;
+ topupAdminChannel=supabaseClient.channel('xeravion-admin-topup-orders')
+  .on('postgres_changes',{event:'*',schema:'public',table:'topup_orders'},()=>loadAdminTopupOrders())
+  .subscribe();
+}
+
 function updateTopupCheckoutState(){const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');const needsZone=['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame);const needsServer=activeTopupGame==='Genshin Impact';const ready=!!(p&&topupPlayerId.trim()&&(!needsZone||topupZoneId.trim())&&(!needsServer||topupServerRegion));const link=document.querySelector('.topup-checkout');if(!link)return;link.classList.toggle('ready',ready);link.classList.toggle('disabled',!ready);if(ready){link.href=topupOrderLink();link.target='_blank';link.rel='noopener';link.removeAttribute('aria-disabled');link.onclick=null}else{link.removeAttribute('href');link.removeAttribute('target');link.setAttribute('aria-disabled','true');link.onclick=()=>false}}
 function handleTopupPlayerIdInput(value){topupPlayerId=String(value||'');saveTopupBuyerData();updateTopupCheckoutState()}
 function handleTopupZoneIdInput(value){topupZoneId=String(value||'');saveTopupBuyerData();updateTopupCheckoutState()}
@@ -2320,11 +2402,12 @@ async function loadCreditProgramOverview(){
 }
 
 function showAdminTab(tab){
- const allowed=['overview','form','listings','item-listings','topup-listings','orders','accounting','credits','credit-monitor','analytics','mail'];
+ const allowed=['overview','form','listings','item-listings','topup-listings','topup-orders','orders','accounting','credits','credit-monitor','analytics','mail'];
  if(!allowed.includes(tab))tab='overview';
  document.querySelectorAll('.xer-admin-tab-panel').forEach(el=>el.classList.toggle('active',el.id==='adminTab-'+tab));
  document.querySelectorAll('.xer-admin-tab').forEach(el=>el.classList.toggle('active',el.dataset.tab===tab));
  if(tab==='orders')loadXeravionOrders();
+ if(tab==='topup-orders'){loadAdminTopupOrders();subscribeAdminTopupOrders();}
  if(tab==='accounting')loadXeravionAccounting();
  if(tab==='listings')renderAdmin();
  if(tab==='item-listings')renderItemGamingAdmin();

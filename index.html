@@ -1941,7 +1941,7 @@ function loadAdminTopupOrders(){
   body.innerHTML=data?.length?data.map(o=>'<tr><td><strong>'+esc(o.invoice_number)+'</strong><div class="hint">'+new Date(o.created_at).toLocaleString('id-ID')+'</div></td><td>'+esc(o.buyer_name)+'<div class="hint">'+esc(o.buyer_contact||'Tanpa kontak')+'</div></td><td>'+esc(o.game)+'<div class="hint">'+esc(o.product_code)+' · '+esc(o.product_name)+'</div></td><td>'+esc(o.player_id)+(o.zone_id?'<div class="hint">Zone: '+esc(o.zone_id)+'</div>':'')+(o.server_region?'<div class="hint">Server: '+esc(o.server_region)+'</div>':'')+'</td><td>'+rupiah(o.amount_due)+'</td><td><select aria-label="Status pesanan '+esc(o.invoice_number)+'" onchange="setTopupOrderStatus(\''+o.id+'\',this.value)"><option value="awaiting_payment" '+(o.order_status==='awaiting_payment'?'selected':'')+'>Menunggu pembayaran</option><option value="processing" '+(o.order_status==='processing'?'selected':'')+'>Sedang dikerjakan</option><option value="completed" '+(o.order_status==='completed'?'selected':'')+'>Selesai</option><option value="cancelled" '+(o.order_status==='cancelled'?'selected':'')+'>Dibatalkan</option><option value="failed" '+(o.order_status==='failed'?'selected':'')+'>Gagal</option></select></td><td>'+esc(o.admin_note||'—')+'</td></tr>').join(''):'<tr><td colspan="7">Belum ada pesanan Top Up.</td></tr>';
  }catch(e){body.innerHTML='<tr><td colspan="7">Gagal memuat pesanan Top Up: '+esc(e.message||e)+'</td></tr>'}
 }
-async function setTopupOrderStatus(id,status){
+async async function setTopupOrderStatus(id,status){
  const note=prompt('Catatan untuk pembeli (opsional):','');
  try{
   const {error}=await supabaseClient.rpc('admin_update_topup_order',{p_order_id:id,p_order_status:status,p_admin_note:note||null});

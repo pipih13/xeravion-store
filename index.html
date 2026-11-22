@@ -1889,6 +1889,7 @@ async function saveTopupMarginAndPublish(id){
    const{data:created,error:createError}=await supabaseClient.from('products').insert({code,name,name_en:name,game,catalog_type:'topup',price:selling,original_price:selling,discount_percent:0,description:row.category+' · Top Up '+game,description_en:row.category+' · '+game+' top-up',image_url:'',gallery_images:[],status:'Tersedia'}).select('id').single();
    if(createError)throw createError;productId=created.id;
   }
+  const{error:bookCostError}=await supabaseClient.from('product_costs').upsert({product_id:productId,cost_price:Number(row.cost_price),updated_at:new Date().toISOString()},{onConflict:'product_id'});if(bookCostError)throw bookCostError;
   const{error:costUpdateError}=await supabaseClient.from('topup_cost_catalog').update({margin_amount:margin,selling_price:selling,published_product_id:productId,updated_at:new Date().toISOString()}).eq('id',id);
   if(costUpdateError)throw costUpdateError;
   await loadProducts();await loadTopupCostCatalog();renderTopupAdmin();

@@ -2090,13 +2090,18 @@ function confirmXerQrisBuyerPaid(){
 }
 
 let topupAdminChannel=null;
+let topupCheckoutBusy=false;
 const topupStatusLabel=s=>({awaiting_payment:'Menunggu pembayaran',processing:'Sedang dikerjakan',completed:'Selesai',cancelled:'Dibatalkan',failed:'Gagal'}[s]||s||'Menunggu');
 async function createPublicTopupOrder(){
- const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
  const out=document.getElementById('topupOrderFeedback');
+ if(topupCheckoutBusy)return;
+ const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
  if(!p||!topupPlayerId.trim()){if(out)out.textContent='Pilih produk dan isi ID game terlebih dahulu.';return}
  if(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()){if(out)out.textContent='Zone ID / Server ID wajib diisi.';return}
- const btn=document.querySelector('.topup-checkout');if(btn){btn.disabled=true;btn.textContent='Menyimpan pesanan…'}
+ const btn=document.querySelector('.topup-checkout');
+ if(btn?.disabled)return;
+ topupCheckoutBusy=true;
+ if(btn){btn.disabled=true;btn.textContent='Memeriksa pesanan…'}
  try{
   const {data,error}=await supabaseClient.rpc('create_public_topup_order',{
    p_product_id:p.id,p_player_id:topupPlayerId.trim(),
@@ -2110,12 +2115,13 @@ async function createPublicTopupOrder(){
   localStorage.setItem(TOPUP_ACCESS_KEY,JSON.stringify(saved));
   const inv=document.getElementById('topupTrackInvoice'),tok=document.getElementById('topupTrackToken');
   if(inv)inv.value=data.invoice_number;if(tok)tok.value=data.buyer_access_token;
-  if(out)out.innerHTML='<div class="topup-created-card"><strong>Pesanan berhasil dibuat.</strong><p>Silakan selesaikan pembayaran melalui QRIS atau hubungi admin untuk metode pembayaran lainnya.</p></div>';
-  showBuyerOrderToast('Pesanan berhasil dibuat','Invoice '+data.invoice_number+' · Total '+rupiah(data.amount_due)+'. Silakan lanjutkan pembayaran.');
+  const reused=!!data.existing_order;
+  if(out)out.innerHTML='<div class="topup-created-card"><strong>'+(reused?'Pesanan aktif ditemukan.':'Pesanan berhasil dibuat.')+'</strong><p>'+(reused?'Tidak dibuat invoice baru. Lanjutkan pembayaran pada pesanan yang masih aktif.':'Silakan selesaikan pembayaran melalui QRIS atau hubungi admin untuk metode pembayaran lainnya.')+'</p></div>';
+  showBuyerOrderToast(reused?'Pesanan lama digunakan':'Pesanan berhasil dibuat','Invoice '+data.invoice_number+' · Total '+rupiah(data.amount_due)+'. '+(reused?'Silakan lanjutkan pembayaran yang sama.':'Silakan lanjutkan pembayaran.'));
   openXerQrisPayment({invoice_number:data.invoice_number,amount_due:data.amount_due});
   if(document.getElementById('adminTab-topup-orders')?.classList.contains('active'))loadAdminTopupOrders();
  }catch(e){if(out)out.textContent='Pesanan gagal dibuat: '+(e.message||e)}
- finally{if(btn){btn.disabled=false;btn.textContent='Buat Pesanan Top Up';updateTopupCheckoutState()}}
+ finally{topupCheckoutBusy=false;if(btn){btn.disabled=false;btn.textContent='Buat Pesanan Top Up';updateTopupCheckoutState()}}
 }
 async function checkPublicTopupOrder(){
  const invoice=(document.getElementById('topupTrackInvoice')?.value||'').trim().toUpperCase();
@@ -2834,7 +2840,9 @@ function selectOrderMember(id){
  document.getElementById('orderSelectedMember').textContent='Member dipilih: '+(m.display_name||'Member')+' · '+(m.email||'');
  document.getElementById('orderSelectedMember').dataset.email=m.email||'';
 }
+let xeravionOrderCreateBusy=false;
 async function createXeravionOrder(){
+ if(xeravionOrderCreateBusy)return;
  const msg=document.getElementById('orderAdminMessage'),productId=Number(document.getElementById('orderProduct').value),buyerName=document.getElementById('orderBuyerName').value.trim(),buyerEmail=document.getElementById('orderBuyerEmail').value.trim(),buyerWhatsapp=document.getElementById('orderBuyerWhatsapp').value.trim(),paymentMethod=document.getElementById('orderPaymentMethod').value;
  const product=items.find(p=>Number(p.id)===productId);
  if(!product){msg.textContent='Pilih akun yang masih tersedia.';return}
@@ -2850,6 +2858,9 @@ async function createXeravionOrder(){
  }
  if(buyerType==='guest'&&points>0){msg.textContent='Non-member tidak dapat menggunakan Credit Points. Pilih Member jika ingin menggunakan poin.';return}
  if(points>0&&!orderSelectedMemberId){msg.textContent='Pilih member terlebih dahulu untuk menggunakan Credit Points.';return}
+ xeravionOrderCreateBusy=true;
+ const submitBtn=document.querySelector('button[onclick="createXeravionOrder()"]');
+ if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Menyimpan…'}
  msg.textContent='Menyimpan pesanan dan memproses Credit Points…';
  try{
   const{data,error}=await supabaseClient.rpc('admin_create_xeravion_order',{
@@ -2864,6 +2875,7 @@ async function createXeravionOrder(){
   orderSelectedMemberId=null;document.getElementById('orderBuyerType').value='guest';changeOrderBuyerType();document.getElementById('orderMemberQuery').value='';document.getElementById('orderMemberResults').textContent='Belum ada member dipilih.';
   await loadXeravionOrders();
  }catch(e){msg.textContent='Gagal membuat pesanan: '+(e.message||e)}
+ finally{xeravionOrderCreateBusy=false;if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Buat pesanan'}}
 }
 let xeravionAccountingRows=[];
 const xerFinanceMoney=v=>'Rp '+Number(v||0).toLocaleString('id-ID');

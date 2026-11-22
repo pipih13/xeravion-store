@@ -1519,10 +1519,10 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
 .xer-qris-sub{font-size:12px;color:#b9b4a8;margin:0 0 14px}
 .xer-qris-merchant{font-size:13px;font-weight:900;letter-spacing:.5px;margin:8px 0 12px}
 .xer-qris-merchant small{display:block;font-size:10px;color:#a9a395;font-weight:500;margin-top:4px}
-.xer-qris-code{width:min(270px,82vw);aspect-ratio:1;margin:0 auto 13px;padding:10px;background:#fff;border-radius:12px}
+.xer-qris-code{width:min(270px,82vw);height:auto;min-height:0;aspect-ratio:auto;margin:0 auto 13px;padding:10px;background:#fff;border-radius:12px;display:block;overflow:hidden}
 .xer-qris-code svg{width:100%;height:100%;display:block}
-.xer-qris-code{display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;padding:12px!important;background:#fff!important}
-.xer-qris-code img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;aspect-ratio:1/1!important;image-rendering:crisp-edges!important;background:#fff!important;border:0!important;border-radius:0!important}
+.xer-qris-code{display:block!important;overflow:hidden!important;padding:10px!important;background:#fff!important}
+.xer-qris-code img{display:block!important;width:100%!important;height:auto!important;max-width:100%!important;max-height:none!important;object-fit:contain!important;object-position:center!important;aspect-ratio:auto!important;image-rendering:auto!important;background:#fff!important;border:0!important;border-radius:0!important}
 .xer-qris-cancel{width:100%;margin-top:9px;padding:11px;border:1px solid #8b4545;border-radius:10px;background:#271313;color:#ffc4c4;font-weight:800}
 
 .xer-qris-amount{padding:10px;border:1px solid #6c5734;border-radius:12px;background:#211b10}
@@ -1947,11 +1947,11 @@ function renderXerQrisCode(){
  const host=document.getElementById('xerQrisCode');if(!host)return;
  host.innerHTML='';
  const img=document.createElement('img');
- img.src='/assets/xeravion-qris-code.png';
+ img.src='/assets/xeravion-qris-code.png?v=2';
  img.alt='QRIS resmi XERAVION - GAME';
- img.width=635;img.height=635;
+ img.width=1080;img.height=1521;
  img.decoding='async';img.fetchPriority='high';
- img.style.cssText='display:block;width:100%;height:100%;min-height:1px;object-fit:contain;background:#fff;border-radius:6px';
+ img.style.cssText='display:block;width:100%;height:auto;max-width:100%;object-fit:contain;object-position:center;background:#fff;border-radius:0';
  img.onerror=()=>{
   host.innerHTML='<div style="padding:18px;color:#222;font-size:12px;line-height:1.5">Gambar QRIS tidak berhasil dimuat. Muat ulang halaman atau hubungi admin melalui WhatsApp.</div>';
  };

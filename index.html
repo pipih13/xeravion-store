@@ -1871,7 +1871,7 @@ function renderTopupProductCard(p){
 function selectTopupProduct(id){selectedTopupProductId=Number(id);render()}
 function topupOrderLink(){
  const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');
- if(!p||!topupPlayerId.trim()(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()))return '#';
+ if(!p||!topupPlayerId.trim()||(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)&&!topupZoneId.trim()))return '#';
  const msg='Halo admin XERAVION, saya ingin memesan Top Up '+p.game+'. Produk: '+p.name+' ('+p.code+'). Harga: '+rupiah(p.price)+'. '+(['Mobile Legends','Magic Chess: Go Go'].includes(p.game)?'User ID: '+topupPlayerId.trim()+'. Zone ID / Server ID: '+topupZoneId.trim()+'.':p.game==='Valorant'?'Riot ID: '+topupPlayerId.trim()+'.':p.game==='Genshin Impact'?'UID: '+topupPlayerId.trim()+'. Server: '+topupServerRegion+'.':(p.game==='Free Fire'?'Player ID: ':'Character ID / Player ID: ')+topupPlayerId.trim()+'.')+' Mohon konfirmasi pesanan dan metode pembayaran.';
  return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
 }

@@ -1879,9 +1879,10 @@ function renderTopupGameCostTable(){
  const tableRows=rows.map(x=>{
   const margin=x.margin_amount==null?'':String(x.margin_amount),sale=x.selling_price==null?'':rupiah(x.selling_price);
   const published=x.published_product_id?'<span class="status">Terbit</span>':'<span class="hint">Belum terbit</span>';
-  return '<tr><td>'+esc(x.category)+'</td><td><strong>'+esc(x.product_name)+'</strong></td><td>'+rupiah(x.cost_price)+'</td><td><input inputmode="numeric" type="number" min="0" step="500" id="topupMargin-'+x.id+'" value="'+margin+'" placeholder="Keuntungan" style="min-width:100px" oninput="previewTopupSale('+x.id+','+Number(x.cost_price)+')"></td><td id="topupSale-'+x.id+'">'+(sale||'<span class="hint">Atur margin</span>')+'</td><td>'+published+'</td><td><button class="smallbtn" type="button" onclick="saveTopupMarginAndPublish('+x.id+')">Simpan</button></td></tr>';
- }).join('');
- container.innerHTML='<div class="admin-game-heading"><strong>'+esc(activeTopupCostGame)+'</strong><span>'+rows.length+' produk</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kategori</th><th>Produk</th><th>Modal</th><th>Keuntungan (Rp)</th><th>Harga jual</th><th>Status</th><th>Aksi</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>';
+  const linkedProduct=x.published_product_id?items.find(p=>String(p.id)===String(x.published_product_id)):null;
+  const listingCode=linkedProduct?.code||'<span class="hint">Otomatis saat terbit</span>';
+  return '<tr><td>'+esc(x.category)+'</td><td><strong>'+esc(x.product_name)+'</strong></td><td><code>'+listingCode+'</code></td><td>'+rupiah(x.cost_price)+'</td><td><input inputmode="numeric" type="number" min="0" step="500" id="topupMargin-'+x.id+'" value="'+margin+'" placeholder="Keuntungan" style="min-width:100px" oninput="previewTopupSale('+x.id+','+Number(x.cost_price)+')"></td><td id="topupSale-'+x.id+'">'+(sale||'<span class="hint">Atur margin</span>')+'</td><td>'+published+'</td><td><button class="smallbtn" type="button" onclick="saveTopupMarginAndPublish('+x.id+')">Simpan</button></td></tr>';
+ }).join(''); container.innerHTML='<div class="admin-game-heading"><strong>'+esc(activeTopupCostGame)+'</strong><span>'+rows.length+' produk</span></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Kategori</th><th>Produk</th><th>Kode listing</th><th>Modal</th><th>Keuntungan (Rp)</th><th>Harga jual</th><th>Status</th><th>Aksi</th></tr></thead><tbody>'+tableRows+'</tbody></table></div>';
 }
 function selectTopupCostGame(game){activeTopupCostGame=game;renderTopupGameCostTable()}
 async function loadTopupCostCatalog(){

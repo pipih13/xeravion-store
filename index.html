@@ -1464,6 +1464,11 @@ body.xeravion-topup-page .topup-game-choice img[alt="Free Fire logo"]{object-fit
 body.xeravion-topup-page .topup-game-choice img[alt="Valorant logo"]{object-fit:contain!important;object-position:center!important;background:#ff4655!important;padding:10px!important}
 body.xeravion-topup-page .topup-selected-game-title img[alt="Free Fire"]{object-fit:contain!important;background:#fff!important;padding:5px!important}
 body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-fit:contain!important;background:#ff4655!important;padding:5px!important}
+</style><style id="xeravion-store-artwork-icons">
+body.xeravion-topup-page .topup-game-choice img[alt="Free Fire logo"],
+body.xeravion-topup-page .topup-selected-game-title img[alt="Free Fire"]{object-fit:cover!important;object-position:center!important;background:#161616!important;padding:0!important}
+body.xeravion-topup-page .topup-game-choice img[alt="Valorant logo"],
+body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-fit:contain!important;object-position:center!important;background:#ff4655!important;padding:20px!important}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1838,10 +1843,10 @@ function handleTopupPlayerIdInput(value){topupPlayerId=String(value||'');const p
 function topupGameLogo(game){
  const logos={
   'Mobile Legends':'https://is4-ssl.mzstatic.com/image/thumb/Purple126/v4/0e/ae/e4/0eaee45b-a414-e99b-2eed-b7868478f522/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg',
-  'Free Fire':'https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/eb56db6919078b837ffd2e6a3b7e4aac.jpg',
+  'Free Fire':'https://play-lh.googleusercontent.com/JT88XmsHoGDio7FxONwh382DhuTxuccfMmWFDtRBFjilySzNqWOCxUhqm8IhBKzQSwVrW2HWp_XvSgKFwi3ETA=w512-h512',
   'PUBG Mobile':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4f/8d/38/4f8d3800-68b5-1c53-b0f7-7d46bda6a394/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg',
   'Magic Chess: Go Go':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e3/db/fb/e3dbfb2e-a8f9-94d9-2610-be1d3975e665/AppIcon-1x_U007emarketing-0-7-0-85-220-0.png/512x512bb.jpg',
-  'Valorant':'https://commons.wikimedia.org/wiki/Special:FilePath/Valorant_logo.svg',
+  'Valorant':'https://www.citypng.com/public/uploads/preview/hd-valorant-red-symbol-icon-sign-logo-png-701751694787885tb2zfyarln.png?v=2026040111',
   'Genshin Impact':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d3/f5/2a/d3f52a60-8dd5-e433-226a-5468f9bcfd0f/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg'
  };
  return logos[game]||'';

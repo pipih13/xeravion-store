@@ -1471,6 +1471,11 @@ body.xeravion-topup-page .topup-game-choice img[alt="Valorant logo"],
 body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-fit:contain!important;object-position:center!important;background:#ff4655!important;padding:20px!important}
 </style><style id="xeravion-topup-order-notifications">
 .topup-track-box{margin-top:18px;padding:14px;border:1px solid #65502d;border-radius:12px;background:#100f0c;display:grid;gap:9px}
+.topup-track-box.is-hidden{display:none!important}
+.xer-buyer-order-toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-18px);z-index:2147483001;width:min(440px,calc(100vw - 28px));padding:13px 15px;border:1px solid #6d9a61;border-radius:13px;background:#142318;color:#e4f4df;box-shadow:0 12px 35px #0009;font-size:13px;line-height:1.5;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease}
+.xer-buyer-order-toast.show{opacity:1;transform:translate(-50%,0)}
+.xer-buyer-order-toast strong{display:block;margin-bottom:3px;font-size:14px}
+
 .topup-track-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .topup-track-fields input{min-width:0;padding:11px;border:1px solid #51432b;border-radius:9px;background:#0b0a08;color:#f5ead4}
 .topup-order-feedback:empty,.topup-track-result:empty{display:none}
@@ -1971,6 +1976,14 @@ function closeXerQrisPayment(){
  document.body.style.overflow='';
  document.documentElement.style.overflow='';
 }
+function showBuyerOrderToast(title,message){
+ let toast=document.getElementById('xerBuyerOrderToast');
+ if(!toast){toast=document.createElement('div');toast.id='xerBuyerOrderToast';toast.className='xer-buyer-order-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');document.body.appendChild(toast);}
+ toast.innerHTML='<strong>'+esc(title)+'</strong><span>'+esc(message)+'</span>';
+ toast.classList.add('show');
+ clearTimeout(window.xerBuyerToastTimer);
+ window.xerBuyerToastTimer=setTimeout(()=>toast.classList.remove('show'),4800);
+}
 function confirmXerQrisBuyerPaid(){
  if(activeXerQrisOrder?.type==='listing'){
   const p=activeXerQrisOrder;
@@ -1979,10 +1992,18 @@ function confirmXerQrisBuyerPaid(){
   window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(message),'_blank','noopener');
   return;
  }
+ const order=activeXerQrisOrder||{};
+ const saved=JSON.parse(localStorage.getItem(TOPUP_ACCESS_KEY)||'{}');
+ const credentials=saved[order.invoice_number]||{};
+ const inv=document.getElementById('topupTrackInvoice'),tok=document.getElementById('topupTrackToken');
+ if(inv)inv.value=order.invoice_number||'';
+ if(tok)tok.value=credentials.token||'';
  closeXerQrisPayment();
+ const box=document.getElementById('topupTrackBox');
+ if(box){box.classList.remove('is-hidden');box.setAttribute('aria-hidden','false');box.scrollIntoView({behavior:'smooth',block:'center'});}
  const out=document.getElementById('topupOrderFeedback');
- if(out)out.innerHTML='<div class="topup-created-card"><strong>Terima kasih! Pesanan Anda menunggu verifikasi pembayaran.</strong><p>Admin akan memeriksa pembayaran terlebih dahulu. Status pesanan dapat dicek menggunakan invoice dan kode akses Anda.</p></div>';
- const track=document.getElementById('topupTrackResult');if(track)checkPublicTopupOrder();
+ if(out)out.innerHTML='<div class="topup-created-card"><strong>Konfirmasi pembayaran diterima.</strong><p>Terima kasih. Admin akan memeriksa pembayaran Anda. Cek status pesanan tersedia di bawah.</p></div>';
+ showBuyerOrderToast('Konfirmasi pembayaran dikirim','Admin XERAVION akan memeriksa pembayaran Anda.');
 }
 
 let topupAdminChannel=null;
@@ -2006,9 +2027,9 @@ async function createPublicTopupOrder(){
   localStorage.setItem(TOPUP_ACCESS_KEY,JSON.stringify(saved));
   const inv=document.getElementById('topupTrackInvoice'),tok=document.getElementById('topupTrackToken');
   if(inv)inv.value=data.invoice_number;if(tok)tok.value=data.buyer_access_token;
-  if(out)out.innerHTML='<div class="topup-created-card"><strong>Pesanan berhasil dibuat dan sudah masuk ke panel admin.</strong><div>Invoice: <b>'+esc(data.invoice_number)+'</b></div><div>Kode akses status: <b>'+esc(data.buyer_access_token)+'</b></div><div>Total: <b>'+rupiah(data.amount_due)+'</b></div><p>Simpan nomor invoice dan kode akses ini untuk mengecek status pesanan.</p></div>';
+  if(out)out.innerHTML='<div class="topup-created-card"><strong>Pesanan berhasil dibuat.</strong><p>Silakan selesaikan pembayaran melalui QRIS atau hubungi admin untuk metode pembayaran lainnya.</p></div>';
+  showBuyerOrderToast('Pesanan berhasil dibuat','Invoice '+data.invoice_number+' · Total '+rupiah(data.amount_due)+'. Silakan lanjutkan pembayaran.');
   openXerQrisPayment({invoice_number:data.invoice_number,amount_due:data.amount_due});
-  await checkPublicTopupOrder();
   if(document.getElementById('adminTab-topup-orders')?.classList.contains('active'))loadAdminTopupOrders();
  }catch(e){if(out)out.textContent='Pesanan gagal dibuat: '+(e.message||e)}
  finally{if(btn){btn.disabled=false;btn.textContent='Buat Pesanan Top Up';updateTopupCheckoutState()}}
@@ -2140,7 +2161,7 @@ function renderTopupProducts(list){
  const products=list.filter(p=>p.game===activeTopupGame);
  if(!products.length)return '<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
  const selected=items.find(p=>Number(p.id)===Number(selectedTopupProductId)&&p.game===activeTopupGame);
- return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>Pilih nominal</h3><span>'+products.length+' pilihan</span></div><div class="topup-price-grid">'+products.map(renderTopupProductCard).join('')+'</div>'+(selected?'<div class="topup-order-summary"><span>Dipilih: <strong>'+esc(selected.name)+'</strong></span><strong>'+storefrontPriceDisplay(selected)+'</strong></div>':'')+'<button type="button" class="topup-checkout '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'ready':'disabled')+'" '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'':'disabled')+' onclick="createPublicTopupOrder()">Buat Pesanan Top Up</button><p class="topup-checkout-note">Pesanan langsung masuk ke panel admin XERAVION. Pembayaran dan proses top up akan diperbarui oleh admin.</p><div id="topupOrderFeedback" class="topup-order-feedback" aria-live="polite"></div><div class="topup-track-box"><strong>Cek status pesanan</strong><div class="topup-track-fields"><input id="topupTrackInvoice" placeholder="Nomor invoice Top Up"><input id="topupTrackToken" placeholder="Kode akses pesanan"></div><button type="button" class="btn" onclick="checkPublicTopupOrder()">Cek Status</button><div id="topupTrackResult" class="hint" aria-live="polite"></div></div></section>';
+ return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>Pilih nominal</h3><span>'+products.length+' pilihan</span></div><div class="topup-price-grid">'+products.map(renderTopupProductCard).join('')+'</div>'+(selected?'<div class="topup-order-summary"><span>Dipilih: <strong>'+esc(selected.name)+'</strong></span><strong>'+storefrontPriceDisplay(selected)+'</strong></div>':'')+'<button type="button" class="topup-checkout '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'ready':'disabled')+'" '+(selected&&topupPlayerId.trim()&&(!['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)||topupZoneId.trim())&&(activeTopupGame!=='Genshin Impact'||topupServerRegion)?'':'disabled')+' onclick="createPublicTopupOrder()">Buat Pesanan Top Up</button><p class="topup-checkout-note">Pesanan langsung masuk ke panel admin XERAVION. Pembayaran dan proses top up akan diperbarui oleh admin.</p><div id="topupOrderFeedback" class="topup-order-feedback" aria-live="polite"></div><div class="topup-track-box is-hidden" id="topupTrackBox" aria-hidden="true"><strong>Cek status pesanan</strong><div class="topup-track-fields"><input id="topupTrackInvoice" placeholder="Nomor invoice Top Up"><input id="topupTrackToken" placeholder="Kode akses pesanan"></div><button type="button" class="btn" onclick="checkPublicTopupOrder()">Cek Status</button><div id="topupTrackResult" class="hint" aria-live="polite"></div></div></section>';
 }
 function renderSelectedImagePreviews(){
  const box=document.getElementById('imagePreviewList');if(!box)return;box.innerHTML='';

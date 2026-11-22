@@ -4,11 +4,13 @@ const BASE = "https://dwigital.id/api/v1";
 
 export async function onRequestGet({ env }) {
   try {
-    const liveKey = String(env.DWIGITAL_PRODUCTION_API_KEY || "");
+    // Safety lock: public buyer-facing preparation endpoints may only use
+    // the Development key. A Production secret must never be selected
+    // automatically just because it exists in the Cloudflare environment.
     const testKey = String(env.DWIGITAL_API_KEY || "");
-    const key = liveKey.startsWith("dwg_live_") ? liveKey : testKey.startsWith("dwg_test_") ? testKey : "";
-    if (!key) return json({ success: false, error: "API key Dwigital belum tersedia. Atur secret Development atau Production di Cloudflare." }, 503);
-    const expected = key.startsWith("dwg_live_") ? "production" : "development";
+    const key = testKey.startsWith("dwg_test_") ? testKey : "";
+    if (!key) return json({ success: false, error: "API Key Dwigital Development (dwg_test_) belum tersedia. Endpoint persiapan ini tidak menerima API Production." }, 503);
+    const expected = "development";
     const response = await fetch(BASE + "/products?type=game&q=mobile%20legends&page=1&per_page=1000", {
       headers: { "Authorization": "Bearer " + key, "Accept": "application/json" },
       signal: AbortSignal.timeout(15000)
@@ -17,13 +19,13 @@ export async function onRequestGet({ env }) {
     if (!response.ok || payload?.success !== true || !Array.isArray(payload.data)) {
       const code = String(payload?.code || "");
       const message = code === "ip_not_allowed"
-        ? "Dwigital menolak IP server Cloudflare. IP egress perlu didaftarkan/solusi IP tetap perlu disiapkan."
+        ? "Dwigital menolak IP server. Endpoint persiapan hanya menggunakan Development; jangan pasang key Production untuk melewati pemeriksaan ini."
         : String(payload?.message || "Katalog Dwigital gagal dimuat.");
       return json({ success: false, error: message, code }, 502);
     }
     const actual = String(payload.data?.environment || payload.meta?.environment || "").toLowerCase();
-    if (actual && (expected === "production" ? actual !== "production" : !["development", "sandbox"].includes(actual))) {
-      return json({ success: false, error: "Environment API tidak sesuai dengan key yang dipilih." }, 502);
+    if (actual && !["development", "sandbox"].includes(actual)) {
+      return json({ success: false, error: "Environment API bukan Development/Sandbox. Respons dihentikan demi keamanan." }, 502);
     }
     const rows = payload.data;
     const products = rows

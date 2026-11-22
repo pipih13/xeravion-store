@@ -8,11 +8,12 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
   try {
-    const liveKey = String(env.DWIGITAL_PRODUCTION_API_KEY || "");
+    // Safety lock: this public preparation endpoint is Development-only.
+    // Never fall back to a Production key when both secrets are present.
     const testKey = String(env.DWIGITAL_API_KEY || "");
-    const key = liveKey.startsWith("dwg_live_") ? liveKey : testKey.startsWith("dwg_test_") ? testKey : "";
-    if (!key) return json({ success: false, error: "API key Dwigital belum tersedia di Cloudflare." }, 503);
-    const expected = key.startsWith("dwg_live_") ? "production" : "development";
+    const key = testKey.startsWith("dwg_test_") ? testKey : "";
+    if (!key) return json({ success: false, error: "API Key Dwigital Development (dwg_test_) belum tersedia. Endpoint ini tidak menerima API Production." }, 503);
+    const expected = "development";
     const body = await request.json().catch(() => null);
     const variantId = Number(body?.variant_id);
     const target = String(body?.target || "").trim();
@@ -27,7 +28,7 @@ export async function onRequestPost({ request, env }) {
     const product = detail?.data;
     if (!detailResponse.ok || detail?.success !== true || !product) {
       const code = String(detail?.code || "");
-      const error = code === "ip_not_allowed" ? "IP server Cloudflare belum diizinkan oleh Dwigital." : "Paket verifikasi tidak ditemukan atau tidak tersedia.";
+      const error = code === "ip_not_allowed" ? "IP server belum diizinkan oleh Dwigital." : "Paket verifikasi tidak ditemukan atau tidak tersedia.";
       return json({ success: false, error, code }, 400);
     }
     const productName = String(product.product || product.name || "").toLowerCase();
@@ -42,8 +43,8 @@ export async function onRequestPost({ request, env }) {
       if (field?.pattern && !(new RegExp(field.pattern).test(value))) return json({ success: false, error: label + " tidak sesuai format paket Dwigital." }, 400);
     }
     const detailEnv = String(product.environment || detail.data?.environment || detail.meta?.environment || "").toLowerCase();
-    if (detailEnv && (expected === "production" ? detailEnv !== "production" : !["development", "sandbox"].includes(detailEnv))) {
-      return json({ success: false, error: "Environment detail paket tidak sesuai dengan key API." }, 502);
+    if (detailEnv && !["development", "sandbox"].includes(detailEnv)) {
+      return json({ success: false, error: "Environment detail paket bukan Development/Sandbox." }, 502);
     }
 
     const upstream = await fetch(BASE + "/nickname", {
@@ -60,25 +61,25 @@ export async function onRequestPost({ request, env }) {
         nickname_unsupported: "Paket ini tidak mendukung cek nickname.",
         provider_unavailable: "Layanan game sedang sibuk. Coba lagi beberapa saat.",
         rate_limited: "Terlalu banyak pengecekan. Tunggu sebentar lalu coba lagi.",
-        ip_not_allowed: "IP server Cloudflare belum didaftarkan di Dwigital untuk API Production."
+        ip_not_allowed: "IP server belum diizinkan oleh Dwigital."
       };
       const code = String(payload?.code || "");
       return json({ success: false, code, error: codes[code] || String(payload?.message || "Pengecekan nickname gagal.") }, [422,429,503].includes(upstream.status) ? upstream.status : 502);
     }
     const responseEnv = String(payload.data.environment || "").toLowerCase();
-    if (expected === "production" ? responseEnv !== "production" : !["development", "sandbox"].includes(responseEnv)) {
-      return json({ success: false, error: "Environment respons nickname tidak sesuai dengan key API." }, 502);
+    if (responseEnv && !["development", "sandbox"].includes(responseEnv)) {
+      return json({ success: false, error: "Environment respons nickname bukan Development/Sandbox." }, 502);
     }
     return json({
       success: true,
-      environment: expected === "production" ? "production" : "development_simulation",
+      environment: "development_simulation",
       nickname: String(payload.data.nickname || ""),
       target,
       target_zone: targetZone,
       account_found: true,
       orders_enabled: false,
       payment_enabled: false,
-      message: expected === "production" ? "Nickname akun berhasil diverifikasi melalui Dwigital Production." : "Nickname ini berasal dari simulasi Development Dwigital."
+      message: "Nickname ini berasal dari simulasi Development Dwigital, bukan verifikasi akun game sungguhan."
     });
   } catch (error) {
     return json({ success: false, error: "Pengecekan nickname gagal.", detail: error instanceof Error ? error.message : "Unknown error" }, 502);

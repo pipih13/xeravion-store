@@ -3027,7 +3027,7 @@ function renderXeravionAccounting(){
 async function saveXeravionTopupOrderCost(orderId,value,input){
  if(!xeravionAdminVerified){alert('Sesi admin berakhir. Login kembali.');return;}
  const raw=String(value??'').trim();
- if(raw!==''&&(!/^\\d+$/.test(raw)||!Number.isSafeInteger(Number(raw))||Number(raw)<0)){alert('Masukkan modal berupa angka Rupiah tanpa titik/koma.');return;}
+ if(raw!==''&&(!/^\d+$/.test(raw)||!Number.isSafeInteger(Number(raw))||Number(raw)<0)){alert('Masukkan modal berupa angka Rupiah tanpa titik/koma.');return;}
  if(input)input.disabled=true;
  const msg=document.getElementById('xerFinanceMessage');
  try{

@@ -1539,7 +1539,34 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
 
 .xer-qris-foot{font-size:10px;color:#a8a092;line-height:1.5;margin:10px 0 0}
 @media(max-width:420px){.xer-qris-dialog{padding:20px 15px 16px}.xer-qris-code{width:min(245px,78vw)}}
-</style></head>
+</style><style id="xeravion-topup-admin-table-compact-fix">
+/* Keep Top Up admin tables compact and horizontally scrollable on phones. */
+#adminTab-topup-listings .admin-table-wrap,
+#adminTab-topup-listings #topupCostCatalogRows .admin-table-wrap{
+  width:100%;max-width:100%;overflow-x:auto;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+#adminTab-topup-listings .adminlist{
+  width:max-content;min-width:760px;table-layout:auto;border-collapse:collapse;
+}
+#adminTab-topup-listings .adminlist th,
+#adminTab-topup-listings .adminlist td{
+  padding:10px 9px;line-height:1.35;vertical-align:middle;
+}
+#adminTab-topup-listings .adminlist tbody tr{height:58px;}
+#adminTab-topup-listings .adminlist tbody td{height:58px;max-height:72px;}
+#adminTab-topup-listings .adminlist tbody td strong{white-space:normal;overflow-wrap:anywhere;}
+#adminTab-topup-listings #topupCostCatalogRows .admin-table-wrap{max-height:58vh;}
+@media(max-width:760px){
+ #adminTab-topup-listings .panel{min-width:0;overflow:hidden;}
+ #adminTab-topup-listings .adminlist{min-width:720px;}
+ #adminTab-topup-listings .adminlist th,
+ #adminTab-topup-listings .adminlist td{padding:9px 7px;font-size:10px;line-height:1.3;}
+ #adminTab-topup-listings .adminlist tbody tr{height:56px;}
+ #adminTab-topup-listings .adminlist tbody td{height:56px;max-height:68px;}
+}
+</style>
+</head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
 <main class="wrap">

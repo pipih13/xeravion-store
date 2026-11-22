@@ -2965,15 +2965,33 @@ async function loadXeravionAccounting(){
  if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="6">Sesi admin tidak aktif.</td></tr>';return;}
  body.innerHTML='<tr><td colspan="6">Memuat pembukuan akun dan Top Up…</td></tr>';
  try{
-  const [ordersResult,topupsResult,topupCostsResult]=await Promise.all([
+  const [ordersResult,topupsResult,topupCostsResult,catalogResult]=await Promise.all([
    supabaseClient.from('orders').select('id,invoice_number,buyer_name,buyer_email,product_code,product_name,game,amount_due,payment_status,order_status,created_at,payment_method,order_accounting(cost_price)').order('created_at',{ascending:false}).limit(500),
-   supabaseClient.from('topup_orders').select('id,invoice_number,buyer_name,buyer_contact,product_code,product_name,game,amount_due,payment_status,order_status,created_at,payment_method,player_id,zone_id,server_region').order('created_at',{ascending:false}).limit(500),
-   supabaseClient.from('topup_order_accounting').select('order_id,cost_price')
+   supabaseClient.from('topup_orders').select('id,product_id,invoice_number,buyer_name,buyer_contact,product_code,product_name,game,amount_due,payment_status,order_status,created_at,payment_method,player_id,zone_id,server_region').order('created_at',{ascending:false}).limit(500),
+   supabaseClient.from('topup_order_accounting').select('order_id,cost_price'),
+   supabaseClient.from('topup_cost_catalog').select('game,product_name,cost_price,published_product_id')
   ]);
   if(ordersResult.error)throw ordersResult.error;
   if(topupsResult.error)throw topupsResult.error;
   if(topupCostsResult.error)throw topupCostsResult.error;
+  if(catalogResult.error)throw catalogResult.error;
   const topupCostMap=new Map((topupCostsResult.data||[]).map(x=>[String(x.order_id),x.cost_price]));
+  const catalogById=new Map((catalogResult.data||[]).filter(x=>x.published_product_id!=null).map(x=>[String(x.published_product_id),Number(x.cost_price)]));
+  const norm=v=>String(v||'').trim().toLowerCase().replace(/\\s+/g,' ');
+  const catalogByName=new Map((catalogResult.data||[]).map(x=>[norm(x.game)+'|'+norm(x.product_name),Number(x.cost_price)]));
+  const autoCosts=[];
+  (topupsResult.data||[]).forEach(o=>{
+   if(topupCostMap.has(String(o.id)))return;
+   const byId=o.product_id!=null?catalogById.get(String(o.product_id)):undefined;
+   const byName=catalogByName.get(norm(o.game)+'|'+norm(o.product_name));
+   const cost=byId!==undefined?byId:byName;
+   if(cost!==undefined&&Number.isFinite(cost))autoCosts.push({order_id:o.id,cost_price:cost});
+  });
+  if(autoCosts.length){
+   const {error:autoError}=await supabaseClient.from('topup_order_accounting').upsert(autoCosts,{onConflict:'order_id',ignoreDuplicates:true});
+   if(autoError)throw autoError;
+   autoCosts.forEach(x=>topupCostMap.set(String(x.order_id),x.cost_price));
+  }
   const accountRows=(ordersResult.data||[]).map(o=>({...o,kind:'Akun / Item',cost_price:o.order_accounting?.[0]?.cost_price??o.order_accounting?.cost_price??null}));
   xeravionTopupAccountingRows=(topupsResult.data||[]).map(o=>({...o,kind:'Top Up',buyer_email:o.buyer_contact||'',cost_price:topupCostMap.get(String(o.id))??null,payment_status:['confirmed','paid'].includes(String(o.payment_status||'').toLowerCase())?'paid':o.payment_status,order_status:o.order_status==='awaiting_payment'?'pending':o.order_status}));
   xeravionAccountingRows=[...accountRows,...xeravionTopupAccountingRows].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));

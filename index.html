@@ -2858,6 +2858,7 @@ async function createXeravionOrder(){
  finally{xeravionOrderCreateBusy=false;if(submitBtn){submitBtn.disabled=false;submitBtn.textContent='Buat pesanan'}}
 }
 let xeravionAccountingRows=[];
+let xeravionTopupAccountingRows=[];
 const xerFinanceMoney=v=>'Rp '+Number(v||0).toLocaleString('id-ID');
 async function exportXeravionAccountingExcel(){
  if(!Array.isArray(xeravionAccountingRows)||!xeravionAccountingRows.length){alert('Belum ada data pembukuan untuk diunduh.');return;}
@@ -2962,13 +2963,22 @@ async function exportXeravionAccountingExcel(){
 async function loadXeravionAccounting(){
  const body=document.getElementById('xerFinanceRows');if(!body)return;
  if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="6">Sesi admin tidak aktif.</td></tr>';return;}
- body.innerHTML='<tr><td colspan="6">Memuat pembukuan…</td></tr>';
+ body.innerHTML='<tr><td colspan="6">Memuat pembukuan akun dan Top Up…</td></tr>';
  try{
-  const {data:orders,error}=await supabaseClient.from('orders').select('id,invoice_number,buyer_name,buyer_email,product_code,product_name,game,amount_due,payment_status,order_status,created_at,order_accounting(cost_price)').order('created_at',{ascending:false}).limit(500);
-  if(error)throw error;
-  xeravionAccountingRows=(orders||[]).map(o=>({...o,cost_price:o.order_accounting?.[0]?.cost_price??o.order_accounting?.cost_price??null}));
+  const [ordersResult,topupsResult,topupCostsResult]=await Promise.all([
+   supabaseClient.from('orders').select('id,invoice_number,buyer_name,buyer_email,product_code,product_name,game,amount_due,payment_status,order_status,created_at,payment_method,order_accounting(cost_price)').order('created_at',{ascending:false}).limit(500),
+   supabaseClient.from('topup_orders').select('id,invoice_number,buyer_name,buyer_contact,product_code,product_name,game,amount_due,payment_status,order_status,created_at,payment_method,player_id,zone_id,server_region').order('created_at',{ascending:false}).limit(500),
+   supabaseClient.from('topup_order_accounting').select('order_id,cost_price')
+  ]);
+  if(ordersResult.error)throw ordersResult.error;
+  if(topupsResult.error)throw topupsResult.error;
+  if(topupCostsResult.error)throw topupCostsResult.error;
+  const topupCostMap=new Map((topupCostsResult.data||[]).map(x=>[String(x.order_id),x.cost_price]));
+  const accountRows=(ordersResult.data||[]).map(o=>({...o,kind:'Akun / Item',cost_price:o.order_accounting?.[0]?.cost_price??o.order_accounting?.cost_price??null}));
+  xeravionTopupAccountingRows=(topupsResult.data||[]).map(o=>({...o,kind:'Top Up',buyer_email:o.buyer_contact||'',cost_price:topupCostMap.get(String(o.id))??null,payment_status:['confirmed','paid'].includes(String(o.payment_status||'').toLowerCase())?'paid':o.payment_status,order_status:o.order_status==='awaiting_payment'?'pending':o.order_status}));
+  xeravionAccountingRows=[...accountRows,...xeravionTopupAccountingRows].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   renderXeravionAccounting();
- }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat pembukuan: '+esc(e.message||e)+'</td></tr>';}
+ }catch(e){body.innerHTML='<tr><td colspan="6">Gagal memuat pembukuan: '+esc(e.message||e)+'</td></tr>';console.error('XERAVION combined accounting:',e);}
 }
 function renderXeravionAccounting(){
  const body=document.getElementById('xerFinanceRows');if(!body)return;
@@ -2976,7 +2986,7 @@ function renderXeravionAccounting(){
  const period=document.getElementById('xerFinancePeriod')?.value||'all';
  const status=document.getElementById('xerFinanceStatus')?.value||'all';
  const since=period==='all'?0:Date.now()-Number(period)*86400000;
- const filtered=xeravionAccountingRows.filter(o=>(status==='all'||o.order_status===status)&&new Date(o.created_at).getTime()>=since&&[o.invoice_number,o.buyer_name,o.buyer_email,o.product_code,o.product_name,o.game].join(' ').toLowerCase().includes(q));
+ const filtered=xeravionAccountingRows.filter(o=>(status==='all'||o.order_status===status)&&new Date(o.created_at).getTime()>=since&&[o.kind,o.invoice_number,o.buyer_name,o.buyer_email,o.product_code,o.product_name,o.game,o.player_id,o.zone_id].join(' ').toLowerCase().includes(q));
  const completed=xeravionAccountingRows.filter(o=>o.payment_status==='paid'&&o.order_status==='completed');
  const revenue=completed.reduce((n,o)=>n+Number(o.amount_due||0),0);
  const withCost=completed.filter(o=>o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!=='');
@@ -2989,16 +2999,15 @@ function renderXeravionAccounting(){
   const groups=new Map();
   completed.forEach(o=>{
    const key=String(o.game||'Game lainnya').trim()||'Game lainnya';
-   if(!groups.has(key))groups.set(key,{count:0,revenue:0,cost:0,profit:0,knownCost:0,missing:0});
-   const g=groups.get(key);g.count++;g.revenue+=Number(o.amount_due||0);
-   if(o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!==''){
-    const c=Number(o.cost_price||0);g.cost+=c;g.profit+=Number(o.amount_due||0)-c;g.knownCost++;
-   }else g.missing++;
+   if(!groups.has(key))groups.set(key,{count:0,revenue:0,cost:0,profit:0,knownCost:0,missing:0,topup:0});
+   const g=groups.get(key);g.count++;g.revenue+=Number(o.amount_due||0);if(o.kind==='Top Up')g.topup++;
+   if(o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!==''){const v=Number(o.cost_price||0);g.cost+=v;g.profit+=Number(o.amount_due||0)-v;g.knownCost++;}else g.missing++;
   });
   const money=n=>'Rp '+Number(n||0).toLocaleString('id-ID');
   gameRoot.innerHTML=groups.size?Array.from(groups.entries()).sort((a,b)=>b[1].profit-a[1].profit).map(([name,g])=>
    '<article class="xer-finance-game-card"><h4>'+esc(name)+'</h4>'+
    '<div class="game-stat"><span>Transaksi selesai</span><strong>'+g.count.toLocaleString('id-ID')+'</strong></div>'+
+   '<div class="game-stat"><span>Termasuk Top Up</span><strong>'+g.topup.toLocaleString('id-ID')+'</strong></div>'+
    '<div class="game-stat"><span>Pendapatan</span><strong>'+money(g.revenue)+'</strong></div>'+
    '<div class="game-stat"><span>Modal terisi</span><strong>'+money(g.cost)+'</strong></div>'+
    '<div class="game-stat"><span>Keuntungan</span><strong>'+money(g.profit)+'</strong></div>'+
@@ -3008,12 +3017,29 @@ function renderXeravionAccounting(){
  body.innerHTML=filtered.length?filtered.map(o=>{
   const d=new Date(o.created_at).toLocaleString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium',timeStyle:'short'});
   const isCompleted=o.payment_status==='paid'&&o.order_status==='completed';
-  const costInput=isCompleted?'<input type="number" min="0" step="1" inputmode="numeric" aria-label="Modal untuk '+esc(o.invoice_number)+'" value="'+(o.cost_price??'')+'" placeholder="Isi modal" onchange="saveXeravionOrderCost(\''+o.id+'\',this.value,this)">':'<span class="hint">—</span>';
-  const profitCell=isCompleted&&o.cost_price!==null&&o.cost_price!==undefined?'<strong class="profit-positive">'+xerFinanceMoney(Number(o.amount_due)-Number(o.cost_price))+'</strong>':'<span class="profit-unknown">'+(isCompleted?'Belum dihitung':'—')+'</span>';
+  const costInput=isCompleted?'<input type="number" min="0" step="1" inputmode="numeric" aria-label="Modal untuk '+esc(o.invoice_number)+'" value="'+(o.cost_price??'')+'" placeholder="Isi modal" onchange="'+(o.kind==='Top Up'?'saveXeravionTopupOrderCost':'saveXeravionOrderCost')+'(\''+o.id+'\',this.value,this)">':'<span class="hint">—</span>';
+  const profitCell=isCompleted&&o.cost_price!==null&&o.cost_price!==undefined&&o.cost_price!==''?'<strong class="profit-positive">'+xerFinanceMoney(Number(o.amount_due)-Number(o.cost_price))+'</strong>':'<span class="profit-unknown">'+(isCompleted?'Belum dihitung':'—')+'</span>';
   const statusLabel=o.order_status==='completed'?'Selesai':o.order_status==='cancelled'?'Dibatalkan':o.order_status==='processing'?'Diproses':'Menunggu';
-  return '<tr><td><strong>'+esc(d)+'</strong><div class="hint">'+esc(o.invoice_number)+'</div></td><td><strong>'+esc(o.buyer_name)+'</strong><div class="hint">'+esc(o.product_code)+' · '+esc(o.product_name)+' · '+esc(o.game)+'</div></td><td>'+xerFinanceMoney(o.amount_due)+'</td><td>'+costInput+'</td><td>'+profitCell+'</td><td><span class="finance-status '+(o.order_status==='cancelled'?'cancelled':'')+'">'+statusLabel+'</span></td></tr>';
+  const buyerInfo=o.kind==='Top Up'?(o.player_id?'ID: '+o.player_id+(o.zone_id?' / Zone: '+o.zone_id:''):'Top Up'):(o.buyer_email||'');
+  return '<tr><td><strong>'+esc(d)+'</strong><div class="hint">'+esc(o.invoice_number)+' · '+esc(o.kind)+'</div></td><td><strong>'+esc(o.buyer_name)+'</strong><div class="hint">'+esc(o.product_code)+' · '+esc(o.product_name)+' · '+esc(o.game)+'</div><div class="hint">'+esc(buyerInfo)+'</div></td><td>'+xerFinanceMoney(o.amount_due)+'</td><td>'+costInput+'</td><td>'+profitCell+'</td><td><span class="finance-status '+(o.order_status==='cancelled'?'cancelled':'')+'">'+statusLabel+'</span></td></tr>';
  }).join(''):'<tr><td colspan="6">Tidak ada transaksi yang cocok.</td></tr>';
 }
+async function saveXeravionTopupOrderCost(orderId,value,input){
+ if(!xeravionAdminVerified){alert('Sesi admin berakhir. Login kembali.');return;}
+ const raw=String(value??'').trim();
+ if(raw!==''&&(!/^\\d+$/.test(raw)||!Number.isSafeInteger(Number(raw))||Number(raw)<0)){alert('Masukkan modal berupa angka Rupiah tanpa titik/koma.');return;}
+ if(input)input.disabled=true;
+ const msg=document.getElementById('xerFinanceMessage');
+ try{
+  const {error}=await supabaseClient.from('topup_order_accounting').upsert({order_id:orderId,cost_price:raw===''?null:Number(raw)},{onConflict:'order_id'});
+  if(error)throw error;
+  const row=xeravionAccountingRows.find(o=>String(o.id)===String(orderId));if(row)row.cost_price=raw===''?null:Number(raw);
+  if(msg)msg.textContent=raw===''?'Modal transaksi Top Up dikosongkan.':'Modal transaksi Top Up berhasil disimpan.';
+  renderXeravionAccounting();
+ }catch(e){if(msg)msg.textContent='Gagal menyimpan modal Top Up: '+(e.message||e);alert('Modal Top Up gagal disimpan: '+(e.message||e));}
+ finally{if(input)input.disabled=false;}
+}
+
 async function saveXeravionOrderCost(orderId,value,input){
  if(!xeravionAdminVerified){alert('Sesi admin berakhir. Login kembali.');return;}
  const raw=String(value??'').trim();

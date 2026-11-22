@@ -1929,7 +1929,7 @@ async function toggleTopupBell(force){
  pop.classList.toggle('open',open);pop.setAttribute('aria-hidden',String(!open));btn.setAttribute('aria-expanded',String(open));
  if(open){loadAdminTopupOrders();subscribeAdminTopupOrders()}
 }
-function loadAdminTopupOrders(){
+async function loadAdminTopupOrders(){
  const body=document.getElementById('adminTopupOrderRows');if(!body)return;
  if(!xeravionAdminVerified){body.innerHTML='<tr><td colspan="7">Sesi admin tidak aktif.</td></tr>';return}
  body.innerHTML='<tr><td colspan="7">Memuat pesanan Top Up…</td></tr>';

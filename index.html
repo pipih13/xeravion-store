@@ -1288,6 +1288,19 @@ body.xeravion-game-page:has(.item-gaming-page-head) #gameListingsHeading{display
 .topup-select-button{width:100%;margin-top:5px;padding:10px;border:1px solid rgba(218,187,115,.7);border-radius:9px;background:linear-gradient(110deg,#f0d995,#b88737);color:#17120a;font-size:11px;font-weight:800;cursor:pointer}
 @media(max-width:560px){.topup-game-picker{gap:9px}.topup-game-tile{flex-basis:94px;min-width:94px;min-height:132px;padding:10px 7px}.topup-game-icon{width:60px;height:60px;flex-basis:60px}.topup-shop-section{padding:12px;margin-top:17px}.topup-product-items{gap:8px}.topup-product-card{padding:11px}.topup-product-info h3{font-size:12px}.topup-product-info>strong{font-size:14px}}
 @media(max-width:370px){.topup-product-items{grid-template-columns:1fr}}
+</style>
+<style id="xeravion-topup-official-game-icons">
+.topup-game-picker{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;padding:4px 2px 13px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:rgba(218,187,115,.65) transparent;-webkit-overflow-scrolling:touch}
+.topup-game-tile{flex:0 0 104px;min-width:104px;min-height:142px;scroll-snap-align:start;justify-content:flex-start}
+.topup-game-icon{width:68px;height:68px;flex:0 0 68px;display:grid;place-items:center;overflow:hidden;border-radius:16px;background:#fff;padding:4px;box-shadow:0 5px 16px #0005}
+.topup-game-icon img{display:block;width:100%;height:100%;object-fit:cover;border-radius:12px}
+.topup-group-title{display:flex;align-items:center;gap:10px;min-width:0}
+.topup-group-title img{width:34px;height:34px;flex:0 0 34px;object-fit:cover;border-radius:9px;background:#fff;padding:2px}
+.topup-group-title h3{margin:0}
+.topup-group-heading{padding:0 0 10px;margin-bottom:12px}
+.topup-product-items{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.topup-product-card{min-height:156px;padding:14px}
+@media(max-width:560px){.topup-game-picker{gap:9px}.topup-game-tile{flex-basis:94px;min-width:94px;min-height:132px;padding:10px 7px}.topup-game-icon{width:60px;height:60px;flex-basis:60px}.topup-product-items{gap:9px}.topup-product-card{min-height:150px;padding:11px}}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>
@@ -1658,8 +1671,15 @@ function applyStoreRoute(){const params=new URLSearchParams(location.search),key
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function safeImageUrl(value){try{const u=new URL(String(value||''),location.href);return ['https:','http:'].includes(u.protocol)?u.href:''}catch{return ''}}function setGame(g,el){activeGame=g;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');render()}function setItemPlatform(platform,button){activeItemPlatform=platform;document.querySelectorAll('.item-platform-filter button').forEach(b=>b.classList.toggle('active',b===button));render()}
 function setTopupGame(game){activeTopupGame=game;render()}
 function topupGameLogo(game){
- const domains={'Mobile Legends':'mobilelegends.com','Free Fire':'ff.garena.com','PUBG Mobile':'pubgmobile.com','Magic Chess: Go Go':'magicchessgogo.com','Valorant':'playvalorant.com','Genshin Impact':'genshin.hoyoverse.com'};
- const domain=domains[game];return domain?'https://www.google.com/s2/favicons?domain='+domain+'&sz=128':'';
+ const logos={
+  'Mobile Legends':'https://is4-ssl.mzstatic.com/image/thumb/Purple126/v4/0e/ae/e4/0eaee45b-a414-e99b-2eed-b7868478f522/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.jpg',
+  'Free Fire':'https://cdn.mobygames.com/covers/9693864-garena-free-fire-iphone-front-cover.jpg',
+  'PUBG Mobile':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/4f/8d/38/4f8d3800-68b5-1c53-b0f7-7d46bda6a394/AppIcon-0-0-1x_U007emarketing-0-7-0-85-220.png/512x512bb.jpg',
+  'Magic Chess: Go Go':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e3/db/fb/e3dbfb2e-a8f9-94d9-2610-be1d3975e665/AppIcon-1x_U007emarketing-0-7-0-85-220-0.png/512x512bb.jpg',
+  'Valorant':'https://cloudpng.com/images/all_img/1749845353_valorant-logo-square-png.png',
+  'Genshin Impact':'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/d3/f5/2a/d3f52a60-8dd5-e433-226a-5468f9bcfd0f/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.jpg'
+ };
+ return logos[game]||'';
 }
 function renderTopupGamePicker(){
  const box=document.getElementById('topupGamePicker');if(!box)return;
@@ -1673,7 +1693,7 @@ function renderTopupProductCard(p){
 function renderTopupProducts(list){
  const order=['Mobile Legends','Free Fire','PUBG Mobile','Magic Chess: Go Go','Valorant','Genshin Impact'];
  const games=activeTopupGame==='Semua'?order.filter(g=>list.some(p=>p.game===g)):[activeTopupGame];
- return games.map(game=>{const products=list.filter(p=>p.game===game);if(!products.length)return '';return '<section class="topup-game-product-group"><div class="topup-group-heading"><h3>'+esc(game)+'</h3><span>'+products.length+' nominal</span></div><div class="topup-product-items">'+products.map(renderTopupProductCard).join('')+'</div></section>'}).join('')||'<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
+ return games.map(game=>{const products=list.filter(p=>p.game===game);if(!products.length)return '';return '<section class="topup-game-product-group"><div class="topup-group-heading"><div class="topup-group-title"><img src="'+topupGameLogo(game)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><h3>'+esc(game)+'</h3></div><span>'+products.length+' nominal</span></div><div class="topup-product-items">'+products.map(renderTopupProductCard).join('')+'</div></section>'}).join('')||'<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
 }
 function renderSelectedImagePreviews(){
  const box=document.getElementById('imagePreviewList');if(!box)return;box.innerHTML='';

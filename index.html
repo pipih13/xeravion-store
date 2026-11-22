@@ -1575,6 +1575,40 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
 #adminTab-topup-listings .admin-topup-game-group .admin-table-wrap{width:100%;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 #adminTab-topup-listings .admin-topup-game-group .adminlist{width:max-content;min-width:680px;table-layout:auto}
 @media(max-width:760px){#adminTab-topup-listings .admin-topup-game-group .adminlist{min-width:650px}#adminTab-topup-listings .admin-topup-game-heading{padding:9px 10px}}
+</style><style id="xeravion-topup-horizontal-game-catalog">
+/* Horizontal game catalog: swipe/scroll sideways instead of stacking every game vertically. */
+#adminTab-topup-listings #adminTopupRows.admin-topup-game-groups{
+ display:flex!important;flex-flow:row nowrap!important;align-items:stretch;
+ gap:14px;width:100%;max-width:100%;margin-top:10px;
+ overflow-x:auto!important;overflow-y:hidden!important;
+ padding:2px 2px 14px;scroll-snap-type:x mandatory;
+ -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;
+}
+#adminTab-topup-listings .admin-topup-game-group{
+ flex:0 0 min(82vw,480px);width:min(82vw,480px);min-width:0;
+ border:1px solid rgba(201,164,92,.35);border-radius:13px;
+ background:linear-gradient(160deg,rgba(201,164,92,.07),rgba(15,18,27,.35));
+ padding:10px;scroll-snap-align:start;overflow:hidden;
+}
+#adminTab-topup-listings .admin-topup-game-heading{margin-bottom:9px}
+#adminTab-topup-listings .admin-topup-game-group .admin-table-wrap{
+ width:100%;max-width:100%;overflow-x:auto;overflow-y:auto;
+ max-height:62vh;-webkit-overflow-scrolling:touch;
+}
+#adminTab-topup-listings .admin-topup-game-group .adminlist{
+ width:100%;min-width:610px;table-layout:auto;
+}
+#adminTab-topup-listings .admin-topup-game-group .adminlist th,
+#adminTab-topup-listings .admin-topup-game-group .adminlist td{padding:9px 7px}
+#adminTab-topup-listings #adminTopupRows::-webkit-scrollbar{height:7px}
+#adminTab-topup-listings #adminTopupRows::-webkit-scrollbar-thumb{background:rgba(201,164,92,.65);border-radius:8px}
+@media(min-width:900px){
+ #adminTab-topup-listings .admin-topup-game-group{flex-basis:440px;width:440px}
+}
+@media(max-width:600px){
+ #adminTab-topup-listings .admin-topup-game-group{flex-basis:86vw;width:86vw;padding:8px}
+ #adminTab-topup-listings .admin-topup-game-group .admin-table-wrap{max-height:58vh}
+}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

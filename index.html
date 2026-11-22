@@ -1423,6 +1423,36 @@ body.xeravion-topup-page .topup-player-input{display:block!important;box-sizing:
 /* XERAVION Top Up is intentionally limited to its six approved games */
 body.xeravion-topup-page #gameListingsHeading .topup-game-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;justify-content:center!important;max-width:100%!important}
 body.xeravion-topup-page #gameListingsHeading .topup-game-choice{min-width:0!important}
+</style><style id="xeravion-topup-header-restore">
+/* Keep XERAVION's own Top Up service introduction above the game gallery.
+   ShopeePay is only a layout reference for the game tiles. */
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading{
+ display:block!important;
+ position:relative!important;
+ width:100%!important;
+ max-width:100%!important;
+ margin:0 0 22px!important;
+ padding:0!important;
+ float:none!important;
+ clear:both!important;
+}
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading h2{
+ display:block!important;
+ margin:5px 0 8px!important;
+}
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading .eyebrow,
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading .game-seo-intro,
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading>.game-back-link{
+ display:block!important;
+ visibility:visible!important;
+}
+body.xeravion-topup-page #gameListingsHeading>.topup-page-heading>.game-back-link{
+ display:inline-flex!important;
+ margin:4px 0 0!important;
+}
+body.xeravion-topup-page.xeravion-topup-selected #gameListingsHeading>.topup-page-heading{
+ display:block!important;
+}
 </style></head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

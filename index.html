@@ -2328,42 +2328,51 @@ function subscribeAdminTopupOrders(){
 }
 
 function updateTopupCheckoutState(){const p=items.find(x=>Number(x.id)===Number(selectedTopupProductId)&&x.catalog_type==='topup');const needsZone=['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame);const needsServer=activeTopupGame==='Genshin Impact';const ready=!!(p&&topupPlayerId.trim()&&(!needsZone||topupZoneId.trim())&&(!needsServer||topupServerRegion));const link=document.querySelector('.topup-checkout');if(!link)return;link.classList.toggle('ready',ready);link.classList.toggle('disabled',!ready);link.disabled=!ready;}
-function handleTopupPlayerIdInput(value){topupPlayerId=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState()}
-function handleTopupZoneIdInput(value){topupZoneId=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState()}
-function handleTopupServerRegionChange(value){topupServerRegion=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState()}
+function handleTopupPlayerIdInput(value){topupPlayerId=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState();scheduleTopupIdCheck()}
+function handleTopupZoneIdInput(value){topupZoneId=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState();scheduleTopupIdCheck()}
+function handleTopupServerRegionChange(value){topupServerRegion=String(value||'');saveTopupBuyerData();clearTopupIdCheck();updateTopupCheckoutState();scheduleTopupIdCheck()}
 function supportedTopupCheckGames(){return ['Mobile Legends','Free Fire','PUBG Mobile','Valorant','Genshin Impact']}
-let topupIdCheckBusy=false,topupIdCheckFingerprint='';
+let topupIdCheckBusy=false,topupIdCheckFingerprint='',topupIdCheckTimer=null;
 function clearTopupIdCheck(){
+ if(topupIdCheckTimer){clearTimeout(topupIdCheckTimer);topupIdCheckTimer=null}
  topupIdCheckFingerprint='';
  const box=document.getElementById('topupIdCheckFeedback');
  if(box)box.innerHTML='';
 }
+function scheduleTopupIdCheck(){
+ if(topupIdCheckTimer){clearTimeout(topupIdCheckTimer);topupIdCheckTimer=null}
+ const game=activeTopupGame,userId=String(topupPlayerId||'').trim(),zoneId=String(topupZoneId||'').trim();
+ if(!supportedTopupCheckGames().includes(game)||!userId)return;
+ if(['Mobile Legends','PUBG Mobile','Genshin Impact'].includes(game)&&!zoneId)return;
+ const out=document.getElementById('topupIdCheckFeedback');
+ if(out)out.textContent='Memeriksa ID secara otomatis…';
+ topupIdCheckTimer=setTimeout(()=>{topupIdCheckTimer=null;checkTopupGameId()},850);
+}
 async function checkTopupGameId(){
  const out=document.getElementById('topupIdCheckFeedback');
- const btn=document.getElementById('topupIdCheckButton');
  const supported={'Mobile Legends':'mlbb','Free Fire':'ff','PUBG Mobile':'pubgm','Valorant':'valorant','Genshin Impact':'genshin'};
- const game=activeTopupGame,code=supported[game];
- const userId=String(topupPlayerId||'').trim(),zoneId=String(topupZoneId||'').trim();
- if(topupIdCheckBusy)return;
- if(!code){if(out)out.textContent='Pengecekan otomatis belum tersedia untuk game ini.';return}
- if(!userId){if(out)out.textContent='Masukkan User ID terlebih dahulu.';document.getElementById('topupPlayerId')?.focus();return}
- if(['Mobile Legends','PUBG Mobile','Genshin Impact'].includes(game)&&!zoneId){if(out)out.textContent='Zone ID / Server ID wajib diisi untuk game ini.';document.getElementById('topupZoneId')?.focus();return}
- const fingerprint=[game,userId,zoneId].join('|');
- if(topupIdCheckFingerprint===fingerprint){if(out)out.textContent='ID ini sudah berhasil diverifikasi. Ubah ID jika ingin mengecek ulang.';return}
+ const game=activeTopupGame,code=supported[game],userId=String(topupPlayerId||'').trim(),zoneId=String(topupZoneId||'').trim();
+ if(topupIdCheckBusy||!code||!userId)return;
+ if(['Mobile Legends','PUBG Mobile','Genshin Impact'].includes(game)&&!zoneId)return;
+ const fingerprint=[game,userId,zoneId,topupServerRegion||''].join('|');
+ if(topupIdCheckFingerprint===fingerprint)return;
  topupIdCheckBusy=true;
- if(btn){btn.disabled=true;btn.textContent='Memeriksa…'}
  if(out)out.textContent='Menghubungi layanan pengecekan…';
  try{
-  const response=await fetch('/api/check-game',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game,userId,zoneId})});
+  const response=await fetch('/api/check-game',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({game,userId,zoneId,serverRegion:topupServerRegion})});
   const data=await response.json().catch(()=>({}));
-  if(!response.ok||data.status!==true||!data.nickname)throw new Error(data.message||'ID tidak dapat diverifikasi. Coba lagi.');
+  const currentFingerprint=[activeTopupGame,String(topupPlayerId||'').trim(),String(topupZoneId||'').trim(),topupServerRegion||''].join('|');
+  if(currentFingerprint!==fingerprint)return;
+  if(!response.ok||data.status!==true||!data.nickname)throw new Error(data.message||'ID tidak dapat diverifikasi. Periksa kembali ID dan Server ID.');
   topupIdCheckFingerprint=fingerprint;
   if(out)out.innerHTML='<span style="color:#56d69a;font-weight:800">✓ Nickname ditemukan: '+esc(data.nickname)+'</span><div class="hint">Pastikan nickname ini sesuai dengan akun tujuan Anda.</div>';
  }catch(error){
-  if(out)out.textContent=error.message||'Pengecekan gagal. Silakan coba lagi.';
+  const currentFingerprint=[activeTopupGame,String(topupPlayerId||'').trim(),String(topupZoneId||'').trim(),topupServerRegion||''].join('|');
+  if(currentFingerprint===fingerprint&&out)out.textContent=error.message||'Pengecekan gagal. Silakan coba lagi.';
  }finally{
   topupIdCheckBusy=false;
-  if(btn){btn.disabled=false;btn.textContent='Cek ID & Nickname'}
+  const currentFingerprint=[activeTopupGame,String(topupPlayerId||'').trim(),String(topupZoneId||'').trim(),topupServerRegion||''].join('|');
+  if(currentFingerprint!==fingerprint)scheduleTopupIdCheck();
  }
 }
 function topupGameLogo(game){
@@ -2382,7 +2391,7 @@ function renderTopupGamePicker(){
  const games=[{name:'Mobile Legends',value:'Mobile Legends',short:'ML',logo:topupGameLogo('Mobile Legends')},{name:'Magic Chess: Go Go',value:'Magic Chess: Go Go',short:'MCGG',logo:topupGameLogo('Magic Chess: Go Go')},{name:'Free Fire',value:'Free Fire',short:'FF',logo:topupGameLogo('Free Fire')},{name:'PUBG Mobile',value:'PUBG Mobile',short:'PUBG',logo:topupGameLogo('PUBG Mobile')},{name:'Valorant',value:'Valorant',short:'VAL',logo:topupGameLogo('Valorant')},{name:'Genshin Impact',value:'Genshin Impact',short:'GI',logo:topupGameLogo('Genshin Impact')}];
  if(activeTopupGame!=='Semua'){
   const g=games.find(x=>x.value===activeTopupGame)||games[0];
-  const available=items.some(p=>p.catalog_type==='topup'&&p.game===activeTopupGame&&p.stock==='Tersedia');box.innerHTML='<div class="topup-selected-game"><button type="button" class="topup-back-games" onclick="setTopupGame(\'Semua\')">← Semua Top Up Games</button><div class="topup-selected-game-title">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+'" onerror="this.style.display=\'none\'">':'<span class="topup-selected-fallback">'+g.short+'</span>')+'<strong>'+esc(g.name)+'</strong></div>'+(available?'<label class="topup-player-label" for="topupPlayerId">'+(['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)?'User ID':activeTopupGame==='Free Fire'?'Player ID':activeTopupGame==='PUBG Mobile'?'Character ID / Player ID':activeTopupGame==='Valorant'?'Riot ID (Nama#Tagline)':'UID')+'</label><input id="topupPlayerId" class="topup-player-input" type="text" inputmode="text" autocomplete="off" placeholder="'+(activeTopupGame==='Valorant'?'Contoh: NamaPemain#SEA':activeTopupGame==='Genshin Impact'?'Masukkan UID Genshin Impact':'Masukkan '+(['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)?'User ID':activeTopupGame==='Free Fire'?'Player ID':'Character ID'))+'" value="'+esc(topupPlayerId)+'" oninput="handleTopupPlayerIdInput(this.value)">'+(['Mobile Legends','Magic Chess: Go Go','PUBG Mobile','Genshin Impact'].includes(activeTopupGame)?'<label class="topup-player-label" for="topupZoneId">Zone ID / Server ID</label><input id="topupZoneId" class="topup-player-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Masukkan Zone ID / Server ID" value="'+esc(topupZoneId)+'" oninput="handleTopupZoneIdInput(this.value)">':'')+(activeTopupGame==='Genshin Impact'?'<label class="topup-player-label" for="topupServerRegion">Server Genshin Impact</label><select id="topupServerRegion" class="topup-player-input" onchange="handleTopupServerRegionChange(this.value)"><option value="Asia" '+(topupServerRegion==='Asia'?'selected':'')+'>Asia</option><option value="America" '+(topupServerRegion==='America'?'selected':'')+'>America</option><option value="Europe" '+(topupServerRegion==='Europe'?'selected':'')+'>Europe</option><option value="TW/HK/MO" '+(topupServerRegion==='TW/HK/MO'?'selected':'')+'>TW / HK / MO</option></select>':'')+(supportedTopupCheckGames().includes(activeTopupGame)?'<button type="button" id="topupIdCheckButton" class="btn gold" style="width:100%;margin-top:12px" onclick="checkTopupGameId()">Cek ID &amp; Nickname</button><div id="topupIdCheckFeedback" class="topup-checkout-note" role="status" aria-live="polite"></div>':''):'<p class="topup-coming-soon">Produk untuk game ini segera hadir di XERAVION.</p>')+'</div>';
+  const available=items.some(p=>p.catalog_type==='topup'&&p.game===activeTopupGame&&p.stock==='Tersedia');box.innerHTML='<div class="topup-selected-game"><button type="button" class="topup-back-games" onclick="setTopupGame(\'Semua\')">← Semua Top Up Games</button><div class="topup-selected-game-title">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+'" onerror="this.style.display=\'none\'">':'<span class="topup-selected-fallback">'+g.short+'</span>')+'<strong>'+esc(g.name)+'</strong></div>'+(available?'<label class="topup-player-label" for="topupPlayerId">'+(['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)?'User ID':activeTopupGame==='Free Fire'?'Player ID':activeTopupGame==='PUBG Mobile'?'Character ID / Player ID':activeTopupGame==='Valorant'?'Riot ID (Nama#Tagline)':'UID')+'</label><input id="topupPlayerId" class="topup-player-input" type="text" inputmode="text" autocomplete="off" placeholder="'+(activeTopupGame==='Valorant'?'Contoh: NamaPemain#SEA':activeTopupGame==='Genshin Impact'?'Masukkan UID Genshin Impact':'Masukkan '+(['Mobile Legends','Magic Chess: Go Go'].includes(activeTopupGame)?'User ID':activeTopupGame==='Free Fire'?'Player ID':'Character ID'))+'" value="'+esc(topupPlayerId)+'" oninput="handleTopupPlayerIdInput(this.value)">'+(['Mobile Legends','Magic Chess: Go Go','PUBG Mobile','Genshin Impact'].includes(activeTopupGame)?'<label class="topup-player-label" for="topupZoneId">Zone ID / Server ID</label><input id="topupZoneId" class="topup-player-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Masukkan Zone ID / Server ID" value="'+esc(topupZoneId)+'" oninput="handleTopupZoneIdInput(this.value)">':'')+(activeTopupGame==='Genshin Impact'?'<label class="topup-player-label" for="topupServerRegion">Server Genshin Impact</label><select id="topupServerRegion" class="topup-player-input" onchange="handleTopupServerRegionChange(this.value)"><option value="Asia" '+(topupServerRegion==='Asia'?'selected':'')+'>Asia</option><option value="America" '+(topupServerRegion==='America'?'selected':'')+'>America</option><option value="Europe" '+(topupServerRegion==='Europe'?'selected':'')+'>Europe</option><option value="TW/HK/MO" '+(topupServerRegion==='TW/HK/MO'?'selected':'')+'>TW / HK / MO</option></select>':'')+(supportedTopupCheckGames().includes(activeTopupGame)?'<div id="topupIdCheckFeedback" class="topup-checkout-note" role="status" aria-live="polite">Nama akun akan muncul otomatis setelah User ID'+(['Mobile Legends','PUBG Mobile','Genshin Impact'].includes(activeTopupGame)?' dan Server ID':'')+' diisi.</div>':''):'<p class="topup-coming-soon">Produk untuk game ini segera hadir di XERAVION.</p>')+'</div>';
   return;
  }
  box.innerHTML='<div class="topup-game-grid">'+games.map(g=>{const count=items.filter(p=>p.catalog_type==='topup'&&p.game===g.value&&p.stock==='Tersedia').length;return '<button type="button" class="topup-game-choice '+(count?'available':'coming-soon')+'" onclick="setTopupGame(\''+esc(g.value)+'\')">'+(g.logo?'<img src="'+g.logo+'" alt="'+esc(g.name)+' logo" loading="lazy" onerror="this.style.display=\'none\'">':'<span class="topup-game-choice-fallback">'+g.short+'</span>')+'<span>'+esc(g.name)+'</span>'+(count?'':'<small>Segera hadir</small>')+'</button>'}).join('')+'</div>';

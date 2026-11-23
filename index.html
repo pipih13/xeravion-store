@@ -2412,7 +2412,7 @@ function renderTopupProducts(list){
  if(activeTopupGame==='Semua')return '<div class="topup-choose-hint">Pilih game di atas untuk melihat daftar produk dan harga</div>';
  const products=list.filter(p=>p.game===activeTopupGame);
  // Kelompokkan seluruh Weekly Diamond Pass di bagian paling atas agar x1–x5 tampil berurutan.
- const weeklyPassRank=name=>{const match=String(name||'').match(/^Weekly Diamond Pass(?:\\s*x(\\d+))?$/i);return match?(match[1]?Number(match[1]):1):Infinity};
+ const weeklyPassRank=name=>{const match=String(name||'').match(/^Weekly Diamond Pass(?:\s*x(\d+))?$/i);return match?(match[1]?Number(match[1]):1):Infinity};
  products.sort((a,b)=>weeklyPassRank(a.name)-weeklyPassRank(b.name));
  if(!products.length)return '<div class="empty">Belum ada produk Top Up untuk game ini.</div>';
  const selected=items.find(p=>Number(p.id)===Number(selectedTopupProductId)&&p.game===activeTopupGame);

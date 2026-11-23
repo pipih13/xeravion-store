@@ -1,7 +1,7 @@
 const NIAR_ENDPOINT = "https://api.digitalsoft.id/check-id-game";
 const ALLOWED_ORIGINS = new Set(["https://xeravion.my.id", "https://www.xeravion.my.id"]);
 const GAME_CODES = Object.freeze({
-  "Mobile Legends": { type_name: "mobile_legends", zoneRequired: true },
+  "Mobile Legends": { type_name: "mlbb", zoneRequired: true },
   "Free Fire": { type_name: "ff", zoneRequired: false },
   "PUBG Mobile": { type_name: "pubgm", zoneRequired: true },
   "Valorant": { type_name: "valorant", zoneRequired: false },

@@ -58,6 +58,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   const game = typeof body?.game === "string" ? body.game : "";
+  console.info("[niar-check] Incoming check request", { game });
   const config = GAME_CODES[game];
   const userId = typeof body?.userId === "string" ? body.userId.trim() : "";
   const zoneId = typeof body?.zoneId === "string" ? body.zoneId.trim() : "";
@@ -95,6 +96,13 @@ export async function onRequestPost({ request, env }) {
       console.error("[niar-check] Niar returned a non-JSON response", upstream.status);
       return json({ status: false, message: "Server pengecekan sedang bermasalah. Coba beberapa saat lagi." }, 502);
     }
+
+    console.info("[niar-check] Upstream response", {
+      httpStatus: upstream.status,
+      apiStatus: result?.status,
+      message: typeof result?.message === "string" ? result.message.slice(0, 160) : null,
+      responseKeys: result && typeof result === "object" ? Object.keys(result) : []
+    });
 
     if (!upstream.ok || result?.status !== true) {
       const status = upstream.status === 429 ? 429 : upstream.status === 401 || upstream.status === 403 ? 502 : 200;

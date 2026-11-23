@@ -98,13 +98,16 @@ export async function onRequestPost({ request, env }) {
 
     if (!upstream.ok || result?.status !== true) {
       const status = upstream.status === 429 ? 429 : upstream.status === 401 || upstream.status === 403 ? 502 : 200;
+      const niarMessage = typeof result?.message === "string" && result.message.trim()
+        ? result.message.trim().slice(0, 180)
+        : "";
       const message = upstream.status === 429
-        ? "Batas pengecekan sedang tercapai. Tunggu sebentar lalu coba lagi."
-        : upstream.status === 401 || upstream.status === 403
-          ? "Autentikasi atau domain API bermasalah. Silakan hubungi admin XERAVION."
-          : (typeof result?.message === "string" && result.message.length < 180
-            ? result.message
-            : "ID tidak ditemukan atau tidak dapat diverifikasi. Periksa kembali data Anda.");
+        ? "Niar membatasi request (HTTP 429). Tunggu sebentar sebelum mencoba lagi."
+        : upstream.status === 401
+          ? "Niar menolak API Key (HTTP 401). Periksa status API Key."
+          : upstream.status === 403
+            ? "Niar menolak domain (HTTP 403). Periksa Domain Lock xeravion.my.id."
+            : niarMessage || `Niar belum memverifikasi ID (HTTP ${upstream.status}; status: ${String(result?.status)}; tanpa pesan error dari Niar).`;
       return json({ status: false, message }, status);
     }
 

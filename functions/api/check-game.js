@@ -96,7 +96,7 @@ export async function onRequestPost({ request, env }) {
       return json({ status: false, message: "Server pengecekan sedang bermasalah. Coba beberapa saat lagi." }, 502);
     }
 
-    if (!upstream.ok || result?.status !== true || typeof result?.nickname !== "string" || !result.nickname.trim()) {
+    if (!upstream.ok || result?.status !== true) {
       const status = upstream.status === 429 ? 429 : upstream.status === 401 || upstream.status === 403 ? 502 : 200;
       const message = upstream.status === 429
         ? "Batas pengecekan sedang tercapai. Tunggu sebentar lalu coba lagi."
@@ -108,9 +108,47 @@ export async function onRequestPost({ request, env }) {
       return json({ status: false, message }, status);
     }
 
+    // Search common Niar response layouts without exposing the raw upstream payload.
+    const nameKeys = ["nickname", "username", "playerName", "player_name", "name"];
+    const queue = [{ value: result, depth: 0 }];
+    let playerName = "";
+    while (queue.length && !playerName) {
+      const current = queue.shift();
+      if (!current.value || typeof current.value !== "object" || current.depth > 3) continue;
+      for (const key of nameKeys) {
+        const value = current.value[key];
+        if (typeof value === "string" && value.trim()) {
+          playerName = value.trim();
+          break;
+        }
+      }
+      if (!playerName) {
+        for (const [key, value] of Object.entries(current.value)) {
+          if (value && typeof value === "object" && !Array.isArray(value)) {
+            queue.push({ value, depth: current.depth + 1 });
+          } else if (Array.isArray(value)) {
+            for (const item of value.slice(0, 5)) {
+              if (item && typeof item === "object") queue.push({ value: item, depth: current.depth + 1 });
+            }
+          }
+        }
+      }
+    }
+
+    if (!playerName) {
+      console.warn("[niar-check] Niar success response has no recognized nickname field", {
+        topLevelKeys: Object.keys(result || {}),
+        nestedDataKeys: result?.data && typeof result.data === "object" ? Object.keys(result.data) : []
+      });
+      return json({
+        status: false,
+        message: "Niar menyatakan request berhasil, tetapi field nickname tidak ditemukan pada respons. Perlu penyesuaian format respons dari Niar."
+      }, 502);
+    }
+
     return json({
       status: true,
-      nickname: result.nickname.trim(),
+      nickname: playerName,
       game: config.type_name,
       message: "ID berhasil diverifikasi."
     });

@@ -101,7 +101,12 @@ export async function onRequestPost({ request, env }) {
       httpStatus: upstream.status,
       apiStatus: result?.status,
       message: typeof result?.message === "string" ? result.message.slice(0, 160) : null,
-      responseKeys: result && typeof result === "object" ? Object.keys(result) : []
+      requestedTypeName: config.type_name,
+      returnedTypeName: typeof result?.type_name === "string" ? result.type_name : null,
+      responseKeys: result && typeof result === "object" ? Object.keys(result) : [],
+      nicknameType: result?.nickname === null ? "null" : Array.isArray(result?.nickname) ? "array" : typeof result?.nickname,
+      nicknameStringLength: typeof result?.nickname === "string" ? result.nickname.trim().length : null,
+      nicknameObjectKeys: result?.nickname && typeof result.nickname === "object" && !Array.isArray(result.nickname) ? Object.keys(result.nickname) : []
     });
 
     if (!upstream.ok || result?.status !== true) {
@@ -121,12 +126,14 @@ export async function onRequestPost({ request, env }) {
 
     // Follow Niar's documented success response: nickname is a top-level field.
     if (typeof result?.nickname !== "string" || !result.nickname.trim()) {
-      console.warn("[niar-check] Niar success response did not include top-level nickname", {
-        topLevelKeys: Object.keys(result || {})
+      console.warn("[niar-check] Niar response has no usable nickname string", {
+        nicknameType: result?.nickname === null ? "null" : Array.isArray(result?.nickname) ? "array" : typeof result?.nickname,
+        nicknameStringLength: typeof result?.nickname === "string" ? result.nickname.trim().length : null,
+        nicknameObjectKeys: result?.nickname && typeof result.nickname === "object" && !Array.isArray(result.nickname) ? Object.keys(result.nickname) : []
       });
       return json({
         status: false,
-        message: "Niar menyatakan request berhasil, tetapi field nickname tidak ada pada respons sesuai dokumentasi. Mohon admin Niar memeriksa respons API."
+        message: "Niar menerima request, tetapi nilai nickname kosong atau formatnya bukan teks. Data ID belum dapat diverifikasi."
       }, 502);
     }
 

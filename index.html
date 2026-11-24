@@ -4241,11 +4241,12 @@ body:not(.xeravion-home-page) #xeravionGamingNews{display:none!important}
   setWords();grid.replaceChildren();const empty=document.createElement('div');empty.className='xeravion-news-empty';empty.textContent=words[lang()].loading;grid.append(empty);
   try{
    const since=new Date(Date.now()-7*86400000).toISOString();
-   const {data,error}=await supabaseClient.from('gaming_news').select('title,summary,source_name,source_domain,source_url,image_url,game,category,published_at').eq('is_published',true).gte('published_at',since).order('published_at',{ascending:false}).limit(12);
+   const {data,error}=await supabaseClient.from('gaming_news').select('title,summary,source_name,source_domain,source_url,image_url,game,category,published_at,fetched_at').eq('is_published',true).gte('published_at',since).order('published_at',{ascending:false}).limit(12);
    if(error)throw error;grid.replaceChildren();
    if(!data?.length){empty.textContent=words[lang()].empty;grid.append(empty);status.textContent=words[lang()].status;return}
    data.forEach(a=>grid.append(card(a)));
-   status.textContent=(lang()==='en'?'Last checked: ':'Terakhir diperiksa: ')+safeDate(new Date().toISOString())+' · '+data.length+(lang()==='en'?' articles':' berita');
+   const lastSync=data.reduce((latest,a)=>!latest||new Date(a.fetched_at)>new Date(latest)?a.fetched_at:latest,null);
+   status.textContent=(lang()==='en'?'Last source sync: ':'Sinkronisasi sumber: ')+safeDate(lastSync||new Date().toISOString())+' · '+data.length+(lang()==='en'?' articles':' berita');
   }catch(e){console.error('XERAVION Gaming News:',e);grid.replaceChildren();empty.textContent=words[lang()].error;grid.append(empty);status.textContent=words[lang()].error}
  }
  refresh?.addEventListener('click',load);

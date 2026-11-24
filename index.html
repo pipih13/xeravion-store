@@ -1691,18 +1691,6 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
  </div>
 </div>
 
-<section id="xeravionGamingNews" class="xeravion-news-section" aria-labelledby="xeravionNewsTitle">
- <div class="sectionhead xeravion-news-heading">
-  <div><div class="eyebrow" data-news-id="eyebrow">XERAVION DAILY INTELLIGENCE</div><h2 id="xeravionNewsTitle" data-news-id="title">Info Terkini Gaming</h2><p data-news-id="subtitle">Berita dan event game terbaru dari sumber tepercaya.</p></div>
-  <button class="btn" type="button" id="xeravionNewsRefresh" data-news-id="refresh">↻ Muat ulang</button>
- </div>
- <div class="xeravion-news-meta"><span id="xeravionNewsStatus" data-news-id="status">Memuat berita terbaru…</span><span data-news-id="frequency">Sinkronisasi otomatis setiap 3 jam</span></div>
- <div id="xeravionNewsGrid" class="xeravion-news-grid" aria-live="polite">
-  <div class="xeravion-news-empty" data-news-id="loading">Mengambil berita terbaru…</div>
- </div>
- <p class="xeravion-news-disclaimer" data-news-id="disclaimer">Berita dirangkum dari sumber pihak ketiga. Periksa tanggal dan buka sumber asli untuk detail, syarat event, serta konfirmasi informasi.</p>
-</section>
-
 <div class="sectionhead"><div><div class="eyebrow">STORE COLLECTION</div><h2>Etalase akun</h2></div><p id="resultCount">0 akun</p></div><div class="tools"><div class="search"><input id="search" type="search" placeholder="Cari nama, kode stok, atau deskripsi…" oninput="render()"></div><select id="sort" onchange="render()"><option value="code" selected>Kode listing (A-Z)</option><option value="new">Terbaru</option><option value="low">Harga terendah</option><option value="high">Harga tertinggi</option></select></div>
 <div class="chips"><button class="chip active" onclick="setGame('Semua',this)">Semua game</button><button class="chip" onclick="setGame('Mobile Legends',this)">Mobile Legends</button><button class="chip" onclick="setGame('PUBG Mobile',this)">PUBG Mobile</button><button class="chip" onclick="setGame('Free Fire',this)">Free Fire</button><button class="chip" onclick="setGame('eFootball',this)">eFootball</button><button class="chip" onclick="setGame('Clash of Clans',this)">Clash of Clans</button><button class="chip" onclick="setGame('Lainnya',this)">Lainnya</button><button class="chip" onclick="setGame('Top Up',this)">Top Up</button></div><div class="grid" id="products"></div><p class="hint" style="margin:18px 0 40px">Informasi akun ditampilkan sesuai data yang dimasukkan admin. Pastikan proses jual beli dan pengalihan akun mematuhi ketentuan penerbit game. Jangan pernah membagikan password, OTP, atau data pemulihan melalui halaman publik.</p></section>
 <section class="admin" id="admin"><div class="topup-bell-wrap" id="topupBellWrap"><button type="button" class="topup-bell-fab" id="topupBellButton" aria-label="Notifikasi pesanan Top Up" aria-expanded="false" onclick="toggleTopupBell()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="topup-bell-count" id="topupOrderBadge" style="display:none"></span></button><div class="topup-bell-popover" id="topupBellPopover" aria-hidden="true"><div class="topup-bell-head"><div><strong>Notifikasi Pesanan Top Up</strong><div class="hint">Pesanan masuk terbaru akan muncul otomatis di sini.</div></div><button type="button" class="topup-bell-close" onclick="toggleTopupBell(false)" aria-label="Tutup">×</button></div><div class="sectionhead"><span class="hint">Daftar pesanan Top Up</span><button class="btn" type="button" onclick="loadAdminTopupOrders()">Muat ulang</button></div><div class="admin-table-wrap"><table class="adminlist"><thead><tr><th>Invoice / Waktu</th><th>Pembeli</th><th>Game / Produk</th><th>ID Tujuan</th><th>Total</th><th>Status</th><th>Catatan</th><th>Kirim Invoice</th></tr></thead><tbody id="adminTopupOrderRows"><tr><td colspan="7">Memuat pesanan…</td></tr></tbody></table></div></div></div><div class="adminbar"><div><div class="eyebrow">XERAVION ADMIN CONTROL CENTER</div><h2>Admin Control Center</h2><div class="hint">Satu pusat kendali untuk toko, member, transaksi, dan email.</div></div><div class="navright"><button class="btn" onclick="signOutAdmin()">Keluar admin</button><button class="btn" id="xeravionAdminRefreshBtn" type="button" onclick="refreshXeravionAdminData()">↻ Muat Ulang Data</button></div></div>
@@ -4185,75 +4173,4 @@ body.xeravion-home-page #catalog>#products+p{display:none!important}
 /* Halaman kategori game tetap menampilkan daftar akun seperti sebelumnya. */
 body.xeravion-game-page #catalog>#gameCategoryHub{display:none!important}
 </style>
-
-
-<style id="xeravion-gaming-news-style">
-.xeravion-news-section{margin:34px 0 48px;padding:22px;border:1px solid #55452c;border-radius:18px;background:radial-gradient(ellipse at 95% 0%,#35234d66,transparent 40%),linear-gradient(145deg,#14120f,#10121b 65%,#171127)}
-.xeravion-news-heading{align-items:center;margin-bottom:8px}.xeravion-news-heading h2{margin:6px 0}.xeravion-news-heading p{margin:6px 0 0;color:var(--muted);font-size:11px}
-.xeravion-news-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0 16px;color:#a99d89;font-size:10px}
-.xeravion-news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.xeravion-news-card{min-width:0;overflow:hidden;border:1px solid #443923;border-radius:13px;background:#0e0e12;display:flex;flex-direction:column}
-.xeravion-news-card>a{color:inherit;text-decoration:none;display:flex;flex-direction:column;height:100%}
-.xeravion-news-image{width:100%;height:145px;object-fit:cover;background:linear-gradient(135deg,#242047,#172c43);display:block}
-.xeravion-news-placeholder{height:145px;display:grid;place-items:center;background:radial-gradient(circle at 70% 25%,#6944a766,transparent 45%),linear-gradient(135deg,#171c35,#21132d);color:#e8cc91;font-size:35px}
-.xeravion-news-copy{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
-.xeravion-news-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.xeravion-news-tag{font-size:8px;letter-spacing:.6px;text-transform:uppercase;color:#f0d69b;border:1px solid #68512d;border-radius:99px;padding:4px 7px}
-.xeravion-news-date{font-size:9px;color:#a99d89}
-.xeravion-news-card h3{font-size:13px;line-height:1.45;margin:0;color:#f3ead9}
-.xeravion-news-card p{font-size:10px;line-height:1.6;color:#b8ad9b;margin:0}
-.xeravion-news-source{margin-top:auto;padding-top:5px;color:#d6b978;font-size:9px;display:flex;justify-content:space-between;gap:8px}
-.xeravion-news-empty{grid-column:1/-1;padding:25px;text-align:center;border:1px dashed #55452c;border-radius:12px;color:#b8ad9b;font-size:12px}
-.xeravion-news-disclaimer{font-size:9px;line-height:1.6;color:#938978;margin:14px 0 0}
-@media(max-width:760px){.xeravion-news-section{padding:15px;margin:25px 0 34px}.xeravion-news-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.xeravion-news-image,.xeravion-news-placeholder{height:112px}.xeravion-news-copy{padding:9px;gap:6px}.xeravion-news-card h3{font-size:11px}.xeravion-news-card p{font-size:9px}}
-@media(max-width:390px){.xeravion-news-grid{grid-template-columns:1fr}.xeravion-news-image,.xeravion-news-placeholder{height:160px}}
-body:not(.xeravion-home-page) #xeravionGamingNews{display:none!important}
-</style>
-<script id="xeravion-gaming-news-client">
-(function(){
- const box=document.getElementById('xeravionGamingNews');if(!box||!window.supabase)return;
- const grid=document.getElementById('xeravionNewsGrid'),status=document.getElementById('xeravionNewsStatus'),refresh=document.getElementById('xeravionNewsRefresh');
- const words={
-  id:{eyebrow:'XERAVION DAILY INTELLIGENCE',title:'Info Terkini Gaming',subtitle:'Berita dan event game terbaru dari sumber tepercaya.',refresh:'↻ Muat ulang',status:'Memuat berita terbaru…',frequency:'Sinkronisasi otomatis setiap 3 jam',loading:'Mengambil berita terbaru…',empty:'Belum ada berita baru dalam 7 hari terakhir. Silakan periksa kembali nanti.',error:'Berita belum dapat dimuat. Coba muat ulang beberapa saat lagi.',read:'Baca sumber asli ↗',disclaimer:'Berita dirangkum dari sumber pihak ketiga. Periksa tanggal dan buka sumber asli untuk detail, syarat event, serta konfirmasi informasi.'},
-  en:{eyebrow:'XERAVION DAILY INTELLIGENCE',title:'Latest Gaming News',subtitle:'Fresh gaming news and events from trusted sources.',refresh:'↻ Refresh',status:'Loading latest news…',frequency:'Automatic sync every 3 hours',loading:'Fetching the latest news…',empty:'No new articles in the last 7 days. Please check again later.',error:'News could not be loaded. Please try again shortly.',read:'Read original source ↗',disclaimer:'News summaries are collected from third-party sources. Check the date and open the original source for details, event terms and confirmation.'}
- };
- function lang(){return window.getXeravionLanguage?.()==='en'?'en':'id'}
- function setWords(){const w=words[lang()];box.querySelectorAll('[data-news-id]').forEach(el=>{const k=el.dataset.newsId;if(w[k])el.textContent=w[k]})}
- function safeDate(v){const d=new Date(v);if(!Number.isFinite(d.getTime()))return '';return new Intl.DateTimeFormat(lang()==='en'?'en-US':'id-ID',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Jakarta'}).format(d)}
- function card(a){
-  const article=document.createElement('article');article.className='xeravion-news-card';
-  const link=document.createElement('a');link.href=a.source_url;link.target='_blank';link.rel='noopener noreferrer';
-  if(a.image_url){const img=document.createElement('img');img.className='xeravion-news-image';img.loading='lazy';img.alt='';img.src=a.image_url;img.onerror=()=>{img.replaceWith(placeholder(a.game))};link.append(img)}else link.append(placeholder(a.game));
-  const copy=document.createElement('div');copy.className='xeravion-news-copy';
-  const tags=document.createElement('div');tags.className='xeravion-news-tags';
-  const game=document.createElement('span');game.className='xeravion-news-tag';game.textContent=a.game||'Gaming';
-  const category=document.createElement('span');category.className='xeravion-news-tag';category.textContent=a.category||'Berita';tags.append(game,category);
-  const date=document.createElement('div');date.className='xeravion-news-date';date.textContent=safeDate(a.published_at);
-  const title=document.createElement('h3');title.textContent=a.title||'Gaming update';
-  const summary=document.createElement('p');summary.textContent=(a.summary||'Buka sumber asli untuk membaca informasi lengkap.').slice(0,260);
-  const source=document.createElement('div');source.className='xeravion-news-source';
-  const publisher=document.createElement('span');publisher.textContent=a.source_name||a.source_domain||'Sumber berita';
-  const read=document.createElement('span');read.textContent=words[lang()].read;source.append(publisher,read);
-  copy.append(tags,date,title,summary,source);link.append(copy);article.append(link);return article;
- }
- function placeholder(game){const p=document.createElement('div');p.className='xeravion-news-placeholder';p.textContent=({'Mobile Legends':'⚔️','Free Fire':'🔥','PUBG Mobile':'🎯','eFootball':'⚽','Clash of Clans':'🏰','Magic Chess: Go Go':'♟️'})[game]||'🎮';return p}
- async function load(){
-  setWords();grid.replaceChildren();const empty=document.createElement('div');empty.className='xeravion-news-empty';empty.textContent=words[lang()].loading;grid.append(empty);
-  try{
-   const since=new Date(Date.now()-7*86400000).toISOString();
-   const {data,error}=await supabaseClient.from('gaming_news').select('title,summary,source_name,source_domain,source_url,image_url,game,category,published_at,fetched_at').eq('is_published',true).gte('published_at',since).order('published_at',{ascending:false}).limit(12);
-   if(error)throw error;grid.replaceChildren();
-   if(!data?.length){empty.textContent=words[lang()].empty;grid.append(empty);status.textContent=words[lang()].status;return}
-   data.forEach(a=>grid.append(card(a)));
-   const lastSync=data.reduce((latest,a)=>!latest||new Date(a.fetched_at)>new Date(latest)?a.fetched_at:latest,null);
-   status.textContent=(lang()==='en'?'Last source sync: ':'Sinkronisasi sumber: ')+safeDate(lastSync||new Date().toISOString())+' · '+data.length+(lang()==='en'?' articles':' berita');
-  }catch(e){console.error('XERAVION Gaming News:',e);grid.replaceChildren();empty.textContent=words[lang()].error;grid.append(empty);status.textContent=words[lang()].error}
- }
- refresh?.addEventListener('click',load);
- window.addEventListener('xeravion-language-changed',setWords);
- const originalSet=window.setXeravionLanguage;
- if(typeof originalSet==='function'&&!originalSet.__newsWrapped){const wrapped=function(v){const result=originalSet(v);setWords();return result};wrapped.__newsWrapped=true;window.setXeravionLanguage=wrapped}
- load();
-})();
-</script>
 

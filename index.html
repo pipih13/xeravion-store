@@ -1688,6 +1688,42 @@ body.xeravion-topup-page .topup-selected-game-title img[alt="Valorant"]{object-f
   }
 }
 </style>
+<style id="xeravion-header-controls-ultra-compact">
+/* Final override: compact the three header controls vertically. */
+header.top .wrap.nav > .navright > label.language-picker,
+header.top .wrap.nav > .navright > button.btn {
+  height:30px!important;
+  min-height:30px!important;
+  max-height:30px!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  line-height:1!important;
+  box-sizing:border-box!important;
+  align-self:center!important;
+}
+header.top .wrap.nav > .navright > label.language-picker {
+  padding-left:6px!important;
+  padding-right:6px!important;
+}
+header.top .wrap.nav > .navright > button.btn {
+  padding-left:10px!important;
+  padding-right:10px!important;
+  font-size:10px!important;
+}
+@media(max-width:760px){
+  header.top .wrap.nav > .navright > label.language-picker,
+  header.top .wrap.nav > .navright > button.btn {
+    height:25px!important;
+    min-height:25px!important;
+    max-height:25px!important;
+  }
+  header.top .wrap.nav > .navright > button.btn {
+    padding-left:5px!important;
+    padding-right:5px!important;
+    font-size:8px!important;
+  }
+}
+</style>
 </head>
 <body><div class="app">
 <header class="top"><div class="wrap nav"><a class="brand" href="/" aria-label="XERAVION - Kembali ke halaman utama"><img class="brand-logo" src="/assets/xeravion-logo.png?v=4" alt="Logo XERAVION" width="250" height="auto" decoding="async"></a><nav class="navlinks"><a href="#topup">Top Up</a><a href="#how">Cara Order</a><a href="#about">Tentang</a><a href="#faq">FAQ</a><a href="#contact">Kontak</a></nav><div class="navright"><label class="language-picker" aria-label="Pilih bahasa"><span>🌐</span><select id="siteLanguage" onchange="setXeravionLanguage(this.value)" aria-label="Select language"><option value="id">🇮🇩 Indonesia</option><option value="en">🇬🇧 English</option></select></label><button class="btn" onclick="openMember()">Member Points</button><button class="btn gold" type="button" onclick="openMember()">Login ↗</button></div></div></header>

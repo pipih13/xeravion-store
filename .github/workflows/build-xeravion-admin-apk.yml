@@ -30,6 +30,19 @@ jobs:
       - name: Install Android SDK platform and build tools
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
+      - name: Install SVG renderer
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+
+      - name: Use official XERAVION emblem as the Android app icon
+        run: |
+          mkdir -p android-admin/app/src/main/res/drawable-nodpi
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/pipih13/xeravion-store/main/assets/xeravion-emblem.svg \
+            -o /tmp/xeravion-emblem.svg
+          rsvg-convert --width 512 --height 512 /tmp/xeravion-emblem.svg \
+            --output android-admin/app/src/main/res/drawable-nodpi/xeravion_official_icon.png
+          test -s android-admin/app/src/main/res/drawable-nodpi/xeravion_official_icon.png
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:

@@ -6,8 +6,8 @@
     <application
         android:allowBackup="false"
         android:label="XERAVION Admin"
-        android:icon="@drawable/ic_launcher"
-        android:roundIcon="@drawable/ic_launcher"
+        android:icon="@drawable/xeravion_official_icon"
+        android:roundIcon="@drawable/xeravion_official_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="false">
